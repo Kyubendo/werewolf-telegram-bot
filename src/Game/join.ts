@@ -12,12 +12,12 @@ export const join = (bot: TelegramBot, state: State, query: TelegramBot.Callback
         chat_id: state.chatId,
         parse_mode: 'Markdown'
     })
-    bot.sendMessage(newPlayer.id, 'Ты успешно присоединился у игре!')
+    bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!')
         .catch(reason => {
             if (reason.response.statusCode === 403) {
                 bot.sendMessage(
                     state.chatId,
-                    `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, тебе надо меня запустить.`,
+                    `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, надо меня запустить.`,
                     {
                         parse_mode: 'Markdown',
                         reply_markup: {

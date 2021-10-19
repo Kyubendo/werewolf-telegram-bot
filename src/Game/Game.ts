@@ -11,7 +11,7 @@ export class Game {
 
     public stage: GameStage = undefined
 
-    nextStage() {
+    setNextStage() {
         if (!this.stage) {
             this.stage = 'night'
             return
