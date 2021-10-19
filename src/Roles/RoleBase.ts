@@ -1,9 +1,8 @@
-import {Game} from "../Game/Game";
 import TelegramBot from "node-telegram-bot-api";
-import {State} from "../Bot";
+import {Game} from "../Game/Game";
 
 export abstract class RoleBase {
-    constructor(readonly bot: TelegramBot, readonly state: State) { //change to Game
+    constructor(readonly bot: TelegramBot, readonly game: Game) { //change to Game
     }
 
     abstract readonly roleName: string;
@@ -11,5 +10,6 @@ export abstract class RoleBase {
     abstract readonly startMessageText: string;
     readonly nightAction?: () => void
     readonly dayAction?: () => void
-
+    readonly nightActionResolve?: () => void
+    readonly dayActionResolve?: () => void
 }

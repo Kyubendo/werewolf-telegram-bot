@@ -1,22 +1,22 @@
 import TelegramBot from "node-telegram-bot-api";
 import {Player} from "../Player/Player";
 import {playerList} from "./playerList";
-import {State} from "../Bot";
+import {Game} from "./Game";
 
-export const join = (bot: TelegramBot, state: State, query: TelegramBot.CallbackQuery) => {
+export const join = (bot: TelegramBot, game: Game, query: TelegramBot.CallbackQuery) => {
     const newPlayer = new Player(query.from)
-    if (!state.game || state.game.players.map(e => e.id).includes(newPlayer.id)) return
-    state.game.addPlayer(newPlayer)
-    bot.editMessageText(playerList(state.game), {
-        message_id: state.playerCountMsgId,
-        chat_id: state.chatId,
+    if ( game.players.map(e => e.id).includes(newPlayer.id)) return
+    game.addPlayer(newPlayer)
+    bot.editMessageText(playerList(game), {
+        message_id: game.playerCountMsgId,
+        chat_id: game.chatId,
         parse_mode: 'Markdown'
     })
     bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!')
         .catch(reason => {
             if (reason.response.statusCode === 403) {
                 bot.sendMessage(
-                    state.chatId,
+                    game.chatId,
                     `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, надо меня запустить.`,
                     {
                         parse_mode: 'Markdown',

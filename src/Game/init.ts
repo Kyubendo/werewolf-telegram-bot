@@ -24,20 +24,18 @@ export const initGame = (bot: TelegramBot, state: State) => {
             return;
         }
 
-        state.game = new Game('classic', [new Player(msg.from)])
-        state.chatId = msg.chat.id
-
+        state.game = new Game('classic', [new Player(msg.from)], msg.chat.id, 0) // fix countId
         bot.sendMessage(
             msg.chat.id,
             `${msg.from?.first_name} начал(а) игру! Присоединяйся, чтобы умереть.`,
             {
                 reply_markup: joinButton
             }
-        ).then(msg => bot.pinChatMessage(msg.chat.id, msg.message_id + ''))
+        )//.then(msg => bot.pinChatMessage(msg.chat.id, msg.message_id + ''))
         bot.sendMessage(
             msg.chat.id,
             playerList(state.game),
             {parse_mode: 'Markdown'},
-        ).then(msg => state.playerCountMsgId = msg.message_id)
+        ).then(msg => state.game!.playerCountMsgId = msg.message_id)
     })
 }
