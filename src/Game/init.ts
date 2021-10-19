@@ -36,7 +36,7 @@ export const initGame = (bot: TelegramBot, state: State) => {
         ).then(msg => bot.pinChatMessage(msg.chat.id, msg.message_id + ''))
         bot.sendMessage(
             msg.chat.id,
-            playerList(state),
+            playerList(state.game),
             {parse_mode: 'Markdown'},
         ).then(msg => state.playerCountMsgId = msg.message_id)
     })

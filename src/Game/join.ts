@@ -7,7 +7,7 @@ export const join = (bot: TelegramBot, state: State, query: TelegramBot.Callback
     const newPlayer = new Player(query.from)
     if (!state.game || state.game.players.map(e => e.id).includes(newPlayer.id)) return
     state.game.addPlayer(newPlayer)
-    bot.editMessageText(playerList(state), {
+    bot.editMessageText(playerList(state.game), {
         message_id: state.playerCountMsgId,
         chat_id: state.chatId,
         parse_mode: 'Markdown'
@@ -16,7 +16,7 @@ export const join = (bot: TelegramBot, state: State, query: TelegramBot.Callback
         .catch(reason => {
             if (reason.response.statusCode === 403) {
                 bot.sendMessage(
-                    state.chatId || 0,
+                    state.chatId,
                     `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, тебе надо меня запустить.`,
                     {
                         parse_mode: 'Markdown',

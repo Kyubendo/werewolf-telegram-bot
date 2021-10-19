@@ -3,6 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 import {initGame} from "./Game/init";
 import {Game} from "./Game/Game";
 import {callbackHandle} from "./Game/callback";
+import {forceStart} from "./Game/gameStart";
 
 config({path: __dirname + '/./../.env'})
 const tgToken = process.env.TG_TOKEN!
@@ -17,8 +18,9 @@ if (process.env.NODE_ENV === 'production') {
     bot = new TelegramBot(tgToken, {polling: true});
 }
 
-export type State = { game?: Game, playerCountMsgId?: number, chatId?:number } //move
-let state: State = {}
+export type State = { game?: Game, playerCountMsgId?: number, chatId: number } //move
+let state: State = {chatId:0} // fix
 
 initGame(bot, state)
 callbackHandle(bot, state)
+forceStart(bot, state)

@@ -1,13 +1,21 @@
 import {Player} from "../Player/Player";
 
+export type GameStage = 'day' | 'night' | 'lynch' | undefined
+
 export class Game {
     constructor(
         readonly mode: 'classic',
         readonly players: Player[],
-        public stage?: 'day' | 'night' | 'lynch') {
+    ) {
     }
 
+    public stage: GameStage = undefined
+
     nextStage() {
+        if (!this.stage) {
+            this.stage = 'night'
+            return
+        }
         this.stage = this.stage === 'day' ? 'night' : this.stage === 'night' ? 'lynch' : 'day'
     }
 
