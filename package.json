@@ -1,0 +1,28 @@
+{
+  "name": "werewolf-telegram-bot",
+  "version": "1.0.0",
+  "dependencies": {
+    "@types/node-telegram-bot-api": "^0.53.1",
+    "dotenv": "^10.0.0",
+    "node-telegram-bot-api": "^0.54.0",
+    "ts-node": "^10.3.0",
+    "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.1"
+  },
+  "scripts": {
+    "start": "ts-node src/Bot.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kyubendo/werewolf-telegram-bot.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kyubendo/werewolf-telegram-bot/issues"
+  },
+  "homepage": "https://github.com/Kyubendo/werewolf-telegram-bot#readme"
+}

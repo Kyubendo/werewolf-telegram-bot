@@ -1,20 +1,21 @@
 import * as Roles from "./Roles";
-import {arrayShuffle} from "./utils/arrayShuffle";
-import {RoleBase} from "./Roles/RoleBase";
+import {arrayShuffle} from "./Utils/arrayShuffle";
 
 const playerCount = 6 // test
 
-const basePool: RoleBase[] = [
-    new Roles.Villager(), new Roles.Seer(),
-    new Roles.Wolf(),
-    new Roles.Suicide(),
+const rolePool = [
+    Roles.Villager, Roles.Seer,
+    Roles.Wolf,
+    Roles.Suicide,
 ]
 
 if (false) { // playerCount > n
-    // basePool.push(...additionalRoles)
+    // rolePool.push(...additionalRoles)
 }
 
-const roles = arrayShuffle(basePool)
+for (let i = rolePool.length; i < playerCount; i++) rolePool.push(Roles.Villager)
 
-console.log(basePool)
+arrayShuffle(rolePool)
+
+console.log(rolePool)
 
