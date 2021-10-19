@@ -1,11 +1,10 @@
 import * as Roles from "../Roles";
 import {arrayShuffle} from "../Utils/arrayShuffle";
 import TelegramBot from "node-telegram-bot-api";
-import {State} from "../Bot";
+import {Game} from "./Game";
 
-export const assignRoles = (bot: TelegramBot, state: State) => {
-    if (!state.game) return
-    const players = state.game?.players
+export const assignRoles = (bot: TelegramBot, game: Game) => {
+    const players = game.players
     const rolePool = [
         Roles.Villager, Roles.Seer,
         Roles.Wolf,
@@ -15,7 +14,7 @@ export const assignRoles = (bot: TelegramBot, state: State) => {
     arrayShuffle(rolePool)
 
     players.forEach((player, i) => {
-        const role = new rolePool[i](bot, state)
+        const role = new rolePool[i](bot, game)
         player.role = role
         bot.sendMessage(player.id, role.startMessageText)
     })

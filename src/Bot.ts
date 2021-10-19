@@ -18,9 +18,10 @@ if (process.env.NODE_ENV === 'production') {
     bot = new TelegramBot(tgToken, {polling: true});
 }
 
-export type State = { game?: Game, playerCountMsgId?: number, chatId: number } //move
-let state: State = {chatId:0} // fix
+export type State = { game?: Game, } // fix maybe
+let state: State = {}
 
 initGame(bot, state)
+
 callbackHandle(bot, state)
 forceStart(bot, state)

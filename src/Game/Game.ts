@@ -6,6 +6,8 @@ export class Game {
     constructor(
         readonly mode: 'classic',
         readonly players: Player[],
+        readonly chatId:number,
+        public playerCountMsgId:number,
     ) {
     }
 
