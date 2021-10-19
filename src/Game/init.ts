@@ -31,7 +31,7 @@ export const initGame = (bot: TelegramBot, state: State) => {
             {
                 reply_markup: joinButton
             }
-        )//.then(msg => bot.pinChatMessage(msg.chat.id, msg.message_id + ''))
+        ).then(msg => bot.pinChatMessage(msg.chat.id, String(msg.message_id)))
         bot.sendMessage(
             msg.chat.id,
             playerList(state.game),

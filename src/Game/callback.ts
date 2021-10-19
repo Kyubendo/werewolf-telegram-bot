@@ -1,6 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import {join} from "./join";
 import {State} from "../Bot";
+import {roleChoice} from "./roleChoice";
 
 export const callbackHandle = (bot: TelegramBot, state: State) => {
     bot.on('callback_query', query => {
@@ -10,6 +11,7 @@ export const callbackHandle = (bot: TelegramBot, state: State) => {
             case 'join':
                 join(bot, game, query)
                 break
+            default:roleChoice(query, game.players)
         }
     })
 }

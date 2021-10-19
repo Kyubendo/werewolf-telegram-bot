@@ -1,13 +1,19 @@
 import TelegramBot from "node-telegram-bot-api";
 import {Game} from "../Game/Game";
+import {Player} from "../Player/Player";
 
 export abstract class RoleBase {
-    constructor(readonly bot: TelegramBot, readonly game: Game) { //change to Game
+    constructor(readonly player: Player) {
     }
 
-    abstract readonly roleName: string;
-    abstract readonly weight: number;
-    abstract readonly startMessageText: string;
+    static bot: TelegramBot
+    static game: Game
+    abstract readonly roleName: string
+    abstract readonly weight: number
+    abstract readonly startMessageText: string
+
+    readonly handleChoice?: (chosenPlayer?:Player) => void
+
     readonly nightAction?: () => void
     readonly dayAction?: () => void
     readonly nightActionResolve?: () => void
