@@ -17,7 +17,8 @@ export const join = (bot: TelegramBot, state: State, query: TelegramBot.Callback
             if (reason.response.statusCode === 403) {
                 bot.sendMessage(
                     state.chatId,
-                    `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, тебе надо меня запустить.`,
+                    `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, 
+                    тебе надо меня запустить.`,
                     {
                         parse_mode: 'Markdown',
                         reply_markup: {

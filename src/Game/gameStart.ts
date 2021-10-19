@@ -6,7 +6,7 @@ import {playerList} from "./playerList";
 
 export const gameStart = (bot: TelegramBot, state: State) => {
     if (!state.game) return;
-
+    //if (playerList())
     state.game.nextStage();
     bot.sendMessage(state.chatId, gameStageMsg(state.game.stage) || '')
         .then(() => {

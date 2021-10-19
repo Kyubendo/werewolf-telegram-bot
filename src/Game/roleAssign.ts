@@ -5,8 +5,8 @@ import {Player} from "../Player/Player";
 
 export const assignRoles = (bot: TelegramBot, players: Player[]) => {
     const rolePool = [
-        Roles.Villager, Roles.Seer,
-        Roles.Wolf,
+        Roles.Villager, Roles.Seer, Roles.ClumsyGuy,
+        Roles.Wolf, Roles.Lycan,
         Roles.Suicide,
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
