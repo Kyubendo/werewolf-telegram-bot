@@ -10,7 +10,7 @@ export const assignRoles = (bot: TelegramBot, game: Game) => {
     const players = game.players
     const rolePool = [
         Roles.Lycan, Roles.Seer,
-        Roles.Villager, Roles.Seer, Roles.Fool, Roles.ClumsyGuy,
+        Roles.Villager, Roles.Seer, Roles.Fool, Roles.ClumsyGuy, Roles.Cursed,
         Roles.Wolf, Roles.Lycan,
         Roles.Suicide,
     ]

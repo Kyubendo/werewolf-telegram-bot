@@ -3,7 +3,7 @@ import {WolfBase} from "./WolfBase";
 // import {Player} from "../../Player/Player";
 
 export class Wolf extends WolfBase {
-    roleName = 'Wolf';
+    roleName = 'Волк';
     startMessageText = 'Ты волк. Скушай всё село.';
     weight = -10;
 

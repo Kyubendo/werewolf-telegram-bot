@@ -34,9 +34,6 @@ export class Seer extends VillagerBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Seer.game.players)
         if (!this.targetPlayer) return;
-        Seer.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer.name}.`,
-            {message_id: this.choiceMsgId, chat_id: this.player.id}
-        )
+        this.choiceMsgEditText();
     }
 }
