@@ -6,6 +6,6 @@ const generateInlineKeyboard = (players: Player[]) => ({
 )
 
 export const playersButtons = (players: Player[], alive: boolean, ...exception_players: Player[]) => {
-    return status ? generateInlineKeyboard(players.filter(e => e.isAlive && !exception_players.includes(e))) :
+    return alive ? generateInlineKeyboard(players.filter(e => e.isAlive && !exception_players.includes(e))) :
         generateInlineKeyboard(players.filter(e => !e.isAlive && !exception_players.includes(e)));
 }
