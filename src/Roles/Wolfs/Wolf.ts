@@ -8,7 +8,7 @@ export class Wolf extends RoleBase {
     roleName = 'Wolf';
     startMessageText = 'Ты волк. Скушай всё село.';
     weight = -10;
-
+//1
     killMessage = ""
 
     action = () => {
