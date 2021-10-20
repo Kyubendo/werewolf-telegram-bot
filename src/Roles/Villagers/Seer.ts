@@ -1,9 +1,9 @@
-import {VillagerBase} from "./VillagerBase";
+import {Villager} from "./Villager";
 import {playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 
-export class Seer extends VillagerBase {
+export class Seer extends Villager {
     roleName = 'Провидец';
     startMessageText = 'Ты Провидец! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.  ';
     weight = 7;

@@ -16,11 +16,13 @@ export abstract class RoleBase {
     readonly handleChoice?: (choice?: string) => void
 
     handleDeath = (killer?: Player) => {
-        this.player.isAlive = false;
+        const message = killer?.role?.killMessage;
+        if (message !== undefined)
+            RoleBase.bot.sendMessage(RoleBase.game.chatId, message);
         return true;
     }
 
-    abstract readonly killMessage: string;
+    abstract readonly killMessage?: string;
 
     targetPlayer?: Player
     choiceMsgId?: number
