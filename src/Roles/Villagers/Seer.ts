@@ -8,9 +8,6 @@ export class Seer extends VillagerBase {
     startMessageText = 'Ты Провидец! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.  ';
     weight = 7;
 
-    targetPlayer?: Player
-    choiceMsgId?: number
-
     action = () => {
         if (Seer.game.stage !== 'night') return;
         Seer.bot.sendMessage(

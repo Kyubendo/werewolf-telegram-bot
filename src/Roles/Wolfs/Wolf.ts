@@ -1,12 +1,15 @@
-import {WolfBase} from "./WolfBase";
+
 import {playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
+import {RoleBase} from "../RoleBase";
 
-export class Wolf extends WolfBase {
+export class Wolf extends RoleBase {
     roleName = 'Wolf';
     startMessageText = 'Ты волк. Скушай всё село.';
     weight = -10;
+
+    killMessage = ""
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
@@ -22,7 +25,7 @@ export class Wolf extends WolfBase {
 
     actionResolve = () => {
         if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
-        //this.targetPlayer.isAlive = false;
+        this.targetPlayer.role?.handleDeath(this.player);
     }
 
     handleChoice = (choice?: string) => {
