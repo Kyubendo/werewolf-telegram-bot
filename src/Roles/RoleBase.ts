@@ -19,10 +19,11 @@ export abstract class RoleBase {
         const message = killer?.role?.killMessage;
         if (message !== undefined)
             RoleBase.bot.sendMessage(RoleBase.game.chatId, message);
+
         return true;
     }
 
-    abstract readonly killMessage?: string;
+    readonly killMessage?: string;
 
     targetPlayer?: Player
     choiceMsgId?: number

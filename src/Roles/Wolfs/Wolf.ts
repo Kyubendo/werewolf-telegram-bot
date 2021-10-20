@@ -8,8 +8,8 @@ export class Wolf extends RoleBase {
     startMessageText = 'Ты волк. Скушай всё село.';
     weight = -10;
 
-    killMessage = `НомномНОМномНОМНОМном... ${this.player.name} съели заживо! 
-                    ${this.player.name} был(а) ${this.player.role?.roleName}.`;
+    killMessage = `НомномНОМномНОМНОМном... ${this.targetPlayer?.name} съели заживо! 
+                    ${this.targetPlayer?.name} был(а) ${this.targetPlayer?.role?.roleName}.`;
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
@@ -18,7 +18,7 @@ export class Wolf extends RoleBase {
             'Кого ты хочешь съесть?',
             {
                 reply_markup: playersButtons(Wolf.game.players, true,
-                    Wolf.game.players.filter(wolf => wolf.role instanceof Wolf))
+                    ...Wolf.game.players.filter(wolf => wolf.role instanceof Wolf))
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
@@ -26,6 +26,7 @@ export class Wolf extends RoleBase {
     actionResolve = () => {
         if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
         this.targetPlayer.role?.handleDeath(this.player);
+        this.targetPlayer = undefined
     }
 
     handleChoice = (choice?: string) => {

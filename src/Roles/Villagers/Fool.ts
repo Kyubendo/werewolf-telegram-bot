@@ -1,4 +1,3 @@
-import {VillagerBase} from "./VillagerBase";
 import {playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {Seer} from "./Seer";
