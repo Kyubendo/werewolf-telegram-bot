@@ -6,7 +6,9 @@ import {playerList} from "./playerList";
 
 export const gameStart = (bot: TelegramBot, state: State) => {
     if (!state.game) return;
-    //if (playerList())
+    if (playerList.length < 5) {
+        bot.sendMessage(state.chatId, 'Вас слишком мало, чтобы начать игру!');
+    }
     state.game.nextStage();
     bot.sendMessage(state.chatId, gameStageMsg(state.game.stage) || '')
         .then(() => {
