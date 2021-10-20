@@ -17,10 +17,10 @@ export const assignRoles = (bot: TelegramBot, game: Game) => {
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
     // arrayShuffle(rolePool) // add
 
-    players.forEach((player, i) => {
+    players.forEach(async (player, i) => {
         const role = new rolePool[i](player)
         player.role = role
-        bot.sendMessage(player.id, role.startMessageText)
+        await bot.sendMessage(player.id, role.startMessageText)
     })
 
-}
+ }

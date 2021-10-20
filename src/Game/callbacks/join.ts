@@ -1,11 +1,11 @@
 import TelegramBot from "node-telegram-bot-api";
-import {Player} from "../Player/Player";
-import {playerList} from "./playerList";
-import {Game} from "./Game";
+import {Player} from "../../Player/Player";
+import {playerList} from "../playerList";
+import {Game} from "../Game";
 
 export const join = (bot: TelegramBot, game: Game, query: TelegramBot.CallbackQuery) => {
     const newPlayer = new Player(query.from)
-    if ( game.players.map(e => e.id).includes(newPlayer.id)) return
+    if ( game.players.map(e => e.id).includes(newPlayer.id)) return;
     game.addPlayer(newPlayer)
     bot.editMessageText(playerList(game), {
         message_id: game.playerCountMsgId,
