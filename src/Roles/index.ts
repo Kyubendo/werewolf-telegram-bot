@@ -1,4 +1,5 @@
 import {Seer} from "./Villagers/Seer";
+import {Fool} from "./Villagers/Fool";
 import {Villager} from "./Villagers/Villager";
 import {ClumsyGuy} from "./Villagers/ClumsyGuy";
 
@@ -8,7 +9,7 @@ import {Lycan} from "./Wolfs/Lycan";
 import {Suicide} from "./Others/Suicide";
 
 export {
-    Seer, Villager, ClumsyGuy,
+    Seer, Fool, Villager, ClumsyGuy,
     Wolf, Lycan,
     Suicide
 }

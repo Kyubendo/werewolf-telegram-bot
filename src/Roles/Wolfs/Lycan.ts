@@ -1,9 +1,9 @@
-import {WolfBase} from "./WolfBase";
+import {Wolf} from "./Wolf";
 import {RoleBase} from "../RoleBase";
+import {Seer} from "../Villagers/Seer";
 
-export class Lycan extends WolfBase {
+export class Lycan extends Wolf {
     roleName = 'Ликан';
     startMessageText = 'Ты Ликан! Ты волк, но провидец видит тебя селянином :)';
-    weight = RoleBase.game.players.find(player => player.role?.roleName === 'Seer' ||
-        player.role?.roleName === 'Fool') ? 12 : 10; // Sets the weight of lycan depending on seer or fool presence
+    weight = RoleBase.game.players.find(player => player instanceof Seer) ? 12 : 10;
 }
