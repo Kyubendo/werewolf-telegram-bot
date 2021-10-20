@@ -6,10 +6,12 @@ import {RoleBase} from "../RoleBase";
 export class Wolf extends RoleBase {
     roleName = 'Wolf';
     startMessageText = 'Ты волк. Скушай всё село.';
-    weight = -10;
+    weight = () => -10;
 
-    killMessage = `НомномНОМномНОМНОМном... ${this.targetPlayer?.name} съели заживо! 
-                    ${this.targetPlayer?.name} был(а) ${this.targetPlayer?.role?.roleName}.`;
+    killMessage = (deadPlayer: Player) => {
+        Wolf.bot.sendMessage(Wolf.game.chatId, `НомномНОМномНОМНОМном... ${deadPlayer.name} съели заживо!
+${deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`)
+    }
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;

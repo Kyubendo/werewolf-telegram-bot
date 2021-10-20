@@ -1,12 +1,9 @@
-import {playersButtons} from "../../Game/playersButtons";
-import {Player} from "../../Player/Player";
 import {Seer} from "./Seer";
 import {findPlayer} from "../../Game/findPlayer";
-import {arrayShuffle} from "../../Utils/arrayShuffle";
 
 export class Fool extends Seer {
     roleName = 'Дурак';
-    weight = 4;
+    weight = () => 4;
 
     handleChoice = (choice?: string) => {
         if (Math.random() >= 0.5) //50% for right guess

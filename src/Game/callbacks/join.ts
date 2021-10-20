@@ -3,7 +3,10 @@ import {Player} from "../../Player/Player";
 import {playerList} from "../playerList";
 import {Game} from "../Game";
 
+
 export const join = (bot: TelegramBot, game: Game, query: TelegramBot.CallbackQuery) => {
+    const botName = process.env.BOT_TOKEN!
+
     const newPlayer = new Player(query.from)
     if ( game.players.map(e => e.id).includes(newPlayer.id)) return;
     game.addPlayer(newPlayer)
@@ -23,7 +26,7 @@ export const join = (bot: TelegramBot, game: Game, query: TelegramBot.CallbackQu
                         parse_mode: 'Markdown',
                         reply_markup: {
                             inline_keyboard: [
-                                [{text: 'Запустить', url: 'telegram.me/UltimateWerewolfGameBot?start=start',}]
+                                [{text: 'Запустить', url: `telegram.me/${process.env.BOT_TOKEN}?start=start`,}]
                             ],
                         }
                     },
