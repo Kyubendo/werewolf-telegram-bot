@@ -8,6 +8,6 @@ export const gameStageMsg = (stage: GameStage) => {
         case 'day':
             return 'Настал день... Время протестовать, делать заявления и сражаться за справедливость!';
         case 'lynch':
-            
+            return 'казнь';
     }
 }

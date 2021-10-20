@@ -10,17 +10,21 @@ export const assignRoles = (bot: TelegramBot, game: Game) => {
     const players = game.players
     const rolePool = [
         Roles.Lycan, Roles.Seer,
+
         Roles.Villager, Roles.Seer, Roles.Fool, Roles.ClumsyGuy, Roles.Cursed,
         Roles.Wolf, Roles.Lycan,
         Roles.Suicide,
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
-    // arrayShuffle(rolePool) // add
 
-    players.forEach((player, i) => {
-        const role = new rolePool[i](player)
-        player.role = role
-        bot.sendMessage(player.id, role.startMessageText + '\nВес роли:' + role.weight)
-    })
+    let balanced = false
+    do {
+        // arrayShuffle(rolePool) // add
+        balanced = Math.abs(
+            players.map((player, i) => player.role = new rolePool[i](player)).reduce((a, c) => a + c.weight(), 0)
+        ) < 123 // change 123 to variance
 
- }
+    } while (!balanced)
+
+    players.forEach(player => player.role && bot.sendMessage(player.id, player.role.startMessageText))
+}

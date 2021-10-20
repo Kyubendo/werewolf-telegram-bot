@@ -8,32 +8,28 @@ export abstract class RoleBase {
 
     static bot: TelegramBot
     static game: Game
+
     abstract readonly roleName: string
-
     abstract readonly weight: () => number
-
     abstract readonly startMessageText: string
 
-
+    readonly killMessage?: (deadPlayer: Player) => void
+    readonly action?: () => void
+    readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
+
+    targetPlayer?: Player
+    choiceMsgId?: number
 
     handleDeath = (killer?: Player) => {
         killer?.role?.killMessage && killer.role.killMessage(this.player);
         this.player.isAlive = false;
     }
 
-    readonly killMessage?: (deadPlayer: Player) => void
-
-    targetPlayer?: Player
-    choiceMsgId?: number
-
     choiceMsgEditText = () => {
         RoleBase.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer?.name}.`,
+            `Выбор принят: ${this.targetPlayer?.name || 'Пропустить'}.`,
             {message_id: this.choiceMsgId, chat_id: this.player.id}
         )
     }
-
-    readonly action?: () => void
-    readonly actionResolve?: () => void
 }

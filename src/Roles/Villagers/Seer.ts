@@ -23,11 +23,9 @@ export class Seer extends Villager {
         if (Seer.game.stage !== 'night' || !this.targetPlayer?.role) return;
         let roleName;
 
-        if (this.targetPlayer.role instanceof Lycan)
-            roleName = 'Селянин 👱';
-        //else if (this.targetPlayer.role instanceof WolfMan)
-        else
-            roleName = this.targetPlayer.role.roleName;
+        if (this.targetPlayer.role instanceof Lycan) roleName = new Villager(this.player).roleName;
+        //else if (this.targetPlayer.role instanceof WolfMan) roleName = new WolfMan(this.player).roleName;
+        else roleName = this.targetPlayer.role.roleName;
 
         Seer.bot.sendMessage(
             this.player.id,
@@ -38,7 +36,6 @@ export class Seer extends Villager {
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Seer.game.players)
-        if (!this.targetPlayer) return;
         this.choiceMsgEditText();
     }
 }

@@ -33,7 +33,6 @@ ${deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`)
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Wolf.game.players);
-        if (!this.targetPlayer) return;
         this.choiceMsgEditText();
     }
 }
