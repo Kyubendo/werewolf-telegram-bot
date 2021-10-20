@@ -7,5 +7,7 @@ export const gameStageMsg = (stage: GameStage) => {
                 'У вас есть 120 секунд...'
         case 'day':
             return 'Настал день... Время протестовать, делать заявления и сражаться за справедливость!';
+        case 'lynch':
+            
     }
 }

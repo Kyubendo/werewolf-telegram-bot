@@ -1,4 +1,5 @@
 import {Player} from "../Player/Player";
+import {RoleBase} from "../Roles/RoleBase";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 

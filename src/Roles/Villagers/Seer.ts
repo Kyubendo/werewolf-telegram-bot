@@ -1,15 +1,12 @@
-import {VillagerBase} from "./VillagerBase";
+import {Villager} from "./Villager";
 import {playersButtons} from "../../Game/playersButtons";
-import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
+import {Lycan} from "../Wolfs/Lycan";
 
-export class Seer extends VillagerBase {
+export class Seer extends Villager {
     roleName = 'Провидец';
     startMessageText = 'Ты Провидец! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.  ';
-    weight = 7;
-
-    targetPlayer?: Player
-    choiceMsgId?: number
+    weight = () => 7;
 
     action = () => {
         if (Seer.game.stage !== 'night') return;
@@ -23,10 +20,18 @@ export class Seer extends VillagerBase {
     };
 
     actionResolve = () => {
-        if (Seer.game.stage !== 'night' || !this.targetPlayer) return;
+        if (Seer.game.stage !== 'night' || !this.targetPlayer?.role) return;
+        let roleName;
+
+        if (this.targetPlayer.role instanceof Lycan)
+            roleName = 'Селянин 👱';
+        //else if (this.targetPlayer.role instanceof WolfMan)
+        else
+            roleName = this.targetPlayer.role.roleName;
+
         Seer.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${this.targetPlayer.name} это ${this.targetPlayer.role?.roleName}!`
+            `Ты видишь, что ${this.targetPlayer.name} это ${roleName}!`
         )
         this.targetPlayer = undefined
     }
@@ -34,9 +39,6 @@ export class Seer extends VillagerBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Seer.game.players)
         if (!this.targetPlayer) return;
-        Seer.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer.name}.`,
-            {message_id: this.choiceMsgId, chat_id: this.player.id}
-        )
+        this.choiceMsgEditText();
     }
 }
