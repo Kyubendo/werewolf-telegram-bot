@@ -17,7 +17,7 @@ export class Seer extends VillagerBase {
             this.player.id,
             'Кого ты хочешь посмотреть?',
             {
-                reply_markup: playersButtons(Seer.game.players, true, this.player)
+                reply_markup: playersButtons(Seer.game.players, true, [this.player])
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     };
