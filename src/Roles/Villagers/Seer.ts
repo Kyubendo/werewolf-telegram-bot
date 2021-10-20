@@ -1,5 +1,5 @@
 import {VillagerBase} from "./VillagerBase";
-import {alivePlayersButtons} from "../../Game/playersButtons";
+import {playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 
 export class Seer extends VillagerBase {
@@ -12,7 +12,7 @@ export class Seer extends VillagerBase {
             this.player.id,
             'Кого ты хочешь посмотреть?',
             {
-                reply_markup: alivePlayersButtons(Seer.game.players)
+                reply_markup: playersButtons(Seer.game.players, true, this.player)
             }
         )
     };

@@ -1,5 +1,5 @@
 import {VillagerBase} from "./VillagerBase";
-import {alivePlayersButtons} from "../../Game/playersButtons";
+import {playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {Seer} from "./Seer";
 
