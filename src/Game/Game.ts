@@ -18,7 +18,7 @@ export class Game {
             this.stage = 'night'
             return
         }
-        this.stage = this.stage === 'day' ? 'night' : this.stage === 'night' ? 'lynch' : 'day'
+        this.stage = this.stage === 'day' ? 'lynch' : this.stage === 'lynch' ? 'night' : 'day'
     }
 
     addPlayer(player: Player) {

@@ -16,6 +16,7 @@ export const join = (bot: TelegramBot, game: Game, query: TelegramBot.CallbackQu
         .catch(reason => {
             if (reason.response.statusCode === 403) {
                 bot.sendMessage(
+
                     game.chatId,
                     `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, надо меня запустить.`,
                     {
