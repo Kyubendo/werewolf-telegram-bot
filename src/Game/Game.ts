@@ -6,12 +6,14 @@ export class Game {
     constructor(
         readonly mode: 'classic',
         readonly players: Player[],
+        readonly chatId:number,
+        public playerCountMsgId:number,
     ) {
     }
 
     public stage: GameStage = undefined
 
-    nextStage() {
+    setNextStage() {
         if (!this.stage) {
             this.stage = 'night'
             return

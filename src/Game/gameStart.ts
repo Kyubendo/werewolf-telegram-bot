@@ -1,24 +1,18 @@
 import TelegramBot from "node-telegram-bot-api";
-import {State} from "../Bot";
-import {gameStageMsg} from "./gameStageMsg";
 import {assignRoles} from "./roleAssign";
-import {playerList} from "./playerList";
+import {changeStage} from "./changeStage";
+import {Game} from "./Game";
+import {State} from "../Bot";
 
-export const gameStart = (bot: TelegramBot, state: State) => {
-    if (!state.game) return;
-    if (playerList.length < 5) {
-        bot.sendMessage(state.chatId, 'Вас слишком мало, чтобы начать игру!');
-    }
-    state.game.nextStage();
-    bot.sendMessage(state.chatId, gameStageMsg(state.game.stage) || '')
-        .then(() => {
-            bot.sendMessage(state.chatId, playerList(state.game!), {parse_mode: 'Markdown'})
-        })
-    assignRoles(bot, state.game.players)
+export const gameStart = (bot: TelegramBot, game: Game) => {
+    assignRoles(bot, game)
+    changeStage(bot, game)
 }
 
 export const forceStart = (bot: TelegramBot, state: State) => {
     bot.onText(/\/force_start/, msg => {
-        gameStart(bot, state)
+        const game = state.game
+        if (!game) return;
+        gameStart(bot, game)
     })
 }
