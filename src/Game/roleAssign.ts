@@ -9,8 +9,8 @@ export const assignRoles = (bot: TelegramBot, game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const rolePool = [
-        Roles.Seer, //remove
-        Roles.Villager, Roles.Seer, Roles.ClumsyGuy,
+        Roles.Lycan, Roles.Seer,
+        Roles.Villager, Roles.Seer, Roles.Fool, Roles.ClumsyGuy,
         Roles.Wolf, Roles.Lycan,
         Roles.Suicide,
     ]
@@ -20,7 +20,7 @@ export const assignRoles = (bot: TelegramBot, game: Game) => {
     players.forEach(async (player, i) => {
         const role = new rolePool[i](player)
         player.role = role
-        await bot.sendMessage(player.id, role.startMessageText)
+        await bot.sendMessage(player.id, role.startMessageText + '\nВес роли:' + role.weight)
     })
 
  }
