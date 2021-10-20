@@ -1,12 +1,12 @@
 import TelegramBot from "node-telegram-bot-api";
-import {join} from "./join";
-import {State} from "../Bot";
-import {roleChoice} from "./roleChoice";
+import {join} from "../callbacks/join";
+import {State} from "../../Bot";
+import {roleChoice} from "../callbacks/roleChoice";
 
 export const callbackHandle = (bot: TelegramBot, state: State) => {
     bot.on('callback_query', query => {
         const game = state.game
-        if (!game) return
+        if (!game) return;
         switch (query.data) {
             case 'join':
                 join(bot, game, query)

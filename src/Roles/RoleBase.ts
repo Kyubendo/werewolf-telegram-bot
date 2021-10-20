@@ -12,10 +12,8 @@ export abstract class RoleBase {
     abstract readonly weight: number
     abstract readonly startMessageText: string
 
-    readonly handleChoice?: (chosenPlayer?:Player) => void
+    readonly handleChoice?: (choice?: string) => void
 
-    readonly nightAction?: () => void
-    readonly dayAction?: () => void
-    readonly nightActionResolve?: () => void
-    readonly dayActionResolve?: () => void
+    readonly action?: () => void
+    readonly actionResolve?: () => void
 }
