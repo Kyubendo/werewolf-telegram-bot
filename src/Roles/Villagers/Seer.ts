@@ -4,7 +4,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {Lycan} from "../Wolfs/Lycan";
 import {RoleBase} from "../RoleBase";
 import {Wolf} from "../Wolfs/Wolf";
-import {WolfMan} from "./WolfMan";
+import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
 
 export class Seer extends Villager {
@@ -42,8 +42,8 @@ export class Seer extends Villager {
     forecastRoleName = (targetRole: RoleBase) => {
         if (targetRole instanceof Lycan) {
             return new Villager(this.player).roleName; // Seer sees Lycan as Villager
-        } else if (targetRole instanceof Wolf || targetRole instanceof WolfMan) {
-            return new Wolf(this.player).roleName; // Seer sees all wolves and WolfMan as Wolf
+        } else if (targetRole instanceof Wolf || targetRole instanceof WoodMan) {
+            return new Wolf(this.player).roleName; // Seer sees all wolves and WoodMan as Wolf
         } else if (targetRole instanceof Traitor) {
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
             // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
