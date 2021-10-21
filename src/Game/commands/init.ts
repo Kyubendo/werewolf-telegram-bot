@@ -24,7 +24,7 @@ export const initGame = (bot: TelegramBot, state: State) => {
             return;
         }
 
-        state.game = new Game('classic', [new Player(msg.from)], msg.chat.id, 0) // fix countId
+        state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, 0)
         bot.sendMessage(
             msg.chat.id,
             `${msg.from?.first_name} начал(а) игру! Присоединяйся, чтобы умереть.`,

@@ -11,4 +11,6 @@ RoleBase.game = game
 
 const weight = game.players.map((player, i) => player.role = new rolePool[i](player)).reduce((a, c) => a + c.weight(), 0)
 
-console.log(weight)
+console.log(`
+asdaa 
+da`)
