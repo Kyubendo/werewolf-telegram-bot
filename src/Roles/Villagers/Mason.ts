@@ -2,7 +2,7 @@ import {Villager} from "./Villager";
 import {RoleBase} from "../RoleBase";
 
 export class Mason extends Villager {
-    roleName = 'Каменщик';
+    roleName = 'Каменщик 👷';
     startMessageText = 'Тебе ничего не остается делать, кроме как идти и пахать на стройке, ведь ты Каменщик.';
     weight = () => {
         let otherMasons = RoleBase.game.players.filter(player => player.role instanceof Mason &&

@@ -2,7 +2,7 @@ import {Seer} from "./Seer";
 import {findPlayer} from "../../Game/findPlayer";
 
 export class Fool extends Seer {
-    roleName = 'Дурак';
+    roleName = 'Дурак 🃏';
     weight = () => 4;
 
     handleChoice = (choice?: string) => {
