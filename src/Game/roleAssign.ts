@@ -11,9 +11,10 @@ export const assignRoles = (bot: TelegramBot, game: Game) => {
     const rolePool = [
         Roles.Lycan, Roles.Seer,
 
-        Roles.Villager, Roles.Seer, Roles.Fool, Roles.ClumsyGuy, Roles.Cursed,
-        Roles.Wolf, Roles.Lycan,
-        Roles.Suicide,
+        Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason, // Passive Villagers
+        Roles.Seer, Roles.Fool, // Active Villagers
+        Roles.Wolf, Roles.Lycan, // Wolves
+        Roles.Suicide, // Other
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
 

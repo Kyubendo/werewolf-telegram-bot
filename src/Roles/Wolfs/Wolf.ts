@@ -4,7 +4,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
 
 export class Wolf extends RoleBase {
-    roleName = 'Wolf';
+    roleName = 'Wolf 🐺';
     startMessageText = 'Ты волк. Скушай всё село.';
     weight = () => -10;
 
