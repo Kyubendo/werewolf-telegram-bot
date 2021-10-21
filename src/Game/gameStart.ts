@@ -6,4 +6,3 @@ export const gameStart = (bot: TelegramBot, game: Game) => {
     assignRoles(game) // fix async
     game.setNextStage()
 }
-

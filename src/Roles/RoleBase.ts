@@ -5,6 +5,7 @@ import {Player} from "../Player/Player";
 export abstract class RoleBase {
     constructor(readonly player: Player) {
     }
+
     static game: Game
 
     abstract readonly roleName: string
@@ -21,7 +22,7 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    handleDeath(killer?: Player) {
+     handleDeath(killer?: Player) {
         killer?.role?.killMessage && RoleBase.game.bot.sendMessage(RoleBase.game.chatId, killer.role.killMessage(this.player));
         this.player.isAlive = false;
     }

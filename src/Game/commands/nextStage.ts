@@ -6,5 +6,4 @@ export const nextStage = (bot: TelegramBot, state: State) => {
         if (!state.game) return;
         state.game.setNextStage()
     })
-
 }
