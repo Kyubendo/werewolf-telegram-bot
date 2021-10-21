@@ -2,16 +2,15 @@ import {playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
+import {alliesMessage} from "../../Game/findAllies";
 
 export class Wolf extends RoleBase {
-    roleName = 'Wolf 🐺';
-    startMessageText = 'Ты волк. Скушай всё село.';
+    roleName = 'Волк 🐺';
+    startMessageText = 'Ты волк. Скушай всё село.' + alliesMessage(this.player);
     weight = () => -10;
 
-    killMessage = (deadPlayer: Player) => {
-        Wolf.bot.sendMessage(Wolf.game.chatId, `НомномНОМномНОМНОМном... ${deadPlayer.name} съели заживо!
-${deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`)
-    }
+    killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${deadPlayer.name} съели заживо!\n${
+        deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
