@@ -15,7 +15,7 @@ export abstract class RoleBase {
 
     previousRole?: RoleBase;
 
-    readonly killMessage?: (deadPlayer: Player) => void
+    readonly killMessage?: (deadPlayer: Player) => string
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
@@ -23,8 +23,9 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    handleDeath = (killer?: Player) => {
-        killer?.role?.killMessage && killer.role.killMessage(this.player);
+    handleDeath (killer?: Player) {
+        killer?.role?.killMessage && RoleBase.bot.sendMessage(RoleBase.game.chatId,
+            killer.role.killMessage(this.player));
         this.player.isAlive = false;
     }
 

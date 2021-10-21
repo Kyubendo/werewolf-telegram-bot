@@ -17,8 +17,7 @@ export class Cursed extends Villager {
                 'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...'
                 + alliesMessage(this.player));
         } else {
-            killer?.role?.killMessage && killer.role.killMessage(this.player);
-            this.player.isAlive = false;
+            super.handleDeath(killer);
         }
     }
 }
