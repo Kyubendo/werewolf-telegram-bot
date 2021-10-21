@@ -13,6 +13,8 @@ export abstract class RoleBase {
     abstract readonly weight: () => number
     abstract readonly startMessageText: string
 
+    previousRole?: RoleBase;
+
     readonly killMessage?: (deadPlayer: Player) => void
     readonly action?: () => void
     readonly actionResolve?: () => void

@@ -2,10 +2,11 @@ import {playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
+import {alliesMessage} from "../../Game/findAllies";
 
 export class Wolf extends RoleBase {
-    roleName = 'Wolf 🐺';
-    startMessageText = 'Ты волк. Скушай всё село.';
+    roleName = 'Волк 🐺';
+    startMessageText = 'Ты волк. Скушай всё село.' + alliesMessage(this.player);
     weight = () => -10;
 
     killMessage = (deadPlayer: Player) => {
