@@ -1,11 +1,12 @@
 import {Villager} from "./Villager";
-import {playersButtons} from "../../Game/playersButtons";
-import {findPlayer} from "../../Game/findPlayer";
 import {Lycan} from "../Wolfs/Lycan";
 import {RoleBase} from "../RoleBase";
 import {Wolf} from "../Wolfs/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
+import {playersButtons} from "../../Game/playersButtons";
+import {findPlayer} from "../../Game/findPlayer";
+
 
 export class Seer extends Villager {
     roleName = 'Провидец 👳';
@@ -14,7 +15,7 @@ export class Seer extends Villager {
 
     action = () => {
         if (Seer.game.stage !== 'night') return;
-        Seer.bot.sendMessage(
+        Seer.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь посмотреть?',
             {
@@ -27,7 +28,7 @@ export class Seer extends Villager {
         if (Seer.game.stage !== 'night' || !this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
-        Seer.bot.sendMessage(
+        Seer.game.bot.sendMessage(
             this.player.id,
             `Ты видишь, что ${this.targetPlayer.name} это ${roleName}!`
         )

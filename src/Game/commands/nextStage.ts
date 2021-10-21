@@ -5,7 +5,7 @@ import {changeStage} from "../changeStage";
 export const nextStage = (bot: TelegramBot, state: State) => {
     bot.onText(/\/test_next_stage/, () => {
         if (!state.game) return;
-        changeStage(bot, state.game)
+        changeStage(state.game)
     })
 
 }

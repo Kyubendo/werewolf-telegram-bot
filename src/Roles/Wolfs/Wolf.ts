@@ -14,12 +14,15 @@ export class Wolf extends RoleBase {
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
-        Wolf.bot.sendMessage(
+        Wolf.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь съесть?',
             {
-                reply_markup: playersButtons(Wolf.game.players, true,
-                    ...Wolf.game.players.filter(wolf => wolf.role instanceof Wolf))
+                reply_markup: playersButtons(
+                    Wolf.game.players,
+                    true,
+                    ...Wolf.game.players.filter(player => player.role instanceof Wolf)
+                )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }

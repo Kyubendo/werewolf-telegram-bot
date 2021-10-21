@@ -9,7 +9,7 @@ export const callbackHandle = (bot: TelegramBot, state: State) => {
         if (!game) return;
         switch (query.data) {
             case 'join':
-                join(bot, game, query)
+                join(game, query)
                 break
             default:roleChoice(query, game.players)
         }

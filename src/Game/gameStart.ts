@@ -4,7 +4,7 @@ import {changeStage} from "./changeStage";
 import {Game} from "./Game";
 
 export const gameStart = (bot: TelegramBot, game: Game) => {
-    assignRoles(bot, game)
-    changeStage(bot, game)
+    assignRoles(game)
+    changeStage(game)
 }
 
