@@ -3,7 +3,7 @@ import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
 import {alliesMessage} from "../../Game/findAllies";
-import {highlightPlayer} from "../../Game/highlightPlayer";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Wolf extends RoleBase {
     roleName = 'Волк 🐺';

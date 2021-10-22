@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import {Player} from "../../Player/Player";
 import {playerList} from "../playerList";
 import {Game} from "../Game";
-import {highlightPlayer} from "../highlightPlayer";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export const join = (game: Game, query: TelegramBot.CallbackQuery) => {
     const newPlayer = new Player(query.from)

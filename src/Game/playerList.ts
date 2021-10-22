@@ -1,5 +1,5 @@
 import {Game} from "./Game";
-import {highlightPlayer} from "./highlightPlayer";
+import {highlightPlayer} from "../Utils/highlightPlayer";
 
 export const playerList = (game: Game) => {
     const players = game.players

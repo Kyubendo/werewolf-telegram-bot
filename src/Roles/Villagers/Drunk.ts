@@ -2,7 +2,7 @@ import {Villager} from "./Villager";
 import {Wolf} from "../Wolfs/Wolf";
 import {Player} from "../../Player/Player";
 import {SerialKiller} from "../Others/SerialKiller";
-import {highlightPlayer} from "../../Game/highlightPlayer";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Drunk extends Villager {
     roleName = 'Пьяница 🍻';

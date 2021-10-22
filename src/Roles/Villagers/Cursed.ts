@@ -8,7 +8,7 @@ export class Cursed extends Villager {
     startMessageText = `Ты ${this.roleName}! Сейчас ты обычный смертный, ` +
         'но если волки выберут тебя съесть, ты станешь одним из них.';
     weight = () => {
-        const otherCursedAmount = findAllies(this.player, this.player.role).length;
+        const otherCursedAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;
         return (otherCursedAmount ? 1 - otherCursedAmount: 1)
     }
 

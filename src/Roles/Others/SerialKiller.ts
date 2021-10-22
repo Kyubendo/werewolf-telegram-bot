@@ -1,7 +1,7 @@
 import {RoleBase} from "../RoleBase";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../Wolfs/Wolf";
-import {highlightPlayer} from "../../Game/highlightPlayer";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 
