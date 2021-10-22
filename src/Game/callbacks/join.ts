@@ -3,20 +3,19 @@ import {Player} from "../../Player/Player";
 import {playerList} from "../playerList";
 import {Game} from "../Game";
 
-export const join = (bot: TelegramBot, game: Game, query: TelegramBot.CallbackQuery) => {
+export const join = (game: Game, query: TelegramBot.CallbackQuery) => {
     const newPlayer = new Player(query.from)
     if ( game.players.map(e => e.id).includes(newPlayer.id)) return;
     game.addPlayer(newPlayer)
-    bot.editMessageText(playerList(game), {
+    game.bot.editMessageText(playerList(game), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,
         parse_mode: 'Markdown'
     })
-    bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!')
+    game.bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!')
         .catch(reason => {
             if (reason.response.statusCode === 403) {
-                bot.sendMessage(
-
+                game.bot.sendMessage(
                     game.chatId,
                     `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, надо меня запустить.`,
                     {

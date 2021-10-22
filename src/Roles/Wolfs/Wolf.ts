@@ -9,17 +9,20 @@ export class Wolf extends RoleBase {
     startMessageText = 'Ты волк. Скушай всё село.' + alliesMessage(this.player);
     weight = () => -10;
 
-    killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${deadPlayer.name} съели заживо!\n${
-        deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`
+    killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${deadPlayer.name} съели заживо!` +
+        `\n${deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
-        Wolf.bot.sendMessage(
+        Wolf.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь съесть?',
             {
-                reply_markup: playersButtons(Wolf.game.players, true,
-                    ...Wolf.game.players.filter(wolf => wolf.role instanceof Wolf))
+                reply_markup: playersButtons(
+                    Wolf.game.players,
+                    true,
+                    ...Wolf.game.players.filter(player => player.role instanceof Wolf)
+                )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }

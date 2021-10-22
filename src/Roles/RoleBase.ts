@@ -6,7 +6,6 @@ export abstract class RoleBase {
     constructor(readonly player: Player) {
     }
 
-    static bot: TelegramBot
     static game: Game
 
     abstract readonly roleName: string
@@ -23,14 +22,13 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    handleDeath (killer?: Player) {
-        killer?.role?.killMessage && RoleBase.bot.sendMessage(RoleBase.game.chatId,
-            killer.role.killMessage(this.player));
+     handleDeath(killer?: Player) {
+        killer?.role?.killMessage && RoleBase.game.bot.sendMessage(RoleBase.game.chatId, killer.role.killMessage(this.player));
         this.player.isAlive = false;
     }
 
     choiceMsgEditText = () => {
-        RoleBase.bot.editMessageText(
+        RoleBase.game.bot.editMessageText(
             `Выбор принят: ${this.targetPlayer?.name || 'Пропустить'}.`,
             {message_id: this.choiceMsgId, chat_id: this.player.id}
         )

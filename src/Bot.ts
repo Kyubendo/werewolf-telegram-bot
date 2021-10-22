@@ -1,12 +1,15 @@
 import {config} from "dotenv";
+
+config({path: __dirname + '/./../.env'})
+
 import TelegramBot from "node-telegram-bot-api";
 import {Game} from "./Game/Game";
-import {initGame} from "./Game/commands/init"; // optimid
+import {initGame} from "./Game/commands/init";
 import {callbackHandle} from "./Game/commands/callbackHandle";
 import {forceStart} from "./Game/commands/forceStart";
 import {nextStage} from "./Game/commands/nextStage";
+//optimize imports
 
-config({path: __dirname + '/./../.env'})
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
 
@@ -28,4 +31,4 @@ initGame(bot, state)
 
 callbackHandle(bot, state)
 forceStart(bot, state)
-nextStage(bot,state)
+nextStage(bot, state)
