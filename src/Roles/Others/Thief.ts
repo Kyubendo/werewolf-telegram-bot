@@ -3,6 +3,7 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Wolf} from "../Wolfs/Wolf";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -23,7 +24,6 @@ export class Thief extends RoleBase {
 
     actionResolve = () => {
         if (Thief.game.stage !== 'night' || !this.targetPlayer?.role) return;
-
         if (!this.targetPlayer.isAlive) {
             Thief.game.bot.sendMessage(
                 this.player.id,
@@ -49,12 +49,15 @@ export class Thief extends RoleBase {
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
         } else {
-            [this.player.role, this.targetPlayer.role] = [this.targetPlayer.role, this.player.role];
+            //[this.player.role, this.targetPlayer.role] = [this.targetPlayer.role, this.player.role];
+            const temp = this.player.role;
+            this.player.role = this.targetPlayer.role;
+            this.targetPlayer.role = temp;
 
             Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
-                `Теперь ты ${this.player.role.roleName}!`,
+                `Теперь ты ${this.player.role?.roleName}!`,
                 {
                     parse_mode: 'Markdown'
                 }
@@ -66,11 +69,12 @@ export class Thief extends RoleBase {
                 `Укради роль у кого-нибудь.`
             )
         }
+
+        this.targetPlayer = undefined;
     }
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Thief.game.players);
         this.choiceMsgEditText();
     }
-
 }

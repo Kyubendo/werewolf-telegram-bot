@@ -19,7 +19,8 @@ export class Seer extends Villager {
             this.player.id,
             'Кого ты хочешь посмотреть?',
             {
-                reply_markup: generateInlineKeyboard(Seer.game.players, true)
+                reply_markup: generateInlineKeyboard(Seer.game.players.filter(player => player !== this.player &&
+                player.isAlive), true)
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     };
