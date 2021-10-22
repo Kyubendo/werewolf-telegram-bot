@@ -12,13 +12,20 @@ export class SerialKiller extends RoleBase {
     weight = () => -15; // change?
 
     killMessage = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
-        `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` + `
-        на месте... Серийный Убийца снова атаковал! ${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}`;
+        `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
+        `на месте... Серийный Убийца снова атаковал! ${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}`;
 
     handleDeath(killer?: Player) {
-        if (killer?.role instanceof Wolf)
-            killer.role.handleDeath(this.player);
-        else
+        if (killer?.role instanceof Wolf) {
+            SerialKiller.game.bot.sendMessage(
+                SerialKiller.game.chatId,
+                `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!` +
+                `${killer.role.roleName} ${highlightPlayer(killer)} погиб.`,
+                {
+                    parse_mode: 'Markdown'
+                }
+            )
+        } else
             super.handleDeath(killer);
     }
 
@@ -37,7 +44,7 @@ export class SerialKiller extends RoleBase {
 
     actionResolve = () => {
         if (SerialKiller.game.stage !== 'night' || !this.targetPlayer) return;
-        this.targetPlayer.role?.handleDeath(this.player);
+        this.targetPlayer.isAlive && this.targetPlayer.role?.handleDeath(this.player);
         this.targetPlayer = undefined
     }
 
