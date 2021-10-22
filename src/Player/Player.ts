@@ -15,6 +15,6 @@ export class Player {
     readonly name: string;
     readonly username?: string;
     isAlive: boolean;
-    readonly isFrozen: boolean;
+    isFrozen: boolean;
     role?: RoleBase;
 }
