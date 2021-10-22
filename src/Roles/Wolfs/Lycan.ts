@@ -3,6 +3,6 @@ import {Seer} from "../Villagers/Seer";
 
 export class Lycan extends Wolf {
     roleName = 'Ликан 🐺🌝';
-    startMessageText = 'Ты Ликан! Ты волк, но провидец видит тебя селянином :)';
+    startMessageText = `Ты ${this.roleName}! Ты волк, но провидец видит тебя селянином :)`;
     weight = () => Wolf.game.players.find(player => player.role instanceof Seer) ? -12 : -10;
 }

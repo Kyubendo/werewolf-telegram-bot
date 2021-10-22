@@ -2,6 +2,8 @@ import {RoleBase} from "../RoleBase";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../Wolfs/Wolf";
 import {highlightPlayer} from "../../Game/highlightPlayer";
+import {generateInlineKeyboard} from "../../Game/playersButtons";
+import {findPlayer} from "../../Game/findPlayer";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
@@ -18,5 +20,29 @@ export class SerialKiller extends RoleBase {
             killer.role.handleDeath(this.player);
         else
             super.handleDeath(killer);
+    }
+
+    action = () => {
+        if (SerialKiller.game.stage !== 'night') return;
+        SerialKiller.game.bot.sendMessage(
+            this.player.id,
+            'В кого ты хочешь запихнуть пару-тройку ножей?',
+            {
+                reply_markup: generateInlineKeyboard(
+                    SerialKiller.game.players.filter(player => player !== this.player && player.isAlive)
+                )
+            }
+        ).then(msg => this.choiceMsgId = msg.message_id)
+    }
+
+    actionResolve = () => {
+        if (SerialKiller.game.stage !== 'night' || !this.targetPlayer) return;
+        this.targetPlayer.role?.handleDeath(this.player);
+        this.targetPlayer = undefined
+    }
+
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, SerialKiller.game.players);
+        this.choiceMsgEditText();
     }
 }

@@ -22,8 +22,13 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-     handleDeath(killer?: Player) {
-        killer?.role?.killMessage && RoleBase.game.bot.sendMessage(RoleBase.game.chatId, killer.role.killMessage(this.player));
+    handleDeath(killer?: Player) {
+        killer?.role?.killMessage && RoleBase.game.bot.sendMessage(
+            RoleBase.game.chatId,
+            killer.role.killMessage(this.player),
+            {
+                parse_mode: 'Markdown',
+            });
         this.player.isAlive = false;
     }
 

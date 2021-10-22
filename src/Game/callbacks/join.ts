@@ -2,6 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import {Player} from "../../Player/Player";
 import {playerList} from "../playerList";
 import {Game} from "../Game";
+import {highlightPlayer} from "../highlightPlayer";
 
 export const join = (game: Game, query: TelegramBot.CallbackQuery) => {
     const newPlayer = new Player(query.from)
@@ -17,7 +18,7 @@ export const join = (game: Game, query: TelegramBot.CallbackQuery) => {
             if (reason.response.statusCode === 403) {
                 game.bot.sendMessage(
                     game.chatId,
-                    `[${newPlayer.name}](tg://user?id=${newPlayer.id}), чтобы я смог тебе писать, надо меня запустить.`,
+                    `[${highlightPlayer(newPlayer)}), чтобы я смог тебе писать, надо меня запустить.`,
                     {
                         parse_mode: 'Markdown',
                         reply_markup: {

@@ -4,7 +4,7 @@ import {alliesMessage, findAllies} from "../../Game/findAllies";
 
 export class Mason extends Villager {
     roleName = 'Каменщик 👷';
-    startMessageText = 'Тебе ничего не остается делать, кроме как идти и пахать на стройке, ведь ты Каменщик.'
+    startMessageText = `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ведь ты ${this.roleName}.`
         + alliesMessage(this.player);
     weight = () => {
         const otherMasonsAmount = findAllies(this.player).length;

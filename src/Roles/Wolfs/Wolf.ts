@@ -7,7 +7,7 @@ import {highlightPlayer} from "../../Game/highlightPlayer";
 
 export class Wolf extends RoleBase {
     roleName = 'Волк 🐺';
-    startMessageText = 'Ты волк. Скушай всё село.' + alliesMessage(this.player);
+    startMessageText = `Ты ${this.roleName}. Скушай всё село.` + alliesMessage(this.player);
     weight = () => -10;
 
     killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
