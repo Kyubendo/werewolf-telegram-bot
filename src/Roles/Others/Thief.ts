@@ -1,5 +1,5 @@
 import {RoleBase} from "../RoleBase";
-import {playersButtons} from "../../Game/playersButtons";
+import {generateInlineKeyboard} from "../../Game/playersButtons";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -12,9 +12,8 @@ export class Thief extends RoleBase {
         Thief.game.bot.sendMessage(this.player.id,
             'Чью роль ты хочешь украсть?',
             {
-                reply_markup: playersButtons(Thief.game.players,
-                    true,
-                    this.player)
+                reply_markup: generateInlineKeyboard(Thief.game.players,
+                    true)
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }

@@ -4,7 +4,7 @@ import {RoleBase} from "../RoleBase";
 import {Wolf} from "../Wolfs/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
-import {playersButtons} from "../../Game/playersButtons";
+import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 
 
@@ -19,7 +19,7 @@ export class Seer extends Villager {
             this.player.id,
             'Кого ты хочешь посмотреть?',
             {
-                reply_markup: playersButtons(Seer.game.players, true, this.player)
+                reply_markup: generateInlineKeyboard(Seer.game.players, true)
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     };

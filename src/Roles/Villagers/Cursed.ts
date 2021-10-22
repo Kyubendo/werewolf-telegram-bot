@@ -1,13 +1,16 @@
 import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../Wolfs/Wolf";
-import {alliesMessage} from "../../Game/findAllies";
+import {alliesMessage, findAllies} from "../../Game/findAllies";
 
 export class Cursed extends Villager {
     roleName = 'Проклятый 😾';
     startMessageText = 'Ты Проклятый! Сейчас ты обычный смертный, ' +
         'но если волки выберут тебя съесть, ты станешь одним из них.';
-    weight = () => -3;
+    weight = () => {
+        const otherCursedAmount = findAllies(this.player, this.player.role).length;
+        return (otherCursedAmount ? 1 - otherCursedAmount: 1)
+    }
 
     handleDeath = (killer?: Player) => {
         if (killer?.role instanceof Wolf) {

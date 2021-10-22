@@ -15,9 +15,9 @@ export class Game {
     ) {
     }
 
-    lynchDuration = 1_000
-    dayDuration = 10_000
-    nightDuration = 5_000
+    lynchDuration = 1000_000
+    dayDuration = 10000_000
+    nightDuration = 5000_000
 
     stage: GameStage = undefined
     stageTimer?: NodeJS.Timer

@@ -1,16 +1,17 @@
-import {generateInlineKeyboard, playersButtons} from "../../Game/playersButtons";
+import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
 import {alliesMessage} from "../../Game/findAllies";
+import {highlightPlayer} from "../../Game/highlightPlayer";
 
 export class Wolf extends RoleBase {
     roleName = 'Волк 🐺';
     startMessageText = 'Ты волк. Скушай всё село.' + alliesMessage(this.player);
     weight = () => -10;
 
-    killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${deadPlayer.name} съели заживо!` +
-        `\n${deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`
+    killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
+        `\n${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}.`
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
