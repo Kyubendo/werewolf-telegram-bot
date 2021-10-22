@@ -1,4 +1,4 @@
-import {playersButtons} from "../../Game/playersButtons";
+import {generateInlineKeyboard, playersButtons} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
@@ -18,10 +18,8 @@ export class Wolf extends RoleBase {
             this.player.id,
             'Кого ты хочешь съесть?',
             {
-                reply_markup: playersButtons(
-                    Wolf.game.players,
-                    true,
-                    ...Wolf.game.players.filter(player => player.role instanceof Wolf)
+                reply_markup: generateInlineKeyboard(
+                    Wolf.game.players.filter(player => !(player.role instanceof Wolf) && player.isAlive)
                 )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
