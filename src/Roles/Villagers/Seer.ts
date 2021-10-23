@@ -6,6 +6,7 @@ import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 
 export class Seer extends Villager {
@@ -31,7 +32,10 @@ export class Seer extends Villager {
 
         Seer.game.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${this.targetPlayer.name} это ${roleName}!`
+            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это ${roleName}!`,
+            {
+                parse_mode: 'Markdown'
+            }
         )
         this.targetPlayer = undefined
     }

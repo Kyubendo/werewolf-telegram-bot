@@ -1,6 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import {Game} from "../Game/Game";
 import {Player} from "../Player/Player";
+import {highlightPlayer} from "../Utils/highlightPlayer";
 
 export abstract class RoleBase {
     constructor(readonly player: Player) {
@@ -33,9 +34,13 @@ export abstract class RoleBase {
     }
 
     choiceMsgEditText = () => {
-        RoleBase.game.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer?.name || 'Пропустить'}.`,
-            {message_id: this.choiceMsgId, chat_id: this.player.id}
+        this.targetPlayer && RoleBase.game.bot.editMessageText(
+            `Выбор принят: ${highlightPlayer(this.targetPlayer) || 'Пропустить'}.`,
+            {
+                message_id: this.choiceMsgId,
+                chat_id: this.player.id,
+                parse_mode: 'Markdown'
+            }
         )
     }
 }

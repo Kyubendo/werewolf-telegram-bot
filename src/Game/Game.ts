@@ -51,7 +51,7 @@ export class Game {
             .then(() => {
                 this.bot.sendMessage(this.chatId, playerList(this), {parse_mode: 'Markdown'})
             })
-        this.players.filter(player => player.isAlive || !player.isFrozen)
+        this.players.filter(player => player.isAlive && !player.isFrozen)
             .forEach(player => player.role?.action && player.role.action())
     }
 

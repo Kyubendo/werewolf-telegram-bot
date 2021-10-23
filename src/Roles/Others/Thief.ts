@@ -3,7 +3,7 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Wolf} from "../Wolfs/Wolf";
+import {Seer} from "../Villagers/Seer";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -48,11 +48,15 @@ export class Thief extends RoleBase {
                 this.player.id,
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
-        } else {
+        } else if (this.player.role) {
             //[this.player.role, this.targetPlayer.role] = [this.targetPlayer.role, this.player.role];
-            const temp = this.player.role;
-            this.player.role = this.targetPlayer.role;
-            this.targetPlayer.role = temp;
+
+            // const thiefRole = Object.create(this.player.role, {'player': {value: this.targetPlayer}});
+            // this.player.role = Object.create(this.targetPlayer.role, {'player': {value: this.player}});
+            // this.targetPlayer.role = thiefRole;
+
+            // this.player.role = new Seer(this.player);
+            // this.targetPlayer.role = new Thief(this.targetPlayer);
 
             Thief.game.bot.sendMessage(
                 this.player.id,
@@ -68,6 +72,8 @@ export class Thief extends RoleBase {
                 `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
                 `Укради роль у кого-нибудь.`
             )
+
+            this.targetPlayer = undefined;
         }
 
         this.targetPlayer = undefined;
