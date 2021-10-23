@@ -27,7 +27,7 @@ export const initGame = (bot: TelegramBot, state: State) => {
         state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, 0)
         bot.sendMessage(
             msg.chat.id,
-            `Новая игра начата игроком ${msg.from?.first_name} ${msg.from?.last_name}! Присоединяйся, чтобы` +
+            `Новая игра начата игроком ${msg.from?.first_name}! Присоединяйся, чтобы` +
             ` быть съеденным(ой)!.`,
             {
                 reply_markup: joinButton,

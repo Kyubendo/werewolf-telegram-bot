@@ -23,7 +23,16 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    handleDeath(killer?: Player) {
+    onKilled(killer: Player) {
+        this.handleDeath(killer) && this.movePlayer();
+    }
+
+    movePlayer = () => {
+        RoleBase.game.players.push(...RoleBase.game.players.splice(
+            RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
+    }
+
+    handleDeath(killer?: Player): boolean {
         killer?.role?.killMessage && RoleBase.game.bot.sendMessage(
             RoleBase.game.chatId,
             killer.role.killMessage(this.player),
@@ -31,6 +40,7 @@ export abstract class RoleBase {
                 parse_mode: 'Markdown',
             });
         this.player.isAlive = false;
+        return true;
     }
 
     choiceMsgEditText = () => {
@@ -43,4 +53,6 @@ export abstract class RoleBase {
             }
         )
     }
+
+    createThisRole = (player: Player): RoleBase => new (this.constructor as any)(player);
 }

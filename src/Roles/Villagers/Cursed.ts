@@ -1,6 +1,6 @@
 import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
-import {Wolf} from "../Wolfs/Wolf";
+import {Wolf} from "../Wolves/Wolf";
 import {alliesMessage, findAllies} from "../../Game/findAllies";
 
 export class Cursed extends Villager {
@@ -21,8 +21,9 @@ export class Cursed extends Villager {
                 + alliesMessage(this.player), {
                     parse_mode: 'Markdown',
                 });
+            return false;
         } else {
-            super.handleDeath(killer);
+            return super.handleDeath(killer);
         }
     }
 }

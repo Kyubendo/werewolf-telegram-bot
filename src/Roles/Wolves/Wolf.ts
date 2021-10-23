@@ -28,7 +28,7 @@ export class Wolf extends RoleBase {
 
     actionResolve = () => {
         if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
-        this.targetPlayer.isAlive && this.targetPlayer.role?.handleDeath(this.player);
+        this.targetPlayer.isAlive && this.targetPlayer.role?.onKilled(this.player);
         this.targetPlayer = undefined
     }
 

@@ -1,5 +1,5 @@
 import {Villager} from "./Villager";
-import {Wolf} from "../Wolfs/Wolf";
+import {Wolf} from "../Wolves/Wolf";
 import {Player} from "../../Player/Player";
 import {SerialKiller} from "../Others/SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -21,6 +21,7 @@ export class Drunk extends Villager {
                 {
                     parse_mode: 'Markdown',
                 });
+            return true;
         } else if (killer?.role instanceof SerialKiller) {
             Drunk.game.bot.sendMessage(
                 Drunk.game.chatId,
@@ -30,7 +31,8 @@ export class Drunk extends Villager {
                 {
                     parse_mode: 'Markdown',
                 })
+            return true;
         } else
-            super.handleDeath(killer);
+            return super.handleDeath(killer);
     }
 }

@@ -1,6 +1,6 @@
 import {RoleBase} from "../RoleBase";
 import {Player} from "../../Player/Player";
-import {Wolf} from "../Wolfs/Wolf";
+import {Wolf} from "../Wolves/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
@@ -26,8 +26,9 @@ export class SerialKiller extends RoleBase {
                     parse_mode: 'Markdown'
                 }
             )
+            return false;
         } else
-            super.handleDeath(killer);
+            return super.handleDeath(killer);
     }
 
     action = () => {
@@ -45,7 +46,7 @@ export class SerialKiller extends RoleBase {
 
     actionResolve = () => {
         if (SerialKiller.game.stage !== 'night' || !this.targetPlayer) return;
-        this.targetPlayer.isAlive && this.targetPlayer.role?.handleDeath(this.player);
+        this.targetPlayer.isAlive && this.targetPlayer.role?.onKilled(this.player);
         this.targetPlayer = undefined
     }
 
