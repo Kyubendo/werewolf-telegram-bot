@@ -8,10 +8,11 @@ export const assignRoles = (game: Game) => {
     const rolePool = [
         Roles. Wolf, Roles.Monarch, Roles.Thief, Roles.SerialKiller, Roles.Lycan, Roles.Cursed, Roles.Seer,
 
-        Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason, // Passive Villagers
+        Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason,
+        Roles.Beholder, // Passive Villagers
         Roles.Seer, Roles.Fool, Roles.Monarch, Roles.Harlot, // Active Villagers
         Roles.Wolf, Roles.Lycan, // Wolves
-        Roles.Suicide, // Other
+        Roles.Suicide, Roles.SerialKiller, Roles.Thief // Other
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
 
