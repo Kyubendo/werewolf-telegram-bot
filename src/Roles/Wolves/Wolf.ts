@@ -4,6 +4,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
 import {alliesMessage} from "../../Game/findAllies";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Traitor} from "../Villagers/Traitor";
 
 export class Wolf extends RoleBase {
     roleName = 'Волк 🐺';
@@ -36,5 +37,19 @@ export class Wolf extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Wolf.game.players);
         this.choiceMsgEditText();
+    }
+
+    handleDeath(killer?: Player): boolean {
+        const traitor = Wolf.game.players.find(player => player.role instanceof Traitor);
+        if (!(Wolf.game.players.filter(player => player.role instanceof Wolf).length - 1) && traitor) {
+            traitor.role = new Wolf(traitor);
+            traitor.role.previousRole = new Traitor(traitor);
+            Wolf.game.bot.sendMessage(
+                traitor.id,
+                `Твое время настало, ты обрел новый облик, ${traitor.role.previousRole?.roleName}! ` +
+                `Теперь ты ${traitor.role.roleName}!`
+            )
+        }
+        return super.handleDeath(killer);
     }
 }

@@ -3,7 +3,6 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Seer} from "../Villagers/Seer";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -37,7 +36,7 @@ export class Thief extends RoleBase {
 
             Thief.game.bot.sendMessage(
                 Thief.game.chatId,
-                `${this.roleName} ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
+                `${this.roleName} - ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
                 {
                     parse_mode: 'Markdown'

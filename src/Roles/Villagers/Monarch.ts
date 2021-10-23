@@ -33,11 +33,14 @@ export class Monarch extends Villager {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice === 'Раскрыться')
-            this.comingOut = true;
-        this.choiceMsgEditText();
+        if (choice === 'Раскрыться') {
+            this.choiceMsgEditText();
+            return;
+        }
 
         if (this.comingOut) {
+            this.comingOut = true;
+            this.choiceMsgEditText();
             Monarch.game.bot.sendMessage(
                 Monarch.game.chatId,
                 `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +

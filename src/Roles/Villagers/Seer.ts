@@ -7,6 +7,7 @@ import {Traitor} from "./Traitor";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Player} from "../../Player/Player";
 
 
 export class Seer extends Villager {
@@ -24,7 +25,7 @@ export class Seer extends Villager {
                 player.isAlive), true)
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
-    };
+    }
 
     actionResolve = () => {
         if (Seer.game.stage !== 'night' || !this.targetPlayer?.role) return;
@@ -43,6 +44,20 @@ export class Seer extends Villager {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Seer.game.players)
         this.choiceMsgEditText();
+    }
+
+    handleDeath(killer?: Player): boolean {
+        Seer.game.bot.sendMessage(
+            Seer.game.chatId,
+            `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
+            'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
+            `лучшие мозги. ${this.roleName} - ${highlightPlayer(this.player)} мертв.`,
+            {
+                parse_mode: 'Markdown'
+            }
+        )
+        this.player.isAlive = false;
+        return true;
     }
 
     forecastRoleName = (targetRole: RoleBase) => {
