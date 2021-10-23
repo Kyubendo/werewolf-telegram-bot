@@ -9,7 +9,7 @@ export const assignRoles = (game: Game) => {
         Roles. Wolf, Roles.Monarch, Roles.Thief, Roles.SerialKiller, Roles.Lycan, Roles.Cursed, Roles.Seer,
 
         Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason, // Passive Villagers
-        Roles.Seer, Roles.Fool, // Active Villagers
+        Roles.Seer, Roles.Fool, Roles.Monarch, Roles.Harlot, // Active Villagers
         Roles.Wolf, Roles.Lycan, // Wolves
         Roles.Suicide, // Other
     ]

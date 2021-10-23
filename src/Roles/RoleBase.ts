@@ -28,8 +28,8 @@ export abstract class RoleBase {
         this.player.isAlive && this.handleDeath(killer) && this.movePlayer() && this.checkHarlotDeath(killer);
     }
 
-    private checkHarlotDeath = (killer: Player): boolean => {
-        const harlot = RoleBase.game.players.find(player => player instanceof Harlot);
+    private checkHarlotDeath = (killer: Player) => {
+        let harlot = RoleBase.game.players.find(player => player.role instanceof Harlot);
         if (harlot && harlot.role?.targetPlayer === this.player) {
             RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
@@ -42,9 +42,7 @@ export abstract class RoleBase {
                 }
             )
             harlot.role.onKilled(killer);
-            return true;
         }
-        return false;
     }
 
     movePlayer = () => {
