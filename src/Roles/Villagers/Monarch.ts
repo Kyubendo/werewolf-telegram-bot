@@ -12,8 +12,8 @@ export class Monarch extends Villager {
     comingOut?: boolean;
 
     action = () => {
-        if (Monarch.game.stage !== 'day' || this.comingOut === undefined) return;
-        if (this.comingOut) {
+        if (Monarch.game.stage !== 'day' || this.comingOut === false) return;
+        if (this.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.comingOut = false;
             return;
         }
@@ -30,6 +30,12 @@ export class Monarch extends Villager {
                 }
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
+    }
+
+    handleChoice = (choice?: string) => {
+        if (choice === 'Раскрыться')
+            this.comingOut = true;
+        this.choiceMsgEditText();
 
         if (this.comingOut) {
             Monarch.game.bot.sendMessage(
@@ -42,12 +48,6 @@ export class Monarch extends Villager {
                 }
             )
         }
-    }
-
-    handleChoice = (choice?: string) => {
-        if (choice === 'Раскрыться')
-            this.comingOut = true;
-        this.choiceMsgEditText();
     }
 
     choiceMsgEditText = () => {

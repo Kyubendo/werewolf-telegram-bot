@@ -1,7 +1,7 @@
 import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../Wolves/Wolf";
-import {alliesMessage, findAllies} from "../../Game/findAllies";
+import {alliesMessage} from "../../Game/findAllies";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Cursed extends Villager {
@@ -9,8 +9,8 @@ export class Cursed extends Villager {
     startMessageText = `Ты ${this.roleName}! Сейчас ты обычный смертный, ` +
         'но если волки выберут тебя съесть, ты станешь одним из них.';
     weight = () => {
-        const otherCursedAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;
-        return (otherCursedAmount ? 1 - otherCursedAmount : 1)
+        const wolvesAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;
+        return (wolvesAmount ? 1 - wolvesAmount : 1)
     }
 
     handleDeath = (killer?: Player) => {

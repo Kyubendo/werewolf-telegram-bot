@@ -3,7 +3,7 @@ import {Player} from "../Player/Player";
 import {Wolf} from "../Roles";
 import {highlightPlayer} from "../Utils/highlightPlayer";
 
-export const findAllies = (player: Player, ) => // role для других ролей. Например, когда надо найти потенциальныхсоюзников для Проклятого (волков)
+export const findAllies = (player: Player, ) =>
     RoleBase.game.players.filter(otherPlayer => player.role
         && otherPlayer.role instanceof player.role.constructor
         && otherPlayer !== player

@@ -1,4 +1,3 @@
-import TelegramBot from "node-telegram-bot-api";
 import {Game} from "../Game/Game";
 import {Player} from "../Player/Player";
 import {highlightPlayer} from "../Utils/highlightPlayer";
@@ -25,7 +24,7 @@ export abstract class RoleBase {
     choiceMsgId?: number
 
     onKilled(killer: Player) {
-        this.handleDeath(killer) && this.movePlayer();
+        this.player.isAlive && this.handleDeath(killer) && this.movePlayer();
     }
 
     movePlayer = () => {

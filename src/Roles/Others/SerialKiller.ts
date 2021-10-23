@@ -48,7 +48,7 @@ export class SerialKiller extends RoleBase {
 
     actionResolve = () => {
         if (SerialKiller.game.stage !== 'night' || !this.targetPlayer) return;
-        this.targetPlayer.isAlive && this.targetPlayer.role?.onKilled(this.player);
+        this.targetPlayer.role?.onKilled(this.player);
         this.targetPlayer = undefined
     }
 
