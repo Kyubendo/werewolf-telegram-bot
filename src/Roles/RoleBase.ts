@@ -25,11 +25,12 @@ export abstract class RoleBase {
     choiceMsgId?: number
 
     readonly onKilled = (killer: Player) => {
-        this.player.isAlive && this.handleDeath(killer) && this.movePlayer() && this.checkHarlotDeath(killer);
+        this.player.isAlive && this.handleDeath(killer) && this.movePlayer();
+        this.checkHarlotDeath(killer);
     }
 
-    private checkHarlotDeath = (killer: Player) => {
-        let harlot = RoleBase.game.players.find(player => player.role instanceof Harlot);
+    checkHarlotDeath = (killer: Player) => {
+        const harlot = RoleBase.game.players.find(player => player.role instanceof Harlot);
         if (harlot && harlot.role?.targetPlayer === this.player) {
             RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
