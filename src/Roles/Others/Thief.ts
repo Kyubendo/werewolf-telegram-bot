@@ -27,7 +27,7 @@ export class Thief extends RoleBase {
         if (!this.targetPlayer.isAlive) {
             Thief.game.bot.sendMessage(
                 this.player.id,
-                `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он труп!`
+                `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он(а) уже труп!`
             )
             return;
         }

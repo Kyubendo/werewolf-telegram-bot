@@ -11,10 +11,12 @@ export class SerialKiller extends RoleBase {
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -15; // change?
 
-    killMessage = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
+    killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
         `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
         `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
         `был(а) ${deadPlayer.role?.roleName}`;
+    killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
+        'извлекает твои органы. Ты мертв(а).'
 
     handleDeath(killer?: Player) {
         if (killer?.role instanceof Wolf) {

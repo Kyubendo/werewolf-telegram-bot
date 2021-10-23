@@ -2,6 +2,7 @@ import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../Wolves/Wolf";
 import {alliesMessage, findAllies} from "../../Game/findAllies";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Cursed extends Villager {
     roleName = 'Проклятый 😾';
@@ -9,7 +10,7 @@ export class Cursed extends Villager {
         'но если волки выберут тебя съесть, ты станешь одним из них.';
     weight = () => {
         const otherCursedAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;
-        return (otherCursedAmount ? 1 - otherCursedAmount: 1)
+        return (otherCursedAmount ? 1 - otherCursedAmount : 1)
     }
 
     handleDeath = (killer?: Player) => {
@@ -21,6 +22,12 @@ export class Cursed extends Villager {
                 + alliesMessage(this.player), {
                     parse_mode: 'Markdown',
                 });
+            Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
+                .forEach(player => Cursed.game.bot.sendMessage(
+                    player.id,
+                    `${highlightPlayer(this.player)} был(а) ${this.player.role?.previousRole?.roleName}, ` +
+                    `поэтому он(а) теперь один(на) из вас! Поздравляем нового волка.`
+                ))
             return false;
         } else {
             return super.handleDeath(killer);

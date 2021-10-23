@@ -4,7 +4,7 @@ import {highlightPlayer} from "../Utils/highlightPlayer";
 export const playerList = (game: Game) => {
     const players = game.players
     if (game.stage) {
-        return `Живые игроки (${players.sort((a,b) => + a.isAlive - + b.isAlive)
+        return `Живые игроки (${players.sort((p) => -!p.isAlive )
                 .filter(e => e.isAlive).length}/${players.length}):\n`
             + players.map(e =>
                 `${e.isAlive ? highlightPlayer(e) : e.name}: ${e.isAlive ?

@@ -15,7 +15,8 @@ export abstract class RoleBase {
 
     previousRole?: RoleBase;
 
-    readonly killMessage?: (deadPlayer: Player) => string
+    readonly killMessageAll?: (deadPlayer: Player) => string
+    readonly killMessageDead?: string
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
@@ -33,9 +34,9 @@ export abstract class RoleBase {
     }
 
     handleDeath(killer?: Player): boolean {
-        killer?.role?.killMessage && RoleBase.game.bot.sendMessage(
+        killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
             RoleBase.game.chatId,
-            killer.role.killMessage(this.player),
+            killer.role.killMessageAll(this.player),
             {
                 parse_mode: 'Markdown',
             });

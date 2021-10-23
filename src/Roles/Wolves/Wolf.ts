@@ -10,8 +10,9 @@ export class Wolf extends RoleBase {
     startMessageText = `Ты ${this.roleName}. Скушай всё село.` + alliesMessage(this.player);
     weight = () => -10;
 
-    killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
+    killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
         `\n${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}.`
+    killMessageDead = 'О нет! Ты съеден(а) волком!';
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
