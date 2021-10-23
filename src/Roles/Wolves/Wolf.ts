@@ -1,16 +1,18 @@
-import {playersButtons} from "../../Game/playersButtons";
+import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
 import {alliesMessage} from "../../Game/findAllies";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Wolf extends RoleBase {
     roleName = 'Волк 🐺';
-    startMessageText = 'Ты волк. Скушай всё село.' + alliesMessage(this.player);
+    startMessageText = `Ты ${this.roleName}. Скушай всё село.` + alliesMessage(this.player);
     weight = () => -10;
 
-    killMessage = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${deadPlayer.name} съели заживо!` +
-        `\n${deadPlayer.name} был(а) ${deadPlayer.role?.roleName}.`
+    killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
+        `\n${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}.`
+    killMessageDead = 'О нет! Ты съеден(а) волком!';
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
@@ -18,10 +20,8 @@ export class Wolf extends RoleBase {
             this.player.id,
             'Кого ты хочешь съесть?',
             {
-                reply_markup: playersButtons(
-                    Wolf.game.players,
-                    true,
-                    ...Wolf.game.players.filter(player => player.role instanceof Wolf)
+                reply_markup: generateInlineKeyboard(
+                    Wolf.game.players.filter(player => !(player.role instanceof Wolf) && player.isAlive)
                 )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
@@ -29,7 +29,7 @@ export class Wolf extends RoleBase {
 
     actionResolve = () => {
         if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
-        this.targetPlayer.role?.handleDeath(this.player);
+        this.targetPlayer.role?.onKilled(this.player);
         this.targetPlayer = undefined
     }
 

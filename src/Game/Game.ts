@@ -15,9 +15,9 @@ export class Game {
     ) {
     }
 
-    lynchDuration = 1_000
-    dayDuration = 10_000
-    nightDuration = 5_000
+    lynchDuration = 1000_000
+    dayDuration = 10000_000
+    nightDuration = 5000_000
 
     stage: GameStage = undefined
     stageTimer?: NodeJS.Timer
@@ -51,7 +51,7 @@ export class Game {
             .then(() => {
                 this.bot.sendMessage(this.chatId, playerList(this), {parse_mode: 'Markdown'})
             })
-        this.players.filter(player => player.isAlive || !player.isFrozen)
+        this.players.filter(player => player.isAlive && !player.isFrozen)
             .forEach(player => player.role?.action && player.role.action())
     }
 

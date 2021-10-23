@@ -1,16 +1,17 @@
 import {Villager} from "./Villager";
-import {Lycan} from "../Wolfs/Lycan";
+import {Lycan} from "../Wolves/Lycan";
 import {RoleBase} from "../RoleBase";
-import {Wolf} from "../Wolfs/Wolf";
+import {Wolf} from "../Wolves/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
-import {playersButtons} from "../../Game/playersButtons";
+import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 
 export class Seer extends Villager {
     roleName = 'Провидец 👳';
-    startMessageText = 'Ты Провидец! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.  ';
+    startMessageText = `Ты ${this.roleName} Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
 
     action = () => {
@@ -19,7 +20,8 @@ export class Seer extends Villager {
             this.player.id,
             'Кого ты хочешь посмотреть?',
             {
-                reply_markup: playersButtons(Seer.game.players, true, this.player)
+                reply_markup: generateInlineKeyboard(Seer.game.players.filter(player => player !== this.player &&
+                player.isAlive), true)
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     };
@@ -30,7 +32,10 @@ export class Seer extends Villager {
 
         Seer.game.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${this.targetPlayer.name} это ${roleName}!`
+            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это ${roleName}!`,
+            {
+                parse_mode: 'Markdown'
+            }
         )
         this.targetPlayer = undefined
     }

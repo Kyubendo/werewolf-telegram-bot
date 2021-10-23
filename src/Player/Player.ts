@@ -4,7 +4,7 @@ import {User} from "node-telegram-bot-api";
 export class Player {
     constructor(user: User) {
         this.id = user.id
-        this.name = user.first_name
+        this.name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
         this.username = user.username
 
         this.isAlive = true
@@ -15,6 +15,6 @@ export class Player {
     readonly name: string;
     readonly username?: string;
     isAlive: boolean;
-    readonly isFrozen: boolean;
+    isFrozen: boolean;
     role?: RoleBase;
 }
