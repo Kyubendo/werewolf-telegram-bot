@@ -11,7 +11,10 @@ export const callbackHandle = (bot: TelegramBot, state: State) => {
             case 'join':
                 join(game, query)
                 break
-            default:roleChoice(query, game.players)
+            default:
+                roleChoice(query, game.players)
+                game.lynch?.handleVotingChoice(query)
+
         }
     })
 }

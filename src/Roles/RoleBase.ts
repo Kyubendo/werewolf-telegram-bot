@@ -24,8 +24,9 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    readonly onKilled = (killer: Player) => {
-        this.player.isAlive && this.handleDeath(killer) && this.movePlayer() && this.checkHarlotDeath(killer);
+    readonly onKilled = (killer?: Player) => {
+        if (!killer) this.handleLynchDeath()
+        else this.player.isAlive && this.handleDeath(killer) && this.movePlayer() && this.checkHarlotDeath(killer);
     }
 
     checkHarlotDeath = (killer: Player) => {
@@ -58,15 +59,21 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath(killer ?: Player)
-        :
-        boolean {
+    handleDeath(killer ?: Player): boolean {
         killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
             RoleBase.game.chatId,
             killer.role.killMessageAll(this.player),
-        );
+        )
         this.player.isAlive = false;
         return true;
+    }
+
+    handleLynchDeath() {
+        RoleBase.game.bot.sendMessage(
+            RoleBase.game.chatId,
+            `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+            + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`)
+        this.player.isAlive = false;
     }
 
     choiceMsgEditText = () => {

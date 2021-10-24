@@ -1,7 +1,8 @@
 import {Player} from "../Player/Player";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
-import {playerList} from "./playerList";
+import {playerList} from "../Utils/playerList";
+import {Lynch} from "./Lynch";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -15,6 +16,8 @@ export class Game {
     ) {
     }
 
+    lynch?: Lynch
+
     lynchDuration = 1000_000
     dayDuration = 10000_000
     nightDuration = 5000_000
@@ -22,8 +25,8 @@ export class Game {
     stage: GameStage = undefined
     stageTimer?: NodeJS.Timer
     resetStageTimer = (stageDuration: number) => {
-        this.stageTimer && clearInterval(this.stageTimer)
-        this.stageTimer = setInterval(this.setNextStage, stageDuration)
+        this.stageTimer && clearTimeout(this.stageTimer)
+        this.stageTimer = setTimeout(this.setNextStage, stageDuration)
     }
 
     setNextStage = () => {
@@ -34,20 +37,21 @@ export class Game {
         switch (this.stage) {
             case "day":
                 this.stage = "lynch"
-                stageDuration =this.lynchDuration
+                stageDuration = this.lynchDuration
+                this.lynch?.startVoting()
                 break
             case "night":
                 this.stage = "day"
-                stageDuration=this.dayDuration
+                stageDuration = this.dayDuration
                 break
             case "lynch":
             default:
                 this.stage = "night"
-                stageDuration=this.nightDuration
+                stageDuration = this.nightDuration
         }
         this.resetStageTimer(stageDuration)
 
-        this.bot.sendMessage(this.chatId, gameStageMsg(this.stage) || '')
+        this.bot.sendMessage(this.chatId, gameStageMsg(this))
             .then(() => {
                 this.bot.sendMessage(this.chatId, playerList(this),)
             })
