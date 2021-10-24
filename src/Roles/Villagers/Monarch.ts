@@ -44,9 +44,6 @@ export class Monarch extends Villager {
             `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +
             `шаг вперед, предлагая всем внимательно посмотреть на корону, которую он прятал раньше.\n` +
             `Сегодня ${this.roleName} решит, кого казнить.`, // GIF
-            {
-                parse_mode: 'Markdown'
-            }
         )
     }
 
@@ -56,7 +53,6 @@ export class Monarch extends Villager {
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,
-                parse_mode: 'Markdown'
             }
         )
     }

@@ -32,13 +32,11 @@ export const initGame = (bot: TelegramBot, state: State) => {
             ` быть съеденным(ой)!.`,
             {
                 reply_markup: joinButton,
-                parse_mode: "Markdown"
             }
         )//.then(msg => bot.pinChatMessage(msg.chat.id, String(msg.message_id)))
         bot.sendMessage(
             msg.chat.id,
             playerList(state.game),
-            {parse_mode: 'Markdown'},
         ).then(msg => state.game!.playerCountMsgId = msg.message_id)
     })
 }

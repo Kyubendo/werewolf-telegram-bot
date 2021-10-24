@@ -38,9 +38,6 @@ export abstract class RoleBase {
                     'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
                     `пожирающего ${highlightPlayer(this.player)}! Волк резко прыгает на ${highlightPlayer(harlot)}... ` +
                     `${harlot.role.roleName}  —  ${highlightPlayer(harlot)} мертва.`,
-                    {
-                        parse_mode: 'Markdown'
-                    }
                 )
             } else if (killer.role instanceof SerialKiller) {
                 RoleBase.game.bot.sendMessage(
@@ -49,9 +46,6 @@ export abstract class RoleBase {
                     `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
                     `${highlightPlayer(this.player)}! Серийный Убийца решил развлечься с ${highlightPlayer(harlot)}, ` +
                     `прежде чем взять сердце к себе в коллекцию!`,
-                    {
-                        parse_mode: 'Markdown'
-                    }
                 )
             }
 
@@ -70,9 +64,7 @@ export abstract class RoleBase {
         killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
             RoleBase.game.chatId,
             killer.role.killMessageAll(this.player),
-            {
-                parse_mode: 'Markdown',
-            });
+        );
         this.player.isAlive = false;
         return true;
     }
@@ -83,7 +75,6 @@ export abstract class RoleBase {
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,
-                parse_mode: 'Markdown'
             }
         )
     }

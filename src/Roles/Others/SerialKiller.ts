@@ -24,9 +24,6 @@ export class SerialKiller extends RoleBase {
                 SerialKiller.game.chatId,
                 `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!` +
                 `${killer.role.roleName}  —  ${highlightPlayer(killer)} погиб.`,
-                {
-                    parse_mode: 'Markdown'
-                }
             )
             return false;
         } else

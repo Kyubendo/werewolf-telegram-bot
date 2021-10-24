@@ -24,9 +24,6 @@ export class Fool extends Seer {
             'День начался с печальных новостей. Всем известный Провид... ' +
             `Так, стоп! Это же никакой не Провидец! Он... ${this.roleName}!  ` +
             `Покойся не с миром, ${highlightPlayer(this.player)}...`,
-            {
-                parse_mode: 'Markdown'
-            }
         )
         return true;
     }
