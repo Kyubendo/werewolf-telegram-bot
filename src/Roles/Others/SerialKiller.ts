@@ -14,7 +14,7 @@ export class SerialKiller extends RoleBase {
     killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
         `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
         `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
-        `был(а) **${deadPlayer.role?.roleName}**`;
+        `был(а) *${deadPlayer.role?.roleName}*`;
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
@@ -23,7 +23,7 @@ export class SerialKiller extends RoleBase {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
                 `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!` +
-                `**${killer.role.roleName}** — ${highlightPlayer(killer)} погиб.`,
+                `*${killer.role.roleName}* — ${highlightPlayer(killer)} погиб.`,
 
             )
             return false;

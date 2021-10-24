@@ -36,7 +36,7 @@ export class Thief extends RoleBase {
 
             Thief.game.bot.sendMessage(
                 Thief.game.chatId,
-                `**${this.roleName}** — ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
+                `*${this.roleName}* — ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
             )
 
@@ -57,7 +57,7 @@ export class Thief extends RoleBase {
             Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
-                `Теперь ты **${this.player.role?.roleName}**!`
+                `Теперь ты *${this.player.role?.roleName}*!`
             )
 
             Thief.game.bot.sendMessage(

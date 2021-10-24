@@ -34,7 +34,7 @@ export class Seer extends Villager {
 
         Seer.game.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это **${roleName}**!`
+            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
         )
         this.targetPlayer = undefined
     }
@@ -61,7 +61,7 @@ export class Seer extends Villager {
             Seer.game.chatId,
             `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
             'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
-            `лучшие мозги. **${this.roleName}** — ${highlightPlayer(this.player)} мертв.`)
+            `лучшие мозги. *${this.roleName}* — ${highlightPlayer(this.player)} мертв.`)
         this.player.isAlive = false;
         return true;
     }
@@ -75,6 +75,6 @@ export class Seer extends Villager {
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
             // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
         }
-        return targetRole.roleName;
+        return `это *${targetRole.roleName}*!`;
     }
 }

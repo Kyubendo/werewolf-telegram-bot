@@ -17,6 +17,6 @@ export class Oracle extends Seer {
         this.targetPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
     }
 
-    forecastRoleName = () => `НЕ ${this.targetPlayer?.role?.roleName}!`;
+    forecastRoleName = () => `НЕ *${this.targetPlayer?.role?.roleName}*!`;
 
 }
