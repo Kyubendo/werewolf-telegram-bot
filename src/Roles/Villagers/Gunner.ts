@@ -15,10 +15,11 @@ export class Gunner extends Villager {
         'оружие все еще нацелено в голову...Мертв(а)! \n' +
         `${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}!`
 
+
     ammo = 2;
 
     action = () => {
-        if (Gunner.game.stage !== 'day' && !this.ammo) return;
+        if (Gunner.game.stage !== 'day' || !this.ammo) return;
 
         Gunner.game.bot.sendMessage(
             this.player.id,

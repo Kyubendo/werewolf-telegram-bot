@@ -11,6 +11,7 @@ import {Monarch} from "./Villagers/Monarch";
 import {Harlot} from "./Villagers/Harlot";
 import {Beholder} from "./Villagers/Beholder";
 import {ApprenticeSeer} from "./Villagers/ApprenticeSeer";
+import {Gunner} from "./Villagers/Gunner";
 
 import {Wolf} from "./Wolves/Wolf";
 import {Lycan} from "./Wolves/Lycan";
@@ -21,6 +22,7 @@ import {SerialKiller} from "./Others/SerialKiller";
 
 export {
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Harlot, Beholder, ApprenticeSeer,
+    Gunner,
     Wolf, Lycan,
     Suicide, Thief, SerialKiller
 }
