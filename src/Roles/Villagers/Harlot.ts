@@ -36,9 +36,6 @@ export class Harlot extends Villager {
                     this.player.id,
                     `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
                     `не серийный убийца, потому что ночь была слишком хороша...`,
-                    {
-                        parse_mode: 'Markdown'
-                    }
                 )
                 Harlot.game.bot.sendMessage(
                     this.targetPlayer.id,
@@ -65,9 +62,6 @@ export class Harlot extends Villager {
                     Harlot.game.chatId,
                     `${this.player.name} проскользнула в не тот дом прошлой ночью!  Останки распутной ` +
                     'жительницы были найдены пригвожденными к дверям цверкви... Как жалко :(',
-                    {
-                        parse_mode: 'Markdown'
-                    }
                 )
                 return true;
             } else { // Не убивает, если её целью является не волк
@@ -75,9 +69,6 @@ export class Harlot extends Villager {
                     this.targetPlayer.id, // Сообщение волку, если он пошёл в шлюху, а её не было дома
                     `Странно... ${this.targetPlayer?.role?.targetPlayer} не была дома! ` +
                     `Нет ужина для тебя сегодня...`,
-                    {
-                        parse_mode: 'Markdown'
-                    }
                 )
             }
         } else if (killer?.role instanceof Harlot) {

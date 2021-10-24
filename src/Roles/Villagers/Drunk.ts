@@ -18,9 +18,7 @@ export class Drunk extends Villager {
                 `Один из мирных жителей утром обнаружил у себя в загоне со свиньями самого известного ` +
                 `Пьяницу ${highlightPlayer(this.player)}, который, по словам следователей, ` +
                 `тусовался всю ночь со свиньями до последнего, а потом пришел волк и съел его!`,
-                {
-                    parse_mode: 'Markdown',
-                });
+            );
             return true;
         } else if (killer?.role instanceof SerialKiller) {
             Drunk.game.bot.sendMessage(
@@ -28,9 +26,7 @@ export class Drunk extends Villager {
                 `Селяне надеялись выпить стакан-другой с Пьяницей ${highlightPlayer(this.player)}, но, зайдя ` + `
                 к нему домой, они увидели только сломанный нож и вырезанную печень.` +
                 `Он настолько посадил себе печень, что даже Серийный Убийца ею побрезговал.`,
-                {
-                    parse_mode: 'Markdown',
-                })
+            )
             return true;
         } else
             return super.handleDeath(killer);

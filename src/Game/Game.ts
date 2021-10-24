@@ -49,7 +49,7 @@ export class Game {
 
         this.bot.sendMessage(this.chatId, gameStageMsg(this.stage) || '')
             .then(() => {
-                this.bot.sendMessage(this.chatId, playerList(this), {parse_mode: 'Markdown'})
+                this.bot.sendMessage(this.chatId, playerList(this),)
             })
         this.players.filter(player => player.isAlive && !player.isFrozen)
             .forEach(player => player.role?.action && player.role.action())

@@ -35,9 +35,6 @@ export class Seer extends Villager {
         Seer.game.bot.sendMessage(
             this.player.id,
             `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это ${roleName}!`,
-            {
-                parse_mode: 'Markdown'
-            }
         )
         this.targetPlayer = undefined
     }
@@ -65,9 +62,6 @@ export class Seer extends Villager {
             `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
             'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
             `лучшие мозги. ${this.roleName}  —  ${highlightPlayer(this.player)} мертв.`,
-            {
-                parse_mode: 'Markdown'
-            }
         )
         this.player.isAlive = false;
         return true;
