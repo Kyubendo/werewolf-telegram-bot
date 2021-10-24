@@ -28,7 +28,7 @@ export const assignRoles = (game: Game) => {
 
     players.forEach(player => player.role && game.bot.sendMessage(
         player.id,
-        player.role.startMessageText,
+        player.role.startMessageText(),
         {
             parse_mode: 'Markdown'
         }));

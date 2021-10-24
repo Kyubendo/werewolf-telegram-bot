@@ -7,8 +7,8 @@ export const playerList = (game: Game) => {
         return `Живые игроки (${players.sort((p) => -!p.isAlive )
                 .filter(e => e.isAlive).length}/${players.length}):\n`
             + players.map(e =>
-                `${e.isAlive ? highlightPlayer(e) : e.name}: ${e.isAlive ?
-                    '🙂 Жив(а)' : `💀 Мертв(а) - ${e.role?.roleName}`}`
+                `${e.isAlive ? highlightPlayer(e) : `**${e.name}**`}: ${e.isAlive ?
+                    '🙂 Жив(а)' : `💀 Мертв(а) - **${e.role?.roleName}**`}`
             ).join('\n')
     }
     return `Игроки (${players.length}):\n`

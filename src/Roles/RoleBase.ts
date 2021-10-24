@@ -11,7 +11,7 @@ export abstract class RoleBase {
 
     abstract readonly roleName: string
     abstract readonly weight: () => number
-    abstract readonly startMessageText: string
+    abstract readonly startMessageText: () => string
 
     previousRole?: RoleBase;
 
@@ -71,6 +71,10 @@ export abstract class RoleBase {
             {
                 parse_mode: 'Markdown',
             });
+        killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
+            this.player.id,
+            killer.role.killMessageDead
+        )
         this.player.isAlive = false;
         return true;
     }

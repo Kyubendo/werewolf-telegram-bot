@@ -16,8 +16,8 @@ export class Mason extends Villager {
     }
 
     roleName = 'Каменщик 👷';
-    startMessageText = `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ведь ты ${this.roleName}.`
-        + this.showMasonPlayers();
+    startMessageText = () =>`Тебе ничего не остается делать, кроме как идти и пахать на стройке, `+
+        `ведь ты ${this.roleName}.` + this.showMasonPlayers();
     weight = () => {
         const otherMasonsAmount = this.findMasonPlayers().length;
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
@@ -27,7 +27,7 @@ export class Mason extends Villager {
         Mason.game.bot.sendMessage(
             Mason.game.chatId,
             `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
-            `камней, кровь разбрызгана повсюду. ${this.player.role?.roleName} мертв!`
+            `камней, кровь разбрызгана повсюду. **${this.roleName}** мертв!`
         )
         this.player.isAlive = false;
         return true;

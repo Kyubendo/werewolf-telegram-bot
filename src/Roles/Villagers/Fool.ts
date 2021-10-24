@@ -22,7 +22,7 @@ export class Fool extends Seer {
         Fool.game.bot.sendMessage(
             Fool.game.chatId,
             'День начался с печальных новостей. Всем известный Провид... ' +
-            `Так, стоп! Это же никакой не Провидец! Он... ${this.roleName}!  ` +
+            `Так, стоп! Это же никакой не Провидец! Он... **${this.roleName}**!  ` +
             `Покойся не с миром, ${highlightPlayer(this.player)}...`,
             {
                 parse_mode: 'Markdown'
