@@ -15,19 +15,23 @@ export class Cursed extends Villager {
 
     handleDeath = (killer?: Player) => {
         if (killer?.role instanceof Wolf) {
+            Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
+                .forEach(player => Cursed.game.bot.sendMessage(
+                    player.id,
+                    `${highlightPlayer(this.player)} был(а) ${this.player.role?.roleName}, ` +
+                    `поэтому он(а) теперь один(на) из вас! Поздравляем нового волка.`,
+                    {
+                        parse_mode: 'Markdown'
+                    }
+                ))
+            const previousRole = this.player.role;
             this.player.role = new Wolf(this.player);
-            this.player.role.previousRole = new Cursed(this.player);
+            this.player.role.previousRole = previousRole;
             Cursed.game.bot.sendMessage(this.player.id,
                 'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
                 + alliesMessage(this.player), {
                     parse_mode: 'Markdown',
                 });
-            Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
-                .forEach(player => Cursed.game.bot.sendMessage(
-                    player.id,
-                    `${highlightPlayer(this.player)} был(а) ${this.player.role?.previousRole?.roleName}, ` +
-                    `поэтому он(а) теперь один(на) из вас! Поздравляем нового волка.`
-                ))
             return false;
         } else {
             return super.handleDeath(killer);

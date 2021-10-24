@@ -2,13 +2,22 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../RoleBase";
-import {alliesMessage} from "../../Game/findAllies";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
 
 export class Wolf extends RoleBase {
+    showWolfPlayers = () => {
+        const allies: Player[] = Wolf.game.players.filter(otherPlayer =>
+            otherPlayer.role instanceof Wolf
+            && otherPlayer !== this.player
+            && otherPlayer.isAlive
+        );
+        return `${allies?.length ? ('\nДругие волки: '
+            + allies?.map(ally => highlightPlayer(ally)).join(', ')) : ''}`
+    }
+
     roleName = 'Волк 🐺';
-    startMessageText = `Ты ${this.roleName}. Скушай всё село.` + alliesMessage(this.player);
+    startMessageText = `Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +

@@ -6,7 +6,7 @@ export const assignRoles = (game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const rolePool = [
-        Roles. Harlot, Roles.Monarch, Roles.ApprenticeSeer, Roles.Mason, Roles.Thief, Roles.SerialKiller, Roles.Lycan, Roles.Cursed, Roles.Seer,
+        Roles.Mason, Roles.Mason, Roles.Mason, Roles.Harlot, Roles.Monarch, Roles.ApprenticeSeer, Roles.Mason, Roles.Thief, Roles.SerialKiller, Roles.Lycan, Roles.Cursed, Roles.Seer,
 
         Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason,
         Roles.Beholder, // Passive Villagers
@@ -20,10 +20,16 @@ export const assignRoles = (game: Game) => {
     do {
         // arrayShuffle(rolePool) // add
         balanced = Math.abs(
-            players.map((player, i) => player.role = new rolePool[i](player)).reduce((a, c) => a + c.weight(), 0)
+            players.map((player, i) => player.role = new rolePool[i](player))
+                .reduce((a, c) => a + c.weight(), 0)
         ) < 123 // change 123 to variance
 
     } while (!balanced)
 
-    players.forEach(player => player.role && game.bot.sendMessage(player.id, player.role.startMessageText))
+    players.forEach(player => player.role && game.bot.sendMessage(
+        player.id,
+        player.role.startMessageText,
+        {
+            parse_mode: 'Markdown'
+        }));
 }
