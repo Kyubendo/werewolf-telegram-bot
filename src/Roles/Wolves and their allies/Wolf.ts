@@ -1,7 +1,7 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
-import {RoleBase} from "../RoleBase";
+import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
 
@@ -26,7 +26,8 @@ export class Wolf extends RoleBase {
         `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`
     killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF
 
-    action = () => {
+        action = () => {
+        this.targetPlayer = undefined
         if (Wolf.game.stage !== 'night') return;
         Wolf.game.bot.sendMessage(
             this.player.id,
@@ -42,7 +43,7 @@ export class Wolf extends RoleBase {
     actionResolve = () => {
         if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
         this.targetPlayer.role?.onKilled(this.player);
-        this.targetPlayer = undefined
+        //this.targetPlayer = undefined
     }
 
     handleChoice = (choice?: string) => {

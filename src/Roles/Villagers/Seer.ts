@@ -1,48 +1,19 @@
 import {Villager} from "./Villager";
-import {Lycan} from "../Wolves/Lycan";
-import {RoleBase} from "../RoleBase";
-import {Wolf} from "../Wolves/Wolf";
+import {Lycan} from "../Wolves and their allies/Lycan";
+import {RoleBase} from "../Abstract/RoleBase";
+import {Wolf} from "../Wolves and their allies/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
-import {generateInlineKeyboard} from "../../Game/playersButtons";
-import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {ApprenticeSeer} from "./ApprenticeSeer";
+import {ForecasterBase} from "../Abstract/ForecasterBase";
 
 
-export class Seer extends Villager {
+export class Seer extends ForecasterBase {
     roleName = 'Провидец 👳';
-    startMessageText = () => `Ты ${this.roleName} Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
+    startMessageText = () => `Ты Провидец 👳! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
-
-    action = () => {
-        if (Seer.game.stage !== 'night') return;
-        Seer.game.bot.sendMessage(
-            this.player.id,
-            'Кого ты хочешь посмотреть?',
-            {
-                reply_markup: generateInlineKeyboard(Seer.game.players.filter(player => player !== this.player &&
-                    player.isAlive))
-            }
-        ).then(msg => this.choiceMsgId = msg.message_id)
-    }
-
-    actionResolve = () => {
-        if (Seer.game.stage !== 'night' || !this.targetPlayer?.role) return;
-        let roleName = this.forecastRoleName(this.targetPlayer.role);
-
-        Seer.game.bot.sendMessage(
-            this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
-        )
-        this.targetPlayer = undefined
-    }
-
-    handleChoice = (choice?: string) => {
-        this.targetPlayer = findPlayer(choice, Seer.game.players)
-        this.choiceMsgEditText();
-    }
 
     handleDeath(killer?: Player): boolean {
         const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
