@@ -11,7 +11,6 @@ export const join = (game: Game, query: TelegramBot.CallbackQuery) => {
     game.bot.editMessageText(playerList(game), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,
-        parse_mode: 'Markdown'
     })
     game.bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!')
         .catch(reason => {
@@ -20,7 +19,6 @@ export const join = (game: Game, query: TelegramBot.CallbackQuery) => {
                     game.chatId,
                     `${highlightPlayer(newPlayer)}, чтобы я смог тебе писать, надо меня запустить.`,
                     {
-                        parse_mode: 'Markdown',
                         reply_markup: {
                             inline_keyboard: [
                                 [{text: 'Запустить', url: `telegram.me/${process.env.BOT_NAME}?start=start`,}]
