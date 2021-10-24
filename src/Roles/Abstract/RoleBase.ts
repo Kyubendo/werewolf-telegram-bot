@@ -1,7 +1,7 @@
 import {Game} from "../../Game/Game";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Harlot, SerialKiller, Wolf, GuardianAngel} from "../index";
+import {Harlot, SerialKiller, Wolf, GuardianAngel, Prowler} from "../index";
 
 export abstract class RoleBase {
     constructor(readonly player: Player) {
@@ -26,7 +26,8 @@ export abstract class RoleBase {
 
     readonly onKilled = (killer: Player) => {
         this.player.isAlive && this.checkGuardianAngel(killer)
-        && this.handleDeath(killer) && this.movePlayer() && this.checkHarlotDeath(killer);
+        && this.handleDeath(killer) && this.checkProwler(killer)
+        && this.movePlayer() && this.checkHarlotDeath(killer);
     }
 
     checkGuardianAngel = (killer: Player): boolean => {
@@ -60,6 +61,23 @@ export abstract class RoleBase {
             guardianAngelPlayer.role.numberOfAttacks++;
 
             return false;
+        }
+        return true;
+    }
+
+    checkProwler = (killer: Player): true => {
+        const prowlerPlayer = RoleBase.game.players.find(player => player.role instanceof Prowler);
+
+        if (prowlerPlayer?.role && prowlerPlayer.role?.targetPlayer === this.player && killer.role instanceof Wolf) {
+            RoleBase.game.bot.sendMessage(
+                prowlerPlayer.id,
+                `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+                'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
+                `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
+                'Кажется, ты нашла своих союзников.' + killer.role.showWolfPlayers()
+            )
+
+            prowlerPlayer.role.targetPlayer = prowlerPlayer;
         }
         return true;
     }
