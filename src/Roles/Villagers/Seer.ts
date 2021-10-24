@@ -8,6 +8,7 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
+import {ApprenticeSeer} from "./ApprenticeSeer";
 
 
 export class Seer extends Villager {
@@ -47,6 +48,18 @@ export class Seer extends Villager {
     }
 
     handleDeath(killer?: Player): boolean {
+        const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
+        if (apprenticeSeerPlayer) {
+            const previousRole = apprenticeSeerPlayer.role;
+            apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer);
+            apprenticeSeerPlayer.role.previousRole = previousRole;
+            Seer.game.bot.sendMessage(
+                apprenticeSeerPlayer.id,
+                `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
+                `Ты занял его место по случаю его смерти.`
+            )
+        }
+
         Seer.game.bot.sendMessage(
             Seer.game.chatId,
             `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
