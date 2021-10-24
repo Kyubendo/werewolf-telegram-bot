@@ -16,14 +16,14 @@ export class SerialKiller extends RoleBase {
         `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
         `был(а) ${deadPlayer.role?.roleName}`;
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
-        'извлекает твои органы. Ты мертв(а).'
+        'извлекает твои органы. Ты мертв(а).' // GIF
 
     handleDeath(killer?: Player) {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
                 `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!` +
-                `${killer.role.roleName} ${highlightPlayer(killer)} погиб.`,
+                `${killer.role.roleName}  —  ${highlightPlayer(killer)} погиб.`,
                 {
                     parse_mode: 'Markdown'
                 }

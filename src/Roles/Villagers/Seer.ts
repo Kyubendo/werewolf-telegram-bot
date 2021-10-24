@@ -7,6 +7,8 @@ import {Traitor} from "./Traitor";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Player} from "../../Player/Player";
+import {ApprenticeSeer} from "./ApprenticeSeer";
 
 
 export class Seer extends Villager {
@@ -24,7 +26,7 @@ export class Seer extends Villager {
                 player.isAlive), true)
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
-    };
+    }
 
     actionResolve = () => {
         if (Seer.game.stage !== 'night' || !this.targetPlayer?.role) return;
@@ -43,6 +45,32 @@ export class Seer extends Villager {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Seer.game.players)
         this.choiceMsgEditText();
+    }
+
+    handleDeath(killer?: Player): boolean {
+        const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
+        if (apprenticeSeerPlayer) {
+            const previousRole = apprenticeSeerPlayer.role;
+            apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer);
+            apprenticeSeerPlayer.role.previousRole = previousRole;
+            Seer.game.bot.sendMessage(
+                apprenticeSeerPlayer.id,
+                `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
+                `Ты занял его место по случаю его смерти.`
+            )
+        }
+
+        Seer.game.bot.sendMessage(
+            Seer.game.chatId,
+            `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
+            'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
+            `лучшие мозги. ${this.roleName}  —  ${highlightPlayer(this.player)} мертв.`,
+            {
+                parse_mode: 'Markdown'
+            }
+        )
+        this.player.isAlive = false;
+        return true;
     }
 
     forecastRoleName = (targetRole: RoleBase) => {
