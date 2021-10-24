@@ -14,7 +14,7 @@ export class Wolf extends RoleBase {
 
     showWolfPlayers(): string {
         const allies = this.findWolfPlayers();
-        return `${allies?.length ? ('\nВолки: '
+        return `${allies?.length > 1 ? ('\nВолки: '
             + allies?.map(ally => highlightPlayer(ally)).join(', ')) : ''}`
     }
 
