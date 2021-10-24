@@ -36,7 +36,7 @@ export class Thief extends RoleBase {
 
             Thief.game.bot.sendMessage(
                 Thief.game.chatId,
-                `${this.roleName} - ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
+                `${this.roleName}  —  ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
                 {
                     parse_mode: 'Markdown'
@@ -63,7 +63,7 @@ export class Thief extends RoleBase {
             Thief.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
-                `Укради роль у кого-нибудь.`
+                `Укради роль у кого-нибудь.` // GIF
             )
 
             this.targetPlayer = undefined;

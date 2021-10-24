@@ -18,7 +18,7 @@ export class Cursed extends Villager {
             this.player.role = new Wolf(this.player);
             this.player.role.previousRole = new Cursed(this.player);
             Cursed.game.bot.sendMessage(this.player.id,
-                'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...'
+                'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
                 + alliesMessage(this.player), {
                     parse_mode: 'Markdown',
                 });

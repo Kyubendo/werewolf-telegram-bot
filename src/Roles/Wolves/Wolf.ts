@@ -13,7 +13,7 @@ export class Wolf extends RoleBase {
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
         `\n${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}.`
-    killMessageDead = 'О нет! Ты съеден(а) волком!';
+    killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF
 
     action = () => {
         if (Wolf.game.stage !== 'night') return;
@@ -40,14 +40,15 @@ export class Wolf extends RoleBase {
     }
 
     handleDeath(killer?: Player): boolean {
-        const traitor = Wolf.game.players.find(player => player.role instanceof Traitor);
-        if (!(Wolf.game.players.filter(player => player.role instanceof Wolf).length - 1) && traitor) {
-            traitor.role = new Wolf(traitor);
-            traitor.role.previousRole = new Traitor(traitor);
+        const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
+        if (Wolf.game.players.filter(player => player.role instanceof Wolf && player.isAlive).length <= 1 && traitorPlayer) {
+            const previousRole = traitorPlayer.role;
+            traitorPlayer.role = new Wolf(traitorPlayer);
+            traitorPlayer.role.previousRole = previousRole;
             Wolf.game.bot.sendMessage(
-                traitor.id,
-                `Твое время настало, ты обрел новый облик, ${traitor.role.previousRole?.roleName}! ` +
-                `Теперь ты ${traitor.role.roleName}!`
+                traitorPlayer.id,
+                `Твое время настало, ты обрел новый облик, ${traitorPlayer.role.previousRole?.roleName}! ` +
+                `Теперь ты ${traitorPlayer.role.roleName}!`
             )
         }
         return super.handleDeath(killer);

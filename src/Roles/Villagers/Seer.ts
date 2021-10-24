@@ -64,7 +64,7 @@ export class Seer extends Villager {
             Seer.game.chatId,
             `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
             'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
-            `лучшие мозги. ${this.roleName} - ${highlightPlayer(this.player)} мертв.`,
+            `лучшие мозги. ${this.roleName}  —  ${highlightPlayer(this.player)} мертв.`,
             {
                 parse_mode: 'Markdown'
             }

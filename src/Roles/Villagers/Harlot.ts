@@ -20,7 +20,7 @@ export class Harlot extends Villager {
             'Кого ты хочешь навестить?',
             {
                 reply_markup: generateInlineKeyboard(Harlot.game.players
-                    .filter(player => player !== player && player.isAlive), true)
+                    .filter(player => player !== this.player && player.isAlive))
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
@@ -31,14 +31,21 @@ export class Harlot extends Villager {
         if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
             this.onKilled(this.targetPlayer);
         else {
-            this.targetPlayer && Harlot.game.bot.sendMessage(
-                this.player.id,
-                `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
-                `не серийный убийца, потому что ночь была слишком хороша...`,
-                {
-                    parse_mode: 'Markdown'
-                }
-            )
+            if (this.targetPlayer) {
+                Harlot.game.bot.sendMessage(
+                    this.player.id,
+                    `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
+                    `не серийный убийца, потому что ночь была слишком хороша...`,
+                    {
+                        parse_mode: 'Markdown'
+                    }
+                )
+                Harlot.game.bot.sendMessage(
+                    this.targetPlayer.id,
+                    'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
+                    'И вы оба хорошо провели время!' // GIF
+                )
+            }
         }
 
         this.targetPlayer = undefined;
@@ -49,18 +56,32 @@ export class Harlot extends Villager {
         this.choiceMsgEditText();
     }
 
-    protected handleDeath(killer?: Player): boolean {
-        if (killer?.role instanceof Wolf && this.targetPlayer) {
-            this.player.isAlive = false;
+    handleDeath(killer?: Player): boolean {
+        if (killer?.role instanceof Wolf) { // Если волк пытается убить шлюху
+            if (this.targetPlayer?.role instanceof Wolf) { // Убивает, если её целью является любой из волков
+                this.player.isAlive = false;
 
-            Harlot.game.bot.sendMessage(
-                Harlot.game.chatId,
-                `${this.player.name} проскользнула в не тот дом прошлой ночью!  Останки распутной ` +
-                'жительницы были найдены пригвожденными к дверям цверкви... Как жалко :(',
-                {
-                    parse_mode: 'Markdown'
-                }
-            )
+                Harlot.game.bot.sendMessage(
+                    Harlot.game.chatId,
+                    `${this.player.name} проскользнула в не тот дом прошлой ночью!  Останки распутной ` +
+                    'жительницы были найдены пригвожденными к дверям цверкви... Как жалко :(',
+                    {
+                        parse_mode: 'Markdown'
+                    }
+                )
+                return true;
+            } else { // Не убивает, если её целью является не волк
+                this.targetPlayer && Harlot.game.bot.sendMessage( // Переделать на много волков
+                    this.targetPlayer.id, // Сообщение волку, если он пошёл в шлюху, а её не было дома
+                    `Странно... ${this.targetPlayer?.role?.targetPlayer} не была дома! ` +
+                    `Нет ужина для тебя сегодня...`,
+                    {
+                        parse_mode: 'Markdown'
+                    }
+                )
+            }
+        } else if (killer?.role instanceof Harlot) {
+            this.player.isAlive = false;
             return true;
         }
         return super.handleDeath(killer);
