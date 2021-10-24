@@ -14,26 +14,11 @@ import {TgBot} from "./TgBot";
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
 
-// const sendMessage = TelegramBot.prototype.sendMessage
-// TelegramBot.prototype.sendMessage = function (chatId: TelegramBot.ChatId, text: string, options?: TelegramBot.SendMessageOptions): Promise<TelegramBot.Message> {
-//
-//     return TelegramBot.prototype.sendMessage(chatId, text, {parse_mode: 'Markdown', ...options})
-// }
-//
-//
-// const editMessageText = TelegramBot.prototype.editMessageText
-// TelegramBot.prototype.editMessageText = (text: string, options?: TelegramBot.EditMessageTextOptions): Promise<TelegramBot.Message | boolean> => {
-//     return editMessageText(text, {parse_mode: "Markdown", ...options})
-// }
-
-
-let bot: TgBot
+let bot: TelegramBot
 
 if (process.env.NODE_ENV === 'production') {
     bot = new TgBot(botToken);
     bot.setWebHook(herokuUrl + botToken);
-
-    // bot.getUpdates({ limit:0})
 } else {
     bot = new TgBot(botToken, {polling: true});
 }
