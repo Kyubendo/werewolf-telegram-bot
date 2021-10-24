@@ -48,13 +48,14 @@ export class Seer extends Villager {
     }
 
     handleDeath(killer?: Player): boolean {
-        const apprenticeSeer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
-        if (apprenticeSeer) {
-            apprenticeSeer.role = new Seer(apprenticeSeer);
-            apprenticeSeer.role.previousRole = new ApprenticeSeer(apprenticeSeer);
+        const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
+        if (apprenticeSeerPlayer) {
+            const previousRole = apprenticeSeerPlayer.role;
+            apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer);
+            apprenticeSeerPlayer.role.previousRole = previousRole;
             Seer.game.bot.sendMessage(
-                apprenticeSeer.id,
-                `${highlightPlayer(this.player)} был ${apprenticeSeer.role.roleName}. ` +
+                apprenticeSeerPlayer.id,
+                `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
                 `Ты занял его место по случаю его смерти.`
             )
         }
