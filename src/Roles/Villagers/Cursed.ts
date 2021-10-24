@@ -1,7 +1,6 @@
 import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../Wolves/Wolf";
-import {alliesMessage} from "../../Game/findAllies";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Cursed extends Villager {
@@ -27,11 +26,12 @@ export class Cursed extends Villager {
             const previousRole = this.player.role;
             this.player.role = new Wolf(this.player);
             this.player.role.previousRole = previousRole;
-            Cursed.game.bot.sendMessage(this.player.id,
-                'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
-                + alliesMessage(this.player), {
-                    parse_mode: 'Markdown',
-                });
+            if (this.player.role instanceof Wolf)
+                Cursed.game.bot.sendMessage(this.player.id,
+                    'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
+                    + this.player.role.showWolfPlayers(), {
+                        parse_mode: 'Markdown',
+                    });
             return false;
         } else {
             return super.handleDeath(killer);

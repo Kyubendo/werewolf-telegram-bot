@@ -64,9 +64,7 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath(killer ?: Player)
-        :
-        boolean {
+    handleDeath(killer?: Player): boolean {
         killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
             RoleBase.game.chatId,
             killer.role.killMessageAll(this.player),
