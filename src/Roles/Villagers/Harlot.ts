@@ -63,7 +63,7 @@ export class Harlot extends Villager {
 
                 Harlot.game.bot.sendMessage(
                     Harlot.game.chatId,
-                    `${this.player.name} проскользнула в не тот дом прошлой ночью!  Останки распутной ` +
+                    `${highlightPlayer(this.player)} проскользнула в не тот дом прошлой ночью!  Останки распутной ` +
                     'жительницы были найдены пригвожденными к дверям цверкви... Как жалко :(',
                     {
                         parse_mode: 'Markdown'
@@ -79,6 +79,7 @@ export class Harlot extends Villager {
                         parse_mode: 'Markdown'
                     }
                 )
+                return false;
             }
         } else if (killer?.role instanceof Harlot) {
             this.player.isAlive = false;

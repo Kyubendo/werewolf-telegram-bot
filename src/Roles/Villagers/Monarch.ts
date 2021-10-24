@@ -33,11 +33,14 @@ export class Monarch extends Villager {
     }
 
     handleChoice = (choice?: string) => {
-        this.choiceMsgEditText();
 
-        if (choice !== 'Раскрыться') return;
+        if (choice !== 'Раскрыться') {
+            this.choiceMsgEditText();
+            return;
+        }
 
         this.comingOut = true;
+        this.choiceMsgEditText();
 
         Monarch.game.bot.sendMessage(
             Monarch.game.chatId,
@@ -51,7 +54,7 @@ export class Monarch extends Villager {
     }
 
     choiceMsgEditText = () => {
-        this.targetPlayer && Monarch.game.bot.editMessageText(
+        Monarch.game.bot.editMessageText(
             `Выбор принят: ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
