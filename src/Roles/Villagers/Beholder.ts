@@ -7,7 +7,7 @@ export class Beholder extends Villager {
     roleName = 'Очевидец 👁';
     private seers?: Player[] = Beholder.game.players
         .filter(player => player.role instanceof Seer && !(player.role instanceof Fool));
-    startMessageText = `Ты ${this.roleName}! Ты знаешь, кто настоящий провидец, а не дурак... В общем это ` +
+    startMessageText = () =>`Ты ${this.roleName}! Ты знаешь, кто настоящий провидец, а не дурак... В общем это ` +
         `твоя единственная функция.\n${this.seers?.length ? this.seers.join(', ') + ' - провид' +
             (this.seers.length === 1 ? 'ец!' : 'цы.') :
             'Провидца нет!'}`

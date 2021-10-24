@@ -11,7 +11,7 @@ export abstract class RoleBase {
 
     abstract readonly roleName: string
     abstract readonly weight: () => number
-    abstract readonly startMessageText: string
+    abstract readonly startMessageText: () => string
 
     previousRole?: RoleBase;
 
@@ -58,13 +58,15 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath(killer ?: Player)
-        :
-        boolean {
+    handleDeath(killer?: Player): boolean {
         killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
             RoleBase.game.chatId,
-            killer.role.killMessageAll(this.player),
-        );
+            killer.role.killMessageAll(this.player));
+    
+        killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
+            this.player.id,
+            killer.role.killMessageDead);
+      
         this.player.isAlive = false;
         return true;
     }

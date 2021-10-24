@@ -13,7 +13,7 @@ import {ApprenticeSeer} from "./ApprenticeSeer";
 
 export class Seer extends Villager {
     roleName = 'Провидец 👳';
-    startMessageText = `Ты ${this.roleName} Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
+    startMessageText = () => `Ты ${this.roleName} Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
 
     action = () => {
@@ -23,7 +23,7 @@ export class Seer extends Villager {
             'Кого ты хочешь посмотреть?',
             {
                 reply_markup: generateInlineKeyboard(Seer.game.players.filter(player => player !== this.player &&
-                player.isAlive), true)
+                    player.isAlive))
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
@@ -34,7 +34,7 @@ export class Seer extends Villager {
 
         Seer.game.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это ${roleName}!`,
+            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это **${roleName}**!`
         )
         this.targetPlayer = undefined
     }
@@ -61,8 +61,7 @@ export class Seer extends Villager {
             Seer.game.chatId,
             `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
             'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
-            `лучшие мозги. ${this.roleName}  —  ${highlightPlayer(this.player)} мертв.`,
-        )
+            `лучшие мозги. **${this.roleName}** — ${highlightPlayer(this.player)} мертв.`)
         this.player.isAlive = false;
         return true;
     }

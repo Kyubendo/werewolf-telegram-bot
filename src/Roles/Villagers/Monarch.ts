@@ -3,7 +3,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Monarch extends Villager {
     roleName = 'Монарх 👑';
-    startMessageText = `Ты ${this.roleName}! ` +
+    startMessageText = () =>`Ты ${this.roleName}! ` +
         `Как у главы королевской семьи, у тебя есть власть в этой деревне... По крайней мере, на один день! ` +
         `Ты можешь показать деревне свою корону и семейное древо, и один день они позволят тебе ` +
         `вершить правосудие лично.`
@@ -33,22 +33,25 @@ export class Monarch extends Villager {
     }
 
     handleChoice = (choice?: string) => {
-        this.choiceMsgEditText();
 
-        if (choice !== 'Раскрыться') return;
+        if (choice !== 'Раскрыться') {
+            this.choiceMsgEditText();
+            return;
+        }
 
         this.comingOut = true;
+        this.choiceMsgEditText();
 
         Monarch.game.bot.sendMessage(
             Monarch.game.chatId,
             `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +
             `шаг вперед, предлагая всем внимательно посмотреть на корону, которую он прятал раньше.\n` +
-            `Сегодня ${this.roleName} решит, кого казнить.`, // GIF
+            `Сегодня **${this.roleName}** решит, кого казнить.`, // GIF
         )
     }
 
     choiceMsgEditText = () => {
-        this.targetPlayer && Monarch.game.bot.editMessageText(
+        Monarch.game.bot.editMessageText(
             `Выбор принят: ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,

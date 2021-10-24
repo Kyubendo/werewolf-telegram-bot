@@ -6,7 +6,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
-    startMessageText = `Ты ${this.roleName}! Тебе нравится воровать жизни людей. Каждую ночь можно выбрать того, ` +
+    startMessageText = () =>`Ты ${this.roleName}! Тебе нравится воровать жизни людей. Каждую ночь можно выбрать того, ` +
         `у кого хочешь украсть. Если тебе повезет, тебе удастся украсть его роль, и вместо этого он станет вором!`
     weight = () => -4; // change?
 
@@ -36,7 +36,7 @@ export class Thief extends RoleBase {
 
             Thief.game.bot.sendMessage(
                 Thief.game.chatId,
-                `${this.roleName}  —  ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
+                `**${this.roleName}** — ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
             )
 
@@ -51,7 +51,7 @@ export class Thief extends RoleBase {
             Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
-                `Теперь ты ${this.player.role?.roleName}!`,
+                `Теперь ты **${this.player.role?.roleName}**!`
             )
 
             Thief.game.bot.sendMessage(

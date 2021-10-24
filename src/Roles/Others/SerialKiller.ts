@@ -7,14 +7,14 @@ import {findPlayer} from "../../Game/findPlayer";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
-    startMessageText = `Ты ${this.roleName}! Недавно сбежал из психушки и твоя цель убить всех... ` +
+    startMessageText = () =>`Ты ${this.roleName}! Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -15; // change?
 
     killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
         `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
         `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
-        `был(а) ${deadPlayer.role?.roleName}`;
+        `был(а) **${deadPlayer.role?.roleName}**`;
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
@@ -23,7 +23,8 @@ export class SerialKiller extends RoleBase {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
                 `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!` +
-                `${killer.role.roleName}  —  ${highlightPlayer(killer)} погиб.`,
+                `**${killer.role.roleName}** — ${highlightPlayer(killer)} погиб.`,
+
             )
             return false;
         } else
