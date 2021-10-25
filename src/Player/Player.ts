@@ -1,4 +1,4 @@
-import {RoleBase} from "../Roles/RoleBase";
+import {RoleBase} from "../Roles/Abstract/RoleBase";
 import {User} from "node-telegram-bot-api";
 
 export class Player {

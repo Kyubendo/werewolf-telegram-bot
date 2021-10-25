@@ -10,6 +10,8 @@ export class GuardianAngel extends Villager {
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
+    
+
     numberOfAttacks: number = 0;
 
     action = () => {
@@ -62,7 +64,7 @@ export class GuardianAngel extends Villager {
 
                 GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
-                    `Ночью **${this.roleName}** — ${highlightPlayer(this.player)} пытался спасти деревню ` +
+                    `Ночью *${this.roleName}* — ${highlightPlayer(this.player)} пытался спасти деревню ` +
                     `от маньяка раз и навсегда, но маньяк отрезал ${highlightPlayer(this.player)} крылья! ` +
                     'Рядом с его телом была записка: "Я не нуждаюсь в твоей защите!"'
                 )
@@ -99,7 +101,7 @@ export class GuardianAngel extends Villager {
                 GuardianAngel.game.bot.sendMessage( // Сообщение в чат, если убил серийник
                     GuardianAngel.game.chatId,
                     'Занятно: ангелы спасают других от убийц, а себя спасти не могут. ' +
-                    `**${this.roleName}** — ${highlightPlayer(this.player)} мёртв.`
+                    `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`
                 )
         } else
             return super.handleDeath(killer);
