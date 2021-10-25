@@ -68,7 +68,8 @@ export abstract class RoleBase {
     checkProwler = (killer: Player): true => {
         const prowlerPlayer = RoleBase.game.players.find(player => player.role instanceof Prowler);
 
-        if (prowlerPlayer?.role && prowlerPlayer.role?.targetPlayer === this.player && killer.role instanceof Wolf) {
+        if (prowlerPlayer?.role?.targetPlayer
+            && prowlerPlayer.role?.targetPlayer === this.player && killer.role instanceof Wolf) {
             RoleBase.game.bot.sendMessage(
                 prowlerPlayer.id,
                 `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
@@ -77,7 +78,7 @@ export abstract class RoleBase {
                 'Кажется, ты нашла своих союзников.' + killer.role.showWolfPlayers()
             )
 
-            prowlerPlayer.role.targetPlayer = prowlerPlayer;
+            prowlerPlayer.role.targetPlayer = undefined;
         }
         return true;
     }
