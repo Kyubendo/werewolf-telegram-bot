@@ -26,7 +26,7 @@ export class Harlot extends Villager {
     }
 
     actionResolve = () => {
-        if (!this.player.isAlive && Harlot.game.stage !== 'night' && !this.targetPlayer?.role) return;
+        if (Harlot.game.stage !== 'night' || !this.targetPlayer?.role) return;
 
         if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
             this.onKilled(this.targetPlayer);

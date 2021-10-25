@@ -11,7 +11,7 @@ export class Mason extends Villager {
 
     showMasonPlayers = () => {
         const allies = this.findMasonPlayers();
-        return `${allies?.length ? ('\nКаменщики: '
+        return `${allies?.length > 1 ? ('\nКаменщики: '
             + allies?.map(ally => highlightPlayer(ally)).join(', ')) : ''}`
     }
 

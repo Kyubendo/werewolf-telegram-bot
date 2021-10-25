@@ -14,7 +14,7 @@ export class Wolf extends RoleBase {
 
     showWolfPlayers(): string {
         const allies = this.findWolfPlayers();
-        return `${allies?.length ? ('\nВолки: '
+        return `${allies?.length > 1 ? ('\nВолки: '
             + allies?.map(ally => highlightPlayer(ally)).join(', ')) : ''}`
     }
 
@@ -53,9 +53,7 @@ export class Wolf extends RoleBase {
     handleDeath(killer?: Player): boolean {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
         if (this.findWolfPlayers().length <= 1 && traitorPlayer) {
-            const previousRole = traitorPlayer.role;
-            traitorPlayer.role = new Wolf(traitorPlayer);
-            traitorPlayer.role.previousRole = previousRole;
+            traitorPlayer.role = new Wolf(traitorPlayer, traitorPlayer.role);
             Wolf.game.bot.sendMessage(
                 traitorPlayer.id,
                 `Твое время настало, ты обрел новый облик, ${traitorPlayer.role.previousRole?.roleName}! ` +
