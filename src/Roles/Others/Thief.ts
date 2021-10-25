@@ -44,7 +44,8 @@ export class Thief extends RoleBase {
                 this.player.id,
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
-        } else if (this.player.role) {
+        } else if (this.targetPlayer.role instanceof )
+        else if (this.player.role) {
             const previousRoleOldThief: RoleBase = this.player.role;
             const previousRoleNewThief = this.targetPlayer.role;
 
