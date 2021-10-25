@@ -1,5 +1,5 @@
 import {Villager} from "./Villager";
-import {Wolf} from "../Wolves/Wolf";
+import {Wolf} from "../Wolves and their allies/Wolf";
 import {Player} from "../../Player/Player";
 import {SerialKiller} from "../Others/SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";

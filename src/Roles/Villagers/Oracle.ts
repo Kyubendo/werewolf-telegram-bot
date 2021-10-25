@@ -1,22 +1,19 @@
-import {Seer} from "./Seer";
-import {findPlayer} from "../../Game/findPlayer";
+import {ForecasterBase} from "../Abstract/ForecasterBase";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Oracle extends Seer {
+export class Oracle extends ForecasterBase {
     roleName = 'Оракул 🌀';
     startMessageText = () => `Ты ${this.roleName}. Каждую ночь ты можешь ` +
-        'выбрать игрока и узнать кем он НЕ является. Обрати внимание Тебе скажут роль кого-то другого в игре, ' +
+        'выбрать игрока и узнать кем он НЕ является. Обрати внимание: тебе скажут роль кого-то другого в игре, ' +
         'кто всё ещё жив :)';
     weight = () => 4;
 
-    handleChoice = (choice?: string) => {
-        this.targetPlayer = findPlayer(choice, Oracle.game.players);
-        this.choiceMsgEditText();
+    forecastRoleName = (targetRole: RoleBase) => {
         const otherPlayers = Oracle.game.players.filter(player => player !== this.player
             && player.isAlive
-            && player !== this.targetPlayer);
-        this.targetPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+            && player !== targetRole.player);
+        const otherRole = otherPlayers[Math.floor(Math.random() * otherPlayers.length)].role;
+        return `НЕ ${otherRole?.roleName}!`;
     }
-
-    forecastRoleName = () => `НЕ *${this.targetPlayer?.role?.roleName}*!`;
 
 }

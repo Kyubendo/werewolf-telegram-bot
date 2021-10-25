@@ -1,7 +1,7 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../../Game/findPlayer";
-import {RoleBase} from "../RoleBase";
+import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
 
@@ -19,7 +19,7 @@ export class Wolf extends RoleBase {
     }
 
     roleName = 'Волк 🐺';
-    startMessageText = () =>`Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
+    startMessageText = () => `Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +

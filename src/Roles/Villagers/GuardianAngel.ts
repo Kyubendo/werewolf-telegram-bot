@@ -10,6 +10,8 @@ export class GuardianAngel extends Villager {
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
+    
+
     numberOfAttacks: number = 0;
 
     action = () => {
