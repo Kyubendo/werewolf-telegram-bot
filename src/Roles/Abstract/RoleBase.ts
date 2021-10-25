@@ -25,85 +25,98 @@ export abstract class RoleBase {
     choiceMsgId?: number
 
     readonly onKilled = (killer: Player) => {
-        this.player.isAlive && this.checkGuardianAngel(killer)
-        && this.handleDeath(killer) && this.checkProwler(killer)
-        && this.movePlayer() && this.checkHarlotDeath(killer);
+        this.player.isAlive && this.checkGuardianAngels(killer)
+        && this.handleDeath(killer) && this.checkProwlers(killer)
+        && this.movePlayer() && this.checkHarlotsDeath(killer);
     }
 
-    checkGuardianAngel = (killer: Player): boolean => {
-        const guardianAngelPlayer = RoleBase.game.players.find(player => player.role instanceof GuardianAngel);
-        if (guardianAngelPlayer
-            && guardianAngelPlayer.role instanceof GuardianAngel // Дополнительная проверка нужна для доступа к полям GuardianAngel
-            && guardianAngelPlayer.role?.targetPlayer === this.player) {
+    checkGuardianAngels = (killer: Player): boolean => {
+        const guardianAngelPlayers = RoleBase.game.players.filter(player => player.role instanceof GuardianAngel);
 
-            RoleBase.game.bot.sendMessage(
-                killer.id,
-                `Придя домой к ${highlightPlayer(this.player)}, ` +
-                `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
-                'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
-            )
+        for (const guardianAngelPlayer of guardianAngelPlayers) {
+            if (guardianAngelPlayer
+                && guardianAngelPlayer.role instanceof GuardianAngel // Дополнительная проверка нужна для доступа к полям GuardianAngel
+                && guardianAngelPlayer.role?.targetPlayer === this.player) {
 
-            RoleBase.game.bot.sendMessage(
-                this.player.id,
-                `${guardianAngelPlayer.role.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
-            )
-
-            let ending: string = '';
-            if (guardianAngelPlayer.role.numberOfAttacks)
-                ending = ' Снова!'
-
-            RoleBase.game.bot.sendMessage(
-                guardianAngelPlayer.id,
-                `С выбором ты угадал, на ${highlightPlayer(this.player)} действительно напали! Ты спас ему жизнь!`
-                + ending
-            )
-
-            guardianAngelPlayer.role.numberOfAttacks++;
-
-            return false;
-        }
-        return true;
-    }
-
-    checkProwler = (killer: Player): true => {
-        const prowlerPlayer = RoleBase.game.players.find(player => player.role instanceof Prowler);
-
-        if (prowlerPlayer?.role && prowlerPlayer.role?.targetPlayer === this.player && killer.role instanceof Wolf) {
-            RoleBase.game.bot.sendMessage(
-                prowlerPlayer.id,
-                `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
-                'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
-                `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
-                'Кажется, ты нашла своих союзников.' + killer.role.showWolfPlayers()
-            )
-
-            prowlerPlayer.role.targetPlayer = prowlerPlayer;
-        }
-        return true;
-    }
-
-    checkHarlotDeath = (killer: Player) => {
-        const harlotPlayer = RoleBase.game.players.find(player => player.role instanceof Harlot);
-        if (harlotPlayer && harlotPlayer.role?.targetPlayer === this.player) {
-            if (killer.role instanceof Wolf) {
                 RoleBase.game.bot.sendMessage(
-                    RoleBase.game.chatId,
-                    `${highlightPlayer(harlotPlayer)} проскользнула в дом ${highlightPlayer(this.player)}, ` +
-                    'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
-                    `пожирающего ${highlightPlayer(this.player)}! Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
-                    `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} мертва.`,
+                    killer.id,
+                    `Придя домой к ${highlightPlayer(this.player)}, ` +
+                    `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
+                    'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
                 )
-            } else if (killer.role instanceof SerialKiller) {
+
                 RoleBase.game.bot.sendMessage(
-                    RoleBase.game.chatId,
-                    `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} проникла в дом ` +
-                    `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
-                    `${highlightPlayer(this.player)}! Серийный Убийца решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
-                    `прежде чем взять сердце к себе в коллекцию!`,
+                    this.player.id,
+                    `${guardianAngelPlayer.role.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
                 )
+
+                let ending: string = '';
+                if (guardianAngelPlayer.role.numberOfAttacks)
+                    ending = ' Снова!'
+
+                RoleBase.game.bot.sendMessage(
+                    guardianAngelPlayer.id,
+                    `С выбором ты угадал, на ${highlightPlayer(this.player)} действительно напали! Ты спас ему жизнь!`
+                    + ending
+                )
+
+                guardianAngelPlayer.role.numberOfAttacks++;
+
+                return false;
             }
+        }
 
-            harlotPlayer.role.onKilled(harlotPlayer);
+        return true;
+    }
+
+    checkProwlers = (killer: Player): true => {
+        const prowlerPlayers = RoleBase.game.players.filter(player => player.role instanceof Prowler);
+
+        for (const prowlerPlayer of prowlerPlayers) {
+            if (prowlerPlayer?.role
+                && prowlerPlayer.role?.targetPlayer === this.player
+                && killer.role instanceof Wolf) {
+                RoleBase.game.bot.sendMessage(
+                    prowlerPlayer.id,
+                    `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+                    'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
+                    `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
+                    'Кажется, ты нашла своих союзников.' + killer.role.showWolfPlayers()
+                )
+
+                prowlerPlayer.role.targetPlayer = prowlerPlayer;
+            }
+        }
+        return true;
+    }
+
+    checkHarlotsDeath = (killer: Player): void => {
+        const harlotPlayers = RoleBase.game.players.filter(player => player.role instanceof Harlot);
+
+        for (const harlotPlayer of harlotPlayers) {
+            if (harlotPlayer && harlotPlayer.role?.targetPlayer === this.player) {
+                if (killer.role instanceof Wolf) {
+                    RoleBase.game.bot.sendMessage(
+                        RoleBase.game.chatId,
+                        `${highlightPlayer(harlotPlayer)} проскользнула в дом ${highlightPlayer(this.player)}, ` +
+                        'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
+                        `пожирающего ${highlightPlayer(this.player)}! ` +
+                        `Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
+                        `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} мертва.`,
+                    )
+                } else if (killer.role instanceof SerialKiller) {
+                    RoleBase.game.bot.sendMessage(
+                        RoleBase.game.chatId,
+                        `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} проникла в дом ` +
+                        `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
+                        `${highlightPlayer(this.player)}! ` +
+                        `Серийный Убийца решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
+                        `прежде чем взять сердце к себе в коллекцию!`,
+                    )
+                }
+
+                harlotPlayer.role.onKilled(harlotPlayer);
+            }
         }
     }
 
@@ -127,8 +140,8 @@ export abstract class RoleBase {
 
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer 
-                ? highlightPlayer(this.targetPlayer) 
+            `Выбор принят: ${this.targetPlayer
+                ? highlightPlayer(this.targetPlayer)
                 : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,

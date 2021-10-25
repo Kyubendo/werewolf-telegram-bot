@@ -32,6 +32,7 @@ export class Harlot extends Villager {
 
         if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
             this.onKilled(this.targetPlayer);
+        // What if Harlot visits another Harlot
         else {
             if (this.targetPlayer) {
                 Harlot.game.bot.sendMessage(
