@@ -1,10 +1,11 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {SerialKiller, Villager, Wolf} from "../index";
+import {SerialKiller, Wolf} from "../index";
 import {Player} from "../../Player/Player";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class GuardianAngel extends Villager {
+export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
     startMessageText = () => `Ты ${this.roleName}! Беги спасай свой народ! Но берегись волков, есть ` +
         '50% вероятности что тебя съедят, если выберешь их.';
