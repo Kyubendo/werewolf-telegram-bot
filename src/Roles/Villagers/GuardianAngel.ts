@@ -26,22 +26,22 @@ export class GuardianAngel extends Villager {
     }
 
     actionResolve = () => {
-        if (!this.targetPlayer?.role) return;
+        if (GuardianAngel.game.stage === 'night' || !this.targetPlayer?.role) return;
 
-        if (GuardianAngel.game.stage === 'night' && (this.targetPlayer.role instanceof SerialKiller ||
-            (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)))
+        if (this.targetPlayer.role instanceof SerialKiller ||
+            (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))
             this.onKilled(this.player)
-        else if (GuardianAngel.game.stage === 'day') {
+        else {
             if (!this.numberOfAttacks) {
                 GuardianAngel.game.bot.sendMessage(
                     this.player.id,
                     `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
                     'поэтому ничего не произошло особо...'
                 )
-            } else
-                this.numberOfAttacks = 0;
-            this.targetPlayer = undefined; // В таком случае actionResolve ангела должен идти последним
+            }
         }
+        this.numberOfAttacks = 0;
+        this.targetPlayer = undefined; // В таком случае actionResolve ангела должен идти последним
     }
 
     handleChoice = (choice?: string) => {
