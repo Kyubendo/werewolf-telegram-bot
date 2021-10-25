@@ -7,7 +7,7 @@ export class Prowler extends ForecasterBase {
     startMessageText = () => `Ты ${this.roleName}. Твои союзники - волки. ` +
         'Каждую ночь ты можешь гулять по деревне и подглядывать за селянами через окна домов. ' +
         'Ты увидишь, спит игрок ночью или нет. Если же его съедят, ты увидишь всю стаю волков и узнаешь их имена.'
-    weight = () => 4;
+    weight = () => -4;
 
     actionResolve = () => {
         if (Prowler.game.stage !== 'night' || !this.targetPlayer?.role) return;
