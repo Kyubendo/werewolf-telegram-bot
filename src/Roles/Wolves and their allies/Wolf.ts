@@ -19,15 +19,14 @@ export class Wolf extends RoleBase {
     }
 
     roleName = 'Волк 🐺';
-    startMessageText = () =>`Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
+    startMessageText = () => `Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
         `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`
     killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF
 
-        action = () => {
-        this.targetPlayer = undefined
+    action = () => {
         if (Wolf.game.stage !== 'night') return;
         Wolf.game.bot.sendMessage(
             this.player.id,
@@ -43,7 +42,7 @@ export class Wolf extends RoleBase {
     actionResolve = () => {
         if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
         this.targetPlayer.role?.onKilled(this.player);
-        //this.targetPlayer = undefined
+        this.targetPlayer = undefined
     }
 
     handleChoice = (choice?: string) => {

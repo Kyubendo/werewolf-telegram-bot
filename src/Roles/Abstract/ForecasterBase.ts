@@ -2,10 +2,14 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "./RoleBase";
 import {findPlayer} from "../../Game/findPlayer";
+import {GameStage} from "../../Game/Game";
 
 export abstract class ForecasterBase extends RoleBase {
+
+    readonly forecastTime: GameStage = 'night';
+
     action = () => {
-        if (ForecasterBase.game.stage !== 'night') return;
+        if (ForecasterBase.game.stage !== this.forecastTime) return;
         ForecasterBase.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь посмотреть?',
