@@ -22,7 +22,10 @@ export class Prowler extends ForecasterBase {
 
     forecastRoleName = (targetRole: RoleBase) => {
         let text: string;
-        if (targetRole.targetPlayer)
+        if (targetRole.targetPlayer) {
+            this.handleLovers(targetRole.player);
+            return ''; // Maybe change if Prowler can see result despite Beauty interference
+        } else if (targetRole.targetPlayer)
             text = `Ты заглянула в окошко ${highlightPlayer(targetRole.player)} и увидела там свет. ` +
                 `Похоже, ${highlightPlayer(targetRole.player)} не спит этой ночью!`;
         else

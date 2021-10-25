@@ -3,6 +3,7 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Beauty} from "../Villagers/Beauty";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -44,8 +45,9 @@ export class Thief extends RoleBase {
                 this.player.id,
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
-        } else if (this.targetPlayer.role instanceof )
-        else if (this.player.role) {
+        } else if (this.targetPlayer.role instanceof Beauty) {
+            this.handleLovers(this.targetPlayer);
+        } else if (this.player.role) {
             const previousRoleOldThief: RoleBase = this.player.role;
             const previousRoleNewThief = this.targetPlayer.role;
 
