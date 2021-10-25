@@ -12,8 +12,8 @@ export class Gunner extends Villager {
 
     killMessageAll = (deadPlayer: Player) => 'Вдруг послышался выстрел!  Все село оборачивается, ' +
         `чтобы увидеть стоящего ${highlightPlayer(this.player)} над ${highlightPlayer(deadPlayer)}, и ` +
-        'оружие все еще нацелено в голову...Мертв(а)! \n' +
-        `${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}!`
+        'оружие все еще нацелено в голову... Мертв(а)! \n' +
+        `${highlightPlayer(deadPlayer)} был(а) **${deadPlayer.role?.roleName}**!`
 
 
     ammo = 2;
@@ -37,6 +37,8 @@ export class Gunner extends Villager {
         this.targetPlayer.role.onKilled(this.player);
 
         this.ammo--;
+
+        this.targetPlayer = undefined;
     }
 
     handleChoice = (choice?: string) => {
