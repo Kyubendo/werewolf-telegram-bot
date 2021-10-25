@@ -37,6 +37,8 @@ export class Gunner extends Villager {
         this.targetPlayer.role.onKilled(this.player);
 
         this.ammo--;
+
+        this.targetPlayer = undefined;
     }
 
     handleChoice = (choice?: string) => {
