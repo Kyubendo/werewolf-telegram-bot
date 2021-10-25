@@ -1,5 +1,5 @@
 import {Villager} from "./Villager";
-import {RoleBase} from "../RoleBase";
+import {RoleBase} from "../Abstract/RoleBase";
 import {Seer} from "./Seer";
 
 export class WoodMan extends Villager {

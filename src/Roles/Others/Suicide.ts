@@ -1,4 +1,4 @@
-import {RoleBase} from "../RoleBase";
+import {RoleBase} from "../Abstract/RoleBase";
 
 export class Suicide extends RoleBase {
     roleName = 'Самоубийца 👺';
