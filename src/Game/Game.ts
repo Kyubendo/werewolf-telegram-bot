@@ -2,7 +2,7 @@ import {Player} from "../Player/Player";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
 import {playerList} from "../Utils/playerList";
-import {Lynch} from "./Lynch";
+import {Lynch} from "./Voting/Lynch";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -18,7 +18,7 @@ export class Game {
 
     lynch?: Lynch
 
-    lynchDuration = 1000_000
+    lynchDuration = 10_000
     dayDuration = 10000_000
     nightDuration = 5000_000
 
@@ -45,16 +45,21 @@ export class Game {
                 stageDuration = this.dayDuration
                 break
             case "lynch":
+                this.lynch?.handleLynchKill()
+                this.stage = "night"
+                stageDuration = this.nightDuration
+                break
             default:
                 this.stage = "night"
                 stageDuration = this.nightDuration
         }
         this.resetStageTimer(stageDuration)
-
-        this.bot.sendMessage(this.chatId, gameStageMsg(this))
-            .then(() => {
-                this.bot.sendMessage(this.chatId, playerList(this),)
-            })
+        setTimeout(() => // stupid kludge
+                this.bot.sendMessage(this.chatId, gameStageMsg(this))
+                    .then(() => {
+                        this.bot.sendMessage(this.chatId, playerList(this),)
+                    }),
+            50)
         this.players.filter(player => player.isAlive && !player.isFrozen)
             .forEach(player => player.role?.action && player.role.action())
     }

@@ -3,7 +3,7 @@ import {Game} from "../Game";
 import {Player} from "../../Player/Player";
 import {State} from "../../Bot";
 import {playerList} from "../../Utils/playerList";
-import {Lynch} from "../Lynch";
+import {Lynch} from "../Voting/Lynch";
 
 const joinButton = {
     inline_keyboard: [
