@@ -4,6 +4,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {SerialKiller, Wolf} from "../index";
 import {Player} from "../../Player/Player";
 import {RoleBase} from "../Abstract/RoleBase";
+import {Beauty} from "./Beauty";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
@@ -11,7 +12,6 @@ export class GuardianAngel extends RoleBase {
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
-    
 
     numberOfAttacks: number = 0;
 
@@ -31,10 +31,13 @@ export class GuardianAngel extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (GuardianAngel.game.stage === 'night' && (this.targetPlayer.role instanceof SerialKiller ||
-            (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)))
-            this.onKilled(this.player)
-        else if (GuardianAngel.game.stage === 'day') {
+        if (GuardianAngel.game.stage === 'night') {
+            if (this.targetPlayer.role instanceof SerialKiller ||
+                (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))
+                this.onKilled(this.player);
+            else if (this.targetPlayer.role instanceof Beauty)
+                this.handleLovers(this.targetPlayer);
+        } else if (GuardianAngel.game.stage === 'day') {
             if (!this.numberOfAttacks) {
                 GuardianAngel.game.bot.sendMessage(
                     this.player.id,
