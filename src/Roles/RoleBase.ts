@@ -4,7 +4,8 @@ import {highlightPlayer} from "../Utils/highlightPlayer";
 import {Harlot, SerialKiller, Wolf, GuardianAngel} from "./index";
 
 export abstract class RoleBase {
-    constructor(readonly player: Player) {
+    constructor(readonly player: Player, previousRole?: RoleBase) {
+        this.previousRole = previousRole;
     }
 
     static game: Game
@@ -13,7 +14,7 @@ export abstract class RoleBase {
     abstract readonly weight: () => number
     abstract readonly startMessageText: () => string
 
-    previousRole?: RoleBase;
+    readonly previousRole?: RoleBase;
 
     readonly killMessageAll?: (deadPlayer: Player) => string
     readonly killMessageDead?: string
@@ -109,8 +110,8 @@ export abstract class RoleBase {
 
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer 
-                ? highlightPlayer(this.targetPlayer) 
+            `Выбор принят: ${this.targetPlayer
+                ? highlightPlayer(this.targetPlayer)
                 : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
@@ -119,5 +120,6 @@ export abstract class RoleBase {
         )
     }
 
-    createThisRole = (player: Player): RoleBase => new (this.constructor as any)(player);
+    createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
+        new (this.constructor as any)(player, previousRole);
 }

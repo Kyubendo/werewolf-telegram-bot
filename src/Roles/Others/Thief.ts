@@ -45,14 +45,9 @@ export class Thief extends RoleBase {
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
         } else if (this.player.role) {
-            const previousRoleOldThief: RoleBase = this.player.role;
-            const previousRoleNewThief = this.targetPlayer.role;
+            this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
 
-            this.player.role = this.targetPlayer.role.createThisRole(this.player);
-            this.player.role.previousRole = previousRoleOldThief;
-
-            this.targetPlayer.role = new Thief(this.targetPlayer);
-            this.targetPlayer.role.previousRole = previousRoleNewThief;
+            this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 
             Thief.game.bot.sendMessage(
                 this.player.id,
