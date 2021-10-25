@@ -4,6 +4,7 @@ import {Wolf} from "../Wolves and their allies/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
@@ -46,7 +47,12 @@ export class SerialKiller extends RoleBase {
 
     actionResolve = () => {
         if (SerialKiller.game.stage !== 'night' || !this.targetPlayer) return;
-        this.targetPlayer.role?.onKilled(this.player);
+
+        if (this.targetPlayer.role instanceof Beauty) {
+            this.handleLovers(this.targetPlayer);
+        } else
+            this.targetPlayer.role?.onKilled(this.player);
+
         this.targetPlayer = undefined
     }
 
