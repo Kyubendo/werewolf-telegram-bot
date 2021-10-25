@@ -78,16 +78,21 @@ export abstract class RoleBase {
                 && prowlerPlayer.role?.targetPlayer === this.player
                 && killer.role instanceof Wolf) {
                 let text: string;
-                if (RoleBase.game.players.filter(player => player.role instanceof Wolf).length === 1)
+                const allies = killer.role.findOtherWolfPlayers();
+                if (!allies)
                     text = `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
                         'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
                         `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
                         'Кажется, ты нашла своего союзника.';
-                else
+                else {
                     text = `Когда ты заглянула в окно к ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
                         `ты увидела, как стая волков пожирает беднягу. Ужасающее зрелище... ` +
                         `Ужасающее для ${highlightPlayer(prowlerPlayer.role.targetPlayer)}! ` +
-                        'А для тебя отличное, ведь ты запомнила лица всех волков! ' + killer.role.showWolfPlayers();
+                        'А для тебя отличное, ведь ты запомнила лица всех волков! '
+                        + `\nВот они слева направо: ${highlightPlayer(killer)}, ` +
+                        + allies?.map(ally => highlightPlayer(ally)).join(', ')
+
+                }
 
                 RoleBase.game.bot.sendMessage(
                     prowlerPlayer.id,
@@ -138,7 +143,7 @@ export abstract class RoleBase {
     }
 
 
-    movePlayer = ():true => {
+    movePlayer = (): true => {
         RoleBase.game.players.push(...RoleBase.game.players.splice(
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
         return true;

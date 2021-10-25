@@ -7,20 +7,24 @@ import {Traitor} from "../Villagers/Traitor";
 import {Beauty} from "../Villagers/Beauty";
 
 export class Wolf extends RoleBase {
-    findWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
+    findOtherWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Wolf
         // && otherPlayer !== this.player
         && otherPlayer.isAlive
     )
 
-    showWolfPlayers(): string {
-        const allies = this.findWolfPlayers();
-        return `${allies?.length > 1 ? ('\nВолки: '
-            + allies?.map(ally => highlightPlayer(ally)).join(', ')) : ''}`
+    showOtherWolfPlayers(): string {
+        const allies = this.findOtherWolfPlayers();
+        return `${allies?.length > 0
+            ? '\n' + ((allies.length > 1
+                ? '\nДругие волки: '
+                : 'Твой брат по волчьему делу — ')
+            + allies?.map(ally => highlightPlayer(ally)).join(', ')) 
+            : ''}`
     }
 
     roleName = 'Волк 🐺';
-    startMessageText = () => `Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
+    startMessageText = () => `Ты ${this.roleName}. Скушай всё село.` + this.showOtherWolfPlayers();
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
@@ -47,7 +51,7 @@ export class Wolf extends RoleBase {
             this.handleLovers(this.targetPlayer);
         } else
             this.targetPlayer.role?.onKilled(this.player);
-        
+
         this.targetPlayer = undefined
     }
 
@@ -58,7 +62,7 @@ export class Wolf extends RoleBase {
 
     handleDeath(killer?: Player): boolean {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
-        if (this.findWolfPlayers().length <= 1 && traitorPlayer) {
+        if (this.findOtherWolfPlayers().length <= 1 && traitorPlayer) {
             const previousRole = traitorPlayer.role;
             traitorPlayer.role = new Wolf(traitorPlayer);
             traitorPlayer.role.previousRole = previousRole;
