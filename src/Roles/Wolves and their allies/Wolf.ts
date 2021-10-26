@@ -1,16 +1,28 @@
 import {Player} from "../../Player/Player";
-import {RoleBase} from "../RoleBase";
-import {alliesMessage} from "../../Game/findAllies";
+import {findPlayer} from "../../Game/findPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
 
 export class Wolf extends RoleBase {
+    findWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
+        otherPlayer.role instanceof Wolf
+        // && otherPlayer !== this.player
+        && otherPlayer.isAlive
+    )
+
+    showWolfPlayers(): string {
+        const allies = this.findWolfPlayers();
+        return `${allies?.length > 1 ? ('\nВолки: '
+            + allies?.map(ally => highlightPlayer(ally)).join(', ')) : ''}`
+    }
+
     roleName = 'Волк 🐺';
-    startMessageText = `Ты ${this.roleName}. Скушай всё село.` + alliesMessage(this.player);
+    startMessageText = () => `Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
-        `\n${highlightPlayer(deadPlayer)} был(а) ${deadPlayer.role?.roleName}.`
+        `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`
     killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF
 
     actionResolve = () => {
@@ -21,10 +33,8 @@ export class Wolf extends RoleBase {
 
     handleDeath(killer?: Player): boolean {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
-        if (Wolf.game.players.filter(player => player.role instanceof Wolf && player.isAlive).length <= 1 && traitorPlayer) {
-            const previousRole = traitorPlayer.role;
-            traitorPlayer.role = new Wolf(traitorPlayer);
-            traitorPlayer.role.previousRole = previousRole;
+        if (this.findWolfPlayers().length <= 1 && traitorPlayer) {
+            traitorPlayer.role = new Wolf(traitorPlayer, traitorPlayer.role);
             Wolf.game.bot.sendMessage(
                 traitorPlayer.id,
                 `Твое время настало, ты обрел новый облик, ${traitorPlayer.role.previousRole?.roleName}! ` +
