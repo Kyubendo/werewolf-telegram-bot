@@ -3,59 +3,48 @@ import {Player} from "../../Player/Player";
 import {findPlayer} from "../findPlayer";
 import TelegramBot from "node-telegram-bot-api";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {generateInlineKeyboard} from "../playersButtons";
 
 export abstract class VotingBase {
     constructor(readonly game: Game) {
     }
 
-    votes: { [id: number]: number } = {}
-    votedPlayers: Player[] = []
+    abstract voteStage: GameStage
+
+    abstract votePromptMessage: string
 
     abstract getVoters(): Player[]
 
-    abstract voteStage: GameStage
-
-    abstract handleVoteResult(voteResult: Player | undefined | null): void
+    abstract handleVoteResult(voteResult?: Player[]): void
 
     abstract handleVotingChoiceResult(voter: Player, target?: Player): void
 
+    abstract voteTargetCondition(otherPlayer: Player): boolean
+
     calculateVoteWeight = (target: Player) => 1
 
-    editSkipMessages = () =>
-        this.getVoters().filter(v => !this.votedPlayers.includes(v)).forEach(voter => {
-            this.game.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},//custom text
+    beforeVotingAction?: () => void
+
+    votes: { [id: string]: number } = {}
+
+    votedPlayers: Player[] = []
+
+    startVoting = () => {
+        this.beforeVotingAction && this.beforeVotingAction()
+        setTimeout(() => this.getVoters().forEach(player => {
+            this.game.bot.sendMessage(
+                player.id,
+                this.votePromptMessage,
                 {
-                    message_id: voter.role?.choiceMsgId,
-                    chat_id: voter.id,
+                    reply_markup: generateInlineKeyboard(this.game.players.filter(
+                        otherPlayer => otherPlayer !== player && this.voteTargetCondition(otherPlayer)
+                    ))
                 }
-            )
-        })
-
-    voteResult = () => {
-        let maxVotesTarget: number | undefined
-        let equalVotesCount = 0
-        if (!Object.keys(this.votes).length) return null
-        Object.keys(this.votes).reduce((a, c) => {
-            if (this.votes[+c] > a) {
-                maxVotesTarget = +c
-                return this.votes[+c]
-            } else if (this.votes[+c] === a) equalVotesCount++
-            return a
-        }, 0)
-
-        return maxVotesTarget && !equalVotesCount
-            ? findPlayer(maxVotesTarget, this.game.players)
-            : undefined
+            ).then(msg => {
+                if (player.role) player.role.choiceMsgId = msg.message_id
+            })
+        }), 50)
     }
-
-    handleLynchKill = () => {
-        this.editSkipMessages()
-        this.handleVoteResult(this.voteResult())
-        this.votes = {}
-        this.votedPlayers = []
-    }
-
 
     handleVotingChoice = (query: TelegramBot.CallbackQuery) => {
         if (!query || this.game.stage !== this.voteStage) return;
@@ -78,5 +67,32 @@ export abstract class VotingBase {
             })
         this.handleVotingChoiceResult(voter, target)
         if (this.votedPlayers.length === this.getVoters().length) this.game.setNextStage()
+    }
+
+    handleVoteEnd = () => {
+        this.editSkipMessages()
+        this.handleVoteResult(this.voteResult())
+        this.votes = {}
+        this.votedPlayers = []
+    }
+
+    editSkipMessages = () =>
+        this.getVoters().filter(v => !this.votedPlayers.includes(v)).forEach(voter => {
+            this.game.bot.editMessageReplyMarkup(
+                {inline_keyboard: []}, //custom message?
+                {
+                    message_id: voter.role?.choiceMsgId,
+                    chat_id: voter.id,
+                }
+            )
+        })
+
+    voteResult = () => {
+        if (!Object.keys(this.votes).length) return undefined
+        const maxVotesCount = Object.values(this.votes).reduce((a, c) => c > a ? c : a, 0)
+        return Object.keys(this.votes)
+            .filter(key => this.votes[key] === maxVotesCount)
+            .map(id => findPlayer(id, this.game.players))
+            .filter((e): e is Player => !!e)
     }
 }

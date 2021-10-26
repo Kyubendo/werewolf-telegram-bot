@@ -45,7 +45,7 @@ export class Game {
                 stageDuration = this.dayDuration
                 break
             case "lynch":
-                this.lynch?.handleLynchKill()
+                this.lynch?.handleVoteEnd()
                 this.stage = "night"
                 stageDuration = this.nightDuration
                 break
