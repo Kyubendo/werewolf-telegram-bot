@@ -22,12 +22,13 @@ export class Lynch extends VotingBase {
             this.game.chatId,
             `${this.votedPlayers.length} из ${this.getVoters().length} игроков проголосовало.`
         )
+        if (this.votedPlayers.length === this.getVoters().length) this.game.setNextStage()
     }
 
-    handleVoteResult(voteResult?: Player[]) {
-        voteResult && voteResult.length === 1
+    handleVoteResult(voteResult: Player[]) {
+        voteResult.length === 1
             ? voteResult[0].role?.onKilled()
             : this.game.bot.sendMessage(this.game.chatId,
-                'Не удалось придти к одному решению! Расстроенная толпа расходится по домам...')
+            'Не удалось придти к одному решению! Расстроенная толпа расходится по домам...')
     }
 }

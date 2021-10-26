@@ -9,27 +9,28 @@ export abstract class VotingBase {
     constructor(readonly game: Game) {
     }
 
-    abstract voteStage: GameStage
+    protected abstract voteStage: GameStage
 
-    abstract votePromptMessage: string
+    protected abstract votePromptMessage: string
 
-    abstract getVoters(): Player[]
+    protected abstract getVoters(): Player[]
 
-    abstract handleVoteResult(voteResult?: Player[]): void
+    protected abstract handleVoteResult(voteResult: Player[]): void
 
-    abstract handleVotingChoiceResult(voter: Player, target?: Player): void
+    protected abstract handleVotingChoiceResult(voter: Player, target?: Player): void
 
-    abstract voteTargetCondition(otherPlayer: Player): boolean
+    protected abstract voteTargetCondition(otherPlayer: Player): boolean
 
-    calculateVoteWeight = (target: Player) => 1
+    protected calculateVoteWeight = (target: Player) => 1
 
-    beforeVotingAction?: () => void
+    protected beforeVotingAction?: () => void
 
-    votes: { [id: string]: number } = {}
+    protected votes: { [id: string]: number } = {}
 
-    votedPlayers: Player[] = []
+    protected votedPlayers: Player[] = []
 
     startVoting = () => {
+        if (this.game.stage !== this.voteStage) return;
         this.beforeVotingAction && this.beforeVotingAction()
         setTimeout(() => this.getVoters().forEach(player => {
             this.game.bot.sendMessage(
@@ -66,17 +67,17 @@ export abstract class VotingBase {
                 chat_id: voter.id,
             })
         this.handleVotingChoiceResult(voter, target)
-        if (this.votedPlayers.length === this.getVoters().length) this.game.setNextStage()
     }
 
     handleVoteEnd = () => {
+        if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
         this.handleVoteResult(this.voteResult())
         this.votes = {}
         this.votedPlayers = []
     }
 
-    editSkipMessages = () =>
+    private editSkipMessages = () =>
         this.getVoters().filter(v => !this.votedPlayers.includes(v)).forEach(voter => {
             this.game.bot.editMessageReplyMarkup(
                 {inline_keyboard: []}, //custom message?
@@ -87,8 +88,7 @@ export abstract class VotingBase {
             )
         })
 
-    voteResult = () => {
-        if (!Object.keys(this.votes).length) return undefined
+    private voteResult = () => {
         const maxVotesCount = Object.values(this.votes).reduce((a, c) => c > a ? c : a, 0)
         return Object.keys(this.votes)
             .filter(key => this.votes[key] === maxVotesCount)

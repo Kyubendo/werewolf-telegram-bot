@@ -3,6 +3,8 @@ import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
 import {playerList} from "../Utils/playerList";
 import {Lynch} from "./Voting/Lynch";
+import {WolfFeast} from "./Voting/WolfFeast";
+import {Wolf} from "../Roles";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -17,6 +19,7 @@ export class Game {
     }
 
     lynch?: Lynch
+    wolfFeast?: WolfFeast
 
     lynchDuration = 10_000
     dayDuration = 10000_000
@@ -30,38 +33,49 @@ export class Game {
     }
 
     setNextStage = () => {
-        this.players.filter(player => player.isAlive)
-            .forEach(player => player.role?.actionResolve && player.role?.actionResolve())
-
         let stageDuration;
+        let nextStage: GameStage;
+
+
         switch (this.stage) {
             case "day":
-                this.stage = "lynch"
+                nextStage = "lynch"
                 stageDuration = this.lynchDuration
-                this.lynch?.startVoting()
                 break
             case "night":
-                this.stage = "day"
+                nextStage = "day"
                 stageDuration = this.dayDuration
                 break
             case "lynch":
-                this.lynch?.handleVoteEnd()
-                this.stage = "night"
+                nextStage = "night"
                 stageDuration = this.nightDuration
                 break
             default:
-                this.stage = "night"
+                nextStage = "night"
                 stageDuration = this.nightDuration
         }
         this.resetStageTimer(stageDuration)
+
+
+        this.lynch?.handleVoteEnd()
+        this.wolfFeast?.handleVoteEnd()
+        this.players.filter(player => player.isAlive)
+            .forEach(player => player.role?.actionResolve && player.role?.actionResolve())
+
+        this.stage = nextStage
+
+        this.lynch?.startVoting()
+        this.wolfFeast?.startVoting()
+        this.players.filter(player => player.isAlive && !player.isFrozen)
+            .forEach(player => player.role?.action && player.role.action())
+
+
         setTimeout(() => // stupid kludge
                 this.bot.sendMessage(this.chatId, gameStageMsg(this))
                     .then(() => {
                         this.bot.sendMessage(this.chatId, playerList(this),)
                     }),
             50)
-        this.players.filter(player => player.isAlive && !player.isFrozen)
-            .forEach(player => player.role?.action && player.role.action())
     }
 
     addPlayer = (player: Player) => {
