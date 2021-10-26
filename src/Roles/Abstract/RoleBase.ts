@@ -25,8 +25,9 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    readonly onKilled = (killer: Player) => {
-        this.player.isAlive && this.checkGuardianAngel(killer)
+    readonly onKilled = (killer: Player) => { // fix
+        if (!killer) this.handleLynchDeath()
+        else this.player.isAlive && this.checkGuardianAngel(killer)
         && this.handleDeath(killer) && this.movePlayer() && this.checkHarlotDeath(killer);
     }
 
@@ -106,6 +107,14 @@ export abstract class RoleBase {
 
         this.player.isAlive = false;
         return true;
+    }
+
+    handleLynchDeath() {
+        RoleBase.game.bot.sendMessage(
+            RoleBase.game.chatId,
+            `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+            + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`)
+        this.player.isAlive = false;
     }
 
     choiceMsgEditText = () => {
