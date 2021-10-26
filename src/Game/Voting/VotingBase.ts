@@ -9,25 +9,25 @@ export abstract class VotingBase {
     constructor(readonly game: Game) {
     }
 
-   abstract voteStage: GameStage
+    abstract voteStage: GameStage
 
-   abstract votePromptMessage: string
+    abstract votePromptMessage: string
 
-   abstract getVoters(): Player[]
+    abstract getVoters(): Player[]
 
-   abstract handleVoteResult(voteResult: Player[]): void
+    abstract handleVoteResult(voteResult: Player[]): void
 
-   abstract handleVotingChoiceResult(voter: Player, target?: Player): void
+    abstract handleVotingChoiceResult(voter: Player, target?: Player): void
 
-   abstract voteTargetCondition(otherPlayer: Player): boolean
+    abstract voteTargetCondition(otherPlayer: Player): boolean
 
-   calculateVoteWeight = (target: Player) => 1
+    calculateVoteWeight = (target: Player) => 1
 
-   beforeVotingAction?: () => void
+    beforeVotingAction?: () => void
 
-   votes: { [id: string]: number } = {}
+    votes: { [id: string]: number } = {}
 
-   votedPlayers: Player[] = []
+    votedPlayers: Player[] = []
 
     startVoting = () => {
         if (this.game.stage !== this.voteStage) return;
@@ -50,7 +50,7 @@ export abstract class VotingBase {
     handleVotingChoice = (query: TelegramBot.CallbackQuery) => {
         if (!query || this.game.stage !== this.voteStage) return;
         const voter = findPlayer(query.from.id, this.game.players)
-        if (!voter || !voter.role) return;
+        if (!voter || !voter.role || !this.getVoters().includes(voter)) return;
         this.votedPlayers.push(voter)
         let target: Player | undefined;
         if (query.data !== 'skip') {
