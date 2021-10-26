@@ -4,7 +4,6 @@ import {gameStageMsg} from "./gameStageMsg";
 import {playerList} from "../Utils/playerList";
 import {Lynch} from "./Voting/Lynch";
 import {WolfFeast} from "./Voting/WolfFeast";
-import {Wolf} from "../Roles";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
