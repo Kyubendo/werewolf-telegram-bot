@@ -44,6 +44,6 @@ export class Seer extends ForecasterBase {
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
             // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
         }
-        return `это *${targetRole.roleName}*!`;
+        return `это *${targetRole.roleName}*`;
     }
 }
