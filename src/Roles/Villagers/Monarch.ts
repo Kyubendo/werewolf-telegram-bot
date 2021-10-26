@@ -46,7 +46,7 @@ export class Monarch extends Villager {
             Monarch.game.chatId,
             `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +
             `шаг вперед, предлагая всем внимательно посмотреть на корону, которую он прятал раньше.\n` +
-            `Сегодня **${this.roleName}** решит, кого казнить.`, // GIF
+            `Сегодня *${this.roleName}* решит, кого казнить.`, // GIF
         )
     }
 

@@ -1,7 +1,7 @@
-import {Game} from "../Game/Game";
-import {Player} from "../Player/Player";
-import {highlightPlayer} from "../Utils/highlightPlayer";
-import {Harlot, SerialKiller, Wolf, GuardianAngel} from "./index";
+import {Game} from "../../Game/Game";
+import {Player} from "../../Player/Player";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Harlot, SerialKiller, Wolf, GuardianAngel} from "../index";
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {

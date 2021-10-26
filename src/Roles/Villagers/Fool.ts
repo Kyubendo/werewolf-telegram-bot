@@ -8,13 +8,14 @@ export class Fool extends Seer {
     weight = () => 4;
 
     handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, Fool.game.players);
+        this.choiceMsgEditText();
         if (Math.random() >= 0.5) // 50% for right guess
-            this.targetPlayer = findPlayer(choice, Fool.game.players)
+            return;
         else {
             const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
             this.targetPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
         }
-        this.choiceMsgEditText();
     }
 
     handleDeath(killer?: Player): boolean {
@@ -22,7 +23,7 @@ export class Fool extends Seer {
         Fool.game.bot.sendMessage(
             Fool.game.chatId,
             'День начался с печальных новостей. Всем известный Провид... ' +
-            `Так, стоп! Это же никакой не Провидец! Он... **${this.roleName}**!  ` +
+            `Так, стоп! Это же никакой не Провидец! Он... *${this.roleName}*!  ` +
             `Покойся не с миром, ${highlightPlayer(this.player)}...`,
         )
         return true;

@@ -1,6 +1,6 @@
 import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
-import {Wolf} from "../Wolves/Wolf";
+import {Wolf} from "../Wolves and their allies/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Cursed extends Villager {

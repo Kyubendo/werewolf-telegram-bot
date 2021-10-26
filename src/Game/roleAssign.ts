@@ -1,17 +1,18 @@
 import * as Roles from "../Roles";
 import {Game} from "./Game";
-import {RoleBase} from "../Roles/RoleBase";
+import {RoleBase} from "../Roles/Abstract/RoleBase";
 
 export const assignRoles = (game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const rolePool = [
-        Roles.Thief, Roles.Harlot,
+        Roles.Beholder, Roles.Oracle, Roles.Fool,
 
         Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason,
         Roles.Beholder, // Passive Villagers
-        Roles.Seer, Roles.Fool, Roles.Monarch, Roles.Harlot, // Active Villagers
-        Roles.Wolf, Roles.Lycan, // Wolves
+        Roles.Seer, Roles.Fool, Roles.Monarch, Roles.Harlot, Roles.Oracle, Roles.Gunner, Roles.GuardianAngel,
+        Roles.WiseElder, // Active Villagers
+        Roles.Wolf, Roles.Lycan, // Wolves and their allies
         Roles.Suicide, Roles.SerialKiller, Roles.Thief // Other
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
