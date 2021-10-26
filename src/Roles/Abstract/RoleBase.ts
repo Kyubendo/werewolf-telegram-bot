@@ -114,8 +114,7 @@ export abstract class RoleBase {
             RoleBase.game.chatId,
             `Жители отдали свои голоса в подозрениях и сомнениях... \n`
             + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`)
-        this.player.isAlive = false;
-        return true
+        return this.player.role?.handleDeath()
     }
 
     choiceMsgEditText = () => {

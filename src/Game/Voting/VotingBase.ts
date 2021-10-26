@@ -9,25 +9,25 @@ export abstract class VotingBase {
     constructor(readonly game: Game) {
     }
 
-    protected abstract voteStage: GameStage
+   abstract voteStage: GameStage
 
-    protected abstract votePromptMessage: string
+   abstract votePromptMessage: string
 
-    protected abstract getVoters(): Player[]
+   abstract getVoters(): Player[]
 
-    protected abstract handleVoteResult(voteResult: Player[]): void
+   abstract handleVoteResult(voteResult: Player[]): void
 
-    protected abstract handleVotingChoiceResult(voter: Player, target?: Player): void
+   abstract handleVotingChoiceResult(voter: Player, target?: Player): void
 
-    protected abstract voteTargetCondition(otherPlayer: Player): boolean
+   abstract voteTargetCondition(otherPlayer: Player): boolean
 
-    protected calculateVoteWeight = (target: Player) => 1
+   calculateVoteWeight = (target: Player) => 1
 
-    protected beforeVotingAction?: () => void
+   beforeVotingAction?: () => void
 
-    protected votes: { [id: string]: number } = {}
+   votes: { [id: string]: number } = {}
 
-    protected votedPlayers: Player[] = []
+   votedPlayers: Player[] = []
 
     startVoting = () => {
         if (this.game.stage !== this.voteStage) return;
