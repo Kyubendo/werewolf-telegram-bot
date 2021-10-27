@@ -25,9 +25,7 @@ export abstract class RoleBase {
     choiceMsgId?: number
 
     readonly onKilled = (killer: Player) => {
-        this.player.isAlive && this.checkGuardianAngels(killer)
-        && this.handleDeath(killer) && this.checkProwlers(killer)
-        && this.movePlayer() && this.checkHarlotsDeath(killer);
+        this.player.isAlive && this.handleDeath(killer) && this.movePlayer() && this.killPlayerLover(killer);
     }
 
     checkGuardianAngels = (killer: Player): boolean => {
@@ -69,7 +67,7 @@ export abstract class RoleBase {
         return true;
     }
 
-    checkProwlers = (killer: Player): true => {
+    checkProwlers = (killer: Player) => {
         const prowlerPlayers = RoleBase.game.players.filter(player => player.role instanceof Prowler);
 
         for (const prowlerPlayer of prowlerPlayers) {
@@ -96,10 +94,9 @@ export abstract class RoleBase {
                 prowlerPlayer.role.targetPlayer = prowlerPlayer;
             }
         }
-        return true;
     }
 
-    checkHarlotsDeath = (killer: Player): void => {
+    checkHarlotsDeath = (killer: Player) => {
         const harlotPlayers = RoleBase.game.players.filter(player => player.role instanceof Harlot);
 
         for (const harlotPlayer of harlotPlayers) {
@@ -129,9 +126,16 @@ export abstract class RoleBase {
         }
     }
 
+    readonly killPlayerLover = (loverPlayer: Player) => {
+        if (loverPlayer.lover) {
+            loverPlayer.lover.lover = undefined;
+            loverPlayer.lover.role?.onKilled(loverPlayer);
+        }
+    }
+
+
     movePlayer = () => {
-        RoleBase.game.players.push(...RoleBase.game.players.splice(
-            RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
+        RoleBase.game.players.push(...RoleBase.game.players.splice(RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
     handleDeath(killer?: Player): boolean {
@@ -145,6 +149,24 @@ export abstract class RoleBase {
 
         this.player.isAlive = false;
         return true;
+    }
+
+    readonly loveBind = (newLover: Player) => {
+        this.killPlayerLover(newLover);
+        this.killPlayerLover(this.player)
+        newLover.lover = this.player;
+        this.player.lover = newLover;
+        this.loverMessage(newLover);
+        this.loverMessage(this.player);
+    }
+
+    readonly loverMessage = (newLover: Player) => {
+        newLover.lover && RoleBase.game.bot.sendMessage(
+            newLover.id,
+            `Ты был(а) поражен(а) любовью. ${highlightPlayer(newLover.lover)} навсегда в твоей памяти ` +
+            'и любовь никогда не погаснет в твоем сердце... Ваша цель выжить! Если один из вас погибнет, ' +
+            'другой умрет из-за печали и тоски.'
+        )
     }
 
     choiceMsgEditText = () => {

@@ -1,16 +1,17 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {SerialKiller, Villager, Wolf} from "../index";
+import {SerialKiller, Wolf} from "../index";
 import {Player} from "../../Player/Player";
+import {RoleBase} from "../Abstract/RoleBase";
+import {Beauty} from "./Beauty";
 
-export class GuardianAngel extends Villager {
+export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
     startMessageText = () => `Ты ${this.roleName}! Беги спасай свой народ! Но берегись волков, есть ` +
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
-    
 
     numberOfAttacks: number = 0;
 
@@ -30,10 +31,13 @@ export class GuardianAngel extends Villager {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (GuardianAngel.game.stage === 'night' && (this.targetPlayer.role instanceof SerialKiller ||
-            (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)))
-            this.onKilled(this.player)
-        else if (GuardianAngel.game.stage === 'day') {
+        if (GuardianAngel.game.stage === 'night') {
+            if (this.targetPlayer.role instanceof SerialKiller ||
+                (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))
+                this.onKilled(this.player);
+            else if (this.targetPlayer.role instanceof Beauty)
+                this.loveBind(this.targetPlayer);
+        } else if (GuardianAngel.game.stage === 'day') {
             if (!this.numberOfAttacks) {
                 GuardianAngel.game.bot.sendMessage(
                     this.player.id,

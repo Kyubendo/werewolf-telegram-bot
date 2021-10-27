@@ -1,9 +1,9 @@
-import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../Wolves and their allies/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Cursed extends Villager {
+export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';
     startMessageText = () => `Ты ${this.roleName}! Сейчас ты обычный смертный, ` +
         'но если волки выберут тебя съесть, ты станешь одним из них.';

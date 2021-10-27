@@ -1,9 +1,9 @@
-import {Villager} from "./Villager";
 import {Seer} from "./Seer";
 import {Fool} from "./Fool";
 import {Player} from "../../Player/Player";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Beholder extends Villager {
+export class Beholder extends RoleBase {
     roleName = 'Очевидец 👁';
     private seers?: Player[] = Beholder.game.players
         .filter(player => player.role instanceof Seer && !(player.role instanceof Fool));
