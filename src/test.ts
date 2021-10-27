@@ -16,17 +16,19 @@
 
 
 class A {
-    foo(num: number, options?: { num1?: number, num2?: number }) {
-        console.log(num, options?.num1, options?.num2)
+    foo() {
+        console.log('basic-A')
     }
 }
 
-const foo = A.prototype.foo;
-A.prototype.foo = function (num: number, options?: { num1?: number, num2?: number }) {
-    foo(num, {num1: 1, ...options})
+const a = new A();
+
+const originalFoo = a.foo
+a.foo = () => {
+    console.log('additional-A')
+    originalFoo()
 }
 
-const a = new A()
+a.foo()
 
 
-a.foo(0)

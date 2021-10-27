@@ -4,7 +4,6 @@ import {Wolf} from "../Wolves and their allies/Wolf";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
-import {GameStage} from "../../Game/Game";
 
 export class WiseElder extends ForecasterBase {
     roleName = "Мудрец 📚";
@@ -13,10 +12,8 @@ export class WiseElder extends ForecasterBase {
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
     weight = () => 5;
 
-    forecastTime: GameStage = 'day';
-
     actionResolve = () => {
-        if (ForecasterBase.game.stage !== 'day' || !this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
         ForecasterBase.game.bot.sendMessage(

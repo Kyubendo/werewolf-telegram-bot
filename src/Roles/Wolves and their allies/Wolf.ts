@@ -1,5 +1,4 @@
 import {Player} from "../../Player/Player";
-import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
@@ -26,7 +25,7 @@ export class Wolf extends RoleBase {
     killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF
 
     actionResolve = () => {
-        if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
+        if (!this.targetPlayer) return;
         this.targetPlayer.role?.onKilled(this.player);
         this.targetPlayer = undefined
     }

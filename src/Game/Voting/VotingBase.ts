@@ -60,6 +60,7 @@ export abstract class VotingBase {
                 this.votes[target.id] ? this.votes[target.id] += voteWeight : this.votes[target.id] = voteWeight
             }
         }
+
         this.game.bot.editMessageText(
             `Выбор принят: ${target ? highlightPlayer(target) : 'Пропустить'}.`,
             {
@@ -72,7 +73,7 @@ export abstract class VotingBase {
     handleVoteEnd = () => {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
-        this.handleVoteResult(this.voteResult())
+        this.handleVoteResult(this.voteResults())
         this.votes = {}
         this.votedPlayers = []
     }
@@ -88,7 +89,7 @@ export abstract class VotingBase {
             )
         })
 
-    private voteResult = () => {
+    private voteResults = () => {
         const maxVotesCount = Object.values(this.votes).reduce((a, c) => c > a ? c : a, 0)
         return Object.keys(this.votes)
             .filter(key => this.votes[key] === maxVotesCount)
