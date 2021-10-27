@@ -1,6 +1,6 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
-import {Player} from "../../Player/Player";
+import {findPlayer} from "../../Game/findPlayer";
 
 export class Martyr extends RoleBase {
     readonly roleName = 'Мученица 📿';
@@ -8,9 +8,11 @@ export class Martyr extends RoleBase {
     startMessageText = () => `Ты ${this.roleName}.`
     weight = () => 0;
 
-    targetHandleDeath?: (killer?: Player) => boolean
-
     action = () => {
+        if (this.targetPlayer?.role) {
+            this.targetPlayer.role.handleDeath = this.targetPlayer.role.originalHandleDeath
+            return
+        }
         Martyr.game.bot.sendMessage(
             this.player.id,
             'За кого ты хочешь умереть?',
@@ -21,9 +23,17 @@ export class Martyr extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
+    actionResolve = () => {
+        if (!this.targetPlayer?.role) return;
+        this.targetPlayer.role.handleDeath = (killer) => {
+            this.onKilled(this.player)
+                // messages
+            return false
+        }
+    }
 
-    handleChoice = () => {
-        if (!this.targetPlayer) return
-        this.targetPlayer
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, Martyr.game.players);
+        this.choiceMsgEditText();
     }
 }

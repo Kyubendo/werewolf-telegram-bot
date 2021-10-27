@@ -21,6 +21,7 @@ export abstract class RoleBase {
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
+    readonly originalHandleDeath = this.handleDeath
 
     targetPlayer?: Player
     choiceMsgId?: number

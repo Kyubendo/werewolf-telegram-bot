@@ -1,34 +1,19 @@
-// import {Player} from "./Player/Player";
-// import * as Roles from "./Roles";
-// import {RoleBase} from "./Roles/RoleBase";
-// import {Game} from "./Game/Game";
-// import TelegramBot from "node-telegram-bot-api";
-//
-// const bot = new TelegramBot( process.env.BOT_TOKEN!, {polling: true});
-//
-// const player = new Player({id: 0, first_name: 'test', is_bot: false,})
-// const rolePool = [Roles.Lycan, Roles.Seer,]
-//
-// const game = new Game('classic', bot,[player, player], 0, 0)
-// RoleBase.game = game
-//
-// const weight = game.players.map((player, i) => player.role = new rolePool[i](player)).reduce((a, c) => a + c.weight(), 0)
+import {config} from "dotenv";
 
+config({path: __dirname + '/./../.env'})
+import {Player} from "./Player/Player";
+import * as Roles from "./Roles";
+import {Game} from "./Game/Game";
+import {RoleBase} from "./Roles/Abstract/RoleBase";
+import {TgBot} from "./TgBot";
 
-class A {
-    foo() {
-        console.log('basic-A')
-    }
-}
+const bot = new TgBot(process.env.BOT_TOKEN!, {polling: true});
 
-const a = new A();
+const player = new Player({id: 0, first_name: 'test', is_bot: false,})
+const rolePool = [Roles.Lycan, Roles.Seer,]
 
-const originalFoo = a.foo
-a.foo = () => {
-    console.log('additional-A')
-    originalFoo()
-}
+const game = new Game('classic', bot, [player, player], 0, 0)
+RoleBase.game = game
 
-a.foo()
-
+const weight = game.players.map((player, i) => player.role = new rolePool[i](player)).reduce((a, c) => a + c.weight(), 0)
 

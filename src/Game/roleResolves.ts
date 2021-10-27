@@ -1,4 +1,16 @@
-import {GuardianAngel, Gunner, Harlot, Monarch, Oracle, Seer, SerialKiller, Thief, WiseElder, Wolf} from "../Roles";
+import {
+    GuardianAngel,
+    Gunner,
+    Harlot,
+    Martyr,
+    Monarch,
+    Oracle,
+    Seer,
+    SerialKiller,
+    Thief,
+    WiseElder,
+    Wolf
+} from "../Roles";
 import {GameStage} from "./Game";
 
 export const roleResolves = (stage: GameStage) => {
@@ -21,8 +33,8 @@ const dayRoleResolves = [
 const nightRoleResolves = [
     // PuppetMaster,
     // Jack
+    Martyr,
     GuardianAngel,
-    // Martyr,
     Thief,
     Harlot, //Prowler
     Wolf,
