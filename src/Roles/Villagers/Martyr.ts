@@ -9,10 +9,8 @@ export class Martyr extends RoleBase {
     weight = () => 0;
 
     action = () => {
-        if (this.targetPlayer?.role) {
-            this.targetPlayer.role.handleDeath = this.targetPlayer.role.originalHandleDeath
-            return
-        }
+        if (this.targetPlayer?.role) return
+
         Martyr.game.bot.sendMessage(
             this.player.id,
             'За кого ты хочешь умереть?',
@@ -27,7 +25,8 @@ export class Martyr extends RoleBase {
         if (!this.targetPlayer?.role) return;
         this.targetPlayer.role.handleDeath = (killer) => {
             this.onKilled(this.player)
-                // messages
+
+            // messages
             return false
         }
     }
