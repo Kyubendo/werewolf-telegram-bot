@@ -15,12 +15,12 @@ export class Wolf extends RoleBase {
 
     showOtherWolfPlayers(): string {
         const allies = this.findOtherWolfPlayers();
-        return `${allies?.length > 0
-            ? '\n' + ((allies.length > 1
+        if (!allies.length)
+            return ''
+        return `\n${(allies.length > 1
                 ? '\nДругие волки: '
                 : 'Твой брат по волчьему делу — ')
-            + allies?.map(ally => highlightPlayer(ally)).join(', ')) 
-            : ''}`
+            + allies?.map(ally => highlightPlayer(ally)).join(', ')}`
     }
 
     roleName = 'Волк 🐺';

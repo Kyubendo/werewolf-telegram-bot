@@ -77,26 +77,21 @@ export abstract class RoleBase {
             if (prowlerPlayer?.role
                 && prowlerPlayer.role?.targetPlayer === this.player
                 && killer.role instanceof Wolf) {
-                let text: string;
                 const allies = killer.role.findOtherWolfPlayers();
-                if (!allies)
-                    text = `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+
+                RoleBase.game.bot.sendMessage(
+                    prowlerPlayer.id,
+                    !allies.length
+                        ? `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
                         'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
                         `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
-                        'Кажется, ты нашла своего союзника.';
-                else {
-                    text = `Когда ты заглянула в окно к ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+                        'Кажется, ты нашла своего союзника.'
+                        : `Когда ты заглянула в окно к ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
                         `ты увидела, как стая волков пожирает беднягу. Ужасающее зрелище... ` +
                         `Ужасающее для ${highlightPlayer(prowlerPlayer.role.targetPlayer)}! ` +
                         'А для тебя отличное, ведь ты запомнила лица всех волков! '
                         + `\nВот они слева направо: ${highlightPlayer(killer)}, ` +
-                        + allies?.map(ally => highlightPlayer(ally)).join(', ')
-
-                }
-
-                RoleBase.game.bot.sendMessage(
-                    prowlerPlayer.id,
-                    text
+                        +allies?.map(ally => highlightPlayer(ally)).join(', ')
                 )
 
                 prowlerPlayer.role.targetPlayer = prowlerPlayer;
