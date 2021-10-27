@@ -3,23 +3,29 @@ import {join} from "../callbacks/join";
 import {State} from "../../Bot";
 import {roleChoice} from "../callbacks/roleChoice";
 
+export type SelectType = {
+    type: string,
+    choice: string
+    from: TelegramBot.User
+}
 export const callbackHandle = (bot: TelegramBot, state: State) => {
     bot.on('callback_query', query => {
         const game = state.game
         if (!game || !query.data) return;
-        const select = JSON.parse(query.data)
+        const select: SelectType = JSON.parse(query.data)
+        select.from = query.from
         switch (select.type) {
             case 'join':
-                join(game, select.choice)
+                join(game, select)
                 break
             case 'role':
-                roleChoice(select.choice, game.players)
+                roleChoice(select, game.players)
                 break
             case 'lynch':
-                game.lynch?.handleVotingChoice(select.choice)
+                game.lynch?.handleVotingChoice(select)
                 break
             case 'wolfFeast':
-                game.wolfFeast?.handleVotingChoice(select.choice)
+                game.wolfFeast?.handleVotingChoice(select)
                 break
         }
     })

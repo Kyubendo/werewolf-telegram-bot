@@ -7,6 +7,9 @@ export const generateInlineKeyboard = (players: Player[], withSkip = true, type:
             callback_data: JSON.stringify({type, choice: player.id})
         }])
     };
-    withSkip && output.inline_keyboard.push([{text: 'Пропустить', callback_data: 'skip'}]);
+    withSkip && output.inline_keyboard.push([{
+        text: 'Пропустить',
+        callback_data: JSON.stringify({type, choice: 'skip'})
+    }]);
     return output
 }

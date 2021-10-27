@@ -6,7 +6,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class WolfFeast extends VotingBase {
     voteStage: GameStage = 'night';
-
+    type = 'wolfFeast'
     votePromptMessage = 'Кого ты хочешь съесть?'
 
     getVoters = () => this.game.players.filter(player => player.isAlive && player.role instanceof Wolf)
