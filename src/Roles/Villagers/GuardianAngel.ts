@@ -54,13 +54,13 @@ export class GuardianAngel extends RoleBase {
         this.targetPlayer = findPlayer(choice, GuardianAngel.game.players);
         this.choiceMsgEditText();
 
-        if (this.targetPlayer?.role && this.targetPlayer) {
-            this.targetPlayer.role.handleDeath = (killer?: Player) => {
-                if (killer) {
+        if (this.targetPlayer?.role) {
+            this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
+                if (killer && this.targetPlayer) {
                     RoleBase.game.bot.sendMessage(
                         killer.id,
                         `Придя домой к ${highlightPlayer(this.targetPlayer)}, ` +
-                        `у дверей ты встретил ${this.roleName}, ` +
+                        `у дверей ты встретил Ангела-хранителя, ` +
                         'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
                     )
 
@@ -83,6 +83,7 @@ export class GuardianAngel extends RoleBase {
 
                     return false;
                 }
+                return true;
             }
         }
     }
