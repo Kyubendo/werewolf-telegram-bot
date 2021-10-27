@@ -8,9 +8,12 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {ApprenticeSeer} from "./ApprenticeSeer";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
+import {GameStage} from "../../Game/Game";
 
 
 export class Seer extends ForecasterBase {
+    forecastGameStage:GameStage = 'night';
+
     roleName = 'Провидец 👳';
     startMessageText = () => `Ты Провидец 👳! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;

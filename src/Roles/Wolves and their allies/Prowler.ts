@@ -1,6 +1,7 @@
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
+import {GameStage} from "../../Game/Game";
 
 export class Prowler extends ForecasterBase {
     roleName = 'Сова 🦉';
@@ -9,8 +10,10 @@ export class Prowler extends ForecasterBase {
         'Ты увидишь, спит игрок ночью или нет. Если же его съедят, ты увидишь всю стаю волков и узнаешь их имена.'
     weight = () => 4;
 
+    forecastGameStage: GameStage = 'night';
+
     actionResolve = () => {
-        if (Prowler.game.stage !== 'night' || !this.targetPlayer?.role) return;
+        if (Prowler.game.stage !== this.forecastGameStage || !this.targetPlayer?.role) return;
 
         if (this.targetPlayer !== this.player) {
             Prowler.game.bot.sendMessage(
