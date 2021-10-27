@@ -33,5 +33,5 @@ export abstract class ForecasterBase extends RoleBase {
     }
 
 
-    abstract forecastRoleName:(targetRole: RoleBase) => string;
+    abstract forecastRoleName:(targetRole: RoleBase) => string | undefined;
 }
