@@ -16,6 +16,7 @@ export class Mason extends Villager {
     }
 
     roleName = 'Каменщик 👷';
+    roleIntroductionText = () => ''
     startMessageText = () =>`Тебе ничего не остается делать, кроме как идти и пахать на стройке, `+
         `ведь ты ${this.roleName}.` + this.showMasonPlayers();
     weight = () => {

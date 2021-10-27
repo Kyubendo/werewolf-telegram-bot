@@ -17,7 +17,9 @@ export class Wolf extends RoleBase {
     }
 
     roleName = 'Волк 🐺';
-    startMessageText = () => `Ты ${this.roleName}. Скушай всё село.` + this.showWolfPlayers();
+    roleIntroductionText = () => `Новый ${this.roleName} в селе! `;
+    startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
+        + this.showWolfPlayers();
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +

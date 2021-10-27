@@ -6,7 +6,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Drunk extends Villager {
     roleName = 'Пьяница 🍻';
-    startMessageText = () =>`Ты ${this.roleName}!\n Ищи себе собутыльников, тебе все равно ничего не осталось делать...` +
+    startMessageText = () =>`Ищи себе собутыльников, тебе все равно ничего не осталось делать...` +
         `Однако, если тебя вдруг кто-то съест, он нехило опьянеет`;
     weight = () => Villager.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
 
