@@ -1,7 +1,7 @@
 import {Villager} from "./Villager";
-import {Lycan} from "../Wolves and their allies/Lycan";
+import {Lycan} from "../WolfTeam/Lycan";
 import {RoleBase} from "../Abstract/RoleBase";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -15,7 +15,8 @@ export class Seer extends ForecasterBase {
     forecastGameStage:GameStage = 'night';
 
     roleName = 'Провидец 👳';
-    startMessageText = () => `Ты Провидец 👳! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
+    roleIntroductionMessage = () => 'Ты Провидец 👳! ';
+    startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
 
     handleDeath(killer?: Player): boolean {

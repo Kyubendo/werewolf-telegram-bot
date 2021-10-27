@@ -16,8 +16,9 @@ export class Mason extends RoleBase {
     }
 
     roleName = 'Каменщик 👷';
-    startMessageText = () =>`Тебе ничего не остается делать, кроме как идти и пахать на стройке, `+
-        `ведь ты ${this.roleName}.` + this.showMasonPlayers();
+    roleIntroductionMessage = () => 'Тебе ничего не остается делать, кроме как идти и пахать на стройке, ' +
+        `ведь ты ${this.roleName}.`;
+    startMessageText = () => this.showMasonPlayers();
     weight = () => {
         const otherMasonsAmount = this.findMasonPlayers().length;
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;

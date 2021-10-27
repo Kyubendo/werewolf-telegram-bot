@@ -1,11 +1,11 @@
 import {Player} from "../../Player/Player";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
 
 export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';
-    startMessageText = () => `Ты ${this.roleName}! Сейчас ты обычный смертный, ` +
+    startMessageText = () => `Сейчас ты обычный смертный, ` +
         'но если волки выберут тебя съесть, ты станешь одним из них.';
     weight = () => {
         const wolvesAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;

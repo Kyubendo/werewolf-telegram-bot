@@ -13,6 +13,9 @@ export abstract class RoleBase {
     abstract readonly weight: () => number
     abstract readonly startMessageText: () => string
 
+    readonly roleIntroductionMessage = () => `Ты ${this.roleName}! `
+
+
     previousRole?: RoleBase;
 
     readonly killMessageAll?: (deadPlayer: Player) => string

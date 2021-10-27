@@ -4,7 +4,8 @@ import {GameStage} from "../../Game/Game";
 
 export class Oracle extends ForecasterBase {
     roleName = 'Оракул 🌀';
-    startMessageText = () => `Ты ${this.roleName}. Каждую ночь ты можешь ` +
+    roleIntroductionMessage = () => `Ты ${this.roleName}. `;
+    startMessageText = () => `Каждую ночь ты можешь ` +
         'выбрать игрока и узнать кем он НЕ является. Обрати внимание: тебе скажут роль кого-то другого в игре, ' +
         'кто всё ещё жив :)';
     weight = () => 4;

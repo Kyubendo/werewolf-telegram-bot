@@ -16,10 +16,10 @@ import {GuardianAngel} from "./Villagers/GuardianAngel";
 import {Oracle} from "./Villagers/Oracle";
 import {WiseElder} from "./Villagers/WiseElder";
 
-import {Wolf} from "./Wolves and their allies/Wolf";
-import {Lycan} from "./Wolves and their allies/Lycan";
-import {Prowler} from "./Wolves and their allies/Prowler";
-import {Sorcerer} from "./Wolves and their allies/Sorcerer";
+import {Wolf} from "./WolfTeam/Wolf";
+import {Lycan} from "./WolfTeam/Lycan";
+import {Prowler} from "./WolfTeam/Prowler";
+import {Sorcerer} from "./WolfTeam/Sorcerer";
 
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";

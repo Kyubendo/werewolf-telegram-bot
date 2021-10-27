@@ -1,6 +1,6 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {Player} from "../../Player/Player";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
@@ -8,7 +8,7 @@ import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
-    startMessageText = () =>`Ты ${this.roleName}! Недавно сбежал из психушки и твоя цель убить всех... ` +
+    startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -15; // change?
 
