@@ -77,21 +77,21 @@ export abstract class RoleBase {
             if (prowlerPlayer?.role
                 && prowlerPlayer.role?.targetPlayer === this.player
                 && killer.role instanceof Wolf) {
-                let text: string;
-                if (RoleBase.game.players.filter(player => player.role instanceof Wolf).length === 1)
-                    text = `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
-                        'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
-                        `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
-                        'Кажется, ты нашла своего союзника.';
-                else
-                    text = `Когда ты заглянула в окно к ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
-                        `ты увидела, как стая волков пожирает беднягу. Ужасающее зрелище... ` +
-                        `Ужасающее для ${highlightPlayer(prowlerPlayer.role.targetPlayer)}! ` +
-                        'А для тебя отличное, ведь ты запомнила лица всех волков! ' + killer.role.showWolfPlayers();
+                const allies = killer.role.findOtherWolfPlayers();
 
                 RoleBase.game.bot.sendMessage(
                     prowlerPlayer.id,
-                    text
+                    !allies.length
+                        ? `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+                        'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
+                        `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
+                        'Кажется, ты нашла своего союзника.'
+                        : `Когда ты заглянула в окно к ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+                        `ты увидела, как стая волков пожирает беднягу. Ужасающее зрелище... ` +
+                        `Ужасающее для ${highlightPlayer(prowlerPlayer.role.targetPlayer)}! ` +
+                        'А для тебя отличное, ведь ты запомнила лица всех волков! '
+                        + `\nВот они слева направо: ${highlightPlayer(killer)}, ` +
+                        +allies?.map(ally => highlightPlayer(ally)).join(', ')
                 )
 
                 prowlerPlayer.role.targetPlayer = prowlerPlayer;
@@ -135,7 +135,6 @@ export abstract class RoleBase {
             loverPlayer.lover.role?.onKilled(loverPlayer);
         }
     }
-
 
     movePlayer = () => {
         RoleBase.game.players.push(...RoleBase.game.players.splice(RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end

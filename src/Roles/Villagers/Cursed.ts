@@ -29,7 +29,7 @@ export class Cursed extends RoleBase {
             if (this.player.role instanceof Wolf)
                 Cursed.game.bot.sendMessage(this.player.id,
                     'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
-                    + this.player.role.showWolfPlayers(), {
+                    + this.player.role.showOtherWolfPlayers(), {
                         parse_mode: 'Markdown',
                     });
             return false;

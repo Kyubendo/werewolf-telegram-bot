@@ -49,7 +49,6 @@ export class Thief extends RoleBase {
             this.loveBind(this.targetPlayer);
         } else if (this.player.role) {
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
-
             this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 
             Thief.game.bot.sendMessage(
