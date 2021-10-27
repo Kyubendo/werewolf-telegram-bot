@@ -6,7 +6,7 @@ import {Player} from "../../Player/Player";
 import {Gunner, SerialKiller, Wolf} from "../index";
 
 export class Martyr extends RoleBase {
-    readonly roleName = 'Мученица 📿';
+    readonly roleName = 'Мученица 🕯';
 
     startMessageText = () => `Ты ${this.roleName}.`
     weight = () => 0;
@@ -46,37 +46,40 @@ export class Martyr extends RoleBase {
             Martyr.game.bot.sendMessage(
                 this.targetPlayer?.id,
                 `Ты проснулся(ась) в своем доме из-за того, что почувствовал(а) что-то... Ты помнишь, как `
-                + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы 📿 ${this.player} навсегда отпечаталось у`
-                + `тебя в сознании. И ты знаешь, что она подертвовала собой для того, чтобы ты жил(а).`
+                + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы ${highlightPlayer(this.player)} навсегда `
+                + `отпечаталось у тебя в сознании. И ты знаешь, что она пожертвовала собой для того, чтобы ты жил(а).`
             )
             return false
         }
     }
 
-
     handleDeath(killer?: Player): boolean {
-        if (killer !== this.player || !this.targetPlayer) return super.handleDeath(killer);
+        if (killer === this.player && this.targetPlayer) {
+            let deathMessage
+            if (!this.targetKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
+                + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
+                + `закончилось, они увидели мертвое тело ${highlightPlayer(this.player)} на виселице, в то время как `
+                + `${highlightPlayer(this.targetPlayer)} стоит рядом как ни в чем не бывало.`
+            else if (this.targetKiller.role instanceof SerialKiller || this.targetKiller.role instanceof Wolf) deathMessage = `Селяне собрались `
+                + `на следующее утро и увидели лежащее на площади тело Мученицы ${highlightPlayer(this.player)}. `
+                + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью ${this.roleName} умерла за `
+                + `другого человека.`
+            else if (this.targetKiller.role instanceof Gunner) deathMessage = `Вдруг раздался оглушительный выстрел, и все на площади `
+                + `увидели, как ${this.targetKiller.role.roleName} ${highlightPlayer(this.targetKiller)} все еще целится в голову `
+                + `${highlightPlayer(this.targetPlayer)}… Но промахивается и попадает в ${highlightPlayer(this.player)}, в `
+                + `то время как ${highlightPlayer(this.targetPlayer)} стоит абсолютно невредим(а).`
+            // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `
+            //     + `второпях целится в ${highlightPlayer(this.targetPlayer)} и стреляет в последний момент. Но попадает в `
+            //     + `${highlightPlayer(this.player)}, в то время как ${highlightPlayer(this.targetPlayer)} стоит целый(ая) `
+            //     + `и невредимый(ая).`
 
-        let deathMessage
-        if (!killer) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
-            + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
-            + `закончилось, они увидели мертвое тело ${highlightPlayer(this.player)} на виселице, в то время как `
-            + `${highlightPlayer(this.targetPlayer)} стоит рядом как ни в чем не бывало.`
-        else if (killer.role instanceof SerialKiller || killer.role instanceof Wolf) deathMessage = `Селяне собрались `
-            + `на следующее утро и увидели лежащее на площади тело Мученицы 📿 ${highlightPlayer(this.player)}. `
-            + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью ${this.roleName} умерла за `
-            + `другого человека.`
-        else if (killer.role instanceof Gunner) deathMessage = `Вдруг раздался оглушительный выстрел, и все на площади `
-            + `увидели, как ${killer.role.roleName} ${highlightPlayer(killer)} все еще целится в голову `
-            + `${highlightPlayer(this.targetPlayer)}… Но промахивается и попадает в ${highlightPlayer(this.player)}, в `
-            + `то время как ${highlightPlayer(this.targetPlayer)} стоит абсолютно невредим(а).`
-        // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `
-        //     + `второпях целится в ${highlightPlayer(this.targetPlayer)} и стреляет в последний момент. Но попадает в `
-        //     + `${highlightPlayer(this.player)}, в то время как ${highlightPlayer(this.targetPlayer)} стоит целый(ая) `
-        //     + `и невредимый(ая).`
-
-        deathMessage && Martyr.game.bot.sendMessage(Martyr.game.chatId, deathMessage)
-        return true
+            setTimeout(
+                (deathMessage) => deathMessage && Martyr.game.bot.sendMessage(Martyr.game.chatId, deathMessage),
+                25,
+                deathMessage
+            )
+        }
+        return super.handleDeath(killer)
     }
 
     handleChoice = (choice?: string) => {

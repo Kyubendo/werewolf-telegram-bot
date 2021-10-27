@@ -78,12 +78,13 @@ export class Game {
     }
 
     private runActions = () => {
-        this.players
-            .filter(player => player.isAlive)
-            .forEach(p => {
-                if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
-            })
-
+        if (this.stage === 'night') {
+            this.players
+                .filter(player => player.isAlive)
+                .forEach(p => {
+                    if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
+                })
+        }
         this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
         for (const role of roleResolves(this.stage)) {

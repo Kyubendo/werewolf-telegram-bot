@@ -33,10 +33,10 @@ const dayRoleResolves = [
 const nightRoleResolves = [
     // PuppetMaster,
     // Jack
+    Harlot, //Prowler
     Martyr,
     GuardianAngel,
     Thief,
-    Harlot, //Prowler
     Wolf,
     SerialKiller,
     Seer, Oracle,
