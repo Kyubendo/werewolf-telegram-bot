@@ -1,7 +1,7 @@
 import {Game} from "../../Game/Game";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Harlot, Wolf, GuardianAngel, Prowler} from "../index";
+import {Harlot, Wolf, Prowler} from "../index";
 
 export abstract class RoleBase {
     constructor(readonly player: Player) {
@@ -26,45 +26,6 @@ export abstract class RoleBase {
 
     readonly onKilled = (killer: Player) => {
         this.player.isAlive && this.handleDeath(killer) && this.movePlayer() && this.killPlayerLover(killer);
-    }
-
-    checkGuardianAngels = (killer: Player): boolean => {
-        const guardianAngelPlayers = RoleBase.game.players.filter(player => player.role instanceof GuardianAngel);
-
-        for (const guardianAngelPlayer of guardianAngelPlayers) {
-            if (guardianAngelPlayer
-                && guardianAngelPlayer.role instanceof GuardianAngel // Дополнительная проверка нужна для доступа к полям GuardianAngel
-                && guardianAngelPlayer.role?.targetPlayer === this.player) {
-
-                RoleBase.game.bot.sendMessage(
-                    killer.id,
-                    `Придя домой к ${highlightPlayer(this.player)}, ` +
-                    `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
-                    'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
-                )
-
-                RoleBase.game.bot.sendMessage(
-                    this.player.id,
-                    `${guardianAngelPlayer.role.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
-                )
-
-                let ending: string = '';
-                if (guardianAngelPlayer.role.numberOfAttacks)
-                    ending = ' Снова!'
-
-                RoleBase.game.bot.sendMessage(
-                    guardianAngelPlayer.id,
-                    `С выбором ты угадал, на ${highlightPlayer(this.player)} ` +
-                    `действительно напали! Ты спас ему жизнь!` + ending
-                )
-
-                guardianAngelPlayer.role.numberOfAttacks++;
-
-                return false;
-            }
-        }
-
-        return true;
     }
 
     checkProwlers = (killer: Player) => {

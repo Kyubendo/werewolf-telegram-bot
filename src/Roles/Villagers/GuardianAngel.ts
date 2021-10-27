@@ -53,6 +53,38 @@ export class GuardianAngel extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, GuardianAngel.game.players);
         this.choiceMsgEditText();
+
+        if (this.targetPlayer?.role && this.targetPlayer) {
+            this.targetPlayer.role.handleDeath = (killer?: Player) => {
+                if (killer) {
+                    RoleBase.game.bot.sendMessage(
+                        killer.id,
+                        `Придя домой к ${highlightPlayer(this.targetPlayer)}, ` +
+                        `у дверей ты встретил ${this.roleName}, ` +
+                        'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
+                    )
+
+                    RoleBase.game.bot.sendMessage(
+                        this.targetPlayer.id,
+                        `${this.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
+                    )
+
+                    let ending: string = '';
+                    if (this.numberOfAttacks)
+                        ending = ' Снова!'
+
+                    RoleBase.game.bot.sendMessage(
+                        this.player.id,
+                        `С выбором ты угадал, на ${highlightPlayer(this.targetPlayer)} ` +
+                        `действительно напали! Ты спас ему жизнь!` + ending
+                    )
+
+                    this.numberOfAttacks++;
+
+                    return false;
+                }
+            }
+        }
     }
 
     handleDeath(killer?: Player): boolean {
