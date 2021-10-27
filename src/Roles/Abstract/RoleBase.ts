@@ -27,7 +27,7 @@ export abstract class RoleBase {
 
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
-        const playerDied = killer ? this.handleLynchDeath() : this.handleDeath(killer)
+        const playerDied = killer ? this.handleDeath(killer) : this.handleLynchDeath()
         playerDied && this.movePlayer()
     }
 
@@ -97,14 +97,17 @@ export abstract class RoleBase {
     }
 
     handleDeath(killer?: Player): boolean {
-        killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
-            RoleBase.game.chatId,
-            killer.role.killMessageAll(this.player));
+        if (killer?.role !== this) {
+            killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                killer.role.killMessageAll(this.player)
+            );
 
-        killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
-            this.player.id,
-            killer.role.killMessageDead);
-
+            killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
+                this.player.id,
+                killer.role.killMessageDead
+            );
+        }
         this.player.isAlive = false;
         return true;
     }

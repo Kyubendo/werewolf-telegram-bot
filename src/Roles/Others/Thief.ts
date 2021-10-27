@@ -11,7 +11,6 @@ export class Thief extends RoleBase {
     weight = () => -4; // change?
 
     action = () => {
-        if (Thief.game.stage !== 'night') return;
         Thief.game.bot.sendMessage(this.player.id,
             'Чью роль ты хочешь украсть?',
             {
@@ -22,7 +21,7 @@ export class Thief extends RoleBase {
     }
 
     actionResolve = () => {
-        if (Thief.game.stage !== 'night' || !this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) return;
         if (!this.targetPlayer.isAlive) {
             Thief.game.bot.sendMessage(
                 this.player.id,
