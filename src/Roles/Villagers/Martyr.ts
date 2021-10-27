@@ -4,6 +4,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {Gunner, SerialKiller, Wolf} from "../index";
+import {randomElement} from "../../Utils/randomElement";
 
 export class Martyr extends RoleBase {
     readonly roleName = 'Мученица 🕯';
@@ -20,20 +21,29 @@ export class Martyr extends RoleBase {
             this.player.id,
             'За кого ты хочешь умереть?',
             {
-                reply_markup: generateInlineKeyboard(Martyr.game.players.filter(player => player !== this.player &&
-                    player.isAlive))
+                reply_markup: generateInlineKeyboard(
+                    Martyr.game.players.filter(player => player !== this.player && player.isAlive),
+                    false
+                )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
     actionResolve = () => {
-        if (!this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) {
+            this.targetPlayer = randomElement(Martyr.game.players.filter(p => p !== this.player))
+            Martyr.game.bot.editMessageText(
+                `Боги сделали выбор за вас — ${highlightPlayer(this.targetPlayer)}`,
+                {
+                    chat_id: this.player.id,
+                    message_id: this.choiceMsgId
+                }
+            )
+            return;
+        }
 
         this.targetPlayer.role.handleDeath = (killer) => {
-            if (!this.targetPlayer) {
-                console.log('asdasdasd121')
-                return false;
-            }
+            if (!this.targetPlayer) return false;
 
             this.targetKiller = killer
             this.onKilled(this.player)

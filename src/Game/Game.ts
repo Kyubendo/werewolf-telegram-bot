@@ -78,7 +78,7 @@ export class Game {
     }
 
     private runActions = () => {
-        if (this.stage === 'night') {
+        if (this.stage !== 'lynch') { // change?
             this.players
                 .filter(player => player.isAlive)
                 .forEach(p => {

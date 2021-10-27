@@ -2,6 +2,7 @@ import {Seer} from "./Seer";
 import {findPlayer} from "../../Game/findPlayer";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {randomElement} from "../../Utils/randomElement";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
@@ -14,7 +15,7 @@ export class Fool extends Seer {
             return;
         else {
             const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
-            this.targetPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+            this.targetPlayer = randomElement(otherPlayers);
         }
     }
 

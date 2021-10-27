@@ -1,5 +1,6 @@
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {RoleBase} from "../Abstract/RoleBase";
+import {randomElement} from "../../Utils/randomElement";
 
 export class Oracle extends ForecasterBase {
     roleName = 'Оракул 🌀';
@@ -12,7 +13,7 @@ export class Oracle extends ForecasterBase {
         const otherPlayers = Oracle.game.players.filter(player => player !== this.player
             && player.isAlive
             && player !== targetRole.player);
-        const otherRole = otherPlayers[Math.floor(Math.random() * otherPlayers.length)].role;
+        const otherRole = randomElement(otherPlayers).role;
         return `НЕ *${otherRole?.roleName}*`;
     }
 

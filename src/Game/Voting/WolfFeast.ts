@@ -3,6 +3,7 @@ import {GameStage} from "../Game";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../../Roles";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {randomElement} from "../../Utils/randomElement";
 
 export class WolfFeast extends VotingBase {
     voteStage: GameStage = 'night';
@@ -30,8 +31,8 @@ export class WolfFeast extends VotingBase {
             return;
         }
 
-        const killerWolf = this.getVoters()[Math.floor(Math.random() * this.getVoters().length)].role
-        if (killerWolf) killerWolf.targetPlayer = voteResults[Math.floor(Math.random() * voteResults.length)]
+        const killerWolf = randomElement(this.getVoters()).role
+        if (killerWolf) killerWolf.targetPlayer = randomElement(voteResults)
     }
 
     handleVotingChoiceResult = (voter: Player, target?: Player) =>
