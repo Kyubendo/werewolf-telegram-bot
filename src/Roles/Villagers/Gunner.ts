@@ -19,7 +19,7 @@ export class Gunner extends Villager {
     ammo = 2;
 
     action = () => {
-        if (Gunner.game.stage !== 'day' || !this.ammo) return;
+        if (!this.ammo) return;
 
         Gunner.game.bot.sendMessage(
             this.player.id,
@@ -32,7 +32,7 @@ export class Gunner extends Villager {
     }
 
     actionResolve = () => {
-        if (Gunner.game.stage !== 'day' || !this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) return;
 
         this.targetPlayer.role.onKilled(this.player);
 
