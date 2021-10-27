@@ -39,9 +39,8 @@ export class Martyr extends RoleBase {
                     message_id: this.choiceMsgId
                 }
             )
-            return;
         }
-
+        if (!this.targetPlayer.role) return
         this.targetPlayer.role.handleDeath = (killer) => {
             if (!this.targetPlayer) return false;
 
