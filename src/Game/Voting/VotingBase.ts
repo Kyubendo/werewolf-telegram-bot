@@ -2,6 +2,7 @@ import {Game, GameStage} from "../Game";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../findPlayer";
 import TelegramBot from "node-telegram-bot-api";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../playersButtons";
 
 export abstract class VotingBase {
@@ -60,12 +61,12 @@ export abstract class VotingBase {
             }
         }
 
-        // this.game.bot.editMessageText(
-        //     `Выбор принят: ${target ? highlightPlayer(target) : 'Пропустить'}.`,
-        //     {
-        //         message_id: voter.role.choiceMsgId,
-        //         chat_id: voter.id,
-        //     })
+        this.game.bot.editMessageText(
+            `Выбор принят: ${target ? highlightPlayer(target) : 'Пропустить'}.`,
+            {
+                message_id: voter.role.choiceMsgId,
+                chat_id: voter.id,
+            })
         this.handleVotingChoiceResult(voter, target)
     }
 
