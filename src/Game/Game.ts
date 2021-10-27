@@ -4,6 +4,7 @@ import {gameStageMsg} from "./gameStageMsg";
 import {playerList} from "../Utils/playerList";
 import {Lynch} from "./Voting/Lynch";
 import {WolfFeast} from "./Voting/WolfFeast";
+import {roleResolves} from "./roleResolves";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -35,7 +36,6 @@ export class Game {
         let stageDuration;
         let nextStage: GameStage;
 
-
         switch (this.stage) {
             case "day":
                 nextStage = "lynch"
@@ -55,19 +55,9 @@ export class Game {
         }
         this.resetStageTimer(stageDuration)
 
-
-        this.lynch?.handleVoteEnd()
-        this.wolfFeast?.handleVoteEnd()
-        this.players.filter(player => player.isAlive)
-            .forEach(player => player.role?.actionResolve && player.role?.actionResolve())
-
+        this.runResolves()
         this.stage = nextStage
-
-        this.lynch?.startVoting()
-        this.wolfFeast?.startVoting()
-        this.players.filter(player => player.isAlive && !player.isFrozen)
-            .forEach(player => player.role?.action && player.role.action())
-
+        setTimeout(this.runActions, 50)
 
         setTimeout(() => // stupid kludge
                 this.bot.sendMessage(this.chatId, gameStageMsg(this))
@@ -75,6 +65,26 @@ export class Game {
                         this.bot.sendMessage(this.chatId, playerList(this),)
                     }),
             50)
+    }
+
+    private runResolves = () => {
+        this.lynch?.handleVoteEnd()
+        this.wolfFeast?.handleVoteEnd()
+        for (const role of roleResolves(this.stage)) {
+            this.players
+                .filter(player => player.isAlive && player.role instanceof role)
+                .forEach(player => player.role?.actionResolve && player.role.actionResolve())
+        }
+    }
+
+    private runActions = () => {
+        this.lynch?.startVoting()
+        this.wolfFeast?.startVoting()
+        for (const role of roleResolves(this.stage)) {
+            this.players
+                .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+                .forEach(player => player.role?.action && player.role.action())
+        }
     }
 
     addPlayer = (player: Player) => {

@@ -16,7 +16,6 @@ export class Harlot extends Villager {
     
 
     action = () => {
-        if (Harlot.game.stage !== 'night') return;
         Harlot.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь навестить?',
@@ -28,7 +27,7 @@ export class Harlot extends Villager {
     }
 
     actionResolve = () => {
-        if (Harlot.game.stage !== 'night' || !this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
             this.onKilled(this.targetPlayer);

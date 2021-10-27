@@ -12,7 +12,7 @@ export class Monarch extends Villager {
     comingOut?: boolean;
 
     action = () => {
-        if (Monarch.game.stage !== 'day' || this.comingOut === false) return;
+        if (this.comingOut === false) return;
         if (this.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.comingOut = false;
             return;
@@ -33,7 +33,6 @@ export class Monarch extends Villager {
     }
 
     handleChoice = (choice?: string) => {
-
         if (choice !== 'Раскрыться') {
             this.choiceMsgEditText();
             return;

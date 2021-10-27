@@ -15,7 +15,6 @@ export const callbackHandle = (bot: TelegramBot, state: State) => {
                 roleChoice(query, game.players)
                 game.lynch?.handleVotingChoice(query)
                 game.wolfFeast?.handleVotingChoice(query)
-
         }
     })
 }

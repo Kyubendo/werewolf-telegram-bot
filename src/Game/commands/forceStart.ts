@@ -5,7 +5,7 @@ import {gameStart} from "../gameStart";
 export const forceStart = (bot: TelegramBot, state: State) => {
     bot.onText(/\/force_start/, msg => {
         const game = state.game
-        if (!game) return;
+        if (!game || game.stage) return;
         gameStart(bot, game)
     })
 }

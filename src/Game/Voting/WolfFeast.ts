@@ -19,18 +19,19 @@ export class WolfFeast extends VotingBase {
             'Ты со стаей собрался покушать.'
         ))
 
-    handleVoteResult = (voteResult: Player[]) => {
-        if (voteResult.length) {
-            const killerWolf = this.getVoters()[Math.floor(Math.random() * this.getVoters().length)].role
-            if (killerWolf) killerWolf.targetPlayer = voteResult[Math.floor(Math.random() * voteResult.length)]
+    handleVoteResult = (voteResults: Player[]) => {
+        if (!voteResults.length) {
+            if (this.getVoters().length > 1) {
+                this.getVoters().forEach(voter => this.game.bot.sendMessage(
+                    voter.id,
+                    'Ваша стая слишком долго выла на луну и вы не заметили как прошла ночь. Вы никого не съели!'
+                ))
+            }
             return;
         }
-        if (this.getVoters().length > 1) {
-            this.getVoters().forEach(voter => this.game.bot.sendMessage(
-                voter.id,
-                'Ваша стая слишком долго выла на луну и вы не заметили как прошла ночь. Вы никого не съели!'
-            ))
-        }
+
+        const killerWolf = this.getVoters()[Math.floor(Math.random() * this.getVoters().length)].role
+        if (killerWolf) killerWolf.targetPlayer = voteResults[Math.floor(Math.random() * voteResults.length)]
     }
 
     handleVotingChoiceResult = (voter: Player, target?: Player) =>
