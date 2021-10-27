@@ -2,9 +2,9 @@ import {Gunner} from "./Gunner";
 import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../Wolves and their allies/Wolf";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
+import {GameStage} from "../../Game/Game";
 
 export class WiseElder extends ForecasterBase {
     roleName = "Мудрец 📚";
@@ -13,17 +13,7 @@ export class WiseElder extends ForecasterBase {
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
     weight = () => 5;
 
-    action = () => {
-        if (ForecasterBase.game.stage !== 'day') return;
-        ForecasterBase.game.bot.sendMessage(
-            this.player.id,
-            'Кого ты хочешь посмотреть?',
-            {
-                reply_markup: generateInlineKeyboard(ForecasterBase.game.players
-                    .filter(player => player !== this.player && player.isAlive))
-            }
-        ).then(msg => this.choiceMsgId = msg.message_id)
-    }
+    forecastTime: GameStage = 'day';
 
     actionResolve = () => {
         if (ForecasterBase.game.stage !== 'day' || !this.targetPlayer?.role) return;
