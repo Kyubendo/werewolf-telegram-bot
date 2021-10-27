@@ -2,7 +2,9 @@ import TelegramBot from "node-telegram-bot-api";
 import {Game} from "../Game";
 import {Player} from "../../Player/Player";
 import {State} from "../../Bot";
-import {playerList} from "../playerList";
+import {playerList} from "../../Utils/playerList";
+import {Lynch} from "../Voting/Lynch";
+import {WolfFeast} from "../Voting/WolfFeast";
 
 const joinButton = {
     inline_keyboard: [
@@ -25,6 +27,9 @@ export const initGame = (bot: TelegramBot, state: State) => {
         }
 
         state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, 0)
+        state.game.lynch = new Lynch(state.game)
+        state.game.wolfFeast = new WolfFeast(state.game)
+
         bot.sendMessage(
             msg.chat.id,
             `Новая игра начата игроком ${msg.from?.first_name +

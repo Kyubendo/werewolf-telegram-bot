@@ -24,13 +24,12 @@ export class Sorcerer extends ForecasterBase {
         )
     }
 
-    forecastRoleName = (targetRole: RoleBase): string => {
-        if (wolfTeam.find(player => targetRole instanceof player))
+    forecastRoleName = (targetRole: RoleBase): string | undefined => {
+        if (wolfTeam.find(wolfAlly => targetRole instanceof wolfAlly))
             return targetRole.roleName;
         else if ((targetRole instanceof Seer && !(targetRole instanceof Fool))
             || (targetRole instanceof ApprenticeSeer && Math.random() >= 0.5))
             return new Seer(this.player).roleName;
-        return '';
+        return undefined;
     }
-
 }

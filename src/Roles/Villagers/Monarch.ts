@@ -1,8 +1,10 @@
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
 
-export class Monarch extends RoleBase {
-    roleName = 'Монарх 👑';
+
+export class Monarch extends Villager {
+    roleName = 'Монарх 🤴';
+  
     startMessageText = () =>`Ты ${this.roleName}! ` +
         `Как у главы королевской семьи, у тебя есть власть в этой деревне... По крайней мере, на один день! ` +
         `Ты можешь показать деревне свою корону и семейное древо, и один день они позволят тебе ` +

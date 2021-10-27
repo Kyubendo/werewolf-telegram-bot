@@ -1,7 +1,9 @@
 import {Player} from "../Player/Player";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
-import {playerList} from "./playerList";
+import {playerList} from "../Utils/playerList";
+import {Lynch} from "./Voting/Lynch";
+import {WolfFeast} from "./Voting/WolfFeast";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -15,44 +17,64 @@ export class Game {
     ) {
     }
 
-    lynchDuration = 1000_000
+    lynch?: Lynch
+    wolfFeast?: WolfFeast
+
+    lynchDuration = 10_000
     dayDuration = 10000_000
     nightDuration = 5000_000
 
     stage: GameStage = undefined
     stageTimer?: NodeJS.Timer
     resetStageTimer = (stageDuration: number) => {
-        this.stageTimer && clearInterval(this.stageTimer)
-        this.stageTimer = setInterval(this.setNextStage, stageDuration)
+        this.stageTimer && clearTimeout(this.stageTimer)
+        this.stageTimer = setTimeout(this.setNextStage, stageDuration)
     }
 
     setNextStage = () => {
-        this.players.filter(player => player.isAlive)
-            .forEach(player => player.role?.actionResolve && player.role?.actionResolve())
-
         let stageDuration;
+        let nextStage: GameStage;
+
+
         switch (this.stage) {
             case "day":
-                this.stage = "lynch"
-                stageDuration =this.lynchDuration
+                nextStage = "lynch"
+                stageDuration = this.lynchDuration
                 break
             case "night":
-                this.stage = "day"
-                stageDuration=this.dayDuration
+                nextStage = "day"
+                stageDuration = this.dayDuration
                 break
             case "lynch":
+                nextStage = "night"
+                stageDuration = this.nightDuration
+                break
             default:
-                this.stage = "night"
-                stageDuration=this.nightDuration
+                nextStage = "night"
+                stageDuration = this.nightDuration
         }
         this.resetStageTimer(stageDuration)
 
-        this.bot.sendMessage(this.chatId, gameStageMsg(this.stage) || '')
-            .then(() => {
-                this.bot.sendMessage(this.chatId, playerList(this),)
-            })
+
+        this.lynch?.handleVoteEnd()
+        this.wolfFeast?.handleVoteEnd()
+        this.players.filter(player => player.isAlive)
+            .forEach(player => player.role?.actionResolve && player.role?.actionResolve())
+
+        this.stage = nextStage
+
+        this.lynch?.startVoting()
+        this.wolfFeast?.startVoting()
         this.players.filter(player => player.isAlive && !player.isFrozen)
             .forEach(player => player.role?.action && player.role.action())
+
+
+        setTimeout(() => // stupid kludge
+                this.bot.sendMessage(this.chatId, gameStageMsg(this))
+                    .then(() => {
+                        this.bot.sendMessage(this.chatId, playerList(this),)
+                    }),
+            50)
     }
 
     addPlayer = (player: Player) => {

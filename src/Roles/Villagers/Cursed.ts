@@ -23,9 +23,9 @@ export class Cursed extends RoleBase {
                         parse_mode: 'Markdown'
                     }
                 ))
-            const previousRole = this.player.role;
-            this.player.role = new Wolf(this.player);
-            this.player.role.previousRole = previousRole;
+
+            this.player.role = new Wolf(this.player, this.player.role);
+
             if (this.player.role instanceof Wolf)
                 Cursed.game.bot.sendMessage(this.player.id,
                     'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
