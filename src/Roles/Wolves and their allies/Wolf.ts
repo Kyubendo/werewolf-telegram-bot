@@ -44,7 +44,7 @@ export class Wolf extends RoleBase {
         if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
 
         if (this.targetPlayer.role instanceof Beauty) {
-            this.handleLovers(this.targetPlayer);
+            this.loveBind(this.targetPlayer);
         } else
             this.targetPlayer.role?.onKilled(this.player);
         

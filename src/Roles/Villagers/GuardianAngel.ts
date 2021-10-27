@@ -36,7 +36,7 @@ export class GuardianAngel extends RoleBase {
                 (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))
                 this.onKilled(this.player);
             else if (this.targetPlayer.role instanceof Beauty)
-                this.handleLovers(this.targetPlayer);
+                this.loveBind(this.targetPlayer);
         } else if (GuardianAngel.game.stage === 'day') {
             if (!this.numberOfAttacks) {
                 GuardianAngel.game.bot.sendMessage(

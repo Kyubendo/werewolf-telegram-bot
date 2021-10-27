@@ -34,7 +34,7 @@ export class Harlot extends RoleBase {
             this.onKilled(this.targetPlayer);
         // What if Harlot visits another Harlot
         else if (this.targetPlayer.role instanceof Beauty) {
-            this.handleLovers(this.targetPlayer);
+            this.loveBind(this.targetPlayer);
         } else {
             if (this.targetPlayer) {
                 Harlot.game.bot.sendMessage(

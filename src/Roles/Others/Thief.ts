@@ -46,7 +46,7 @@ export class Thief extends RoleBase {
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
         } else if (this.targetPlayer.role instanceof Beauty) {
-            this.handleLovers(this.targetPlayer);
+            this.loveBind(this.targetPlayer);
         } else if (this.player.role) {
             const previousRoleOldThief: RoleBase = this.player.role;
             const previousRoleNewThief = this.targetPlayer.role;
