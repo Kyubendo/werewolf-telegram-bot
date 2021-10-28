@@ -1,7 +1,7 @@
 import {Villager} from "./Villager";
-import {Lycan} from "../Wolves and their allies/Lycan";
+import {Lycan} from "../WolfTeam/Lycan";
 import {RoleBase} from "../Abstract/RoleBase";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
