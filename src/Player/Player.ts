@@ -17,4 +17,6 @@ export class Player {
     isAlive: boolean;
     isFrozen: boolean;
     role?: RoleBase;
+
+    lover?: Player;
 }

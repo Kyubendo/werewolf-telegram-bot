@@ -29,7 +29,37 @@ export abstract class RoleBase {
 
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
-        this.handleDeath(killer) && this.movePlayer()
+        if (this.handleDeath(killer))  {
+            this.movePlayer()
+            this.killPlayerLover(this.player)
+        }
+    }
+
+    readonly loveBind = (lover: Player) => {
+        this.killPlayerLover(this.player);
+        this.killPlayerLover(lover);
+
+        this.player.lover = lover;
+        lover.lover = this.player;
+
+        this.loverMessage(this.player);
+        this.loverMessage(lover);
+    }
+
+    readonly killPlayerLover = (loverPlayer: Player) => {
+        if (loverPlayer.lover) {
+            loverPlayer.lover.lover = undefined;
+            loverPlayer.lover.role?.onKilled(loverPlayer);
+        }
+    }
+
+    readonly loverMessage = (newLover: Player) => {
+        newLover.lover && RoleBase.game.bot.sendMessage(
+            newLover.id,
+            `Ты был(а) поражен(а) любовью. ${highlightPlayer(newLover.lover)} навсегда в твоей памяти ` +
+            'и любовь никогда не погаснет в твоем сердце... Ваша цель выжить! Если один из вас погибнет, ' +
+            'другой умрет из-за печали и тоски.'
+        )
     }
 
     checkGuardianAngel = (killer: Player): boolean => {
@@ -97,7 +127,9 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath(killer ?: Player)
+        :
+        boolean {
         if (killer?.role !== this) {
             killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
