@@ -1,6 +1,6 @@
 import {Gunner} from "./Gunner";
 import {SerialKiller} from "../Others/SerialKiller";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
