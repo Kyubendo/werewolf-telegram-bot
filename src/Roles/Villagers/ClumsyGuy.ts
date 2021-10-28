@@ -1,6 +1,6 @@
-import {Villager} from "./Villager";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class ClumsyGuy extends Villager {
+export class ClumsyGuy extends RoleBase {
     roleName = 'Недотёпа 🤕';
     roleIntroductionText = () => `Ты ${this.roleName}… `
     startMessageText = () => `Ах, женщины всегда выбирают не тех! ` +
