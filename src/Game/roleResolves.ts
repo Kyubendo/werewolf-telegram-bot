@@ -1,4 +1,5 @@
 import {
+    Blacksmith,
     GuardianAngel,
     Gunner,
     Harlot,
@@ -27,6 +28,7 @@ export const roleResolves = (stage: GameStage) => {
 const dayRoleResolves = [
     Martyr, // WildChild, // constant choices
     Monarch, // only action
+    Blacksmith, // only action
     Gunner,
     WiseElder, // Detective
 ]

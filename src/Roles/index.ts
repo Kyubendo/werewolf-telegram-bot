@@ -16,6 +16,7 @@ import {GuardianAngel} from "./Villagers/GuardianAngel";
 import {Oracle} from "./Villagers/Oracle";
 import {WiseElder} from "./Villagers/WiseElder";
 import {Martyr} from "./Villagers/Martyr";
+import {Blacksmith} from "./Villagers/Blacksmith";
 
 import {Wolf} from "./Wolves and their allies/Wolf";
 import {Lycan} from "./Wolves and their allies/Lycan";
@@ -26,7 +27,7 @@ import {SerialKiller} from "./Others/SerialKiller";
 
 export {
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Harlot, Beholder, ApprenticeSeer,
-    Gunner, GuardianAngel, Oracle, WiseElder, Martyr,
+    Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Blacksmith,
     Wolf, Lycan,
     Suicide, Thief, SerialKiller
 }
