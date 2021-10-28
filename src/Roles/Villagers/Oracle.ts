@@ -1,5 +1,6 @@
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {RoleBase} from "../Abstract/RoleBase";
+import {GameStage} from "../../Game/Game";
 
 export class Oracle extends ForecasterBase {
     roleName = 'Оракул 🌀';
@@ -8,12 +9,14 @@ export class Oracle extends ForecasterBase {
         'кто всё ещё жив :)';
     weight = () => 4;
 
+    forecastGameStage: GameStage = 'night';
+
     forecastRoleName = (targetRole: RoleBase) => {
         const otherPlayers = Oracle.game.players.filter(player => player !== this.player
             && player.isAlive
             && player !== targetRole.player);
         const otherRole = otherPlayers[Math.floor(Math.random() * otherPlayers.length)].role;
-        return `НЕ *${otherRole?.roleName}*`;
+        return `НЕ *${otherRole?.roleName}*!`;
     }
 
 }

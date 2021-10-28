@@ -5,11 +5,8 @@ import {findPlayer} from "../../Game/findPlayer";
 import {GameStage} from "../../Game/Game";
 
 export abstract class ForecasterBase extends RoleBase {
-
-    readonly forecastTime: GameStage = 'night';
-
     action = () => {
-        if (ForecasterBase.game.stage !== this.forecastTime) return;
+        if (ForecasterBase.game.stage !== this.forecastGameStage) return;
         ForecasterBase.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь посмотреть?',
@@ -21,12 +18,12 @@ export abstract class ForecasterBase extends RoleBase {
     }
 
     actionResolve = () => {
-        if (ForecasterBase.game.stage !== 'night' || !this.targetPlayer?.role) return;
+        if (ForecasterBase.game.stage !== this.forecastGameStage || !this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
         ForecasterBase.game.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}!`
+            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
         )
         this.targetPlayer = undefined
     }

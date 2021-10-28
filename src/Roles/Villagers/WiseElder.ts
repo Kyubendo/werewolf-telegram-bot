@@ -13,23 +13,11 @@ export class WiseElder extends ForecasterBase {
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
     weight = () => 5;
 
-    forecastTime: GameStage = 'day';
-
-    actionResolve = () => {
-        if (ForecasterBase.game.stage !== 'day' || !this.targetPlayer?.role) return;
-        let roleName = this.forecastRoleName(this.targetPlayer.role);
-
-        ForecasterBase.game.bot.sendMessage(
-            this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}.`
-        )
-        this.targetPlayer = undefined
-    }
-
+    forecastGameStage: GameStage = 'day';
     forecastRoleName = (targetRole: RoleBase) => { // Arsonist, CultistHunter, FallenAngel, Hunter, BlackWolf?
         const killers = [Gunner, SerialKiller, Wolf];
-        return killers.find(player => targetRole instanceof player)
+        return (killers.find(player => targetRole instanceof player)
             ? 'может убивать'
-            : 'совершенно безобидный человек и не желает никому причинять боль'
+            : 'совершенно безобидный человек и не желает никому причинять боль') + '.'
     }
 }
