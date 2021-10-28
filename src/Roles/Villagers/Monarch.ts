@@ -24,8 +24,8 @@ export class Monarch extends Villager {
             {
                 reply_markup: {
                     inline_keyboard: [
-                        [{text: 'Ракскрыться', callback_data: String('Раскрыться')}],
-                        [{text: 'Пропустить', callback_data: String('Пропустить')}]
+                        [{text: 'Да', callback_data: String('Да')}],
+                        [{text: 'Нет', callback_data: String('Нет')}]
                     ]
                 }
             }

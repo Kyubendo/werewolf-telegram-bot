@@ -28,7 +28,15 @@ export class Blacksmith extends RoleBase {
 
         Blacksmith.game.bot.sendMessage(
             this.player.id,
-            'Желаешь ли распылить сегодня серебрянную пыль?'
+            'Желаешь ли ты распылить сегодня серебрянную пыль?',
+            {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{text: 'Да', callback_data: String('Да')}],
+                        [{text: 'Нет', callback_data: String('Нет')}]
+                    ]
+                }
+            }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
