@@ -1,8 +1,8 @@
-import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Mason extends Villager {
+export class Mason extends RoleBase {
     findMasonPlayers = () => Mason.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Mason
         // && otherPlayer !== this.player
