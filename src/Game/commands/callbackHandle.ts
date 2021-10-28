@@ -5,8 +5,8 @@ import {roleChoice} from "../callbacks/roleChoice";
 
 export type SelectType = {
     type: string,
-    choice: string
-    from: TelegramBot.User
+    choice: string,
+    from: TelegramBot.User,
 }
 export const callbackHandle = (bot: TelegramBot, state: State) => {
     bot.on('callback_query', query => {
