@@ -80,6 +80,8 @@ export class Game {
     private runActions = () => {
         this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
+        this.players.forEach(player => this.stage === 'night' && player.isAlive && player.infected
+            && player.transformInfected())
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)

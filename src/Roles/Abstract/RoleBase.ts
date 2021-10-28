@@ -26,22 +26,6 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    infected: boolean = false;
-
-    readonly transformInfected = () => {
-        if (!this.infected) return;
-
-        this.player.role = new Wolf(this.player, this.player.role);
-
-        RoleBase.game.bot.sendMessage(
-            this.player.id,
-            'С наступлением ночи ты испытал(а) странное покалывание, ноющее чувство, пронзающее все тело, ' +
-            'ты стремительно трансформировался(ась)... Теперь ты '
-            + this.roleIntroductionText
-            + (this instanceof Wolf ? this.showWolfPlayers() : '') // check this line later
-        )
-    }
-
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
         const playerDied = killer ? this.handleDeath(killer) : this.handleLynchDeath()

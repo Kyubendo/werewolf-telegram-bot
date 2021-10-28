@@ -1,5 +1,6 @@
 import {Wolf} from "./Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Player} from "../../Player/Player";
 
 export class AlphaWolf extends Wolf {
     roleName = 'Альфа-волк 🐺⚡';
@@ -10,9 +11,11 @@ export class AlphaWolf extends Wolf {
     weight = () => 13;
 
     actionResolve = () => {
-        if (!this.targetPlayer) return;
-        if (Math.random() < 0.25) {
-            //this.targetPlayer.role = new Wolf(this.targetPlayer, this.targetPlayer.role);
+        if (!this.targetPlayer?.role) return;
+
+        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
+        this.targetPlayer.role.handleDeath = (killer: Player): boolean => {
+            if (!this.targetPlayer || Math.random() >= 0.25) return currentTargetHandleDeath(killer);
 
             AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
@@ -24,18 +27,21 @@ export class AlphaWolf extends Wolf {
             const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);
 
             wolfPlayers.forEach(player =>
-                this.targetPlayer && AlphaWolf.game.bot.sendMessage(
-                    player.id,
-                    `Как только волками был(а) атакован(а) ${highlightPlayer(this.targetPlayer)}, ` +
-                    `${highlightPlayer(this.player)} остановил всех, будучи Альфа Волком. ` +
-                    `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
-                    `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
-                    'присоединиться к стае вместо того, ' +
-                    `чтобы умереть, и стая оставила ${this.targetPlayer} с инфекцией. ` +
-                    'Он(а) станет волком завтра ночью.'
-                )
+                    this.targetPlayer && AlphaWolf.game.bot.sendMessage(
+                        player.id,
+                        `Как только волками был(а) атакован(а) ${highlightPlayer(this.targetPlayer)}, ` +
+                        `${highlightPlayer(this.player)} остановил всех, будучи Альфа Волком. ` +
+                        `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
+                        `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
+                        'присоединиться к стае вместо того, ' +
+                        `чтобы умереть, и стая оставила ${this.targetPlayer} с инфекцией. ` +
+                        'Он(а) станет волком завтра ночью.'
+                    )
             )
 
+            this.targetPlayer.infected = true;
+
+            return false;
         }
     }
 }
