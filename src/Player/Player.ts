@@ -21,6 +21,8 @@ export class Player {
 
     infected: boolean = false;
 
+    guardianAngel?: Player;
+
     readonly transformInfected = () => {
         this.role = new Wolf(this, this.role);
 

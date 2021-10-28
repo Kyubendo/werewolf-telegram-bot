@@ -2,6 +2,7 @@ import {Player} from "../../Player/Player";
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
 
 export class Wolf extends RoleBase {
     findWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
@@ -28,6 +29,11 @@ export class Wolf extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer) return;
+
+        if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+            this.handleGuardianAngel(this.player);
+            return;
+        }
         this.targetPlayer.role?.onKilled(this.player);
         this.targetPlayer = undefined
     }

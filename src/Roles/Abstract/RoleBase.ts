@@ -32,12 +32,10 @@ export abstract class RoleBase {
         playerDied && this.movePlayer()
     }
 
-    checkGuardianAngel = (killer: Player): boolean => {
-        const guardianAngelPlayer = RoleBase.game.players.find(player => player.role instanceof GuardianAngel);
+    readonly handleGuardianAngel = (killer: Player) => {
+        const guardianAngelPlayer = killer.role?.targetPlayer?.guardianAngel;
         if (guardianAngelPlayer
-            && guardianAngelPlayer.role instanceof GuardianAngel // Дополнительная проверка нужна для доступа к полям GuardianAngel
-            && guardianAngelPlayer.role?.targetPlayer === this.player) {
-
+            && guardianAngelPlayer.role instanceof GuardianAngel) { // Дополнительная проверка нужна для доступа к полям GuardianAngel
             RoleBase.game.bot.sendMessage(
                 killer.id,
                 `Придя домой к ${highlightPlayer(this.player)}, ` +
@@ -61,10 +59,7 @@ export abstract class RoleBase {
             )
 
             guardianAngelPlayer.role.numberOfAttacks++;
-
-            return false;
         }
-        return true;
     }
 
     checkHarlotDeath = (killer: Player) => {

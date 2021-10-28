@@ -4,6 +4,7 @@ import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
@@ -51,6 +52,12 @@ export class SerialKiller extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer) return;
+
+        if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+            this.handleGuardianAngel(this.player);
+            return;
+        }
+
         this.targetPlayer.role?.onKilled(this.player);
         this.targetPlayer = undefined
     }
