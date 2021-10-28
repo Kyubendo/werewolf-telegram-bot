@@ -3,10 +3,11 @@ import {GameStage} from "../Game";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../../Roles";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {randomElement} from "../../Utils/randomElement";
 
 export class WolfFeast extends VotingBase {
     voteStage: GameStage = 'night';
-
+    type = 'wolfFeast'
     votePromptMessage = 'Кого ты хочешь съесть?'
 
     getVoters = () => this.game.players.filter(player => player.isAlive && player.role instanceof Wolf)
@@ -19,18 +20,19 @@ export class WolfFeast extends VotingBase {
             'Ты со стаей собрался покушать.'
         ))
 
-    handleVoteResult = (voteResult: Player[]) => {
-        if (voteResult.length) {
-            const killerWolf = this.getVoters()[Math.floor(Math.random() * this.getVoters().length)].role
-            if (killerWolf) killerWolf.targetPlayer = voteResult[Math.floor(Math.random() * voteResult.length)]
+    handleVoteResult = (voteResults: Player[]) => {
+        if (!voteResults.length) {
+            if (this.getVoters().length > 1) {
+                this.getVoters().forEach(voter => this.game.bot.sendMessage(
+                    voter.id,
+                    'Ваша стая слишком долго выла на луну и вы не заметили как прошла ночь. Вы никого не съели!'
+                ))
+            }
             return;
         }
-        if (this.getVoters().length > 1) {
-            this.getVoters().forEach(voter => this.game.bot.sendMessage(
-                voter.id,
-                'Ваша стая слишком долго выла на луну и вы не заметили как прошла ночь. Вы никого не съели!'
-            ))
-        }
+
+        const killerWolf = randomElement(this.getVoters()).role
+        if (killerWolf) killerWolf.targetPlayer = randomElement(voteResults)
     }
 
     handleVotingChoiceResult = (voter: Player, target?: Player) =>

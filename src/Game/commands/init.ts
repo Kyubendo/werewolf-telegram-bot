@@ -8,7 +8,7 @@ import {WolfFeast} from "../Voting/WolfFeast";
 
 const joinButton = {
     inline_keyboard: [
-        [{text: 'Присоединиться', callback_data: 'join',}]
+        [{text: 'Присоединиться', callback_data: JSON.stringify({type: 'join'}),}]
     ]
 }
 

@@ -2,6 +2,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 
 export class Villager extends RoleBase {
     roleName = 'Селянин 👱';
-    startMessageText = () => `Ты простой ${this.roleName} и твоя задача — найти и казнить волка!`;
+    roleIntroductionText = () => `Ты простой ${this.roleName} `;
+    startMessageText = () => `и твоя задача — найти и казнить волка!`;
     weight = () => 1;
 }

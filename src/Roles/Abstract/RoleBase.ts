@@ -12,6 +12,7 @@ export abstract class RoleBase {
 
     abstract readonly roleName: string
     abstract readonly weight: () => number
+    readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
     abstract readonly startMessageText: () => string
 
     readonly previousRole?: RoleBase;
@@ -21,14 +22,14 @@ export abstract class RoleBase {
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
+    readonly originalHandleDeath = this.handleDeath
 
     targetPlayer?: Player
     choiceMsgId?: number
   
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
-        const playerDied = killer ? this.handleLynchDeath() : this.handleDeath(killer)
-        playerDied && this.movePlayer()
+        this.handleDeath(killer) && this.movePlayer()
     }
 
     checkProwlers = (killer: Player) => {
@@ -102,14 +103,24 @@ export abstract class RoleBase {
     }
 
     handleDeath(killer?: Player): boolean {
-        killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
-            RoleBase.game.chatId,
-            killer.role.killMessageAll(this.player));
+        if (killer?.role !== this) {
+            killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                killer.role.killMessageAll(this.player)
+            );
 
-        killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
-            this.player.id,
-            killer.role.killMessageDead);
-
+            killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
+                this.player.id,
+                killer.role.killMessageDead
+            );
+        }
+        if (!killer) {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+                + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`
+            )
+        }
         this.player.isAlive = false;
         return true;
     }
@@ -129,7 +140,7 @@ export abstract class RoleBase {
             + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`)
         return this.player.role?.handleDeath()
     }
-
+      
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(
             `Выбор принят: ${this.targetPlayer

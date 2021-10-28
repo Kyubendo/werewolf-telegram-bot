@@ -1,5 +1,4 @@
 import {Player} from "../../Player/Player";
-import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
@@ -23,7 +22,9 @@ export class Wolf extends RoleBase {
     }
 
     roleName = 'Волк 🐺';
-    startMessageText = () => `Ты ${this.roleName}. Скушай всё село.` + this.showOtherWolfPlayers();
+    roleIntroductionText = () => `Новый ${this.roleName} в селе! `;
+    startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
+        + this.showWolfPlayers();
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
@@ -32,7 +33,7 @@ export class Wolf extends RoleBase {
 
 
     actionResolve = () => {
-        if (Wolf.game.stage !== 'night' || !this.targetPlayer) return;
+        if (!this.targetPlayer) return;
         if (this.targetPlayer.role instanceof Beauty) {
             this.loveBind(this.targetPlayer);
         } else

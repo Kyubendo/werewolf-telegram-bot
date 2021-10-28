@@ -8,7 +8,7 @@ import {Beauty} from "./Beauty";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
-    startMessageText = () => `Ты ${this.roleName}! Беги спасай свой народ! Но берегись волков, есть ` +
+    startMessageText = () => `Беги спасай свой народ! Но берегись волков, есть ` +
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
@@ -16,8 +16,6 @@ export class GuardianAngel extends RoleBase {
     numberOfAttacks: number = 0;
 
     action = () => {
-
-        if (GuardianAngel.game.stage !== 'night') return;
         GuardianAngel.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь защитить?',
@@ -29,7 +27,7 @@ export class GuardianAngel extends RoleBase {
     }
 
     actionResolve = () => {
-        if (GuardianAngel.game.stage !== 'night' || !this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof SerialKiller ||
             (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))

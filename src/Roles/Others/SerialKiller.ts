@@ -8,7 +8,7 @@ import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
-    startMessageText = () =>`Ты ${this.roleName}! Недавно сбежал из психушки и твоя цель убить всех... ` +
+    startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -15; // change?
 
@@ -23,17 +23,22 @@ export class SerialKiller extends RoleBase {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
-                `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!` +
-                `*${killer.role.roleName}* — ${highlightPlayer(killer)} погиб.`,
-
+                `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка! ` +
+                `*${killer.role.roleName}* ${highlightPlayer(killer)} погиб.`,
             )
+            SerialKiller.game.bot.sendMessage(
+                killer.id,
+                'Ты вышел на охоту, но сам оказался жертвой.'
+                + ' Жертвой, которую разрезали на сотню маленьких кусочков.',
+            )
+
+            killer.role.onKilled(killer)
             return false;
         } else
             return super.handleDeath(killer);
     }
 
     action = () => {
-        if (SerialKiller.game.stage !== 'night') return;
         SerialKiller.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь запихнуть пару-тройку ножей?',
@@ -46,13 +51,12 @@ export class SerialKiller extends RoleBase {
     }
 
     actionResolve = () => {
-        if (SerialKiller.game.stage !== 'night' || !this.targetPlayer) return;
+        if (!this.targetPlayer) return;
 
         if (this.targetPlayer.role instanceof Beauty) {
             this.loveBind(this.targetPlayer);
         } else
             this.targetPlayer.role?.onKilled(this.player);
-
         this.targetPlayer = undefined
     }
 

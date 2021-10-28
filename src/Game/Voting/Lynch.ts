@@ -5,6 +5,7 @@ import {VotingBase} from "./VotingBase";
 
 export class Lynch extends VotingBase {
     voteStage: GameStage = 'lynch'
+    type = 'lynch'
     votePromptMessage = 'За кого ты хочешь проголосовать?'
 
     getVoters = () => {

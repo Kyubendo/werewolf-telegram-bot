@@ -4,9 +4,10 @@ import {RoleBase} from "../Abstract/RoleBase";
 
 export class Monarch extends Villager {
     roleName = 'Монарх 🤴';
-  
-    startMessageText = () =>`Ты ${this.roleName}! ` +
-        `Как у главы королевской семьи, у тебя есть власть в этой деревне... По крайней мере, на один день! ` +
+
+    startMessageText = () => 'Как у главы королевской семьи, у тебя есть власть в этой деревне... ' +
+        'По крайней мере, на один день! ' +
+
         `Ты можешь показать деревне свою корону и семейное древо, и один день они позволят тебе ` +
         `вершить правосудие лично.`
     weight = () => 3;
@@ -14,7 +15,7 @@ export class Monarch extends Villager {
     comingOut?: boolean;
 
     action = () => {
-        if (Monarch.game.stage !== 'day' || this.comingOut === false) return;
+        if (this.comingOut === false) return;
         if (this.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.comingOut = false;
             return;
@@ -35,7 +36,6 @@ export class Monarch extends Villager {
     }
 
     handleChoice = (choice?: string) => {
-
         if (choice !== 'Раскрыться') {
             this.choiceMsgEditText();
             return;

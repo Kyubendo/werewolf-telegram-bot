@@ -6,8 +6,9 @@ import {RoleBase} from "../Abstract/RoleBase";
 
 export class Gunner extends RoleBase {
     roleName = "Стрелок 🔫";
-    startMessageText = () => `${this.roleName} выходит на охоту!  ` +
-        'У тебя есть две серебрянных пули, чтобы убить кого-то днем. Но имей ввиду, все услышат твой выстрел...';
+    roleIntroductionText = () => `${this.roleName} выходит на охоту! `
+    startMessageText = () => 'У тебя есть две серебрянных пули, чтобы убить кого-то днем. ' +
+        'Но имей ввиду, все услышат твой выстрел...';
     weight = () => 6;
 
     killMessageAll = (deadPlayer: Player) => 'Вдруг послышался выстрел!  Все село оборачивается, ' +
@@ -19,7 +20,7 @@ export class Gunner extends RoleBase {
     ammo = 2;
 
     action = () => {
-        if (Gunner.game.stage !== 'day' || !this.ammo) return;
+        if (!this.ammo) return;
 
         Gunner.game.bot.sendMessage(
             this.player.id,
@@ -32,7 +33,7 @@ export class Gunner extends RoleBase {
     }
 
     actionResolve = () => {
-        if (Gunner.game.stage !== 'day' || !this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) return;
 
         this.targetPlayer.role.onKilled(this.player);
 

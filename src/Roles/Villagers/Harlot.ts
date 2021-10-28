@@ -9,14 +9,14 @@ import {Beauty} from "./Beauty";
 
 export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
-    startMessageText = () => `Ах ты ${this.roleName}! Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
+    roleIntroductionText = () => `Ах ты ${this.roleName}! `
+    startMessageText = () =>`Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
         'Но, если зло выберет того, к кому ты пошла, вы оба умрете! А если волки выберут тебя, а дома ' +
         'тебя не будет, ты останешься жить, логично...';
     weight = () => 6;
 
 
     action = () => {
-        if (Harlot.game.stage !== 'night') return;
         Harlot.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь навестить?',
@@ -28,7 +28,7 @@ export class Harlot extends RoleBase {
     }
 
     actionResolve = () => {
-        if (Harlot.game.stage !== 'night' || !this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
             this.onKilled(this.targetPlayer);
