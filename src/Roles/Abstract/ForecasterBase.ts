@@ -5,8 +5,6 @@ import {findPlayer} from "../../Game/findPlayer";
 import {GameStage} from "../../Game/Game";
 
 export abstract class ForecasterBase extends RoleBase {
-    abstract forecastGameStage: GameStage;
-
     action = () => {
         if (ForecasterBase.game.stage !== this.forecastGameStage) return;
         ForecasterBase.game.bot.sendMessage(

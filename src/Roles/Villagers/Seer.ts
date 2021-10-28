@@ -21,9 +21,7 @@ export class Seer extends ForecasterBase {
     handleDeath(killer?: Player): boolean {
         const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
         if (apprenticeSeerPlayer) {
-            const previousRole = apprenticeSeerPlayer.role;
-            apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer);
-            apprenticeSeerPlayer.role.previousRole = previousRole;
+            apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
             Seer.game.bot.sendMessage(
                 apprenticeSeerPlayer.id,
                 `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
@@ -48,6 +46,7 @@ export class Seer extends ForecasterBase {
         else if (targetRole instanceof Traitor)
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
         // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
+      
         return `это *${targetRole.roleName}*!`;
     }
 }

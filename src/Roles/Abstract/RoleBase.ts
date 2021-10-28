@@ -4,7 +4,8 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Harlot, Wolf, Prowler} from "../index";
 
 export abstract class RoleBase {
-    constructor(readonly player: Player) {
+    constructor(readonly player: Player, previousRole?: RoleBase) {
+        this.previousRole = previousRole;
     }
 
     static game: Game
@@ -13,7 +14,7 @@ export abstract class RoleBase {
     abstract readonly weight: () => number
     abstract readonly startMessageText: () => string
 
-    previousRole?: RoleBase;
+    readonly previousRole?: RoleBase;
 
     readonly killMessageAll?: (deadPlayer: Player) => string
     readonly killMessageDead?: string
@@ -23,9 +24,11 @@ export abstract class RoleBase {
 
     targetPlayer?: Player
     choiceMsgId?: number
-
-    readonly onKilled = (killer: Player) => {
-        this.player.isAlive && this.handleDeath(killer) && this.movePlayer() && this.killPlayerLover(killer);
+  
+    readonly onKilled = (killer?: Player) => {
+        if (!this.player.isAlive) return
+        const playerDied = killer ? this.handleLynchDeath() : this.handleDeath(killer)
+        playerDied && this.movePlayer()
     }
 
     checkProwlers = (killer: Player) => {
@@ -35,21 +38,21 @@ export abstract class RoleBase {
             if (prowlerPlayer?.role
                 && prowlerPlayer.role?.targetPlayer === this.player
                 && killer.role instanceof Wolf) {
-                let text: string;
-                if (RoleBase.game.players.filter(player => player.role instanceof Wolf).length === 1)
-                    text = `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
-                        'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
-                        `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
-                        'Кажется, ты нашла своего союзника.';
-                else
-                    text = `Когда ты заглянула в окно к ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
-                        `ты увидела, как стая волков пожирает беднягу. Ужасающее зрелище... ` +
-                        `Ужасающее для ${highlightPlayer(prowlerPlayer.role.targetPlayer)}! ` +
-                        'А для тебя отличное, ведь ты запомнила лица всех волков! ' + killer.role.showWolfPlayers();
+                const allies = killer.role.findOtherWolfPlayers();
 
                 RoleBase.game.bot.sendMessage(
                     prowlerPlayer.id,
-                    text
+                    !allies.length
+                        ? `Ты почти добралась до дома ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+                        'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
+                        `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
+                        'Кажется, ты нашла своего союзника.'
+                        : `Когда ты заглянула в окно к ${highlightPlayer(prowlerPlayer.role.targetPlayer)}, ` +
+                        `ты увидела, как стая волков пожирает беднягу. Ужасающее зрелище... ` +
+                        `Ужасающее для ${highlightPlayer(prowlerPlayer.role.targetPlayer)}! ` +
+                        'А для тебя отличное, ведь ты запомнила лица всех волков! '
+                        + `\nВот они слева направо: ${highlightPlayer(killer)}, ` +
+                        +allies?.map(ally => highlightPlayer(ally)).join(', ')
                 )
 
                 prowlerPlayer.role.targetPlayer = prowlerPlayer;
@@ -94,7 +97,6 @@ export abstract class RoleBase {
         }
     }
 
-
     movePlayer = () => {
         RoleBase.game.players.push(...RoleBase.game.players.splice(RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
@@ -112,15 +114,6 @@ export abstract class RoleBase {
         return true;
     }
 
-    readonly loveBind = (newLover: Player) => {
-        this.killPlayerLover(newLover);
-        this.killPlayerLover(this.player)
-        newLover.lover = this.player;
-        this.player.lover = newLover;
-        this.loverMessage(newLover);
-        this.loverMessage(this.player);
-    }
-
     readonly loverMessage = (newLover: Player) => {
         newLover.lover && RoleBase.game.bot.sendMessage(
             newLover.id,
@@ -128,6 +121,13 @@ export abstract class RoleBase {
             'и любовь никогда не погаснет в твоем сердце... Ваша цель выжить! Если один из вас погибнет, ' +
             'другой умрет из-за печали и тоски.'
         )
+      
+    handleLynchDeath() {
+        RoleBase.game.bot.sendMessage(
+            RoleBase.game.chatId,
+            `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+            + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`)
+        return this.player.role?.handleDeath()
     }
 
     choiceMsgEditText = () => {
@@ -142,5 +142,6 @@ export abstract class RoleBase {
         )
     }
 
-    createThisRole = (player: Player): RoleBase => new (this.constructor as any)(player);
+    createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
+        new (this.constructor as any)(player, previousRole);
 }

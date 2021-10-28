@@ -1,6 +1,6 @@
 import TelegramBot from "node-telegram-bot-api";
 import {Player} from "../../Player/Player";
-import {playerList} from "../playerList";
+import {playerList} from "../../Utils/playerList";
 import {Game} from "../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 
