@@ -56,6 +56,9 @@ export class Game {
         this.resetStageTimer(stageDuration)
 
         this.runResolves()
+
+
+
         this.stage = nextStage
         setTimeout(this.runActions, 50)
 
