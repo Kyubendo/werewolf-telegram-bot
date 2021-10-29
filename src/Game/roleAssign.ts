@@ -6,6 +6,7 @@ export const assignRoles = (game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const rolePool = [
+        Roles.GuardianAngel, Roles.Beauty,
         Roles.Martyr, Roles.Villager, Roles.SerialKiller, Roles.GuardianAngel,
 
         Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason,
