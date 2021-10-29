@@ -20,6 +20,7 @@ import {Martyr} from "./Villagers/Martyr";
 
 import {Wolf} from "./WolfTeam/Wolf";
 import {Lycan} from "./WolfTeam/Lycan";
+import {Sorcerer} from "./WolfTeam/Sorcerer";
 import {AlphaWolf} from "./WolfTeam/AlphaWolf";
 
 import {Suicide} from "./Others/Suicide";
@@ -30,8 +31,8 @@ export {
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Harlot, Beholder, ApprenticeSeer,
 
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Detective,
-
-    Wolf, Lycan, AlphaWolf,
+  
+    Wolf, Lycan, Sorcerer, AlphaWolf,
 
     Suicide, Thief, SerialKiller
 }
