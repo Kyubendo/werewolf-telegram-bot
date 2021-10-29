@@ -28,8 +28,6 @@ import {SerialKiller} from "./Others/SerialKiller";
 
 export {
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Harlot, Beholder, ApprenticeSeer,
-    Gunner, GuardianAngel, Oracle, WiseElder, Detective,
-    Wolf, Lycan,
 
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Detective,
 
