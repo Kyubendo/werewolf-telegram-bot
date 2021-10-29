@@ -72,7 +72,7 @@ export class Game {
         }
 
         this.stage = nextStage
-        setTimeout(this.runActions, 50)
+        setTimeout(this.runActions, 30)
 
         setTimeout(() => // stupid kludge
                 this.bot.sendMessage(this.chatId, gameStageMsg(this))

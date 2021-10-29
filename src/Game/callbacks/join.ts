@@ -4,7 +4,8 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {SelectType} from "../commands/callbackHandle";
 import {startPlayerList} from "../../Utils/playerLists";
 
-export const join = (game: Game, select:SelectType) => {
+export const join = (game: Game, select: SelectType) => {
+    if (game.stage) return;
     const newPlayer = new Player(select.from)
     if (game.players.map(e => e.id).includes(newPlayer.id)) return;
     game.addPlayer(newPlayer)
