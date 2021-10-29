@@ -5,8 +5,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 
 export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';
-    startMessageText = () => `Сейчас ты обычный смертный, ` +
-        'но если волки выберут тебя съесть, ты станешь одним из них.';
+    startMessageText = () => 'Сейчас ты обычный смертный, но если волки выберут тебя съесть, ты станешь одним из них.';
     weight = () => {
         const wolvesAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;
         return (wolvesAmount ? 1 - wolvesAmount : 1)
