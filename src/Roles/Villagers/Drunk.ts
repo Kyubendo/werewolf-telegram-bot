@@ -1,4 +1,3 @@
-import {Villager} from "./Villager";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {SerialKiller} from "../Others/SerialKiller";
@@ -13,6 +12,7 @@ export class Drunk extends RoleBase {
 
     handleDeath(killer?: Player) {
         if (killer?.role instanceof Wolf) {
+            killer.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.isFrozen = true);
             killer.isFrozen = true;
             Drunk.game.bot.sendMessage(
                 Drunk.game.chatId,
@@ -20,7 +20,8 @@ export class Drunk extends RoleBase {
                 `Пьяницу ${highlightPlayer(this.player)}, который, по словам следователей, ` +
                 `тусовался всю ночь со свиньями до последнего, а потом пришел волк и съел его!`,
             );
-            return true;
+            this.player.isAlive = false;
+            return !this.player.isAlive;
         } else if (killer?.role instanceof SerialKiller) {
             Drunk.game.bot.sendMessage(
                 Drunk.game.chatId,
@@ -28,7 +29,8 @@ export class Drunk extends RoleBase {
                 к нему домой, они увидели только сломанный нож и вырезанную печень.` +
                 `Он настолько посадил себе печень, что даже Серийный Убийца ею побрезговал.`,
             )
-            return true;
+            this.player.isAlive = false;
+            return !this.player.isAlive;
         } else
             return super.handleDeath(killer);
     }
