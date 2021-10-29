@@ -25,8 +25,8 @@ export const initGame = (bot: TelegramBot, state: State) => {
                 })
             return;
         }
-
-        state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, 0)
+        const onEnd = () => delete state.game
+        state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, onEnd, 0)
         state.game.lynch = new Lynch(state.game)
         state.game.wolfFeast = new WolfFeast(state.game)
 

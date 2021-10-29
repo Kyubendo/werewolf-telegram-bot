@@ -15,6 +15,7 @@ export class Game {
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,
+        readonly onEnd: () => boolean,
         public playerCountMsgId: number,
     ) {
     }
@@ -61,8 +62,10 @@ export class Game {
         const winners = checkEndGame(this.players, this.stage)
         if (winners) {
             setWinners(winners, this.players)
-            this.bot.sendMessage(this.chatId, endPlayerList(this.players))
-            delete this
+            this.bot.sendMessage(this.chatId, 'Конец игры.').then(() =>
+                this.bot.sendMessage(this.chatId, endPlayerList(this.players))
+            )
+            this.onEnd()
         }
 
         this.stage = nextStage
