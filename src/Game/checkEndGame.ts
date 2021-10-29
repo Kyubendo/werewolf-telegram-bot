@@ -21,15 +21,16 @@ const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller]
 const nonWolfKillers: Function[] = [SerialKiller]
 
-
-export const checkEndGame = (players: Player[], stage: GameStage): undefined | Player[] => {
+export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'suicide' | 'nobody'
+export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
+    const wolvesTeamPlayers = players.filter(p => wolfTeam.find(wa => p.role instanceof wa))
+    const villagersTeamPlayers = players.filter(p => villagers.find(v => p.role instanceof v))
     const alivePlayers = players.filter(p => p.isAlive)
+    const aliveWolves = alivePlayers.filter(p => p.role instanceof Wolf)
 
     if (!alivePlayers.find(p => evil.find(e => p.role instanceof e))) {
-        return players.filter(p => villagers.find(v => p.role instanceof v))
+        return {winners: villagersTeamPlayers, type: 'villagers'}
     }
-
-    const aliveWolves = alivePlayers.filter(p => p.role instanceof Wolf)
 
     alivePlayers.find(p => p.role instanceof Gunner && p.role.ammo) && nonWolfKillers.push(Gunner)
     const aliveUniqueKillers = [...new Set(alivePlayers
@@ -47,10 +48,12 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | P
             // const puppetMaster = players.filter(p => p.role instanceof PuppetMaster)
 
             // if(puppetMaster) return puppetMaster
-            if (wolf && serialKiller) return [serialKiller]
+            if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller) && gunner) {
-                if (stage === 'night') return players.filter(p => villagers.find(v => p.role instanceof v))
-                return [wolf ?? serialKiller!]
+                if (stage === 'night') return {winners: villagersTeamPlayers, type: 'villagers'}
+                return wolf
+                    ? {winners: wolvesTeamPlayers, type: 'wolves'}
+                    : {winners: [serialKiller!], type: 'serialKiller'}
             }
             // if(cowboy && serialKiller) return []
             // if(cowboy && wolf) return [Math.random()>.3 wolf:cowboy]
@@ -58,12 +61,13 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | P
     }
 
     if (aliveWolves.length * 2 >= alivePlayers.length) {
-        return players.filter(p => p.role instanceof Wolf)
+        return {winners: wolvesTeamPlayers, type: 'wolves'}
     }
 
     if (alivePlayers.length < 3) {
         const evilPlayer = players.find(p => evil.find(e => p.role instanceof e))
-        return evilPlayer ? [evilPlayer] : undefined
+        if (!evilPlayer) return undefined
+        if (evilPlayer.role instanceof SerialKiller) return {winners: [evilPlayer], type: 'serialKiller'}
     }
 
     return undefined
@@ -73,5 +77,5 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | P
 export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
     const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForTarget)
-    for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm?.targetPlayer && !!~winners.indexOf(sm?.targetPlayer)
+    for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm.targetPlayer && !!~winners.indexOf(sm.targetPlayer)
 }
