@@ -10,6 +10,7 @@ export class Wolf extends RoleBase {
         && otherPlayer.isAlive
     )
 
+
     showOtherWolfPlayers(): string {
         const allies = this.findOtherWolfPlayers();
         if (!allies.length)
@@ -24,6 +25,7 @@ export class Wolf extends RoleBase {
     roleIntroductionText = () => `Новый ${this.roleName} в селе! `;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
         + this.showOtherWolfPlayers();
+
     weight = () => -10;
 
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
@@ -38,6 +40,7 @@ export class Wolf extends RoleBase {
 
     handleDeath(killer?: Player): boolean {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
+
         if (this.findOtherWolfPlayers().length <= 1 && traitorPlayer) {
             traitorPlayer.role = new Wolf(traitorPlayer, traitorPlayer.role);
             Wolf.game.bot.sendMessage(
