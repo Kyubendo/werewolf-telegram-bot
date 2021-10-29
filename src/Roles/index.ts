@@ -21,7 +21,7 @@ import {Wolf} from "./WolfTeam/Wolf";
 import {Lycan} from "./WolfTeam/Lycan";
 import {AlphaWolf} from "./WolfTeam/AlphaWolf";
 
-
+import {SigmaWolf} from "./Others/SigmaWolf";
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";
 import {SerialKiller} from "./Others/SerialKiller";
@@ -33,5 +33,5 @@ export {
   
     Wolf, Lycan, AlphaWolf,
 
-    Suicide, Thief, SerialKiller
+    SigmaWolf, Suicide, Thief, SerialKiller
 }

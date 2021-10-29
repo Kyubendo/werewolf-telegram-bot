@@ -1,7 +1,7 @@
 import {Game} from "../../Game/Game";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Harlot, SerialKiller, Wolf, GuardianAngel} from "../index";
+import {Harlot, SerialKiller, Wolf} from "../index";
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
@@ -30,41 +30,6 @@ export abstract class RoleBase {
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
         this.handleDeath(killer) && this.movePlayer()
-    }
-
-    checkGuardianAngel = (killer: Player): boolean => {
-        const guardianAngelPlayer = RoleBase.game.players.find(player => player.role instanceof GuardianAngel);
-        if (guardianAngelPlayer
-            && guardianAngelPlayer.role instanceof GuardianAngel // Дополнительная проверка нужна для доступа к полям GuardianAngel
-            && guardianAngelPlayer.role?.targetPlayer === this.player) {
-
-            RoleBase.game.bot.sendMessage(
-                killer.id,
-                `Придя домой к ${highlightPlayer(this.player)}, ` +
-                `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
-                'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
-            )
-
-            RoleBase.game.bot.sendMessage(
-                this.player.id,
-                `${guardianAngelPlayer.role.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
-            )
-
-            let ending: string = '';
-            if (guardianAngelPlayer.role.numberOfAttacks)
-                ending = ' Снова!'
-
-            RoleBase.game.bot.sendMessage(
-                guardianAngelPlayer.id,
-                `С выбором ты угадал, на ${highlightPlayer(this.player)} действительно напали! Ты спас ему жизнь!`
-                + ending
-            )
-
-            guardianAngelPlayer.role.numberOfAttacks++;
-
-            return false;
-        }
-        return true;
     }
 
     checkHarlotDeath = (killer: Player) => {
