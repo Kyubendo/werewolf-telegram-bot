@@ -13,6 +13,7 @@ export class Martyr extends RoleBase {
     weight = () => 0;
 
     targetKiller?: Player
+    diedForTarget: boolean = false
 
     action = () => {
         if (this.targetPlayer?.role) return
@@ -46,6 +47,7 @@ export class Martyr extends RoleBase {
 
             this.targetKiller = killer
             this.onKilled(this.player)
+            this.diedForTarget = true
             Martyr.game.bot.sendMessage(
                 this.player.id,
                 `Как только ${highlightPlayer(this.targetPlayer)} оказался(лась) на грани жизни и смерти, `

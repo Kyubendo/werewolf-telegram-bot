@@ -8,7 +8,7 @@ import {
     Fool,
     GuardianAngel,
     Gunner,
-    Harlot,
+    Harlot, Martyr,
     Mason,
     Monarch, Oracle, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan
 } from "../Roles";
@@ -71,6 +71,12 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | P
 }
 
 
-const setWinners = (players: Player[]) => {
-
+const setWinners = (winners: Player[], players: Player[]) => {
+    winners.forEach(w => w.won = true)
+    const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForTarget)
+    for (const sacrificedMartyr of sacrificedMartyrs) {
+        if (sacrificedMartyr?.targetPlayer && ~winners.indexOf(sacrificedMartyr?.targetPlayer)) {
+            sacrificedMartyr.player.won = true
+        }
+    }
 }
