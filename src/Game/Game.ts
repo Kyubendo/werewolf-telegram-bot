@@ -1,10 +1,12 @@
 import {Player} from "../Player/Player";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
-import {playerList} from "../Utils/playerList";
 import {Lynch} from "./Voting/Lynch";
 import {WolfFeast} from "./Voting/WolfFeast";
 import {roleResolves} from "./roleResolves";
+import {checkEndGame, setWinners} from "./checkEndGame";
+import {endPlayerList, playerGameList} from "../Utils/playerLists";
+import {endGameMessage} from "../Utils/endGameMessage";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -14,6 +16,7 @@ export class Game {
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,
+        readonly onEnd: () => boolean,
         public playerCountMsgId: number,
     ) {
     }
@@ -56,13 +59,25 @@ export class Game {
         this.resetStageTimer(stageDuration)
 
         this.runResolves()
+
+        const endGame = checkEndGame(this.players, this.stage)
+        if (endGame) {
+            setWinners(endGame.winners, this.players)
+            this.bot.sendAnimation(
+                this.chatId,
+                endGameMessage[endGame.type].gif,
+                {caption: endGameMessage[endGame.type].text}
+            ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.onEnd()))
+            return
+        }
+
         this.stage = nextStage
         setTimeout(this.runActions, 50)
 
         setTimeout(() => // stupid kludge
                 this.bot.sendMessage(this.chatId, gameStageMsg(this))
                     .then(() => {
-                        this.bot.sendMessage(this.chatId, playerList(this),)
+                        this.bot.sendMessage(this.chatId, playerGameList(this.players),)
                     }),
             50)
     }
