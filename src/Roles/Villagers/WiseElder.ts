@@ -26,7 +26,7 @@ export class WiseElder extends ForecasterBase {
     forecastRoleName = (targetRole: RoleBase) => { // Arsonist, CultistHunter, FallenAngel, Hunter, BlackWolf?
         const killers = [Gunner, SerialKiller, Wolf];
         return killers.find(player => targetRole instanceof player)
-            ? 'может убивать'
-            : 'совершенно безобидный человек и не желает никому причинять боль'
+            ? 'может убивать.'
+            : 'совершенно безобидный человек и не желает никому причинять боль.';
     }
 }
