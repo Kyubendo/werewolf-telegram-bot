@@ -22,14 +22,14 @@ export abstract class RoleBase {
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
+    readonly originalHandleDeath = this.handleDeath
 
     targetPlayer?: Player
     choiceMsgId?: number
 
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
-        const playerDied = killer ? this.handleDeath(killer) : this.handleLynchDeath()
-        playerDied && this.movePlayer()
+        this.handleDeath(killer) && this.movePlayer()
     }
 
     checkGuardianAngel = (killer: Player): boolean => {
@@ -109,16 +109,15 @@ export abstract class RoleBase {
                 killer.role.killMessageDead
             );
         }
+        if (!killer) {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+                + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`
+            )
+        }
         this.player.isAlive = false;
         return true;
-    }
-
-    handleLynchDeath() {
-        RoleBase.game.bot.sendMessage(
-            RoleBase.game.chatId,
-            `Жители отдали свои голоса в подозрениях и сомнениях... \n`
-            + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`)
-        return this.player.role?.handleDeath()
     }
 
     choiceMsgEditText = () => {

@@ -78,6 +78,13 @@ export class Game {
     }
 
     private runActions = () => {
+        if (this.stage !== 'lynch') { // change?
+            this.players
+                .filter(player => player.isAlive)
+                .forEach(p => {
+                    if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
+                })
+        }
         this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
         this.stage === 'night' && this.players.forEach(player => player.isAlive && player.infected
