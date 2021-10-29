@@ -10,7 +10,7 @@ export const playerGameList = (players: Player[]) => `Живые игроки ($
 
 
 export const startPlayerList = (players: Player[]) => `Игроки:\n`
-    + players.map(e => `[${e.name}](tg://user?id=${e.id})`).join('\n')
+    + players.map(p => highlightPlayer(p)).join('\n')
 
 export const endPlayerList = (players: Player[]) => `Игроки (${players.length}):\n` + players
     .sort(p => -!p.isAlive)
@@ -21,7 +21,7 @@ export const endPlayerList = (players: Player[]) => `Игроки (${players.len
             role = role.previousRole
             previousRoles.push(role)
         }
-        return `[${p.name}](tg://user?id=${p.id}): `
+        return `${highlightPlayer(p)}: `
             + `${p.won ? '🏆 Выиграл(а)' : '💩 Проиграл(а)'} — `
             + `${p.isAlive ? '🙂 Жив(а)' : '💀 Мертв(а)'} — `
             + `*${p.role?.roleName}* `

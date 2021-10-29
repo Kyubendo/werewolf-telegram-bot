@@ -27,8 +27,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     const villagersTeamPlayers = players.filter(p => villagers.find(v => p.role instanceof v))
     const alivePlayers = players.filter(p => p.isAlive)
     const aliveWolves = alivePlayers.filter(p => p.role instanceof Wolf)
-
-    if (!alivePlayers.find(p => evil.find(e => p.role instanceof e))) {
+    const aliveEvilPlayer = alivePlayers.find(p => evil.find(e => p.role instanceof e))
+    if (!aliveEvilPlayer) {
         return {winners: villagersTeamPlayers, type: 'villagers'}
     }
 
@@ -65,9 +65,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     if (alivePlayers.length < 3) {
-        const evilPlayer = players.find(p => evil.find(e => p.role instanceof e))
-        if (!evilPlayer) return undefined
-        if (evilPlayer.role instanceof SerialKiller) return {winners: [evilPlayer], type: 'serialKiller'}
+        if (aliveEvilPlayer.role instanceof SerialKiller) return {winners: [aliveEvilPlayer], type: 'serialKiller'}
     }
 
     return undefined
