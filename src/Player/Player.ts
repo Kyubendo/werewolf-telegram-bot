@@ -21,6 +21,7 @@ export class Player {
 
     infected: boolean = false;
 
+
     readonly transformInfected = () => {
         this.role = new Wolf(this, this.role);
 
@@ -28,7 +29,7 @@ export class Player {
             this.id,
             'С наступлением ночи ты испытал(а) странное покалывание, ноющее чувство, пронзающее все тело, ' +
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
-            + (this.role instanceof Wolf && this.role.showWolfPlayers()) // check this line later
+            + (this.role instanceof Wolf && this.role.showOtherWolfPlayers()) // check this line later
         )
     }
 }

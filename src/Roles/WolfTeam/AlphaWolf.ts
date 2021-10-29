@@ -3,19 +3,21 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 
 export class AlphaWolf extends Wolf {
-    roleName = 'Альфа-волк 🐺⚡';
+    roleName = 'Альфа-волк 🐺⭐';
     roleIntroductionText = () => `Ты ${this.roleName} - источник всех бедствий! `
     startMessageText = () => 'Твои укусы передают проклятие, обращающее человека в волка. ' +
         'По ночам ты можешь выбрать человека, а затем атаковать и убить его, но пока ты жив, ' +
         'твои жертвы имеют 25% шанса стать волком.'
     weight = () => 13;
 
+    infectionChance: number = 0.25;
+
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
         this.targetPlayer.role.handleDeath = (killer: Player): boolean => {
-            if (!this.targetPlayer || Math.random() >= 0.25) return currentTargetHandleDeath(killer);
+            if (!this.targetPlayer || Math.random() < this.infectionChance) return currentTargetHandleDeath(killer);
 
             AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
