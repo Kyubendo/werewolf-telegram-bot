@@ -5,16 +5,16 @@ import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../Wolves and their allies/Wolf";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Beauty} from "./Beauty";
 
 export class Harlot extends Villager {
     roleName = "Блудница 💋";
     roleIntroductionText = () => `Ах ты ${this.roleName}! `
-    startMessageText = () =>`Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
+    startMessageText = () => `Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
         'Но, если зло выберет того, к кому ты пошла, вы оба умрете! А если волки выберут тебя, а дома ' +
         'тебя не будет, ты останешься жить, логично...';
     weight = () => 6;
 
-    
 
     action = () => {
         Harlot.game.bot.sendMessage(
@@ -30,9 +30,11 @@ export class Harlot extends Villager {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
+        if (this.targetPlayer.role instanceof Wolf || this.targetPlayer.role instanceof SerialKiller) {
             this.onKilled(this.targetPlayer);
-        else {
+        } else if (this.targetPlayer.role instanceof Beauty) {
+            this.loveBind(this.targetPlayer);
+        } else {
             if (this.targetPlayer) {
                 Harlot.game.bot.sendMessage(
                     this.player.id,

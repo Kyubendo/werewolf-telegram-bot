@@ -2,6 +2,7 @@ import {Player} from "../../Player/Player";
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
+import {Beauty} from "../Villagers/Beauty";
 
 export class Wolf extends RoleBase {
     findWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
@@ -28,7 +29,13 @@ export class Wolf extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer) return;
-        this.targetPlayer.role?.onKilled(this.player);
+
+        if (this.targetPlayer.role instanceof Beauty) {
+            this.loveBind(this.targetPlayer);
+        } else {
+            this.targetPlayer.role?.onKilled(this.player);
+        }
+
         this.targetPlayer = undefined
     }
 
