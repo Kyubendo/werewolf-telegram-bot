@@ -5,7 +5,6 @@ import {
     ClumsyGuy,
     Cursed,
     Drunk,
-    Fool,
     GuardianAngel,
     Gunner,
     Harlot, Martyr,
@@ -16,7 +15,7 @@ import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan
+    Traitor, Villager, WiseElder, WoodMan, Martyr
 ]
 const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller]
@@ -71,12 +70,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | P
 }
 
 
-const setWinners = (winners: Player[], players: Player[]) => {
+export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
     const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForTarget)
-    for (const sacrificedMartyr of sacrificedMartyrs) {
-        if (sacrificedMartyr?.targetPlayer && ~winners.indexOf(sacrificedMartyr?.targetPlayer)) {
-            sacrificedMartyr.player.won = true
-        }
-    }
+    for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm?.targetPlayer && !!~winners.indexOf(sm?.targetPlayer)
 }

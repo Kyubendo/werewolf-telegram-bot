@@ -1,14 +1,14 @@
 import {Player} from "../../Player/Player";
-import {playerList} from "../../Utils/playerList";
 import {Game} from "../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {SelectType} from "../commands/callbackHandle";
+import {startPlayerList} from "../../Utils/playerLists";
 
 export const join = (game: Game, select:SelectType) => {
     const newPlayer = new Player(select.from)
     if (game.players.map(e => e.id).includes(newPlayer.id)) return;
     game.addPlayer(newPlayer)
-    game.bot.editMessageText(playerList(game), {
+    game.bot.editMessageText(startPlayerList(game.players), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,
     })

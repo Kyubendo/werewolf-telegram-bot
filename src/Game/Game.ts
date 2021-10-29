@@ -1,10 +1,11 @@
 import {Player} from "../Player/Player";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
-import {playerList} from "../Utils/playerList";
 import {Lynch} from "./Voting/Lynch";
 import {WolfFeast} from "./Voting/WolfFeast";
 import {roleResolves} from "./roleResolves";
+import {checkEndGame, setWinners} from "./checkEndGame";
+import {endPlayerList, playerGameList} from "../Utils/playerLists";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -57,7 +58,12 @@ export class Game {
 
         this.runResolves()
 
-
+        const winners = checkEndGame(this.players, this.stage)
+        if (winners) {
+            setWinners(winners, this.players)
+            this.bot.sendMessage(this.chatId, endPlayerList(this.players))
+            delete this
+        }
 
         this.stage = nextStage
         setTimeout(this.runActions, 50)
@@ -65,7 +71,7 @@ export class Game {
         setTimeout(() => // stupid kludge
                 this.bot.sendMessage(this.chatId, gameStageMsg(this))
                     .then(() => {
-                        this.bot.sendMessage(this.chatId, playerList(this),)
+                        this.bot.sendMessage(this.chatId, playerGameList(this.players),)
                     }),
             50)
     }
