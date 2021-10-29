@@ -1,4 +1,5 @@
 import {
+    Detective,
     GuardianAngel,
     Gunner,
     Harlot,
@@ -28,7 +29,7 @@ const dayRoleResolves = [
     Martyr, // WildChild, // constant choices
     Monarch, // only action
     Gunner,
-    WiseElder, // Detective
+    WiseElder, Detective,
 ]
 
 const nightRoleResolves = [
