@@ -96,6 +96,8 @@ export class Game {
         }
         this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
+        this.stage === 'night' && this.players.forEach(player => player.isAlive && player.infected
+            && player.transformInfected())
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)

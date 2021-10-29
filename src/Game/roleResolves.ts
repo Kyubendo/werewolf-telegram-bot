@@ -6,7 +6,7 @@ import {
     Monarch,
     Oracle,
     Seer,
-    SerialKiller,
+    SerialKiller, Sorcerer,
     Thief,
     WiseElder,
     Wolf
@@ -40,5 +40,5 @@ const nightRoleResolves = [
     Thief,
     Wolf,
     SerialKiller,
-    Seer, Oracle,
+    Sorcerer, Seer, Oracle,
 ]

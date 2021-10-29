@@ -1,7 +1,7 @@
 import {Villager} from "./Villager";
-import {Lycan} from "../Wolves and their allies/Lycan";
+import {Lycan} from "../WolfTeam/Lycan";
 import {RoleBase} from "../Abstract/RoleBase";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -37,14 +37,14 @@ export class Seer extends ForecasterBase {
     }
 
     forecastRoleName = (targetRole: RoleBase) => {
-        if (targetRole instanceof Lycan) {
+        if (targetRole instanceof Lycan)
             return new Villager(this.player).roleName; // Seer sees Lycan as Villager
-        } else if (targetRole instanceof Wolf || targetRole instanceof WoodMan) {
+        else if (targetRole instanceof Wolf || targetRole instanceof WoodMan)
             return new Wolf(this.player).roleName; // Seer sees all wolves and WoodMan as Wolf
-        } else if (targetRole instanceof Traitor) {
+        else if (targetRole instanceof Traitor)
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
-            // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
-        }
-        return `это *${targetRole.roleName}*`;
+        // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
+
+        return `это *${targetRole.roleName}*!`;
     }
 }

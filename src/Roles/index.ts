@@ -17,8 +17,11 @@ import {Oracle} from "./Villagers/Oracle";
 import {WiseElder} from "./Villagers/WiseElder";
 import {Martyr} from "./Villagers/Martyr";
 
-import {Wolf} from "./Wolves and their allies/Wolf";
-import {Lycan} from "./Wolves and their allies/Lycan";
+import {Wolf} from "./WolfTeam/Wolf";
+import {Lycan} from "./WolfTeam/Lycan";
+import {Sorcerer} from "./WolfTeam/Sorcerer";
+import {AlphaWolf} from "./WolfTeam/AlphaWolf";
+
 
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";
@@ -27,6 +30,7 @@ import {SerialKiller} from "./Others/SerialKiller";
 export {
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Harlot, Beholder, ApprenticeSeer,
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr,
-    Wolf, Lycan,
+    Wolf, Lycan, Sorcerer, AlphaWolf,
+
     Suicide, Thief, SerialKiller
 }

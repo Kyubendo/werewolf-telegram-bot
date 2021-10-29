@@ -11,9 +11,7 @@ export class Fool extends Seer {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Fool.game.players);
         this.choiceMsgEditText();
-        if (Math.random() >= 0.5) // 50% for right guess
-            return;
-        else {
+        if (Math.random() >= 0.5) { // 50% for right guess
             const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
             this.targetPlayer = randomElement(otherPlayers);
         }
