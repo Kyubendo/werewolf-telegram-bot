@@ -1,7 +1,7 @@
 import {Player} from "../Player/Player";
 import {
     ApprenticeSeer,
-    Beholder,
+    Beholder, Blacksmith,
     ClumsyGuy,
     Cursed,
     Drunk,
@@ -15,7 +15,7 @@ import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan, Martyr
+    Traitor, Villager, WiseElder, WoodMan, Martyr, Blacksmith
 ]
 const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller]

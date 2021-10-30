@@ -122,7 +122,7 @@ export abstract class RoleBase {
 
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer
+            `Выбор принят — ${this.targetPlayer
                 ? highlightPlayer(this.targetPlayer)
                 : 'Пропустить'}.`,
             {
