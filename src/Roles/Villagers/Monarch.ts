@@ -14,6 +14,7 @@ export class Monarch extends RoleBase {
 
     action = () => {
         if (this.comingOut === false) return;
+
         if (this.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.comingOut = false;
             return;
@@ -25,7 +26,7 @@ export class Monarch extends RoleBase {
             {
                 reply_markup: {
                     inline_keyboard: [
-                        [{text: 'Ракскрыться', callback_data: JSON.stringify({type: 'role', choice: 'uncover'})}],
+                        [{text: 'Раскрыться', callback_data: JSON.stringify({type: 'role', choice: 'uncover'})}],
                         [{text: 'Пропустить', callback_data: JSON.stringify({type: 'role', choice: 'skip'})}],
                     ]
                 }
@@ -52,7 +53,7 @@ export class Monarch extends RoleBase {
 
     choiceMsgEditText = () => {
         Monarch.game.bot.editMessageText(
-            `Выбор принят: ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
+            `Выбор принят — ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,
