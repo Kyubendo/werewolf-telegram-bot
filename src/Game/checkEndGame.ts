@@ -4,7 +4,7 @@ import {
     Beholder,
     ClumsyGuy,
     Cursed,
-    Drunk,
+    Drunk, FallenAngel,
     GuardianAngel,
     Gunner,
     Harlot, Martyr,
@@ -17,9 +17,9 @@ const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
     Traitor, Villager, WiseElder, WoodMan, Martyr
 ]
-const wolfTeam: Function[] = [Wolf,]
-const evil: Function[] = [Wolf, SerialKiller]
-const nonWolfKillers: Function[] = [SerialKiller]
+const wolfTeam: Function[] = [Wolf, FallenAngel,]
+const evil: Function[] = [Wolf, SerialKiller, FallenAngel,]
+const nonWolfKillers: Function[] = [SerialKiller, FallenAngel,] // Fallen Angel??
 
 export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'suicide' | 'nobody'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {

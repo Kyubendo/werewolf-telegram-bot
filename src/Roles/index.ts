@@ -22,6 +22,7 @@ import {Wolf} from "./WolfTeam/Wolf";
 import {Lycan} from "./WolfTeam/Lycan";
 import {Sorcerer} from "./WolfTeam/Sorcerer";
 import {AlphaWolf} from "./WolfTeam/AlphaWolf";
+import {FallenAngel} from "./WolfTeam/FallenAngel";
 
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";
@@ -32,7 +33,7 @@ export {
 
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Detective,
   
-    Wolf, Lycan, Sorcerer, AlphaWolf,
+    Wolf, Lycan, Sorcerer, AlphaWolf, FallenAngel,
 
     Suicide, Thief, SerialKiller
 }

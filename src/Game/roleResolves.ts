@@ -1,5 +1,5 @@
 import {
-    Detective,
+    Detective, FallenAngel,
     GuardianAngel,
     Gunner,
     Harlot,
@@ -37,7 +37,7 @@ const nightRoleResolves = [
     // Jack
     Harlot, //Prowler
     Martyr,
-    GuardianAngel,
+    GuardianAngel, FallenAngel,
     Thief,
     Wolf,
     SerialKiller,
