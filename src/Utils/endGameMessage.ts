@@ -2,7 +2,7 @@ import {Win} from "../Game/checkEndGame";
 
 export const endGameMessage: { [type in Win]: { text: string, gif: string } } = {
     serialKiller: {
-        text: 'Серийный убийца выиграл!',
+        text: 'Последним оставшимся в живых стал Серийный Убийца! Кажется, он выиграл!',
         gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
     },
     wolves: {
@@ -14,12 +14,17 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
         gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
     },
     nobody: {
-        text: 'Никто не выиграл!',
+        text: 'Все в деревне мертвы... ' +
+            'Здесь больше нет ничего, кроме мертвых тел. Никто не выиграл, кроме стервятников.',
         gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
     },
     suicide: {
-        text: 'Самоубийца выиграл!',
+        text: 'О нет! Вы казнили Самоубийцу! Он выиграл игру...',
         gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
-    }
+    },
+    lovers: {
+        text: 'Настоящая любовь побеждает! Любовники выиграли!',
+        gif: 'https://gfycat.com/biodegradableplaintivebluebreastedkookaburra' // Note: placeholder
+    },
 }
 
