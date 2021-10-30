@@ -27,6 +27,7 @@ export class Thief extends RoleBase {
                 this.player.id,
                 `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он(а) уже труп!`
             )
+            this.targetPlayer = undefined;
             return;
         }
 
@@ -43,7 +44,8 @@ export class Thief extends RoleBase {
                 this.player.id,
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
-        } else if (this.player.role) {
+
+        } else if (this.player.role) { // Note: place Doppelganger here
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
 
             this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
@@ -59,8 +61,6 @@ export class Thief extends RoleBase {
                 `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
                 `Укради роль у кого-нибудь.` // GIF
             )
-
-            this.targetPlayer = undefined;
         }
 
         this.targetPlayer = undefined;
