@@ -1,6 +1,6 @@
 import {
     Blacksmith,
-    Detective,
+    Detective, Doppelganger,
     GuardianAngel,
     Gunner,
     Harlot,
@@ -38,7 +38,7 @@ const nightRoleResolves = [
     // PuppetMaster,
     // Jack
     Harlot, //Prowler
-    Martyr,
+    Martyr, Doppelganger,
     GuardianAngel,
     Thief,
     Wolf,

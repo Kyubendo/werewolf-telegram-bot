@@ -21,7 +21,7 @@ export class Doppelganger extends RoleBase {
             'Роль какого игрока ты хочешь скопировать?',
             {
                 reply_markup: generateInlineKeyboard(
-                    Doppelganger.game.players.filter(player => player !== player && player.isAlive),
+                    Doppelganger.game.players.filter(player => player !== this.player && player.isAlive),
                     false
                 )
             }
