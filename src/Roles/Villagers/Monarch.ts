@@ -26,7 +26,7 @@ export class Monarch extends RoleBase {
             {
                 reply_markup: {
                     inline_keyboard: [
-                        [{text: 'Ракскрыться', callback_data: JSON.stringify({type: 'role', choice: 'uncover'})}],
+                        [{text: 'Раскрыться', callback_data: JSON.stringify({type: 'role', choice: 'uncover'})}],
                         [{text: 'Пропустить', callback_data: JSON.stringify({type: 'role', choice: 'skip'})}],
                     ]
                 }
