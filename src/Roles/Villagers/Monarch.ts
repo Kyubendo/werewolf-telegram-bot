@@ -52,7 +52,7 @@ export class Monarch extends RoleBase {
 
     choiceMsgEditText = () => {
         Monarch.game.bot.editMessageText(
-            `Выбор принят: ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
+            `Выбор принят — ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,
