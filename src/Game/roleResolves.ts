@@ -1,5 +1,6 @@
 import {
     Blacksmith,
+    Detective,
     GuardianAngel,
     Gunner,
     Harlot,
@@ -7,7 +8,7 @@ import {
     Monarch,
     Oracle,
     Seer,
-    SerialKiller,
+    SerialKiller, Sorcerer,
     Thief,
     WiseElder,
     Wolf
@@ -27,10 +28,9 @@ export const roleResolves = (stage: GameStage) => {
 
 const dayRoleResolves = [
     Martyr, // WildChild, // constant choices
-    Monarch, // only action
-    Blacksmith, // only action
+    Monarch, Blacksmith, // only action
     Gunner,
-    WiseElder, // Detective
+    WiseElder, Detective,
 ]
 
 const nightRoleResolves = [
@@ -42,5 +42,5 @@ const nightRoleResolves = [
     Thief,
     Wolf,
     SerialKiller,
-    Seer, Oracle,
+    Sorcerer, Seer, Oracle,
 ]

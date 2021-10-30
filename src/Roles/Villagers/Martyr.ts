@@ -8,11 +8,16 @@ import {randomElement} from "../../Utils/randomElement";
 
 export class Martyr extends RoleBase {
     readonly roleName = 'Мученица 🕯';
-
-    startMessageText = () => `Ты ${this.roleName}.`
-    weight = () => 0;
+    roleIntroductionText = () => `Ты ${this.roleName}. `
+    startMessageText = () => 'В начале игры ты выбираешь человека, ' +
+        'за которого умрешь. Если этот человек умрет, ты умрешь за него, ' +
+        'и этот человек выживет. Пока ты не умрешь, ты в команде селян, ' +
+        'но как только ты умерла за кого-то, ты можешь выиграть, ' +
+        'только если этот человек выиграет.'
+    weight = () => 6;
 
     targetKiller?: Player
+    diedForTarget: boolean = false
 
     action = () => {
         if (this.targetPlayer?.role) return
@@ -46,6 +51,7 @@ export class Martyr extends RoleBase {
 
             this.targetKiller = killer
             this.onKilled(this.player)
+            this.diedForTarget = true
             Martyr.game.bot.sendMessage(
                 this.player.id,
                 `Как только ${highlightPlayer(this.targetPlayer)} оказался(лась) на грани жизни и смерти, `

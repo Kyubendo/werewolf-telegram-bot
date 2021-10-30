@@ -1,5 +1,6 @@
 import {RoleBase} from "../Roles/Abstract/RoleBase";
 import {User} from "node-telegram-bot-api";
+import {Wolf} from "../Roles";
 
 export class Player {
     constructor(user: User) {
@@ -16,5 +17,19 @@ export class Player {
     readonly username?: string;
     isAlive: boolean;
     isFrozen: boolean;
+    won: boolean = false;
     role?: RoleBase;
+
+    infected: boolean = false;
+
+    readonly transformInfected = () => {
+        this.role = new Wolf(this, this.role);
+
+        RoleBase.game.bot.sendMessage(
+            this.id,
+            'С наступлением ночи ты испытал(а) странное покалывание, ноющее чувство, пронзающее все тело, ' +
+            'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
+            + (this.role instanceof Wolf && this.role.showOtherWolfPlayers()) // check this line later
+        )
+    }
 }

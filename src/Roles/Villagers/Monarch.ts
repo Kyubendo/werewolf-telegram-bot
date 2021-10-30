@@ -1,8 +1,9 @@
-import {Villager} from "./Villager";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Monarch extends Villager {
+export class Monarch extends RoleBase {
     roleName = 'Монарх 🤴';
+    roleIntroductionText = () => `Ты ${this.roleName}! `
     startMessageText = () => 'Как у главы королевской семьи, у тебя есть власть в этой деревне... ' +
         'По крайней мере, на один день! ' +
         `Ты можешь показать деревне свою корону и семейное древо, и один день они позволят тебе ` +
@@ -24,8 +25,8 @@ export class Monarch extends Villager {
             {
                 reply_markup: {
                     inline_keyboard: [
-                        [{text: 'Да', callback_data: String('Да')}],
-                        [{text: 'Нет', callback_data: String('Нет')}]
+                        [{text: 'Ракскрыться', callback_data: JSON.stringify({type: 'role', choice: 'uncover'})}],
+                        [{text: 'Пропустить', callback_data: JSON.stringify({type: 'role', choice: 'skip'})}],
                     ]
                 }
             }
@@ -33,7 +34,7 @@ export class Monarch extends Villager {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice !== 'Раскрыться') {
+        if (choice !== 'uncover') {
             this.choiceMsgEditText();
             return;
         }

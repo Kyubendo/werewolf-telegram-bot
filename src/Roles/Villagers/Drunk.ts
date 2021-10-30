@@ -1,14 +1,14 @@
-import {Villager} from "./Villager";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {SerialKiller} from "../Others/SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Drunk extends Villager {
+export class Drunk extends RoleBase {
     roleName = 'Пьяница 🍻';
-    startMessageText = () =>`Ищи себе собутыльников, тебе все равно ничего не осталось делать...` +
+    startMessageText = () => `Ищи себе собутыльников, тебе все равно ничего не осталось делать...` +
         `Однако, если тебя вдруг кто-то съест, он нехило опьянеет`;
-    weight = () => Villager.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
+    weight = () => Drunk.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
 
     handleDeath(killer?: Player) {
         if (killer?.role instanceof Wolf) {
