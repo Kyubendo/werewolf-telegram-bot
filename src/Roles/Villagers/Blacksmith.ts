@@ -21,14 +21,10 @@ export class Blacksmith extends RoleBase {
 
     action = () => {
         if (this.silverDust === false) return;
-        else if (this.silverDust) {
-            this.silverDust = false;
-            return;
-        }
 
         Blacksmith.game.bot.sendMessage(
             this.player.id,
-            'Желаешь ли ты распылить сегодня серебрянную пыль?',
+            'Желаешь ли ты распылить серебрянную пыль сегодня?',
             {
                 reply_markup: {
                     inline_keyboard: [
@@ -38,6 +34,15 @@ export class Blacksmith extends RoleBase {
                 }
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
+    }
+
+    actionResolve = () => {
+        if (!this.silverDust) return;
+
+        Blacksmith.game.players.filter(player => player.isAlive
+            && (player.role instanceof Wolf || player.infected)).forEach(player => player.isFrozen = true)
+
+        this.silverDust = false;
     }
 
     handleChoice = (choice?: string) => {
@@ -56,9 +61,6 @@ export class Blacksmith extends RoleBase {
             'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
             'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)' // GIF
         )
-
-        Blacksmith.game.players.filter(player => player.role instanceof Wolf || player.infected)
-            .forEach(player => player.isFrozen = true);
     }
 
     choiceMsgEditText = () => {

@@ -28,9 +28,10 @@ export const roleResolves = (stage: GameStage) => {
 
 const dayRoleResolves = [
     Martyr, // WildChild, // constant choices
-    Monarch, Blacksmith, // only action
+    Monarch,
     Gunner,
     WiseElder, Detective,
+    Blacksmith, // last because he can freeze action of infected but still not wolf player
 ]
 
 const nightRoleResolves = [
