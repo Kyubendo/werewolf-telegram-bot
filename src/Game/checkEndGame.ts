@@ -9,13 +9,13 @@ import {
     Gunner,
     Harlot, Martyr,
     Mason,
-    Monarch, Oracle, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan
+    Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan
 } from "../Roles";
 import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan, Martyr
+    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman,
 ]
 const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller]
