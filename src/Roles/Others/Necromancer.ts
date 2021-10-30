@@ -10,7 +10,7 @@ export class Necromancer extends RoleBase {
 
     action = () => {
         const deadPlayers = Necromancer.game.players
-            .filter(player => player !== this.player && !player.isAlive);
+            .filter(player => !player.isAlive);
         if (!deadPlayers.length) return
         Necromancer.game.bot.sendMessage(
             this.player.id,

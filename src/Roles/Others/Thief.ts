@@ -11,6 +11,7 @@ export class Thief extends RoleBase {
     weight = () => -4; // change?
 
     action = () => {
+        this.targetPlayer = undefined;
         Thief.game.bot.sendMessage(this.player.id,
             'Чью роль ты хочешь украсть?',
             {
@@ -27,7 +28,6 @@ export class Thief extends RoleBase {
                 this.player.id,
                 `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он(а) уже труп!`
             )
-            this.targetPlayer = undefined;
             return;
         }
 
@@ -62,8 +62,6 @@ export class Thief extends RoleBase {
                 `Укради роль у кого-нибудь.` // GIF
             )
         }
-
-        this.targetPlayer = undefined;
     }
 
     handleChoice = (choice?: string) => {
