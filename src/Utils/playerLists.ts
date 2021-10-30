@@ -12,7 +12,7 @@ export const playerGameList = (players: Player[]) => `Живые игроки ($
 export const startPlayerList = (players: Player[]) => `Игроки:\n`
     + players.map(p => highlightPlayer(p)).join('\n')
 
-export const endPlayerList = (players: Player[]) => `Игроки (${players.length}):\n` + players
+export const endPlayerList = (players: Player[]) => `Игроки:\n` + players
     .sort(p => -!p.isAlive)
     .map(p => {
         let role = {...p.role}

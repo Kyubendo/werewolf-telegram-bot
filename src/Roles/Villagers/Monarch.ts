@@ -25,8 +25,8 @@ export class Monarch extends RoleBase {
             {
                 reply_markup: {
                     inline_keyboard: [
-                        [{text: 'Ракскрыться', callback_data: String('Раскрыться')}],
-                        [{text: 'Пропустить', callback_data: String('Пропустить')}]
+                        [{text: 'Ракскрыться', callback_data: JSON.stringify({type: 'role', choice: 'uncover'})}],
+                        [{text: 'Пропустить', callback_data: JSON.stringify({type: 'role', choice: 'skip'})}],
                     ]
                 }
             }
@@ -34,7 +34,7 @@ export class Monarch extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice !== 'Раскрыться') {
+        if (choice !== 'uncover') {
             this.choiceMsgEditText();
             return;
         }
