@@ -46,18 +46,27 @@ export class WildChild extends RoleBase {
 
             this.player.role = new Wolf(this.player, this.player.role);
 
-            WildChild.game.bot.sendMessage(
-                this.player.id,
-                `Твой "пример" ${highlightPlayer(this.targetPlayer)} умер! ` +
-                `Теперь ты ${this.player.role.roleName}! ` +
-                (this.player.role instanceof Wolf && this.player.role.showOtherWolfPlayers())
-            )
+            if (this.player.role instanceof Wolf) {
+                WildChild.game.bot.sendMessage(
+                    this.player.id,
+                    `Твой "пример" ${highlightPlayer(this.targetPlayer)} умер! ` +
+                    `Теперь ты ${this.player.role.roleName}! ` +
+                    this.player.role.showOtherWolfPlayers()
+                )
+
+                this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
+                        player.id,
+                        `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
+                    ))
+            }
 
             return currentTargetHandleDeath(killer);
         }
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath(killer ?: Player)
+        :
+        boolean {
         if (killer?.role instanceof Wolf) {
             WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
