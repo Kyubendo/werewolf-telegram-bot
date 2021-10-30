@@ -5,7 +5,7 @@ import {
     Harlot,
     Martyr,
     Monarch,
-    Oracle,
+    Oracle, Sandman,
     Seer,
     SerialKiller, Sorcerer,
     Thief,
@@ -30,6 +30,7 @@ const dayRoleResolves = [
     Monarch, // only action
     Gunner,
     WiseElder, Detective,
+    Sandman // last because he freeze all other actions
 ]
 
 const nightRoleResolves = [
