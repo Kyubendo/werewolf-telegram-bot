@@ -9,13 +9,13 @@ import {
     Gunner,
     Harlot, Martyr,
     Mason,
-    Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, 
+    Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
 } from "../Roles";
 import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild,
+    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty,
 ]
 const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller]
@@ -28,10 +28,9 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     const alivePlayers = players.filter(p => p.isAlive)
     const aliveWolves = alivePlayers.filter(p => p.role instanceof Wolf)
     const aliveEvilPlayer = alivePlayers.find(p => evil.find(e => p.role instanceof e))
-    const aliveLovers = alivePlayers.filter(player => player.lover)
 
-    if (alivePlayers.length === 2 && aliveLovers === alivePlayers) {
-        return {winners: aliveLovers, type: 'lovers'}
+    if (alivePlayers.length === 2 && alivePlayers[0].lover === alivePlayers[1]) {
+        return {winners: alivePlayers.filter(player => player.lover), type: 'lovers'}
     }
 
     if (!aliveEvilPlayer) {

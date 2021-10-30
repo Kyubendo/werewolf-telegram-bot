@@ -24,7 +24,7 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
     },
     lovers: {
         text: 'Настоящая любовь побеждает! Любовники выиграли!',
-        gif: 'https://gfycat.com/biodegradableplaintivebluebreastedkookaburra' // Note: placeholder
+        gif: 'https://media.giphy.com/media/M2zS4fBQbxZReOhlTa/giphy.gif' // Note: placeholder
     },
 }
 
