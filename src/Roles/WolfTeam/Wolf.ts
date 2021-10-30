@@ -14,7 +14,7 @@ export class Wolf extends RoleBase {
     showOtherWolfPlayers(): string {
         const allies = this.findOtherWolfPlayers();
         if (!allies.length)
-            return ''
+            return '\nНо ты один в стае, крепись.'
         return `\n${(allies.length > 1
             ? '\nДругие волки: '
             : 'Твой брат по волчьему делу — ')
@@ -38,7 +38,7 @@ export class Wolf extends RoleBase {
         this.targetPlayer = undefined
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
 
         if (this.findOtherWolfPlayers().length <= 1 && traitorPlayer) {

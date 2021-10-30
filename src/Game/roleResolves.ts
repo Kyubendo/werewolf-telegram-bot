@@ -9,7 +9,7 @@ import {
     Oracle, Sandman,
     Seer,
     SerialKiller, Sorcerer,
-    Thief,
+    Thief, WildChild,
     WiseElder,
     Wolf
 } from "../Roles";
@@ -27,7 +27,7 @@ export const roleResolves = (stage: GameStage) => {
 }
 
 const dayRoleResolves = [
-    Martyr, // WildChild, // constant choices
+    Martyr, WildChild,  // WildChild, // constant choices
     Monarch,
     Gunner,
     WiseElder, Detective,
@@ -39,7 +39,7 @@ const nightRoleResolves = [
     // PuppetMaster,
     // Jack
     Harlot, //Prowler
-    Martyr,
+    Martyr, WildChild, // constant choices
     GuardianAngel,
     Thief, Necromancer,
     Wolf,
