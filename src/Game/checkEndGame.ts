@@ -79,6 +79,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
 export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
+    const lovers = players.map(player => player.lover);
     const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForTarget)
     for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm.targetPlayer && !!~winners.indexOf(sm.targetPlayer)
+    for (const lover of lovers) if (lover?.won && lover.lover) lover.lover.won = true;
 }
