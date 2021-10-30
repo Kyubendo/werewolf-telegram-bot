@@ -27,6 +27,7 @@ import {AlphaWolf} from "./WolfTeam/AlphaWolf";
 
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";
+import {Necromancer} from "./Others/Necromancer";
 import {SerialKiller} from "./Others/SerialKiller";
 
 export {
@@ -36,5 +37,5 @@ export {
 
     Wolf, Lycan, Sorcerer, AlphaWolf,
 
-    Suicide, Thief, SerialKiller
+    Suicide, Thief, Necromancer, SerialKiller
 }
