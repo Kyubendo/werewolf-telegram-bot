@@ -32,8 +32,8 @@ export class Blacksmith extends RoleBase {
             {
                 reply_markup: {
                     inline_keyboard: [
-                        [{text: 'Да', callback_data: String('Да')}],
-                        [{text: 'Нет', callback_data: String('Нет')}]
+                        [{text: 'Распылить', callback_data: JSON.stringify({type: 'role', choice: 'spread'})}],
+                        [{text: 'Пропустить', callback_data: JSON.stringify({type: 'role', choice: 'skip'})}]
                     ]
                 }
             }
@@ -41,7 +41,7 @@ export class Blacksmith extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice !== 'Да') {
+        if (choice !== 'spread') {
             this.choiceMsgEditText();
             return;
         }
@@ -56,11 +56,14 @@ export class Blacksmith extends RoleBase {
             'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
             'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)' // GIF
         )
+
+        Blacksmith.game.players.filter(player => player.role instanceof Wolf /*|| player.infected*/)
+            .forEach(player => player.isFrozen = true);
     }
 
     choiceMsgEditText = () => {
         Blacksmith.game.bot.editMessageText(
-            `Выбор принят - ${this.silverDust ? 'Да' : 'Нет'}.`,
+            `Выбор принят — ${this.silverDust ? 'Распылить' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,
