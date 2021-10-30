@@ -4,6 +4,7 @@ import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
+import {findPlayer} from "../../Game/findPlayer";
 
 export class WildChild extends RoleBase {
     roleName = 'Дикий ребёнок 👶';
@@ -47,11 +48,13 @@ export class WildChild extends RoleBase {
 
             WildChild.game.bot.sendMessage(
                 this.player.id,
-                `Твой "пример" ${highlightPlayer(this.targetPlayer)} умер! Теперь ты ${this.roleName}! ` +
+                `Твой "пример" ${highlightPlayer(this.targetPlayer)} умер! ` +
+                `Теперь ты ${this.player.role.roleName}! ` +
                 (this.player.role instanceof Wolf && this.player.role.showOtherWolfPlayers())
             )
 
-            return currentTargetHandleDeath(killer);
+            currentTargetHandleDeath(killer);
+            return true;
         }
     }
 
@@ -64,7 +67,20 @@ export class WildChild extends RoleBase {
                 'Селяне поняли, насколько волк(и) безжалостны, раз так хладнокровно ' +
                 'убивают(ет) беззащитных детей.'
             )
-        }
-        return super.handleDeath(killer);
+
+            WildChild.game.bot.sendMessage(
+                this.player.id,
+                killer.role.killMessageDead // change to sendAnimation and add gif later
+            )
+
+            this.player.isAlive = false;
+            return true;
+        } else
+            return super.handleDeath(killer);
+    }
+
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, WildChild.game.players);
+        this.choiceMsgEditText();
     }
 }

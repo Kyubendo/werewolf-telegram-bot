@@ -27,8 +27,7 @@ export class Martyr extends RoleBase {
             'За кого ты хочешь умереть?',
             {
                 reply_markup: generateInlineKeyboard(
-                    Martyr.game.players.filter(player => player !== this.player && player.isAlive),
-                    false
+                    Martyr.game.players.filter(player => player !== this.player && player.isAlive), false
                 )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)

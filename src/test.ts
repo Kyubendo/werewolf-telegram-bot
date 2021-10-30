@@ -13,7 +13,7 @@ const bot = new TelegramBot(process.env.BOT_TOKEN!, {polling: true});
 const rolePool = [Villager, Villager, SerialKiller, SerialKiller,Wolf, Lycan,Fool]
 const players = [...Array(rolePool.length)].map((_, i) => new Player({id: 0, first_name: 'p' + i, is_bot: false,}))
 
-const game = new Game('classic', bot, players, 0, 0)
+const game = new Game('classic', bot, players, 0, () => false, 1)
 RoleBase.game = game
 game.players.map((player, i) => player.role = new rolePool[i](player))
 
