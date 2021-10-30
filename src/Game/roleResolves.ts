@@ -1,4 +1,5 @@
 import {
+    Blacksmith,
     Detective,
     GuardianAngel,
     Gunner,
@@ -27,10 +28,12 @@ export const roleResolves = (stage: GameStage) => {
 
 const dayRoleResolves = [
     Martyr, // WildChild, // constant choices
-    Monarch, // only action
+    Monarch,
     Gunner,
     WiseElder, Detective,
-    Sandman // last because he freeze all other actions
+    Sandman // prelast because he freeze all other actions including Blacksmith's
+    Blacksmith, // last because he can freeze action of infected but still not wolf player
+
 ]
 
 const nightRoleResolves = [
