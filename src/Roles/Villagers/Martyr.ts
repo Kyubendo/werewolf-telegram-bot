@@ -36,7 +36,7 @@ export class Martyr extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer?.role) {
-            this.targetPlayer = randomElement(Martyr.game.players.filter(p => p !== this.player))
+            this.targetPlayer = randomElement(Martyr.game.players.filter(p => p !== this.player && p.isAlive))
             Martyr.game.bot.editMessageText(
                 `Боги сделали выбор за вас — ${highlightPlayer(this.targetPlayer)}`,
                 {
