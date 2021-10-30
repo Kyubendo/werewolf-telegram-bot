@@ -1,5 +1,6 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
+import {findPlayer} from "../../Game/findPlayer";
 
 export class Necromancer extends RoleBase {
     roleName = 'Некромант ⚰';
@@ -26,5 +27,10 @@ export class Necromancer extends RoleBase {
         this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
 
         this.targetPlayer = undefined;
+    }
+
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, Necromancer.game.players);
+        this.choiceMsgEditText();
     }
 }
