@@ -32,7 +32,7 @@ export class Wolf extends RoleBase {
         this.targetPlayer = undefined
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
         if (this.findWolfPlayers().length <= 1 && traitorPlayer) {
             traitorPlayer.role = new Wolf(traitorPlayer, traitorPlayer.role);

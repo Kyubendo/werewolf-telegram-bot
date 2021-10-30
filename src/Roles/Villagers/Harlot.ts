@@ -55,7 +55,7 @@ export class Harlot extends Villager {
         this.choiceMsgEditText();
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         if (killer?.role instanceof Wolf) { // Если волк пытается убить шлюху
             if (this.targetPlayer?.role instanceof Wolf) { // Убивает, если её целью является любой из волков
                 this.player.isAlive = false;

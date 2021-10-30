@@ -18,7 +18,7 @@ export class SerialKiller extends RoleBase {
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
-    handleDeath(killer?: Player) {
+    handleDeath = (killer?: Player): boolean => {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
