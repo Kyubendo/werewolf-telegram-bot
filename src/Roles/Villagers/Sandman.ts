@@ -11,6 +11,10 @@ export class Sandman extends RoleBase {
 
     action = () => {
         if (this.sleep === false) return;
+        if (this.sleep) {
+            this.sleep = false;
+            return;
+        }
 
         Sandman.game.bot.sendMessage(
             this.player.id,
@@ -30,8 +34,6 @@ export class Sandman extends RoleBase {
         if (!this.sleep) return
 
         Sandman.game.players.filter(player => player.isAlive).forEach(player => player.isFrozen = true);
-
-        this.sleep = false;
     }
 
     handleChoice = (choice?: string) => {
