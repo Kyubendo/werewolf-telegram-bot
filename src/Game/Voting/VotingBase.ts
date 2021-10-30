@@ -92,7 +92,8 @@ export abstract class VotingBase {
                     message_id: voter.role?.choiceMsgId,
                     chat_id: voter.id,
                 }
-            )
+            ).catch(() => { // fix later
+            })
         })
 
     private voteResults = () => {

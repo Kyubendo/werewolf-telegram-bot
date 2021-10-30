@@ -60,17 +60,7 @@ export class Game {
 
         this.runResolves()
 
-        const endGame = checkEndGame(this.players, this.stage)
-        if (endGame) {
-            setWinners(endGame.winners, this.players)
-            this.bot.sendAnimation(
-                this.chatId,
-                endGameMessage[endGame.type].gif,
-                {caption: endGameMessage[endGame.type].text}
-            ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.onEnd()))
-            return
-        }
-
+        this.clearSelects()
         this.stage = nextStage
         setTimeout(this.runActions, 30)
 
@@ -113,5 +103,14 @@ export class Game {
 
     addPlayer = (player: Player) => {
         this.players.push(player)
+    }
+
+    clearSelects = () => {
+        this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
+            {inline_keyboard: []},
+            {message_id: p.role.choiceMsgId, chat_id: p.id}
+            ).catch(() => {  // fix later
+            })
+        )
     }
 }
