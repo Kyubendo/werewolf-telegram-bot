@@ -10,7 +10,7 @@ export class Drunk extends RoleBase {
         `Однако, если тебя вдруг кто-то съест, он нехило опьянеет`;
     weight = () => Drunk.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
 
-    handleDeath(killer?: Player) {
+    handleDeath = (killer?: Player) => {
         if (killer?.role instanceof Wolf) {
             killer.isFrozen = true;
             Drunk.game.bot.sendMessage(

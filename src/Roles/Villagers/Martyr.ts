@@ -68,7 +68,7 @@ export class Martyr extends RoleBase {
         }
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         if (killer === this.player && this.targetPlayer) {
             let deathMessage
             if (!this.targetKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
