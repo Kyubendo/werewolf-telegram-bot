@@ -11,10 +11,13 @@ export const assignRoles = (game: Game) => {
 
         Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason,
         Roles.Beholder, // Passive Villagers
+
         Roles.Seer, Roles.Fool, Roles.Monarch, Roles.Harlot, Roles.Oracle, Roles.Gunner, Roles.GuardianAngel,
-        Roles.WiseElder, // Active Villagers
-        Roles.Wolf, Roles.Lycan, // Wolves and their allies
-        Roles.Suicide, Roles.SerialKiller, Roles.Thief // Other
+        Roles.WiseElder, Roles.Sandman, Roles.Blacksmith, Roles.WildChild, // Active Villagers
+
+        Roles.Wolf, Roles.Lycan, Roles.Sorcerer, Roles.AlphaWolf,// WolfTeam
+
+        Roles.Suicide, Roles.SerialKiller, Roles.Thief, Roles.Necromancer, // Other
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
 
@@ -30,5 +33,6 @@ export const assignRoles = (game: Game) => {
 
     players.forEach(player => player.role && game.bot.sendMessage(
         player.id,
-        player.role.startMessageText()));
+        player.role.roleIntroductionText() + player.role.startMessageText())
+    );
 }

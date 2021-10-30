@@ -68,7 +68,7 @@ export abstract class VotingBase {
         }
 
         this.game.bot.editMessageText(
-            `Выбор принят: ${target ? highlightPlayer(target) : 'Пропустить'}.`,
+            `Выбор принят — ${target ? highlightPlayer(target) : 'Пропустить'}.`,
             {
                 message_id: voter.role.choiceMsgId,
                 chat_id: voter.id,
@@ -92,7 +92,8 @@ export abstract class VotingBase {
                     message_id: voter.role?.choiceMsgId,
                     chat_id: voter.id,
                 }
-            )
+            ).catch(() => { // fix later
+            })
         })
 
     private voteResults = () => {

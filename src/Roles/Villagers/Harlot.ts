@@ -1,13 +1,13 @@
-import {Villager} from "./Villager";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "../Others/SerialKiller";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
 import {Beauty} from "./Beauty";
 
-export class Harlot extends Villager {
+export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
     roleIntroductionText = () => `Ах ты ${this.roleName}! `
     startMessageText = () => `Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
@@ -57,7 +57,7 @@ export class Harlot extends Villager {
         this.choiceMsgEditText();
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         if (killer?.role instanceof Wolf) { // Если волк пытается убить шлюху
             if (this.targetPlayer?.role instanceof Wolf) { // Убивает, если её целью является любой из волков
                 this.player.isAlive = false;

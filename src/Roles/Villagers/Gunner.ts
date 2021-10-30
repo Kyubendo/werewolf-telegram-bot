@@ -1,10 +1,10 @@
-import {Villager} from "./Villager";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Gunner extends Villager {
+export class Gunner extends RoleBase {
     roleName = "Стрелок 🔫";
     roleIntroductionText = () => `${this.roleName} выходит на охоту! `
     startMessageText = () => 'У тебя есть две серебрянных пули, чтобы убить кого-то днем. ' +

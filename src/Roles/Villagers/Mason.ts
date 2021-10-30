@@ -1,8 +1,8 @@
-import {Villager} from "./Villager";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Mason extends Villager {
+export class Mason extends RoleBase {
     findMasonPlayers = () => Mason.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Mason
         // && otherPlayer !== this.player
@@ -24,7 +24,7 @@ export class Mason extends Villager {
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         Mason.game.bot.sendMessage(
             Mason.game.chatId,
             `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +

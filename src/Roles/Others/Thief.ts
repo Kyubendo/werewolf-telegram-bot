@@ -12,6 +12,7 @@ export class Thief extends RoleBase {
     weight = () => -4; // change?
 
     action = () => {
+        this.targetPlayer = undefined;
         Thief.game.bot.sendMessage(this.player.id,
             'Чью роль ты хочешь украсть?',
             {
@@ -46,7 +47,7 @@ export class Thief extends RoleBase {
             )
         } else if (this.targetPlayer.role instanceof Beauty) {
             this.loveBind(this.targetPlayer);
-        } else if (this.player.role) {
+        } else if (this.player.role) { // Note: place Doppelganger here
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
 
             this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
@@ -62,11 +63,7 @@ export class Thief extends RoleBase {
                 `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
                 `Укради роль у кого-нибудь.` // GIF
             )
-
-            this.targetPlayer = undefined;
         }
-
-        this.targetPlayer = undefined;
     }
 
     handleChoice = (choice?: string) => {

@@ -14,7 +14,7 @@ export abstract class RoleBase {
 
     abstract readonly roleName: string
     abstract readonly weight: () => number
-    readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
+    readonly roleIntroductionText = () => `Ты ${this.roleName}! `;
     abstract readonly startMessageText: () => string
 
     readonly previousRole?: RoleBase;
@@ -24,7 +24,6 @@ export abstract class RoleBase {
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
-    readonly originalHandleDeath = this.handleDeath
 
     targetPlayer?: Player
     choiceMsgId?: number
@@ -134,7 +133,7 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    handleDeath = (killer?: Player, type?: DeathType): boolean => {
         console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`)
         if (type === 'lover_death') {
             killer?.role && RoleBase.game.bot.sendMessage(
@@ -164,7 +163,7 @@ export abstract class RoleBase {
                 `${highlightPlayer(this.player)} должен(на) покинуть тебя. ` +
                 'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
             )
-        } else if (killer?.role !== this) {
+        } else if (killer?.role) {
             killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 killer.role.killMessageAll(this.player)
@@ -184,10 +183,11 @@ export abstract class RoleBase {
         this.player.isAlive = false;
         return true;
     }
+    readonly originalHandleDeath = this.handleDeath
 
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer
+            `Выбор принят — ${this.targetPlayer
                 ? highlightPlayer(this.targetPlayer)
                 : 'Пропустить'}.`,
             {

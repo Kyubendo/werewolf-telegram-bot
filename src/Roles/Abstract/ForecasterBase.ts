@@ -21,7 +21,7 @@ export abstract class ForecasterBase extends RoleBase {
 
         ForecasterBase.game.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}!`
+            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
         )
         this.targetPlayer = undefined
     }
@@ -32,5 +32,5 @@ export abstract class ForecasterBase extends RoleBase {
     }
 
 
-    abstract forecastRoleName:(targetRole: RoleBase) => string;
+    abstract forecastRoleName:(targetRole: RoleBase) => string | undefined;
 }

@@ -8,11 +8,16 @@ import {randomElement} from "../../Utils/randomElement";
 
 export class Martyr extends RoleBase {
     readonly roleName = 'Мученица 🕯';
-
-    startMessageText = () => `Ты ${this.roleName}.`
-    weight = () => 0;
+    roleIntroductionText = () => `Ты ${this.roleName}. `
+    startMessageText = () => 'В начале игры ты выбираешь человека, ' +
+        'за которого умрешь. Если этот человек умрет, ты умрешь за него, ' +
+        'и этот человек выживет. Пока ты не умрешь, ты в команде селян, ' +
+        'но как только ты умерла за кого-то, ты можешь выиграть, ' +
+        'только если этот человек выиграет.'
+    weight = () => 6;
 
     targetKiller?: Player
+    diedForTarget: boolean = false
 
     action = () => {
         if (this.targetPlayer?.role) return
@@ -22,8 +27,7 @@ export class Martyr extends RoleBase {
             'За кого ты хочешь умереть?',
             {
                 reply_markup: generateInlineKeyboard(
-                    Martyr.game.players.filter(player => player !== this.player && player.isAlive),
-                    false
+                    Martyr.game.players.filter(player => player !== this.player && player.isAlive), false
                 )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
@@ -33,7 +37,8 @@ export class Martyr extends RoleBase {
         if (!this.targetPlayer?.role) {
             this.targetPlayer = randomElement(Martyr.game.players.filter(p => p !== this.player))
             Martyr.game.bot.editMessageText(
-                `Боги сделали выбор за вас — ${highlightPlayer(this.targetPlayer)}`,
+                `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
+                `за тебя — ${highlightPlayer(this.targetPlayer)}`,
                 {
                     chat_id: this.player.id,
                     message_id: this.choiceMsgId
@@ -46,6 +51,7 @@ export class Martyr extends RoleBase {
 
             this.targetKiller = killer
             this.onKilled(this.player)
+            this.diedForTarget = true
             Martyr.game.bot.sendMessage(
                 this.player.id,
                 `Как только ${highlightPlayer(this.targetPlayer)} оказался(лась) на грани жизни и смерти, `
@@ -62,7 +68,7 @@ export class Martyr extends RoleBase {
         }
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         if (killer === this.player && this.targetPlayer) {
             let deathMessage
             if (!this.targetKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
