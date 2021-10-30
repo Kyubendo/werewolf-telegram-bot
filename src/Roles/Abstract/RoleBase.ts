@@ -98,7 +98,7 @@ export abstract class RoleBase {
     }
 
     handleDeath(killer?: Player): boolean {
-        if (killer?.role !== this) {
+        if (killer?.role) {
             killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 killer.role.killMessageAll(this.player)

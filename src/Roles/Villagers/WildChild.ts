@@ -53,8 +53,7 @@ export class WildChild extends RoleBase {
                 (this.player.role instanceof Wolf && this.player.role.showOtherWolfPlayers())
             )
 
-            currentTargetHandleDeath(killer);
-            return true;
+            return currentTargetHandleDeath(killer);
         }
     }
 
