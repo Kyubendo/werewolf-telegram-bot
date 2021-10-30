@@ -5,7 +5,7 @@ import {
     Gunner,
     Harlot,
     Martyr,
-    Monarch,
+    Monarch, Necromancer,
     Oracle, Sandman,
     Seer,
     SerialKiller, Sorcerer,
@@ -31,9 +31,8 @@ const dayRoleResolves = [
     Monarch,
     Gunner,
     WiseElder, Detective,
-    Sandman // prelast because he freeze all other actions including Blacksmith's
+    Sandman, // pre-last because he freeze all other actions including Blacksmith's
     Blacksmith, // last because he can freeze action of infected but still not wolf player
-
 ]
 
 const nightRoleResolves = [
@@ -42,7 +41,7 @@ const nightRoleResolves = [
     Harlot, //Prowler
     Martyr,
     GuardianAngel,
-    Thief,
+    Thief, Necromancer,
     Wolf,
     SerialKiller,
     Sorcerer, Seer, Oracle,

@@ -17,7 +17,7 @@ export const assignRoles = (game: Game) => {
     
         Roles.Wolf, Roles.Lycan, Roles.Sorcerer, Roles.AlphaWolf,// WolfTeam
 
-        Roles.Suicide, Roles.SerialKiller, Roles.Thief // Other
+        Roles.Suicide, Roles.SerialKiller, Roles.Thief, Roles.Necromancer, // Other
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
 
