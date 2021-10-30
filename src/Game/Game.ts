@@ -28,6 +28,8 @@ export class Game {
     dayDuration = 10000_000
     nightDuration = 5000_000
 
+    deadPlayersCount = 0
+
     stage: GameStage = undefined
     stageTimer?: NodeJS.Timer
     resetStageTimer = (stageDuration: number) => {
@@ -61,7 +63,22 @@ export class Game {
         this.runResolves()
 
         this.clearSelects()
+
+        const endGame = checkEndGame(this.players, this.stage)
+        if (endGame) {
+            setWinners(endGame.winners, this.players)
+            this.bot.sendAnimation(
+                this.chatId,
+                endGameMessage[endGame.type].gif,
+                {caption: endGameMessage[endGame.type].text}
+            ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.onEnd()))
+            this.stageTimer && clearTimeout(this.stageTimer)
+            return
+        }
+
+        this.checkNightDeaths(nextStage)
         this.stage = nextStage
+
         setTimeout(this.runActions, 30)
 
         setTimeout(() => // stupid kludge
@@ -112,5 +129,12 @@ export class Game {
             ).catch(() => {  // fix later
             })
         )
+    }
+
+    checkNightDeaths = (nextStage: GameStage) => {
+        if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
+        else if (nextStage === "day" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
+            this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
+        }
     }
 }
