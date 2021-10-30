@@ -30,12 +30,13 @@ export const initGame = (bot: TelegramBot, state: State) => {
         state.game.lynch = new Lynch(state.game)
         state.game.wolfFeast = new WolfFeast(state.game)
 
-        bot.sendMessage(
+        bot.sendAnimation(
             msg.chat.id,
-            `Новая игра начата игроком ${msg.from?.first_name +
-            (msg.from.last_name ? ' ' + msg.from.last_name : '')}! Присоединяйся, чтобы` +
-            ` быть съеденным(ой)!.`,
+            'https://media.giphy.com/media/ZLdy2L5W62WGs/giphy.gif',
             {
+                caption: `Новая игра начата игроком ${msg.from?.first_name +
+                    (msg.from.last_name ? ' ' + msg.from.last_name : '')}! Присоединяйся, чтобы` +
+                    ` быть съеденным(ой)!`,
                 reply_markup: joinButton,
             }
         )//.then(msg => bot.pinChatMessage(msg.chat.id, String(msg.message_id)))
