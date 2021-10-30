@@ -22,6 +22,11 @@ export class Blacksmith extends RoleBase {
     action = () => {
         if (this.silverDust === false) return;
 
+        if (this.silverDust) {
+            this.silverDust = false;
+            return;
+        }
+
         Blacksmith.game.bot.sendMessage(
             this.player.id,
             'Желаешь ли ты распылить серебрянную пыль сегодня?',
@@ -37,12 +42,9 @@ export class Blacksmith extends RoleBase {
     }
 
     actionResolve = () => {
-        if (!this.silverDust) return;
-
-        Blacksmith.game.players.filter(player => player.isAlive
-            && (player.role instanceof Wolf || player.infected)).forEach(player => player.isFrozen = true)
-
-        this.silverDust = false;
+        if (this.silverDust)
+            Blacksmith.game.players.filter(player => player.isAlive
+                && (player.role instanceof Wolf || player.infected)).forEach(player => player.isFrozen = true)
     }
 
     handleChoice = (choice?: string) => {

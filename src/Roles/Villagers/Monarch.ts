@@ -14,6 +14,7 @@ export class Monarch extends RoleBase {
 
     action = () => {
         if (this.comingOut === false) return;
+
         if (this.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.comingOut = false;
             return;
