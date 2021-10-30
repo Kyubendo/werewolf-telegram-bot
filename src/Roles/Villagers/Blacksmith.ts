@@ -1,6 +1,6 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Wolf} from "../Wolves and their allies/Wolf";
+import {Wolf} from "../WolfTeam/Wolf";
 import {Traitor} from "./Traitor";
 
 export class Blacksmith extends RoleBase {
@@ -57,7 +57,7 @@ export class Blacksmith extends RoleBase {
             'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)' // GIF
         )
 
-        Blacksmith.game.players.filter(player => player.role instanceof Wolf /*|| player.infected*/)
+        Blacksmith.game.players.filter(player => player.role instanceof Wolf || player.infected)
             .forEach(player => player.isFrozen = true);
     }
 
