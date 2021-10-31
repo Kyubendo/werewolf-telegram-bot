@@ -40,7 +40,8 @@ export abstract class RoleBase {
         if (!this.player.isAlive) return
         console.log(`onKilled: ${this.player.name}, ${type}`)
         if (this.handleDeath(killer, type)) {
-            /*type !== 'lover_death' && */ this.movePlayer();
+            /*type !== 'lover_death' && */
+            this.movePlayer();
             this.killLover('lover_death')
         }
     }
@@ -80,17 +81,18 @@ export abstract class RoleBase {
     readonly handleGuardianAngel = (killer: Player) => {
         const guardianAngelPlayer = killer.role?.targetPlayer?.guardianAngel;
         if (guardianAngelPlayer
-            && guardianAngelPlayer.role instanceof GuardianAngel) { // Дополнительная проверка нужна для доступа к полям GuardianAngel
+            && guardianAngelPlayer.role instanceof GuardianAngel
+            && killer.role?.targetPlayer) { // Дополнительная проверка нужна для доступа к полям GuardianAngel
             RoleBase.game.bot.sendMessage(
                 killer.id,
-                `Придя домой к ${highlightPlayer(this.player)}, ` +
+                `Придя домой к ${highlightPlayer(killer.role.targetPlayer)}, ` +
                 `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
                 'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
             )
 
             RoleBase.game.bot.sendMessage(
-                this.player.id,
-                `${guardianAngelPlayer.role.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
+                killer.role.targetPlayer.id,
+                `${guardianAngelPlayer.role.roleName} наблюдал за тобой этой ночью и защитил тебя от зла!`
             )
 
             let ending: string = '';
@@ -99,7 +101,8 @@ export abstract class RoleBase {
 
             RoleBase.game.bot.sendMessage(
                 guardianAngelPlayer.id,
-                `С выбором ты угадал, на ${highlightPlayer(this.player)} действительно напали! Ты спас ему жизнь!`
+                `С выбором ты угадал, на ` +
+                `${highlightPlayer(killer.role.targetPlayer)} действительно напали! Ты спас ему жизнь!`
                 + ending
             )
 

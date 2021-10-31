@@ -36,6 +36,8 @@ export class GuardianAngel extends RoleBase {
             this.onKilled(this.player);
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
+        } else {
+            this.targetPlayer.guardianAngel = this.player;
         }
     }
 
