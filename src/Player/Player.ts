@@ -1,4 +1,4 @@
-import {RoleBase} from "../Roles/Abstract/RoleBase";
+import {RoleBase} from "../Game";
 import {User} from "node-telegram-bot-api";
 import {Wolf} from "../Roles";
 
@@ -19,6 +19,8 @@ export class Player {
     isFrozen: boolean = false;
     won: boolean = false;
     role?: RoleBase;
+
+    lover?: Player;
 
     infected: boolean = false;
 

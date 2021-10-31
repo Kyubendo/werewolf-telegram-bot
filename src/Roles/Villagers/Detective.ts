@@ -9,7 +9,8 @@ export class Detective extends ForecasterBase {
     startMessageText = () => 'Ты можешь выбрать игрока днем, чтобы узнать его роль. ' +
         'Но волк узнает, кто ты, если ты выберешь его!'
     weight = () => 6;
-    actionResolve = () => {
+
+    actionResult = () => {
         if (!this.targetPlayer?.role) return;
 
         Detective.game.bot.sendMessage(

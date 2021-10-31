@@ -3,6 +3,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
 import {GuardianAngel} from "../Villagers/GuardianAngel";
+import {Beauty} from "../Villagers/Beauty";
 
 export class Wolf extends RoleBase {
     findOtherWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
@@ -10,7 +11,6 @@ export class Wolf extends RoleBase {
         // && otherPlayer !== this.player
         && otherPlayer.isAlive
     )
-
 
     showOtherWolfPlayers(): string {
         const allies = this.findOtherWolfPlayers();
@@ -39,12 +39,16 @@ export class Wolf extends RoleBase {
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
             this.handleGuardianAngel(this.player);
             return;
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer);
+        } else {
+            this.targetPlayer.role?.onKilled(this.player);
         }
-        this.targetPlayer.role?.onKilled(this.player);
+
         this.targetPlayer = undefined
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
 
         if (this.findOtherWolfPlayers().length <= 1 && traitorPlayer) {
