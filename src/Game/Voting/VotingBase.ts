@@ -80,7 +80,6 @@ export abstract class VotingBase {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
         this.handleVoteResult(this.voteResults())
-        this.getVoters().forEach(v => v.role?.doneNightAction())
         this.votes = {}
         this.votedPlayers = []
     }
