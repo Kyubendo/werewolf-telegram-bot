@@ -11,7 +11,7 @@ export class Doppelganger extends RoleBase {
     startMessageText = () => 'Легенда гласит, что твои предки были Метаморфами и могли выбирать любую форму бытия, ' +
         'какую только пожелали... Ты унаследовал часть их способностей! Выбери игрока, когда он умрет, ' +
         'ты получишь его роль.'
-    weight = () => 2;
+    weight = () => -1;
 
     action = () => {
         if (this.targetPlayer?.role) return;
