@@ -26,7 +26,7 @@ export const assignRoles = (game: Game) => {
         balanced = Math.abs(
             players.map((player, i) => player.role = new rolePool[i](player))
                 .reduce((a, c) => a + c.weight(), 0)
-        ) < 123 // change 123 to variance
+        ) < 5 // change 123 to variance
 
     } while (!balanced)
 
