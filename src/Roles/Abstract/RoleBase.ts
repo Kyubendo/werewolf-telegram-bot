@@ -36,6 +36,8 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
+    nightActionDone?: boolean
+
     readonly onKilled = (killer?: Player, type?: DeathType) => {
         if (!this.player.isAlive) return;
         console.log(`onKilled: ${this.player.name}, ${type}`);
@@ -108,6 +110,11 @@ export abstract class RoleBase {
 
             guardianAngelPlayer.role.numberOfAttacks++;
         }
+    }
+
+    doneNightAction = () => {
+        this.nightActionDone = true
+        if (!RoleBase.game.players.find(p => p.role?.nightActionDone === false)) RoleBase.game.setNextStage()
     }
 
     checkHarlotDeath = (killer: Player) => {

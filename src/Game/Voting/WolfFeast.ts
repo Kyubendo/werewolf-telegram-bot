@@ -35,11 +35,13 @@ export class WolfFeast extends VotingBase {
         if (killerWolf) killerWolf.targetPlayer = randomElement(voteResults)
     }
 
-    handleVotingChoiceResult = (voter: Player, target?: Player) =>
+    handleVotingChoiceResult = (voter: Player, target?: Player) => {
+        voter.role && voter.role.doneNightAction()
         this.getVoters().filter(player => player !== voter).forEach(player => this.game.bot.sendMessage(
             player.id,
             target
                 ? `${highlightPlayer(voter)} облизывается на ${highlightPlayer(target)}.`
                 : `${highlightPlayer(voter)} облизывается в ожидании решения.`
         ))
+    }
 }

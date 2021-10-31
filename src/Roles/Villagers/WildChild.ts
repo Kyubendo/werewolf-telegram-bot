@@ -12,9 +12,13 @@ export class WildChild extends RoleBase {
     startMessageText = () => 'Выбери любого игрока, чтобы он стал твоим "примером". Если он умрет, ты станешь волком!'
     weight = () => -1;
 
-    action = () => {
-        if (this.targetPlayer?.role) return;
+    nightActionDone = false
 
+    action = () => {
+        if (this.targetPlayer?.role) {
+            this.nightActionDone = true
+            return
+        }
         WildChild.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь выбрать своим примером?',
