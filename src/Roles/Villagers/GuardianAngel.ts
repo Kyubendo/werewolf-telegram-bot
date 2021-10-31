@@ -11,11 +11,12 @@ export class GuardianAngel extends RoleBase {
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
-    
-
     numberOfAttacks: number = 0;
 
     action = () => {
+        this.targetPlayer = undefined;
+        this.numberOfAttacks = 0;
+
         GuardianAngel.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь защитить?',
@@ -41,8 +42,6 @@ export class GuardianAngel extends RoleBase {
                 )
             }
         }
-        this.numberOfAttacks = 0;
-        this.targetPlayer = undefined; // В таком случае actionResolve ангела должен идти последним
     }
 
     handleChoice = (choice?: string) => {
@@ -82,14 +81,14 @@ export class GuardianAngel extends RoleBase {
                     'и не устояли забрать его в свои дома.'
                 )
             }
-        } else if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) { // Если ангела убил волк или серия
-            GuardianAngel.game.bot.sendMessage( // Сообщение в личку
+        } else if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
+            GuardianAngel.game.bot.sendMessage(
                 this.player.id,
                 killer.role.killMessageDead
             )
 
             if (killer.role instanceof Wolf)
-                GuardianAngel.game.bot.sendMessage( // Сообщение в чат, если убил волк
+                GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
                     'Кровавый рассвет оросил нежным светом девственные, нежные руки ' +
                     'Ангела вашего Хранителя, прибитые гвоздями к кресту на куполе церкви. ' +
@@ -97,7 +96,7 @@ export class GuardianAngel extends RoleBase {
                     `воспарив в небеса таким садистским способом...`
                 )
             else
-                GuardianAngel.game.bot.sendMessage( // Сообщение в чат, если убил серийник
+                GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
                     'Занятно: ангелы спасают других от убийц, а себя спасти не могут. ' +
                     `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`
