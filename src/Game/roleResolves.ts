@@ -5,11 +5,11 @@ import {
     Gunner,
     Harlot,
     Martyr,
-    Monarch,
-    Oracle,
+    Monarch, Necromancer,
+    Oracle, Sandman,
     Seer,
     SerialKiller, Sorcerer,
-    Thief,
+    Thief, WildChild,
     WiseElder,
     Wolf
 } from "../Roles";
@@ -27,10 +27,11 @@ export const roleResolves = (stage: GameStage) => {
 }
 
 const dayRoleResolves = [
-    Martyr, // WildChild, // constant choices
+    Martyr, WildChild,  // WildChild, // constant choices
     Monarch,
     Gunner,
     WiseElder, Detective,
+    Sandman, // pre-last because he freeze all other actions including Blacksmith's
     Blacksmith, // last because he can freeze action of infected but still not wolf player
 ]
 
@@ -38,9 +39,9 @@ const nightRoleResolves = [
     // PuppetMaster,
     // Jack
     Harlot, //Prowler
-    Martyr, Doppelganger,
+    Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
-    Thief,
+    Thief, Necromancer,
     Wolf,
     SerialKiller,
     Sorcerer, Seer, Oracle,
