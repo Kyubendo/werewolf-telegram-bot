@@ -1,6 +1,6 @@
 import {Villager} from "./Villager";
 import {Lycan} from "../WolfTeam/Lycan";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
@@ -17,7 +17,7 @@ export class Seer extends ForecasterBase {
     startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
 
-    originalHandleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
         if (apprenticeSeerPlayer) {
             apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
@@ -44,7 +44,7 @@ export class Seer extends ForecasterBase {
                 killer.role.killMessageDead
             )
         } else
-            return super.handleDeath(killer);
+            return this.defaultHandleDeath(killer, type);
 
         this.player.isAlive = false;
         return true;

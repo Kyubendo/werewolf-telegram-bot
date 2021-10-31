@@ -3,7 +3,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {SerialKiller, Wolf} from "../index";
 import {Player} from "../../Player/Player";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {Beauty} from "./Beauty";
 
 export class GuardianAngel extends RoleBase {
@@ -55,7 +55,7 @@ export class GuardianAngel extends RoleBase {
         this.choiceMsgEditText();
     }
 
-    originalHandleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         this.player.isAlive = false;
 
         if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)
@@ -108,7 +108,7 @@ export class GuardianAngel extends RoleBase {
                     `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`
                 )
         } else
-            return super.handleDeath(killer);
+            return this.defaultHandleDeath(killer, type);
         return true;
     }
 }

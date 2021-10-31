@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -68,7 +68,7 @@ export class Martyr extends RoleBase {
         }
     }
 
-    originalHandleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         console.log(this.targetPlayer?.name)
         if (killer === this.player && this.targetPlayer) {
             let deathMessage: string | undefined
@@ -98,7 +98,7 @@ export class Martyr extends RoleBase {
             this.player.isAlive = false;
             return true;
         }
-        return super.handleDeath(killer)
+        return this.defaultHandleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {
