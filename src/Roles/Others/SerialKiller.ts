@@ -4,6 +4,7 @@ import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
 import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
@@ -56,7 +57,10 @@ export class SerialKiller extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
-        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
+        if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+            this.handleGuardianAngel(this.player);
+            return;
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
             this.loveBind(this.targetPlayer);
         else
             this.targetPlayer.role?.onKilled(this.player);

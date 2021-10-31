@@ -2,6 +2,7 @@ import {Player} from "../../Player/Player";
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
 import {Beauty} from "../Villagers/Beauty";
 
 export class Wolf extends RoleBase {
@@ -35,7 +36,10 @@ export class Wolf extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
-        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+        if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+            this.handleGuardianAngel(this.player);
+            return;
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
         } else {
             this.targetPlayer.role?.onKilled(this.player);
