@@ -16,7 +16,10 @@ export class Doppelganger extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        if (this.targetPlayer?.role) return;
+        if (this.targetPlayer?.role) {
+            this.nightActionDone = true
+            return;
+        }
 
         Doppelganger.game.bot.sendMessage(
             this.player.id,
