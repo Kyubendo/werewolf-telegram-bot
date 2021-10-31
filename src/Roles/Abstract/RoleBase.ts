@@ -26,6 +26,8 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
+    property?: {    }
+
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
         this.handleDeath(killer) && this.movePlayer()

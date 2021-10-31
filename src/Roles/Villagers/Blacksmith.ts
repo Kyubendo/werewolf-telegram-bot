@@ -17,13 +17,15 @@ export class Blacksmith extends RoleBase {
             ? 4
             : 3
 
-    silverDust ?: boolean;
+    property = {
+        silverDust: undefined,
+    }
 
     action = () => {
-        if (this.silverDust === false) return;
+        if (this.property.silverDust === false) return;
 
-        if (this.silverDust) {
-            this.silverDust = false;
+        if (this.property.silverDust) {
+            this.property.silverDust = false;
             return;
         }
 
@@ -42,7 +44,7 @@ export class Blacksmith extends RoleBase {
     }
 
     actionResolve = () => {
-        if (this.silverDust)
+        if (this.property.silverDust)
             Blacksmith.game.players.filter(player => player.isAlive
                 && (player.role instanceof Wolf || player.infected)).forEach(player => player.isFrozen = true)
     }
@@ -53,7 +55,7 @@ export class Blacksmith extends RoleBase {
             return;
         }
 
-        this.silverDust = true;
+        this.property.silverDust = true;
         this.choiceMsgEditText();
 
         Blacksmith.game.bot.sendMessage(
@@ -67,7 +69,7 @@ export class Blacksmith extends RoleBase {
 
     choiceMsgEditText = () => {
         Blacksmith.game.bot.editMessageText(
-            `Выбор принят — ${this.silverDust ? 'Распылить' : 'Пропустить'}.`,
+            `Выбор принят — ${this.property.silverDust ? 'Распылить' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,
