@@ -32,7 +32,7 @@ export abstract class RoleBase {
         if (!this.player.isAlive) return
         console.log(`onKilled: ${this.player.name}, ${type}`)
         if (this.handleDeath(killer, type)) {
-            this.movePlayer();
+            /*type !== 'lover_death' && */ this.movePlayer();
             this.killLover('lover_death')
         }
     }
