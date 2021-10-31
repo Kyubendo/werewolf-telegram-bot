@@ -20,7 +20,6 @@ export class WiseElder extends ForecasterBase {
             this.player.id,
             `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}.`
         )
-        this.targetPlayer = undefined
     }
 
     forecastRoleName = (targetRole: RoleBase) => { // Arsonist, CultistHunter, FallenAngel, Hunter, BlackWolf?
