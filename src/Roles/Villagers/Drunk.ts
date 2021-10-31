@@ -25,7 +25,7 @@ export class Drunk extends RoleBase {
                     `к нему домой, они увидели только сломанный нож и вырезанную печень.` +
                     `Он настолько посадил себе печень, что даже Серийный Убийца ею побрезговал.`;
             }
-          
+
             Drunk.game.bot.sendMessage(
                 Drunk.game.chatId,
                 text

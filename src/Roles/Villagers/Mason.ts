@@ -30,6 +30,11 @@ export class Mason extends RoleBase {
             `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
             `камней, кровь разбрызгана повсюду. *${this.roleName}* мертв!`
         )
+
+        killer?.role?.killMessageDead && Mason.game.bot.sendMessage(
+            this.player.id,
+            killer?.role?.killMessageDead
+        )
         this.player.isAlive = false;
         return true;
     }

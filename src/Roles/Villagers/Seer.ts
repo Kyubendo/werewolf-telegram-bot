@@ -8,6 +8,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {ApprenticeSeer} from "./ApprenticeSeer";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
+import {SerialKiller} from "../Others/SerialKiller";
 
 
 export class Seer extends ForecasterBase {
@@ -27,11 +28,24 @@ export class Seer extends ForecasterBase {
             )
         }
 
-        Seer.game.bot.sendMessage(
-            Seer.game.chatId,
-            `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
-            'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
-            `лучшие мозги. *${this.roleName}* — ${highlightPlayer(this.player)} мертв.`)
+        if (killer?.role) {
+            Seer.game.bot.sendMessage(
+                Seer.game.chatId,
+                killer?.role instanceof SerialKiller
+                    ? `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
+                    'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
+                    `лучшие мозги. *${this.roleName}* ${highlightPlayer(this.player)} мертв.`
+                    : 'День начался с печальных новостей... ' +
+                    `Всем известный *${this.roleName}* мертв! Покойся с миром ${highlightPlayer(this.player)}...`
+            )
+
+            killer.role.killMessageDead && Seer.game.bot.sendMessage(
+                this.player.id,
+                killer.role.killMessageDead
+            )
+        } else
+            return super.handleDeath(killer);
+
         this.player.isAlive = false;
         return true;
     }
