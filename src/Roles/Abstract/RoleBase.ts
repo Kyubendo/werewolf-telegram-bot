@@ -38,6 +38,7 @@ export abstract class RoleBase {
     }
 
     readonly loveBind = (newLover: Player) => {
+        if (this.player.lover === this.player) return;
         console.log(`loveBind: ${this.player.name}, ${newLover.name}`)
         this.killLover('lover_betrayal');
         newLover.role?.killLover('lover_betrayal');
