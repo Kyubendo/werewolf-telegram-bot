@@ -17,6 +17,14 @@ export class Blacksmith extends RoleBase {
             ? 4
             : 3
 
+    actionAnnouncement = {
+        message: 'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +
+            `как ${highlightPlayer(this.player)} блуждает вокруг и ` +
+            'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
+            'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)',
+        gif: 'https://media.giphy.com/media/dUBR5zjuoZwBChZ1aC/giphy.gif'
+    }
+
     silverDust ?: boolean;
 
     action = () => {
@@ -62,6 +70,11 @@ export class Blacksmith extends RoleBase {
             `как ${highlightPlayer(this.player)} блуждает вокруг и ` +
             'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
             'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)' // GIF
+        )
+
+        Blacksmith.game.bot.sendAnimation(
+            Blacksmith.game.chatId,
+            this.actionAnnouncement.gif, { caption: this.actionAnnouncement.message }
         )
     }
 

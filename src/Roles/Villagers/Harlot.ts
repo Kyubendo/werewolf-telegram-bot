@@ -5,6 +5,7 @@ import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
+import {Beauty} from "./Beauty";
 
 export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
@@ -31,8 +32,24 @@ export class Harlot extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
+        if (this.targetPlayer.role instanceof Wolf || this.targetPlayer.role instanceof SerialKiller) {
             this.onKilled(this.targetPlayer);
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer);
+        } else {
+            if (this.targetPlayer) {
+                Harlot.game.bot.sendMessage(
+                    this.player.id,
+                    `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
+                    `не серийный убийца, потому что ночь была слишком хороша...`,
+                )
+                Harlot.game.bot.sendMessage(
+                    this.targetPlayer.id,
+                    'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
+                    'И вы оба хорошо провели время!' // GIF
+                )
+            }
+        }
     }
 
     actionResult = () => {
@@ -55,7 +72,7 @@ export class Harlot extends RoleBase {
         this.choiceMsgEditText();
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         if (killer?.role instanceof Wolf) { // Если волк пытается убить шлюху
             if (this.targetPlayer?.role instanceof Wolf) { // Убивает, если её целью является любой из волков
                 this.player.isAlive = false;

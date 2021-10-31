@@ -4,6 +4,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {SerialKiller, Wolf} from "../index";
 import {Player} from "../../Player/Player";
 import {RoleBase} from "../Abstract/RoleBase";
+import {Beauty} from "./Beauty";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
@@ -11,7 +12,6 @@ export class GuardianAngel extends RoleBase {
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
-    
 
     numberOfAttacks: number = 0;
 
@@ -31,9 +31,11 @@ export class GuardianAngel extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer.role instanceof SerialKiller ||
-            (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))
-            this.onKilled(this.player)
+        if (this.targetPlayer.role instanceof SerialKiller || (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
+            this.onKilled(this.player);
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer); 
+        }
     }
 
     actionResult = () => {
@@ -53,7 +55,7 @@ export class GuardianAngel extends RoleBase {
         this.choiceMsgEditText();
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         this.player.isAlive = false;
 
         if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)
