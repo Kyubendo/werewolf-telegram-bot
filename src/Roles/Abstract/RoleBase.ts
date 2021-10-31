@@ -1,5 +1,5 @@
-import {Game} from "../../Game/Game";
-import {Player} from "../../Player/Player";
+import {Game} from "../../Game";
+import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner, Suicide} from "../index";
 
