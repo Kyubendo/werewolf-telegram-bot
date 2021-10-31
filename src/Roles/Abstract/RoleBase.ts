@@ -21,6 +21,7 @@ export abstract class RoleBase {
     readonly killMessageDead?: string
     readonly action?: () => void
     readonly actionResolve?: () => void
+    readonly actionResult?: () => void
     readonly handleChoice?: (choice?: string) => void
 
     targetPlayer?: Player

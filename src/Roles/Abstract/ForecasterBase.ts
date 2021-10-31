@@ -15,7 +15,7 @@ export abstract class ForecasterBase extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResult = () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
@@ -30,7 +30,6 @@ export abstract class ForecasterBase extends RoleBase {
         this.targetPlayer = findPlayer(choice, ForecasterBase.game.players)
         this.choiceMsgEditText();
     }
-
 
     abstract forecastRoleName:(targetRole: RoleBase) => string | undefined;
 }

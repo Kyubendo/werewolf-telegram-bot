@@ -16,6 +16,8 @@ export class GuardianAngel extends RoleBase {
     numberOfAttacks: number = 0;
 
     action = () => {
+        this.targetPlayer = undefined;
+        this.numberOfAttacks = 0;
         GuardianAngel.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь защитить?',
@@ -32,17 +34,18 @@ export class GuardianAngel extends RoleBase {
         if (this.targetPlayer.role instanceof SerialKiller ||
             (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))
             this.onKilled(this.player)
-        else {
-            if (!this.numberOfAttacks) {
-                GuardianAngel.game.bot.sendMessage(
-                    this.player.id,
-                    `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
-                    'поэтому ничего не произошло особо...'
-                )
-            }
+    }
+
+    actionResult = () => {
+        if (!this.targetPlayer?.role) return;
+
+        if (!this.numberOfAttacks) {
+            GuardianAngel.game.bot.sendMessage(
+                this.player.id,
+                `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
+                'поэтому ничего не произошло особо...'
+            )
         }
-        this.numberOfAttacks = 0;
-        this.targetPlayer = undefined; // В таком случае actionResolve ангела должен идти последним
     }
 
     handleChoice = (choice?: string) => {

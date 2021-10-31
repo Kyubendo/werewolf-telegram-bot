@@ -9,14 +9,15 @@ import {RoleBase} from "../Abstract/RoleBase";
 export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
     roleIntroductionText = () => `Ах ты ${this.roleName}! `
-    startMessageText = () =>`Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
+    startMessageText = () => `Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
         'Но, если зло выберет того, к кому ты пошла, вы оба умрете! А если волки выберут тебя, а дома ' +
         'тебя не будет, ты останешься жить, логично...';
     weight = () => 6;
 
-    
 
     action = () => {
+        this.targetPlayer = undefined;
+
         Harlot.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь навестить?',
@@ -32,22 +33,21 @@ export class Harlot extends RoleBase {
 
         if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
             this.onKilled(this.targetPlayer);
-        else {
-            if (this.targetPlayer) {
-                Harlot.game.bot.sendMessage(
-                    this.player.id,
-                    `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
-                    `не серийный убийца, потому что ночь была слишком хороша...`,
-                )
-                Harlot.game.bot.sendMessage(
-                    this.targetPlayer.id,
-                    'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
-                    'И вы оба хорошо провели время!' // GIF
-                )
-            }
-        }
+    }
 
-        this.targetPlayer = undefined;
+    actionResult = () => {
+        if (!this.targetPlayer?.role) return;
+
+        Harlot.game.bot.sendMessage(
+            this.player.id,
+            `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
+            `не серийный убийца, потому что ночь была слишком хороша...`,
+        )
+        Harlot.game.bot.sendMessage(
+            this.targetPlayer.id,
+            'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
+            'И вы оба хорошо провели время!' // GIF
+        )
     }
 
     handleChoice = (choice?: string) => {

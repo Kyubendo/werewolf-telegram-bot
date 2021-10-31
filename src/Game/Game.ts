@@ -77,6 +77,9 @@ export class Game {
         }
 
         this.checkNightDeaths(nextStage)
+
+        this.runResults(); // check the position of runResults later
+
         this.stage = nextStage
 
         setTimeout(this.runActions, 30)
@@ -117,6 +120,13 @@ export class Game {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
                 .forEach(player => player.role?.action && player.role.action())
+        }
+    }
+
+    private runResults = () => {
+        for (const role of roleResolves(this.stage)) {
+            this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+                .forEach(player => player.role?.actionResult && player.role.actionResult())
         }
     }
 

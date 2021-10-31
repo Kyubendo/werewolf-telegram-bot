@@ -13,7 +13,7 @@ export class Sorcerer extends ForecasterBase {
         'Наслаждайся убийством несчастных сельских жителей.'
     weight = () => -2;
 
-    actionResolve = () => {
+    actionResult = () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
         Sorcerer.game.bot.sendMessage(
