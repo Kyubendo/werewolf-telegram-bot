@@ -12,7 +12,7 @@ export class WiseElder extends ForecasterBase {
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
     weight = () => 5;
 
-    actionResolve = () => {
+    actionResult = () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 

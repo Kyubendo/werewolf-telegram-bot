@@ -13,7 +13,7 @@ import {ForecasterBase} from "../Abstract/ForecasterBase";
 export class Seer extends ForecasterBase {
     roleName = 'Провидец 👳';
     roleIntroductionText = () => 'Ты Провидец 👳! ';
-    startMessageText = () => `Ты Провидец 👳! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
+    startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
 
     originalHandleDeath = (killer?: Player): boolean => {
