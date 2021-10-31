@@ -64,17 +64,17 @@ export class Game {
 
         this.clearSelects()
 
-        const endGame = checkEndGame(this.players, this.stage)
-        if (endGame) {
-            setWinners(endGame.winners, this.players)
-            this.bot.sendAnimation(
-                this.chatId,
-                endGameMessage[endGame.type].gif,
-                {caption: endGameMessage[endGame.type].text}
-            ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.onEnd()))
-            this.stageTimer && clearTimeout(this.stageTimer)
-            return
-        }
+        // const endGame = checkEndGame(this.players, this.stage)
+        // if (endGame) {
+        //     setWinners(endGame.winners, this.players)
+        //     this.bot.sendAnimation(
+        //         this.chatId,
+        //         endGameMessage[endGame.type].gif,
+        //         {caption: endGameMessage[endGame.type].text}
+        //     ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.onEnd()))
+        //     this.stageTimer && clearTimeout(this.stageTimer)
+        //     return
+        // }
 
         this.checkNightDeaths(nextStage)
 

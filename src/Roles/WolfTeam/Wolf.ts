@@ -8,7 +8,7 @@ import {Beauty} from "../Villagers/Beauty";
 export class Wolf extends RoleBase {
     findOtherWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Wolf
-        // && otherPlayer !== this.player
+        && otherPlayer !== this.player
         && otherPlayer.isAlive
     )
 
