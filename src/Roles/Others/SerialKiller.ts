@@ -13,6 +13,8 @@ export class SerialKiller extends RoleBase {
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -14; // change?
 
+    nightActionDone = false
+
     killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
         `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
         `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
@@ -65,5 +67,6 @@ export class SerialKiller extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, SerialKiller.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

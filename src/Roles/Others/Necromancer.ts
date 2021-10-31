@@ -8,6 +8,8 @@ export class Necromancer extends RoleBase {
         'Но выбирай мудро, так как ты не можешь выиграть как Некромант.'
     weight = () => 3;
 
+    nightActionDone = false
+
     action = () => {
         const deadPlayers = Necromancer.game.players
             .filter(player => !player.isAlive);
@@ -32,5 +34,6 @@ export class Necromancer extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Necromancer.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

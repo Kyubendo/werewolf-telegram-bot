@@ -28,6 +28,8 @@ export class Wolf extends RoleBase {
 
     weight = () => -10;
 
+    nightActionDone = false
+
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
         `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`
     killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF

@@ -16,6 +16,8 @@ export class Martyr extends RoleBase {
         'только если этот человек выиграет.'
     weight = () => 6;
 
+    nightActionDone = false
+
     targetKiller?: Player
     diedForTarget: boolean = false
 
@@ -104,5 +106,6 @@ export class Martyr extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Martyr.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

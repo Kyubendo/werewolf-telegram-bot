@@ -12,6 +12,7 @@ export class GuardianAngel extends RoleBase {
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
+    nightActionDone = false
 
     numberOfAttacks: number = 0;
 
@@ -53,6 +54,7 @@ export class GuardianAngel extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, GuardianAngel.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 
     originalHandleDeath = (killer?: Player): boolean => {

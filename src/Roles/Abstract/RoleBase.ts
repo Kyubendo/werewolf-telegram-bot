@@ -36,11 +36,14 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
+    nightActionDone?: boolean
+
     readonly onKilled = (killer?: Player, type?: DeathType) => {
         if (!this.player.isAlive) return
         console.log(`onKilled: ${this.player.name}, ${type}`)
         if (this.handleDeath(killer, type)) {
-            /*type !== 'lover_death' && */ this.movePlayer();
+            /*type !== 'lover_death' && */
+            this.movePlayer();
             this.killLover('lover_death')
         }
     }
@@ -110,6 +113,11 @@ export abstract class RoleBase {
             return false;
         }
         return true;
+    }
+
+    doneNightAction = () => {
+        this.nightActionDone = true
+        if (!RoleBase.game.players.find(p => p.role?.nightActionDone === false)) RoleBase.game.setNextStage()
     }
 
     checkHarlotDeath = (killer: Player) => {
