@@ -12,6 +12,14 @@ export class Sandman extends RoleBase {
         sleep: undefined
     }
 
+    actionAnnouncement = () => ({
+        message: 'Пока жители деревни обсуждают события прошедшей ночи, ' +
+            `${this.player} возвращается в дом и начинает ` +
+            'напевать мягкую мелодию. Сегодня ночью все будут спать очень глубоко, ' +
+            'и никто не сможет выполнить свои ночные действия.',
+        gif: 'https://media.giphy.com/media/fvJIuEVeNjpYs/giphy.gif'
+    })
+
     action = () => {
         if (this.specialCondition.sleep === false) return;
         if (this.specialCondition.sleep) {
@@ -48,12 +56,9 @@ export class Sandman extends RoleBase {
         this.specialCondition.sleep = true;
         this.choiceMsgEditText();
 
-        Sandman.game.bot.sendMessage(
+        Sandman.game.bot.sendAnimation(
             Sandman.game.chatId,
-            'Пока жители деревни обсуждают события прошедшей ночи, ' +
-            `${this.player} возвращается в дом и начинает ` +
-            'напевать мягкую мелодию. Сегодня ночью все будут спать очень глубоко, ' +
-            'и никто не сможет выполнить свои ночные действия.'
+            this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
         )
     }
 

@@ -17,8 +17,16 @@ export class Blacksmith extends RoleBase {
         : Blacksmith.game.players.filter(player => player.role instanceof Traitor) // Or WildChild
             ? 4
             : 3
-    
 
+    actionAnnouncement = () => ({
+        message: 'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +
+            `как ${highlightPlayer(this.player)} блуждает вокруг и ` +
+            'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
+            'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)',
+        gif: 'https://media.giphy.com/media/dUBR5zjuoZwBChZ1aC/giphy.gif'
+    })
+
+    silverDust ?: boolean;
     specialCondition: specialConditionBlacksmith = {
         silverDust: undefined
     }
@@ -60,12 +68,9 @@ export class Blacksmith extends RoleBase {
         this.specialCondition.silverDust = true;
         this.choiceMsgEditText();
 
-        Blacksmith.game.bot.sendMessage(
+        Blacksmith.game.bot.sendAnimation(
             Blacksmith.game.chatId,
-            'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +
-            `как ${highlightPlayer(this.player)} блуждает вокруг и ` +
-            'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
-            'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)' // GIF
+            this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
         )
     }
 

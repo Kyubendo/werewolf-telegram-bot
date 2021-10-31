@@ -1,6 +1,6 @@
 import {
     Blacksmith,
-    Detective,
+    Detective, Doppelganger,
     GuardianAngel,
     Gunner,
     Harlot,
@@ -27,7 +27,7 @@ export const roleResolves = (stage: GameStage) => {
 }
 
 const dayRoleResolves = [
-    Martyr, WildChild,  // WildChild, // constant choices
+    Martyr, WildChild, Doppelganger,  // WildChild, // constant choices
     Monarch,
     Gunner,
     WiseElder, Detective,
@@ -39,7 +39,7 @@ const nightRoleResolves = [
     // PuppetMaster,
     // Jack
     Harlot, //Prowler
-    Martyr, WildChild, // constant choices
+    Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
     Thief, Necromancer,
     Wolf,

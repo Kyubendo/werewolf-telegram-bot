@@ -15,6 +15,15 @@ export class Monarch extends RoleBase {
         comingOut: undefined
     }
 
+    actionAnnouncement = () => ({
+        message: `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +
+            `шаг вперед, предлагая всем внимательно посмотреть на корону, которую он прятал раньше.\n` +
+            `Сегодня *${this.roleName}* решит, кого казнить.`,
+        gif: 'https://media.giphy.com/media/okLCopqw6ElCDnIhuS/giphy.gif'
+    })
+
+    comingOut?: boolean;
+
     action = () => {
         if (this.specialCondition.comingOut === false) return;
 
@@ -46,11 +55,9 @@ export class Monarch extends RoleBase {
         this.specialCondition.comingOut = true;
         this.choiceMsgEditText();
 
-        Monarch.game.bot.sendMessage(
+        Monarch.game.bot.sendAnimation(
             Monarch.game.chatId,
-            `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +
-            `шаг вперед, предлагая всем внимательно посмотреть на корону, которую он прятал раньше.\n` +
-            `Сегодня *${this.roleName}* решит, кого казнить.`, // GIF
+            this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
         )
     }
 

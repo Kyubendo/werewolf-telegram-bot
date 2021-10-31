@@ -4,6 +4,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {SerialKiller, Wolf} from "../index";
 import {Player} from "../../Player/Player";
 import {RoleBase} from "../Abstract/RoleBase";
+import {Beauty} from "./Beauty";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
@@ -11,11 +12,12 @@ export class GuardianAngel extends RoleBase {
         '50% вероятности что тебя съедят, если выберешь их.';
     weight = () => 7;
 
-    
 
     numberOfAttacks: number = 0;
 
     action = () => {
+        this.targetPlayer = undefined;
+        this.numberOfAttacks = 0;
         GuardianAngel.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь защитить?',
@@ -29,20 +31,23 @@ export class GuardianAngel extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer.role instanceof SerialKiller ||
-            (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5))
-            this.onKilled(this.player)
-        else {
-            if (!this.numberOfAttacks) {
-                GuardianAngel.game.bot.sendMessage(
-                    this.player.id,
-                    `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
-                    'поэтому ничего не произошло особо...'
-                )
-            }
+        if (this.targetPlayer.role instanceof SerialKiller || (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
+            this.onKilled(this.player);
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer); 
         }
-        this.numberOfAttacks = 0;
-        this.targetPlayer = undefined; // В таком случае actionResolve ангела должен идти последним
+    }
+
+    actionResult = () => {
+        if (!this.targetPlayer?.role) return;
+
+        if (!this.numberOfAttacks) {
+            GuardianAngel.game.bot.sendMessage(
+                this.player.id,
+                `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
+                'поэтому ничего не произошло особо...'
+            )
+        }
     }
 
     handleChoice = (choice?: string) => {
@@ -50,7 +55,7 @@ export class GuardianAngel extends RoleBase {
         this.choiceMsgEditText();
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         this.player.isAlive = false;
 
         if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)

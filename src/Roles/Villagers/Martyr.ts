@@ -40,7 +40,8 @@ export class Martyr extends RoleBase {
 
     actionResolve = () => {
         if (!this.specialCondition.protectedPlayer?.role) {
-            this.specialCondition.protectedPlayer = randomElement(Martyr.game.players.filter(p => p !== this.player))
+            this.specialCondition.protectedPlayer = randomElement(Martyr.game.players
+                .filter(p => p !== this.player && p.isAlive))
             Martyr.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
                 `за тебя — ${highlightPlayer(this.specialCondition.protectedPlayer)}`,
@@ -73,19 +74,20 @@ export class Martyr extends RoleBase {
         }
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
+        console.log(this.targetPlayer?.name)
         if (killer === this.player && this.specialCondition.protectedPlayer) {
-            let deathMessage
+            let deathMessage: string | undefined
             if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.specialCondition.protectedPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
                 + `закончилось, они увидели мертвое тело ${highlightPlayer(this.player)} на виселице, в то время как `
                 + `${highlightPlayer(this.specialCondition.protectedPlayer)} стоит рядом как ни в чем не бывало.`
             else if (this.protectedPlayerKiller.role instanceof SerialKiller || this.protectedPlayerKiller.role instanceof Wolf) deathMessage = `Селяне собрались `
                 + `на следующее утро и увидели лежащее на площади тело Мученицы ${highlightPlayer(this.player)}. `
-                + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью ${this.roleName} умерла за `
+                + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью *${this.roleName}* умерла за `
                 + `другого человека.`
             else if (this.protectedPlayerKiller.role instanceof Gunner) deathMessage = `Вдруг раздался оглушительный выстрел, и все на площади `
-                + `увидели, как ${this.protectedPlayerKiller.role.roleName} ${highlightPlayer(this.protectedPlayerKiller)} все еще целится в голову `
+                + `увидели, как *${this.protectedPlayerKiller.role.roleName}* ${highlightPlayer(this.protectedPlayerKiller)} все еще целится в голову `
                 + `${highlightPlayer(this.specialCondition.protectedPlayer)}… Но промахивается и попадает в ${highlightPlayer(this.player)}, в `
                 + `то время как ${highlightPlayer(this.specialCondition.protectedPlayer)} стоит абсолютно невредим(а).`
             // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `
@@ -94,10 +96,13 @@ export class Martyr extends RoleBase {
             //     + `и невредимый(ая).`
 
             setTimeout(
-                (deathMessage) => deathMessage && Martyr.game.bot.sendMessage(Martyr.game.chatId, deathMessage),
+                (deathMessage) => deathMessage && Martyr.game.bot
+                    .sendMessage(Martyr.game.chatId, deathMessage),
                 25,
                 deathMessage
             )
+            this.player.isAlive = false;
+            return true;
         }
         return super.handleDeath(killer)
     }
