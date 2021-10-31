@@ -34,8 +34,8 @@ export const assignRoles = (game: Game) => {
     ]
 
     const testPool = [
-
         GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
+
         Beholder, // Passive Villagers
 
         Seer, Monarch, Fool, Harlot, Oracle, Gunner, GuardianAngel,
