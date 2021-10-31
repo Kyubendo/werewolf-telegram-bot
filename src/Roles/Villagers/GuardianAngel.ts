@@ -50,7 +50,7 @@ export class GuardianAngel extends RoleBase {
         this.choiceMsgEditText();
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         this.player.isAlive = false;
 
         if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)

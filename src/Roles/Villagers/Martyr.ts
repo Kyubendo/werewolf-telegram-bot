@@ -68,9 +68,10 @@ export class Martyr extends RoleBase {
         }
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
+        console.log(this.targetPlayer?.name)
         if (killer === this.player && this.targetPlayer) {
-            let deathMessage
+            let deathMessage = 'fdafdaf'
             if (!this.targetKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
                 + `закончилось, они увидели мертвое тело ${highlightPlayer(this.player)} на виселице, в то время как `
@@ -88,11 +89,9 @@ export class Martyr extends RoleBase {
             //     + `${highlightPlayer(this.player)}, в то время как ${highlightPlayer(this.targetPlayer)} стоит целый(ая) `
             //     + `и невредимый(ая).`
 
-            setTimeout(
-                (deathMessage) => deathMessage && Martyr.game.bot.sendMessage(Martyr.game.chatId, deathMessage),
-                25,
-                deathMessage
-            )
+            Martyr.game.bot.sendMessage(Martyr.game.chatId, deathMessage)
+            this.player.isAlive = false;
+            return true;
         }
         return super.handleDeath(killer)
     }

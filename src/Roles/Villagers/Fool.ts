@@ -17,7 +17,7 @@ export class Fool extends Seer {
         }
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         this.player.isAlive = false;
         Fool.game.bot.sendMessage(
             Fool.game.chatId,
