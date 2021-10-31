@@ -27,7 +27,8 @@ export class WildChild extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer?.role) {
-            this.targetPlayer = randomElement(WildChild.game.players.filter(player => player !== this.player)) // player.isAlive probably redundant because of roleResolves order
+            this.targetPlayer = randomElement(WildChild.game.players
+                .filter(player => player !== this.player && player.isAlive)) // player.isAlive probably redundant because of roleResolves order
             WildChild.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
                 `за тебя — ${highlightPlayer(this.targetPlayer)}`,
@@ -55,9 +56,9 @@ export class WildChild extends RoleBase {
                 )
 
                 this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
-                        player.id,
-                        `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
-                    ))
+                    player.id,
+                    `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
+                ))
             }
 
             return currentTargetHandleDeath(killer);
