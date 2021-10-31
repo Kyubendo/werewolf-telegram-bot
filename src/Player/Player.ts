@@ -15,8 +15,9 @@ export class Player {
     readonly id: number;
     readonly name: string;
     readonly username?: string;
-    isAlive: boolean;
-    isFrozen: boolean;
+    isAlive: boolean = true;
+    isFrozen: boolean = false;
+    won: boolean = false;
     role?: RoleBase;
 
     infected: boolean = false;
@@ -30,7 +31,7 @@ export class Player {
             this.id,
             'С наступлением ночи ты испытал(а) странное покалывание, ноющее чувство, пронзающее все тело, ' +
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
-            + (this instanceof Wolf ? this.showWolfPlayers() : '') // check this line later
+            + (this.role instanceof Wolf && this.role.showOtherWolfPlayers()) // check this line later
         )
     }
 }

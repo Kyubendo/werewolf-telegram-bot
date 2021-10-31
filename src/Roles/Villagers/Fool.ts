@@ -2,6 +2,7 @@ import {Seer} from "./Seer";
 import {findPlayer} from "../../Game/findPlayer";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {randomElement} from "../../Utils/randomElement";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
@@ -10,15 +11,13 @@ export class Fool extends Seer {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Fool.game.players);
         this.choiceMsgEditText();
-        if (Math.random() >= 0.5) // 50% for right guess
-            return;
-        else {
+        if (Math.random() >= 0.5) { // 50% for right guess
             const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
-            this.targetPlayer = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+            this.targetPlayer = randomElement(otherPlayers);
         }
     }
 
-    handleDeath(killer?: Player): boolean {
+    handleDeath = (killer?: Player): boolean => {
         this.player.isAlive = false;
         Fool.game.bot.sendMessage(
             Fool.game.chatId,

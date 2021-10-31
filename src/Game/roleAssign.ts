@@ -6,14 +6,17 @@ export const assignRoles = (game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const rolePool = [
-        Roles.AlphaWolf, Roles.Oracle, Roles.WiseElder, Roles.GuardianAngel,
+        Roles.Monarch,Roles.Martyr, Roles.Villager, Roles.SerialKiller, Roles.GuardianAngel, Roles.Villager,
 
         Roles.Villager, Roles.ClumsyGuy, Roles.Cursed, Roles.Traitor, Roles.WoodMan, Roles.Mason,
         Roles.Beholder, // Passive Villagers
+      
         Roles.Seer, Roles.Fool, Roles.Monarch, Roles.Harlot, Roles.Oracle, Roles.Gunner, Roles.GuardianAngel,
-        Roles.WiseElder, // Active Villagers
-        Roles.Wolf, Roles.Lycan, Roles.AlphaWolf, // WolfTeam
-        Roles.Suicide, Roles.SerialKiller, Roles.Thief // Other
+        Roles.WiseElder, Roles.Sandman, Roles.Blacksmith, Roles.WildChild, // Active Villagers
+
+        Roles.Wolf, Roles.Lycan, Roles.Sorcerer, Roles.AlphaWolf,// WolfTeam
+
+        Roles.Suicide, Roles.SerialKiller, Roles.Thief, Roles.Necromancer, // Other
     ]
     for (let i = rolePool.length; i < players.length; i++) rolePool.push(Roles.Villager)
 

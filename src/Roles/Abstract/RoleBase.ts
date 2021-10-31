@@ -12,7 +12,7 @@ export abstract class RoleBase {
 
     abstract readonly roleName: string
     abstract readonly weight: () => number
-    readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
+    readonly roleIntroductionText = () => `Ты ${this.roleName}! `;
     abstract readonly startMessageText: () => string
 
     readonly previousRole?: RoleBase;
@@ -28,8 +28,7 @@ export abstract class RoleBase {
 
     readonly onKilled = (killer?: Player) => {
         if (!this.player.isAlive) return
-        const playerDied = killer ? this.handleDeath(killer) : this.handleLynchDeath()
-        playerDied && this.movePlayer()
+        this.handleDeath(killer) && this.movePlayer()
     }
 
     readonly handleGuardianAngel = (killer: Player) => {
@@ -92,8 +91,8 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath(killer?: Player): boolean {
-        if (killer?.role !== this) {
+    handleDeath = (killer?: Player): boolean => {
+        if (killer?.role) {
             killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 killer.role.killMessageAll(this.player)
@@ -104,21 +103,21 @@ export abstract class RoleBase {
                 killer.role.killMessageDead
             );
         }
+        if (!killer) {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+                + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`
+            )
+        }
         this.player.isAlive = false;
         return true;
     }
-
-    handleLynchDeath() {
-        RoleBase.game.bot.sendMessage(
-            RoleBase.game.chatId,
-            `Жители отдали свои голоса в подозрениях и сомнениях... \n`
-            + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`)
-        return this.player.role?.handleDeath()
-    }
+    readonly originalHandleDeath = this.handleDeath
 
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(
-            `Выбор принят: ${this.targetPlayer
+            `Выбор принят — ${this.targetPlayer
                 ? highlightPlayer(this.targetPlayer)
                 : 'Пропустить'}.`,
             {
