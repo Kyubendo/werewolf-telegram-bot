@@ -15,8 +15,10 @@ export class WildChild extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        if (this.targetPlayer?.role) return;
-
+        if (this.targetPlayer?.role) {
+            this.nightActionDone = true
+            return
+        }
         WildChild.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь выбрать своим примером?',

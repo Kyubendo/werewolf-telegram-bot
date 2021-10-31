@@ -103,6 +103,9 @@ export class Game {
     }
 
     private runActions = () => {
+        if (this.stage === 'night') this.players.forEach(p => {
+            if (p.role?.nightActionDone) p.role.nightActionDone = false
+        })
         if (this.stage !== 'lynch') { // change?
             this.players
                 .filter(player => player.isAlive)
@@ -137,8 +140,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.choiceMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )

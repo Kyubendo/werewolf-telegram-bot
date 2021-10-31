@@ -22,7 +22,10 @@ export class Martyr extends RoleBase {
     diedForTarget: boolean = false
 
     action = () => {
-        if (this.targetPlayer?.role) return
+        if (this.targetPlayer?.role) {
+            this.nightActionDone = true
+            return
+        }
 
         Martyr.game.bot.sendMessage(
             this.player.id,
