@@ -3,6 +3,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {RoleBase} from "../Abstract/RoleBase";
+import {specialConditionGunner} from "../../Utils/specialConditionTypes";
 
 export class Gunner extends RoleBase {
     roleName = "Стрелок 🔫";
@@ -17,10 +18,12 @@ export class Gunner extends RoleBase {
         `${highlightPlayer(deadPlayer)} был(а) **${deadPlayer.role?.roleName}**!`
 
 
-    ammo = 2;
+    specialCondition: specialConditionGunner = {
+        ammo: 2
+    }
 
     action = () => {
-        if (!this.ammo) return;
+        if (!this.specialCondition.ammo) return;
 
         Gunner.game.bot.sendMessage(
             this.player.id,
@@ -37,7 +40,7 @@ export class Gunner extends RoleBase {
 
         this.targetPlayer.role.onKilled(this.player);
 
-        this.ammo--;
+        this.specialCondition.ammo--;
 
         this.targetPlayer = undefined;
     }

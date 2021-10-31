@@ -32,7 +32,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
         return {winners: villagersTeamPlayers, type: 'villagers'}
     }
 
-    alivePlayers.find(p => p.role instanceof Gunner && p.role.ammo) && nonWolfKillers.push(Gunner)
+    alivePlayers.find(p => p.role instanceof Gunner && p.role.specialCondition.ammo) && nonWolfKillers.push(Gunner)
     const aliveUniqueKillers = [...new Set(alivePlayers
         .filter(p => nonWolfKillers.find(k => p.role instanceof k))
         .map(p => p.role!.constructor))]
@@ -74,6 +74,6 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
 export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
-    const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForTarget)
+    const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForProtectedPlayer)
     for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm.targetPlayer && !!~winners.indexOf(sm.targetPlayer)
 }

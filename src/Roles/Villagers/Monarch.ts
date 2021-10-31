@@ -1,5 +1,6 @@
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
+import {specialConditionMonarch} from "../../Utils/specialConditionTypes";
 
 export class Monarch extends RoleBase {
     roleName = 'Монарх 🤴';
@@ -10,13 +11,15 @@ export class Monarch extends RoleBase {
         `вершить правосудие лично.`
     weight = () => 3;
 
-    comingOut?: boolean;
+    specialCondition: specialConditionMonarch = {
+        comingOut: undefined
+    }
 
     action = () => {
-        if (this.comingOut === false) return;
+        if (this.specialCondition.comingOut === false) return;
 
-        if (this.comingOut) { // Изменить переопределение comingOut после добавления голосования
-            this.comingOut = false;
+        if (this.specialCondition.comingOut) { // Изменить переопределение comingOut после добавления голосования
+            this.specialCondition.comingOut = false;
             return;
         }
 
@@ -40,7 +43,7 @@ export class Monarch extends RoleBase {
             return;
         }
 
-        this.comingOut = true;
+        this.specialCondition.comingOut = true;
         this.choiceMsgEditText();
 
         Monarch.game.bot.sendMessage(
@@ -53,7 +56,7 @@ export class Monarch extends RoleBase {
 
     choiceMsgEditText = () => {
         Monarch.game.bot.editMessageText(
-            `Выбор принят — ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
+            `Выбор принят — ${this.specialCondition.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,

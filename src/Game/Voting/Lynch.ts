@@ -16,7 +16,7 @@ export class Lynch extends VotingBase {
     voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive
 
     getActiveMonarchs = () => this.game.players
-        .filter(player => player.role instanceof Monarch && player.role.comingOut && player.isAlive);
+        .filter(player => player.role instanceof Monarch && player.role.specialCondition.comingOut && player.isAlive);
 
     handleVotingChoiceResult = () => {
         this.game.bot.sendMessage(

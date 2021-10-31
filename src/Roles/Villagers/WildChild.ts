@@ -5,6 +5,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {findPlayer} from "../../Game/findPlayer";
+import {specialConditionWildChild} from "../../Utils/specialConditionTypes";
 
 export class WildChild extends RoleBase {
     roleName = 'Дикий ребёнок 👶';
@@ -12,8 +13,12 @@ export class WildChild extends RoleBase {
     startMessageText = () => 'Выбери любого игрока, чтобы он стал твоим "примером". Если он умрет, ты станешь волком!'
     weight = () => -1;
 
+    specialCondition: specialConditionWildChild = {
+        roleModel: undefined
+    }
+    
     action = () => {
-        if (this.targetPlayer?.role) return;
+        if (this.specialCondition.roleModel?.role) return;
 
         WildChild.game.bot.sendMessage(
             this.player.id,
@@ -26,11 +31,11 @@ export class WildChild extends RoleBase {
     }
 
     actionResolve = () => {
-        if (!this.targetPlayer?.role) {
-            this.targetPlayer = randomElement(WildChild.game.players.filter(player => player !== this.player)) // player.isAlive probably redundant because of roleResolves order
+        if (!this.specialCondition.roleModel?.role) {
+            this.specialCondition.roleModel = randomElement(WildChild.game.players.filter(player => player !== this.player)) // player.isAlive probably redundant because of roleResolves order
             WildChild.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
-                `за тебя — ${highlightPlayer(this.targetPlayer)}`,
+                `за тебя — ${highlightPlayer(this.specialCondition.roleModel)}`,
                 {
                     chat_id: this.player.id,
                     message_id: this.choiceMsgId
@@ -38,18 +43,18 @@ export class WildChild extends RoleBase {
             )
         }
 
-        if (!this.targetPlayer.role) return;
+        if (!this.specialCondition.roleModel.role) return;
 
-        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
-        this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
-            if (!this.targetPlayer) return false;
+        const currentTargetHandleDeath = this.specialCondition.roleModel.role.handleDeath;
+        this.specialCondition.roleModel.role.handleDeath = (killer?: Player): boolean => {
+            if (!this.specialCondition.roleModel) return false;
 
             this.player.role = new Wolf(this.player, this.player.role);
 
             if (this.player.role instanceof Wolf) {
                 WildChild.game.bot.sendMessage(
                     this.player.id,
-                    `Твой "пример" ${highlightPlayer(this.targetPlayer)} умер! ` +
+                    `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
                     `Теперь ты ${this.player.role.roleName}! ` +
                     this.player.role.showOtherWolfPlayers()
                 )
@@ -86,7 +91,7 @@ export class WildChild extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        this.targetPlayer = findPlayer(choice, WildChild.game.players);
+        this.specialCondition.roleModel = findPlayer(choice, WildChild.game.players);
         this.choiceMsgEditText();
     }
 }

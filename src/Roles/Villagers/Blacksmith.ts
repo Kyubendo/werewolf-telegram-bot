@@ -2,6 +2,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Traitor} from "./Traitor";
+import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
 
 export class Blacksmith extends RoleBase {
     roleName = 'Кузнец ⚒';
@@ -16,16 +17,17 @@ export class Blacksmith extends RoleBase {
         : Blacksmith.game.players.filter(player => player.role instanceof Traitor) // Or WildChild
             ? 4
             : 3
+    
 
-    property = {
-        silverDust: undefined,
+    specialCondition: specialConditionBlacksmith = {
+        silverDust: undefined
     }
 
     action = () => {
-        if (this.property.silverDust === false) return;
+        if (this.specialCondition.silverDust === false) return;
 
-        if (this.property.silverDust) {
-            this.property.silverDust = false;
+        if (this.specialCondition.silverDust) {
+            this.specialCondition.silverDust = false;
             return;
         }
 
@@ -44,7 +46,7 @@ export class Blacksmith extends RoleBase {
     }
 
     actionResolve = () => {
-        if (this.property.silverDust)
+        if (this.specialCondition.silverDust)
             Blacksmith.game.players.filter(player => player.isAlive
                 && (player.role instanceof Wolf || player.infected)).forEach(player => player.isFrozen = true)
     }
@@ -55,7 +57,7 @@ export class Blacksmith extends RoleBase {
             return;
         }
 
-        this.property.silverDust = true;
+        this.specialCondition.silverDust = true;
         this.choiceMsgEditText();
 
         Blacksmith.game.bot.sendMessage(
@@ -69,7 +71,7 @@ export class Blacksmith extends RoleBase {
 
     choiceMsgEditText = () => {
         Blacksmith.game.bot.editMessageText(
-            `Выбор принят — ${this.property.silverDust ? 'Распылить' : 'Пропустить'}.`,
+            `Выбор принят — ${this.specialCondition.silverDust ? 'Распылить' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,
