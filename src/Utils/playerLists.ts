@@ -21,11 +21,11 @@ export const endPlayerList = (players: Player[]) => `Игроки:\n` + players
             role = role.previousRole
             previousRoles.push(role)
         }
-        return `${highlightPlayer(p)}: `
-            + `${p.won ? '🏆 Выиграл(а)' : '💩 Проиграл(а)'} — `
-            + `${p.isAlive ? '🙂 Жив(а)' : '💀 Мертв(а)'} — `
-            + `*${p.role?.roleName}* `
+        return `${highlightPlayer(p)}:`
+            + `\t${p.won ? '🏆 Выиграл(а)' : '💩 Проиграл(а)'}\t—`
+            + `\t${p.isAlive ? '🙂 Жив(а)' : '💀 Мертв(а)'}\t—`
+            + `\t*${p.role?.roleName}* `
             + (previousRoles.length
                 ? `(${previousRoles.map(r => r.roleName && r.roleName.match(/[\p{Emoji}\u200d]+/gu)).join(', ')})`
-                : '')
+                : '') + (p.lover ? '❤' : '')
     }).join('\n')

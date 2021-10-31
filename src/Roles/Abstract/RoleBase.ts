@@ -1,7 +1,10 @@
 import {Game} from "../../Game/Game";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner} from "../index";
+import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner, Suicide} from "../index";
+
+export type DeathType = 'lover_death' | 'lover_betrayal'; // Harlot
+
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
@@ -32,9 +35,45 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
-    readonly onKilled = (killer?: Player) => {
+    readonly onKilled = (killer?: Player, type?: DeathType) => {
         if (!this.player.isAlive) return
-        this.handleDeath(killer) && this.movePlayer()
+        console.log(`onKilled: ${this.player.name}, ${type}`)
+        if (this.handleDeath(killer, type)) {
+            /*type !== 'lover_death' && */ this.movePlayer();
+            this.killLover('lover_death')
+        }
+    }
+
+    readonly loveBind = (newLover: Player) => {
+        if (this.player.lover === this.player) return;
+        console.log(`loveBind: ${this.player.name}, ${newLover.name}`)
+        this.killLover('lover_betrayal');
+        newLover.role?.killLover('lover_betrayal');
+
+        this.player.lover = newLover;
+        newLover.lover = this.player;
+
+        this.loverMessage(this.player);
+        this.loverMessage(newLover);
+    }
+
+    readonly killLover = (type: DeathType) => {
+        if (!this.player.lover) return
+        console.log(`killLover: ${this.player.name}, ${type}`)
+
+        if (type !== 'lover_death')
+            this.player.lover.lover = undefined;
+
+        this.player.lover.role?.onKilled(this.player, type);
+    }
+
+    readonly loverMessage = (newLover: Player) => {
+        newLover.lover && RoleBase.game.bot.sendMessage(
+            newLover.id,
+            `Ты был(а) поражен(а) любовью. ${highlightPlayer(newLover.lover)} навсегда в твоей памяти ` +
+            'и любовь никогда не погаснет в твоем сердце... Ваша цель выжить! Если один из вас погибнет, ' +
+            'другой умрет из-за печали и тоски.'
+        )
     }
 
     checkGuardianAngel = (killer: Player): boolean => {
@@ -102,14 +141,42 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath = (killer?: Player): boolean => {
-        if (killer?.role) {
+    handleDeath = (killer?: Player, type?: DeathType): boolean => {
+        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`)
+        if (type === 'lover_death') {
+            killer?.role && RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Бросив взгляд на мертвое тело ${highlightPlayer(killer)}, ` +
+                `${highlightPlayer(this.player)} падает на колени и рыдает. ` +
+                `${highlightPlayer(this.player)}, не выдерживая боли, хватает ближайший пистолет и ` +
+                (this.player.role instanceof Suicide
+                    ? 'перед тем, как нажать на курок, его сердце останавливается от горя! ' +
+                    'Он не успевает покончить с собой!'
+                    : 'выстреливает в себя...') +
+                `\n${highlightPlayer(this.player)} был(а) *${this.roleName}*.`
+            )
+
+            // new message for players if their lover died
+        } else if (type === 'lover_betrayal') {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                'Жители деревни просыпаются на следующее утро и обнаруживают, ' +
+                `что ${highlightPlayer(this.player)} покончил(а) с собой прошлой ночью. ` +
+                'Возле остывающего тела лежит недописанное любовное письмо.'
+            )
+
+            killer && RoleBase.game.bot.sendMessage(
+                killer.id,
+                'Поскольку ты влюбляешься в другого(ую), ' +
+                `${highlightPlayer(this.player)} должен(на) покинуть тебя. ` +
+                'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
+            )
+        } else if (killer?.role) {
             if (killer.role instanceof Gunner)
                 killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
                     RoleBase.game.chatId,
                     killer.role.actionAnnouncement.gif, {caption: killer.role.actionAnnouncement.message}
                 )
-
             killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 killer.role.killMessageAll(this.player)
@@ -119,8 +186,7 @@ export abstract class RoleBase {
                 this.player.id,
                 killer.role.killMessageDead
             );
-        }
-        if (!killer) {
+        } else if (!killer) {
             RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 `Жители отдали свои голоса в подозрениях и сомнениях... \n`

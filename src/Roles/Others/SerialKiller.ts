@@ -4,6 +4,7 @@ import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
@@ -39,6 +40,8 @@ export class SerialKiller extends RoleBase {
     }
 
     action = () => {
+        this.targetPlayer = undefined
+
         SerialKiller.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь запихнуть пару-тройку ножей?',
@@ -52,8 +55,11 @@ export class SerialKiller extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer) return;
-        this.targetPlayer.role?.onKilled(this.player);
-        this.targetPlayer = undefined
+
+        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
+            this.loveBind(this.targetPlayer);
+        else
+            this.targetPlayer.role?.onKilled(this.player);
     }
 
     handleChoice = (choice?: string) => {
