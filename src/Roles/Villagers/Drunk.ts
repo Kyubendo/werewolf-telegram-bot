@@ -2,7 +2,7 @@ import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {SerialKiller} from "../Others/SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 
 export class Drunk extends RoleBase {
     roleName = 'Пьяница 🍻';
@@ -11,7 +11,7 @@ export class Drunk extends RoleBase {
     weight = () => Drunk.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
 
 
-    originalHandleDeath = (killer?: Player) => {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
             let text: string = ''; // change to let text be killer standard message
             if (killer?.role instanceof Wolf) {
@@ -34,6 +34,6 @@ export class Drunk extends RoleBase {
             this.player.isAlive = false;
             return true;
         }
-        return super.handleDeath(killer);
+        return this.defaultHandleDeath(killer, type);
     }
 }
