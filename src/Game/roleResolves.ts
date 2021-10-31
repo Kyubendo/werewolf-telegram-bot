@@ -3,10 +3,10 @@ import {
     Detective, Doppelganger,
     GuardianAngel,
     Gunner,
-    Harlot,
+    Harlot, JackOLantern,
     Martyr,
     Monarch, Necromancer,
-    Oracle, Sandman,
+    Oracle, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
     Thief, WildChild,
@@ -21,6 +21,8 @@ export const roleResolves = (stage: GameStage) => {
             return dayRoleResolves
         case 'night':
             return nightRoleResolves
+        case 'lynch':
+            return lynchRoleResolves
         default:
             return []
     }
@@ -36,8 +38,9 @@ const dayRoleResolves = [
 ]
 
 const nightRoleResolves = [
+    //Pumpkin,
     // PuppetMaster,
-    // Jack
+    JackOLantern,
     Harlot, //Prowler
     Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
@@ -45,4 +48,8 @@ const nightRoleResolves = [
     Wolf,
     SerialKiller,
     Sorcerer, Seer, Oracle,
+]
+
+const lynchRoleResolves = [
+    Pumpkin,
 ]

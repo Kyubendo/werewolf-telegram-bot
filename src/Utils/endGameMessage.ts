@@ -26,6 +26,10 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
         text: 'Настоящая любовь побеждает! Любовники выиграли!',
         gif: 'https://media.giphy.com/media/M2zS4fBQbxZReOhlTa/giphy.gif' // Note: placeholder
     },
+    jack: {
+        text: 'Теперь село не отличить от тыквенной грядки... Все преваритились в тыквы! Победа Джека!',
+        gif: 'https://media.giphy.com/media/rtgu0LxGT0R56/giphy.gif'
+    },
 
 }
 
