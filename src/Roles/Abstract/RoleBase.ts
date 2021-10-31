@@ -1,9 +1,10 @@
 import {Game} from "../../Game/Game";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Harlot, SerialKiller, Wolf, GuardianAngel, Suicide} from "../index";
+import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner, Suicide} from "../index";
 
 export type DeathType = 'lover_death' | 'lover_betrayal'; // Harlot
+
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
@@ -21,6 +22,12 @@ export abstract class RoleBase {
 
     readonly killMessageAll?: (deadPlayer: Player) => string
     readonly killMessageDead?: string
+
+    readonly actionAnnouncement? = {
+        message: string,
+        gif: string
+    }
+
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly handleChoice?: (choice?: string) => void
@@ -165,6 +172,11 @@ export abstract class RoleBase {
                 'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
             )
         } else if (killer?.role) {
+            if (killer.role instanceof Gunner)
+                killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
+                    RoleBase.game.chatId,
+                    killer.role.actionAnnouncement.gif, {caption: killer.role.actionAnnouncement.message}
+                )
             killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 killer.role.killMessageAll(this.player)

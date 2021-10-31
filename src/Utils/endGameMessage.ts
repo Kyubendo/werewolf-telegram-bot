@@ -7,11 +7,11 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
     },
     wolves: {
         text: 'Волки выиграли!',
-        gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
+        gif: 'https://c.tenor.com/jsmJrmp_IbYAAAAC/howl-breaking-dawn.gif',
     },
     villagers: {
         text: 'Селяне выиграли!',
-        gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
+        gif: 'https://c.tenor.com/-HtgekCqZt0AAAAd/minecraft-villager.gif',
     },
     nobody: {
         text: 'Все в деревне мертвы... ' +
@@ -26,5 +26,6 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
         text: 'Настоящая любовь побеждает! Любовники выиграли!',
         gif: 'https://media.giphy.com/media/M2zS4fBQbxZReOhlTa/giphy.gif' // Note: placeholder
     },
+
 }
 
