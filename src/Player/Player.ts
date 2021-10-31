@@ -20,6 +20,8 @@ export class Player {
     won: boolean = false;
     role?: RoleBase;
 
+    lover?: Player;
+
     infected: boolean = false;
 
     readonly transformInfected = () => {

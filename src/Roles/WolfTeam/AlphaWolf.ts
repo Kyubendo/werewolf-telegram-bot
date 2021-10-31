@@ -1,6 +1,7 @@
 import {Wolf} from "./Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
+import {Beauty} from "../Villagers/Beauty";
 
 export class AlphaWolf extends Wolf {
     roleName = 'Альфа-волк 🐺⚡';
@@ -13,9 +14,14 @@ export class AlphaWolf extends Wolf {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
+        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer);
+            return;
+        }
+
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
         this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
-            if (!this.targetPlayer || Math.random() >= 0.25) return currentTargetHandleDeath(killer);
+            if (!this.targetPlayer || Math.random() >= .25) return currentTargetHandleDeath(killer);
 
             AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
@@ -34,7 +40,7 @@ export class AlphaWolf extends Wolf {
                         `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
                         `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
                         'присоединиться к стае вместо того, ' +
-                        `чтобы умереть, и стая оставила ${this.targetPlayer} с инфекцией. ` +
+                        `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией. ` +
                         'Он(а) станет волком завтра ночью.'
                     )
             )
@@ -43,5 +49,8 @@ export class AlphaWolf extends Wolf {
 
             return false;
         }
+
+        this.targetPlayer.role?.onKilled(this.player);
+        this.targetPlayer = undefined
     }
 }

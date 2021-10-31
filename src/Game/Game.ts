@@ -77,6 +77,9 @@ export class Game {
         }
 
         this.checkNightDeaths(nextStage)
+
+        this.runResults(); // check the position of runResults later
+
         this.stage = nextStage
 
         setTimeout(this.runActions, 30)
@@ -101,13 +104,14 @@ export class Game {
 
     private runActions = () => {
         if (this.stage !== 'lynch') { // change?
-            if (this.stage === 'day')
-                this.players.forEach(player => player.isFrozen = false)
             this.players
                 .filter(player => player.isAlive)
                 .forEach(p => {
                     if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
                 })
+
+            if (this.stage === 'day')
+                this.players.forEach(player => player.isFrozen = false)
         }
         this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
@@ -120,14 +124,21 @@ export class Game {
         }
     }
 
+    private runResults = () => {
+        for (const role of roleResolves(this.stage)) {
+            this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+                .forEach(player => player.role?.actionResult && player.role.actionResult())
+        }
+    }
+
     addPlayer = (player: Player) => {
         this.players.push(player)
     }
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.choiceMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
