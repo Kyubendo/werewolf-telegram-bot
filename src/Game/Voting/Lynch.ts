@@ -1,5 +1,5 @@
 import {GameStage} from "../Game";
-import {Monarch} from "../../Roles";
+import {Monarch, Pumpkin} from "../../Roles";
 import {Player} from "../../Player/Player";
 import {VotingBase} from "./VotingBase";
 
@@ -10,7 +10,8 @@ export class Lynch extends VotingBase {
 
     getVoters = () => {
         const activeMonarchs = this.getActiveMonarchs()
-        return activeMonarchs.length ? activeMonarchs : this.game.players.filter(p => p.isAlive)
+        return activeMonarchs.length ? activeMonarchs : this.game.players
+            .filter(p => p.isAlive && !(p.role instanceof Pumpkin))
     }
 
     voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive
@@ -30,6 +31,6 @@ export class Lynch extends VotingBase {
         voteResult.length === 1
             ? voteResult[0].role?.onKilled()
             : this.game.bot.sendMessage(this.game.chatId,
-            'Не удалось придти к одному решению! Расстроенная толпа расходится по домам...')
+                'Не удалось придти к одному решению! Расстроенная толпа расходится по домам...')
     }
 }

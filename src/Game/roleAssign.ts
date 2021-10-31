@@ -5,7 +5,7 @@ import {
     AlphaWolf,
     Beholder, Blacksmith,
     ClumsyGuy,
-    Cursed, Fool, GuardianAngel, Gunner, Harlot, Lycan,
+    Cursed, Fool, GuardianAngel, Gunner, Harlot, JackOLantern, Lycan,
     Mason, Monarch, Necromancer, Oracle, Sandman, Seer,
     SerialKiller,
     Sorcerer, Suicide, Thief,
@@ -18,12 +18,12 @@ export const assignRoles = (game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const killersPool = [
-        Wolf, Lycan, SerialKiller, AlphaWolf,
+        Wolf, Lycan, SerialKiller, AlphaWolf, JackOLantern,
     ]
     const wolfNeededRoles = [Sorcerer, Traitor]
     const evilPool = [...killersPool, Sorcerer]
     const villagersPool = [
-
+        Villager,
         Villager, ClumsyGuy, Cursed, WoodMan, Mason,
         Beholder, // Passive Villagers
 
@@ -34,7 +34,7 @@ export const assignRoles = (game: Game) => {
     ]
 
     const testPool = [
-        GuardianAngel, Wolf, Seer, Cursed, WoodMan, Mason,
+        JackOLantern, Oracle, Villager, GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
 
         Beholder, // Passive Villagers
 

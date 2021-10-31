@@ -7,6 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {checkEndGame, setWinners} from "./checkEndGame";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {endGameMessage} from "../Utils/endGameMessage";
+import {JackOLantern, Pumpkin} from "../Roles";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -95,6 +96,17 @@ export class Game {
     private runResolves = () => {
         this.lynch?.handleVoteEnd()
         this.wolfFeast?.handleVoteEnd()
+
+        // this.players.filter(player => player.role instanceof Pumpkin).forEach(pumpkinPlayer => {
+        //     console.log('тыква')
+        //     if (Math.random() >= 0.25)
+        //         pumpkinPlayer.role = pumpkinPlayer.role?.previousRole?.createThisRole(pumpkinPlayer, pumpkinPlayer.role);
+        //     else
+        //         pumpkinPlayer.role = new JackOLantern(pumpkinPlayer, pumpkinPlayer.role);
+        //     console.log(pumpkinPlayer.role?.roleName)
+        // }) // Note: change to lynch actions
+
+
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && player.role instanceof role)
