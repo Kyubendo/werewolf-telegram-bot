@@ -11,7 +11,6 @@ export class Wolf extends RoleBase {
         && otherPlayer.isAlive
     )
 
-
     showOtherWolfPlayers(): string {
         const allies = this.findOtherWolfPlayers();
         if (!allies.length)

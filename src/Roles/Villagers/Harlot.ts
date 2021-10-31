@@ -17,6 +17,8 @@ export class Harlot extends RoleBase {
 
 
     action = () => {
+        this.targetPlayer = undefined;
+
         Harlot.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь навестить?',
@@ -48,8 +50,21 @@ export class Harlot extends RoleBase {
                 )
             }
         }
+    }
 
-        this.targetPlayer = undefined;
+    actionResult = () => {
+        if (!this.targetPlayer?.role) return;
+
+        Harlot.game.bot.sendMessage(
+            this.player.id,
+            `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
+            `не серийный убийца, потому что ночь была слишком хороша...`,
+        )
+        Harlot.game.bot.sendMessage(
+            this.targetPlayer.id,
+            'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
+            'И вы оба хорошо провели время!' // GIF
+        )
     }
 
     handleChoice = (choice?: string) => {

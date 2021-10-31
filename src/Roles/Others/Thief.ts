@@ -24,6 +24,7 @@ export class Thief extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
+
         if (!this.targetPlayer.isAlive) {
             Thief.game.bot.sendMessage(
                 this.player.id,

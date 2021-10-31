@@ -31,19 +31,22 @@ export class GuardianAngel extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer.role instanceof SerialKiller ||
-            (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
+        if (this.targetPlayer.role instanceof SerialKiller || (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
             this.onKilled(this.player);
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.loveBind(this.targetPlayer);
-        } else {
-            if (!this.numberOfAttacks) {
-                GuardianAngel.game.bot.sendMessage(
-                    this.player.id,
-                    `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а), ` +
-                    'поэтому ничего не произошло особо...'
-                )
-            }
+            this.loveBind(this.targetPlayer); 
+        }
+    }
+
+    actionResult = () => {
+        if (!this.targetPlayer?.role) return;
+
+        if (!this.numberOfAttacks) {
+            GuardianAngel.game.bot.sendMessage(
+                this.player.id,
+                `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
+                'поэтому ничего не произошло особо...'
+            )
         }
     }
 

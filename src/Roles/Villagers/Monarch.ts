@@ -10,12 +10,12 @@ export class Monarch extends RoleBase {
         `вершить правосудие лично.`
     weight = () => 3;
 
-    actionAnnouncement = {
+    actionAnnouncement = () => ({
         message: `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +
             `шаг вперед, предлагая всем внимательно посмотреть на корону, которую он прятал раньше.\n` +
             `Сегодня *${this.roleName}* решит, кого казнить.`,
         gif: 'https://media.giphy.com/media/okLCopqw6ElCDnIhuS/giphy.gif'
-    }
+    })
 
     comingOut?: boolean;
 
@@ -52,7 +52,7 @@ export class Monarch extends RoleBase {
 
         Monarch.game.bot.sendAnimation(
             Monarch.game.chatId,
-            this.actionAnnouncement.gif, { caption: this.actionAnnouncement.message }
+            this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
         )
     }
 
