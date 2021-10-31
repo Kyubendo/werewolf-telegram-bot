@@ -23,7 +23,7 @@ export abstract class RoleBase {
     readonly killMessageAll?: (deadPlayer: Player) => string
     readonly killMessageDead?: string
 
-    readonly actionAnnouncement? = {
+    readonly actionAnnouncement?: () => {
         message: string,
         gif: string
     }
@@ -176,7 +176,7 @@ export abstract class RoleBase {
             if (killer.role instanceof Gunner)
                 killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
                     RoleBase.game.chatId,
-                    killer.role.actionAnnouncement.gif, {caption: killer.role.actionAnnouncement.message}
+                    killer.role.actionAnnouncement().gif, {caption: killer.role.actionAnnouncement().message}
                 )
             killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,

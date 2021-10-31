@@ -12,18 +12,20 @@ export class Gunner extends RoleBase {
 
     killMessageDead = 'В тебя попала серебрянная пуля стрелка! Ты мёртв!' // GIF
 
-    actionAnnouncement = {
-        message: 'Вдруг послышался выстрел!  Все село оборачивается, ' +
-            `чтобы увидеть стоящего ${highlightPlayer(this.player)} над ${highlightPlayer(deadPlayer)}, и ` +
+    actionAnnouncement = () => ({
+        message: this.targetPlayer ? 'Вдруг послышался выстрел!  Все село оборачивается, ' +
+            `чтобы увидеть стоящего ${highlightPlayer(this.player)} над ${highlightPlayer(this.targetPlayer)}, и ` +
             'оружие все еще нацелено в голову... Мертв(а)! \n' +
-            `${highlightPlayer(deadPlayer)} был(а) **${deadPlayer.role?.roleName}**!`,
-        gif: 'https://media.giphy.com/media/1aE4U0Cw6qagVdoqer/giphy.gif'
-    }
+            `${highlightPlayer(this.targetPlayer)} был(а) *${ this.targetPlayer.role?.roleName}*!` : 'ERROR! Gunner-19',
+        gif: 'https://media.giphy.com/media/reNAILRU3ab96/giphy.gif'
+    })
 
 
     ammo = 2;
 
     action = () => {
+        this.targetPlayer = undefined;
+
         if (!this.ammo) return;
 
         Gunner.game.bot.sendMessage(
@@ -42,8 +44,6 @@ export class Gunner extends RoleBase {
         this.targetPlayer.role.onKilled(this.player);
 
         this.ammo--;
-
-        this.targetPlayer = undefined;
     }
 
     handleChoice = (choice?: string) => {
