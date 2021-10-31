@@ -1,20 +1,20 @@
-import {Villager} from "./Villager";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {RoleBase} from "../Abstract/RoleBase";
+import {Beauty} from "./Beauty";
 
-export class Harlot extends Villager {
+export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
     roleIntroductionText = () => `Ах ты ${this.roleName}! `
-    startMessageText = () =>`Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
+    startMessageText = () => `Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
         'Но, если зло выберет того, к кому ты пошла, вы оба умрете! А если волки выберут тебя, а дома ' +
         'тебя не будет, ты останешься жить, логично...';
     weight = () => 6;
 
-    
 
     action = () => {
         Harlot.game.bot.sendMessage(
@@ -30,9 +30,11 @@ export class Harlot extends Villager {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer?.role instanceof Wolf || this.targetPlayer?.role instanceof SerialKiller)
+        if (this.targetPlayer.role instanceof Wolf || this.targetPlayer.role instanceof SerialKiller) {
             this.onKilled(this.targetPlayer);
-        else {
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer);
+        } else {
             if (this.targetPlayer) {
                 Harlot.game.bot.sendMessage(
                     this.player.id,
@@ -55,7 +57,7 @@ export class Harlot extends Villager {
         this.choiceMsgEditText();
     }
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         if (killer?.role instanceof Wolf) { // Если волк пытается убить шлюху
             if (this.targetPlayer?.role instanceof Wolf) { // Убивает, если её целью является любой из волков
                 this.player.isAlive = false;

@@ -1,20 +1,24 @@
-import {Villager} from "./Villager";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Player} from "../../Player/Player";
+import {RoleBase} from "../Abstract/RoleBase";
 
-export class Gunner extends Villager {
+export class Gunner extends RoleBase {
     roleName = "Стрелок 🔫";
     roleIntroductionText = () => `${this.roleName} выходит на охоту! `
     startMessageText = () => 'У тебя есть две серебрянных пули, чтобы убить кого-то днем. ' +
         'Но имей ввиду, все услышат твой выстрел...';
     weight = () => 6;
 
-    killMessageAll = (deadPlayer: Player) => 'Вдруг послышался выстрел!  Все село оборачивается, ' +
-        `чтобы увидеть стоящего ${highlightPlayer(this.player)} над ${highlightPlayer(deadPlayer)}, и ` +
-        'оружие все еще нацелено в голову... Мертв(а)! \n' +
-        `${highlightPlayer(deadPlayer)} был(а) **${deadPlayer.role?.roleName}**!`
+    killMessageDead = 'В тебя попала серебрянная пуля стрелка! Ты мёртв!' // GIF
+
+    actionAnnouncement = {
+        message: 'Вдруг послышался выстрел!  Все село оборачивается, ' +
+            `чтобы увидеть стоящего ${highlightPlayer(this.player)} над ${highlightPlayer(deadPlayer)}, и ` +
+            'оружие все еще нацелено в голову... Мертв(а)! \n' +
+            `${highlightPlayer(deadPlayer)} был(а) **${deadPlayer.role?.roleName}**!`,
+        gif: 'https://media.giphy.com/media/1aE4U0Cw6qagVdoqer/giphy.gif'
+    }
 
 
     ammo = 2;

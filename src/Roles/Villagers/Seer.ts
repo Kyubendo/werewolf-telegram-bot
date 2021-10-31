@@ -17,7 +17,7 @@ export class Seer extends ForecasterBase {
     startMessageText = () => `Ты Провидец 👳! Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
 
-    handleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player): boolean => {
         const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
         if (apprenticeSeerPlayer) {
             apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
@@ -51,14 +51,14 @@ export class Seer extends ForecasterBase {
     }
 
     forecastRoleName = (targetRole: RoleBase) => {
-        if (targetRole instanceof Lycan) {
+        if (targetRole instanceof Lycan)
             return new Villager(this.player).roleName; // Seer sees Lycan as Villager
-        } else if (targetRole instanceof Wolf || targetRole instanceof WoodMan) {
+        else if (targetRole instanceof Wolf || targetRole instanceof WoodMan)
             return new Wolf(this.player).roleName; // Seer sees all wolves and WoodMan as Wolf
-        } else if (targetRole instanceof Traitor) {
+        else if (targetRole instanceof Traitor)
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
-            // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
-        }
-        return `это *${targetRole.roleName}*`;
+        // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
+
+        return `это *${targetRole.roleName}*!`;
     }
 }

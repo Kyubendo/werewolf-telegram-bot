@@ -1,7 +1,6 @@
 import {config} from "dotenv";
 
 config({path: __dirname + '/./../.env'})
-
 import TelegramBot from "node-telegram-bot-api";
 import {Game} from "./Game/Game";
 import {initGame} from "./Game/commands/init";

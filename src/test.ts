@@ -1,34 +1,32 @@
-// import {Player} from "./Player/Player";
-// import * as Roles from "./Roles";
-// import {RoleBase} from "./Roles/RoleBase";
-// import {Game} from "./Game/Game";
-// import TelegramBot from "node-telegram-bot-api";
+import {config} from "dotenv";
+
+config({path: __dirname + '/./../.env'})
+import {Player} from "./Player/Player";
+import {Game} from "./Game/Game";
+import TelegramBot from "node-telegram-bot-api";
+import {RoleBase} from "./Roles/Abstract/RoleBase";
+import {Fool, Lycan, SerialKiller, Villager, Wolf} from "./Roles";
+import {checkEndGame} from "./Game/checkEndGame";
+
+const bot = new TelegramBot(process.env.BOT_TOKEN!, {polling: true});
+
+const rolePool = [Villager, Villager, SerialKiller, SerialKiller,Wolf, Lycan,Fool]
+const players = [...Array(rolePool.length)].map((_, i) => new Player({id: 0, first_name: 'p' + i, is_bot: false,}))
+
+const game = new Game('classic', bot, players, 0, () => false, 1)
+RoleBase.game = game
+game.players.map((player, i) => player.role = new rolePool[i](player))
+
+
+
 //
-// const bot = new TelegramBot( process.env.BOT_TOKEN!, {polling: true});
+// const sk = game.players.find(p => p.role instanceof SerialKiller)
+// if (sk) sk.isAlive = false
 //
-// const player = new Player({id: 0, first_name: 'test', is_bot: false,})
-// const rolePool = [Roles.Lycan, Roles.Seer,]
-//
-// const game = new Game('classic', bot,[player, player], 0, 0)
-// RoleBase.game = game
-//
-// const weight = game.players.map((player, i) => player.role = new rolePool[i](player)).reduce((a, c) => a + c.weight(), 0)
+// const wolf = game.players.find(p => p.role instanceof Wolf)
+// if (wolf) wolf.isAlive = false
 
 
-class A {
-    foo() {
-        console.log('basic-A')
-    }
-}
 
-const a = new A();
-
-const originalFoo = a.foo
-a.foo = () => {
-    console.log('additional-A')
-    originalFoo()
-}
-
-a.foo()
-
-
+// console.log(checkEndGame(game.players).map(p => p.name))
+console.log(checkEndGame(game.players))

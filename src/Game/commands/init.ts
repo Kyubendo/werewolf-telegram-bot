@@ -2,9 +2,9 @@ import TelegramBot from "node-telegram-bot-api";
 import {Game} from "../Game";
 import {Player} from "../../Player/Player";
 import {State} from "../../Bot";
-import {playerList} from "../../Utils/playerList";
 import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
+import {startPlayerList} from "../../Utils/playerLists";
 
 const joinButton = {
     inline_keyboard: [
@@ -25,23 +25,24 @@ export const initGame = (bot: TelegramBot, state: State) => {
                 })
             return;
         }
-
-        state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, 0)
+        const onEnd = () => delete state.game
+        state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, onEnd, 0)
         state.game.lynch = new Lynch(state.game)
         state.game.wolfFeast = new WolfFeast(state.game)
 
-        bot.sendMessage(
+        bot.sendAnimation(
             msg.chat.id,
-            `Новая игра начата игроком ${msg.from?.first_name +
-            (msg.from.last_name ? ' ' + msg.from.last_name : '')}! Присоединяйся, чтобы` +
-            ` быть съеденным(ой)!.`,
+            'https://media.giphy.com/media/ZLdy2L5W62WGs/giphy.gif',
             {
+                caption: `Новая игра начата игроком ${msg.from?.first_name +
+                    (msg.from.last_name ? ' ' + msg.from.last_name : '')}! Присоединяйся, чтобы` +
+                    ` быть съеденным(ой)!`,
                 reply_markup: joinButton,
             }
         )//.then(msg => bot.pinChatMessage(msg.chat.id, String(msg.message_id)))
         bot.sendMessage(
             msg.chat.id,
-            playerList(state.game),
+            startPlayerList(state.game.players),
         ).then(msg => state.game!.playerCountMsgId = msg.message_id)
     })
 }

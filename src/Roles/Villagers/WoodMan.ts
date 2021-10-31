@@ -1,8 +1,7 @@
-import {Villager} from "./Villager";
 import {RoleBase} from "../Abstract/RoleBase";
 import {Seer} from "./Seer";
 
-export class WoodMan extends Villager {
+export class WoodMan extends RoleBase {
     roleName = 'Лесник 🧔‍♂‍🌚';
     roleIntroductionText = () => `Ты скромный селянин - ${this.roleName}, `
     startMessageText = () =>`но поскольку большую часть времени ты проводишь ` +
