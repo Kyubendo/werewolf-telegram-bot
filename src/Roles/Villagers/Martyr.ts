@@ -71,17 +71,17 @@ export class Martyr extends RoleBase {
     originalHandleDeath = (killer?: Player): boolean => {
         console.log(this.targetPlayer?.name)
         if (killer === this.player && this.targetPlayer) {
-            let deathMessage = 'fdafdaf'
+            let deathMessage: string | undefined
             if (!this.targetKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
                 + `закончилось, они увидели мертвое тело ${highlightPlayer(this.player)} на виселице, в то время как `
                 + `${highlightPlayer(this.targetPlayer)} стоит рядом как ни в чем не бывало.`
             else if (this.targetKiller.role instanceof SerialKiller || this.targetKiller.role instanceof Wolf) deathMessage = `Селяне собрались `
                 + `на следующее утро и увидели лежащее на площади тело Мученицы ${highlightPlayer(this.player)}. `
-                + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью ${this.roleName} умерла за `
+                + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью *${this.roleName}* умерла за `
                 + `другого человека.`
             else if (this.targetKiller.role instanceof Gunner) deathMessage = `Вдруг раздался оглушительный выстрел, и все на площади `
-                + `увидели, как ${this.targetKiller.role.roleName} ${highlightPlayer(this.targetKiller)} все еще целится в голову `
+                + `увидели, как *${this.targetKiller.role.roleName}* ${highlightPlayer(this.targetKiller)} все еще целится в голову `
                 + `${highlightPlayer(this.targetPlayer)}… Но промахивается и попадает в ${highlightPlayer(this.player)}, в `
                 + `то время как ${highlightPlayer(this.targetPlayer)} стоит абсолютно невредим(а).`
             // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `
@@ -89,7 +89,12 @@ export class Martyr extends RoleBase {
             //     + `${highlightPlayer(this.player)}, в то время как ${highlightPlayer(this.targetPlayer)} стоит целый(ая) `
             //     + `и невредимый(ая).`
 
-            Martyr.game.bot.sendMessage(Martyr.game.chatId, deathMessage)
+            setTimeout(
+                (deathMessage) => deathMessage && Martyr.game.bot
+                    .sendMessage(Martyr.game.chatId, deathMessage),
+                25,
+                deathMessage
+            )
             this.player.isAlive = false;
             return true;
         }
