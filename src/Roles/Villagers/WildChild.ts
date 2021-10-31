@@ -65,7 +65,7 @@ export class WildChild extends RoleBase {
         }
     }
 
-    handleDeath = (killer ?: Player): boolean => {
+    originalHandleDeath = (killer ?: Player): boolean => {
         if (killer?.role instanceof Wolf) {
             WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
