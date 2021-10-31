@@ -5,7 +5,6 @@ import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner, Suicide} from "../ind
 
 export type DeathType = 'lover_death' | 'lover_betrayal'; // Harlot
 
-import {Harlot, SerialKiller, Wolf, GuardianAngel} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
 export abstract class RoleBase {
