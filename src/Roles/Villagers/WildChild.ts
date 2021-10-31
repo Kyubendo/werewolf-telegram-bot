@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -67,7 +67,7 @@ export class WildChild extends RoleBase {
         }
     }
 
-    originalHandleDeath = (killer ?: Player): boolean => {
+    originalHandleDeath = (killer?: Player, type?: DeathType) => {
         if (killer?.role instanceof Wolf) {
             WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
@@ -85,7 +85,7 @@ export class WildChild extends RoleBase {
             this.player.isAlive = false;
             return true;
         } else
-            return super.handleDeath(killer);
+            return this.defaultHandleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {

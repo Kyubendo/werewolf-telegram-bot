@@ -3,6 +3,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {randomElement} from "../../Utils/randomElement";
+import {DeathType} from "../Abstract/RoleBase";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
@@ -17,7 +18,7 @@ export class Fool extends Seer {
         }
     }
 
-    originalHandleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         this.player.isAlive = false;
         Fool.game.bot.sendMessage(
             Fool.game.chatId,

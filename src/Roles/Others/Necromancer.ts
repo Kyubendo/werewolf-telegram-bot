@@ -6,7 +6,7 @@ export class Necromancer extends RoleBase {
     roleName = 'Некромант ⚰';
     startMessageText = () => 'Ночью ты можешь выбрать роль мертвого для оставшейся части игры. ' +
         'Но выбирай мудро, так как ты не можешь выиграть как Некромант.'
-    weight = () => 3;
+    weight = () => 0;
 
     nightActionDone = false
 

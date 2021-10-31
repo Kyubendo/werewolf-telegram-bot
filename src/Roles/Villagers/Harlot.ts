@@ -4,7 +4,7 @@ import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {Beauty} from "./Beauty";
 
 export class Harlot extends RoleBase {
@@ -74,7 +74,7 @@ export class Harlot extends RoleBase {
         this.doneNightAction()
     }
 
-    originalHandleDeath = (killer?: Player): boolean => {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         if (killer?.role instanceof Wolf) { // Если волк пытается убить шлюху
             if (this.targetPlayer?.role instanceof Wolf) { // Убивает, если её целью является любой из волков
                 this.player.isAlive = false;
@@ -96,6 +96,6 @@ export class Harlot extends RoleBase {
             this.player.isAlive = false;
             return true;
         }
-        return super.handleDeath(killer);
+        return this.defaultHandleDeath(killer, type);
     }
 }

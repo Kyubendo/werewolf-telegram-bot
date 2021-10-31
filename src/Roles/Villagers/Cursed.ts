@@ -1,7 +1,7 @@
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 
 export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';
@@ -11,29 +11,26 @@ export class Cursed extends RoleBase {
         return (wolvesAmount ? 1 - wolvesAmount : 1)
     }
 
-    originalHandleDeath = (killer?: Player) => {
+    originalHandleDeath = (killer?: Player, type?: DeathType) => {
+        console.log('originalHandleDeath123');
         if (killer?.role instanceof Wolf) {
             Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
                 .forEach(player => Cursed.game.bot.sendMessage(
                     player.id,
                     `${highlightPlayer(this.player)} был(а) ${this.player.role?.roleName}, ` +
-                    `поэтому он(а) теперь один(на) из вас! Поздравляем нового волка.`,
-                    {
-                        parse_mode: 'Markdown'
-                    }
-                ))
+                    `поэтому он(а) теперь один(на) из вас! Поздравляем нового волка.`
+                ));
 
             this.player.role = new Wolf(this.player, this.player.role);
 
             if (this.player.role instanceof Wolf)
                 Cursed.game.bot.sendMessage(this.player.id,
                     'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
-                    + this.player.role.showOtherWolfPlayers(), {
-                        parse_mode: 'Markdown',
-                    });
+                    + this.player.role.showOtherWolfPlayers()
+                );
             return false;
         } else {
-            return super.handleDeath(killer);
+            return this.defaultHandleDeath(killer, type);
         }
     }
 }

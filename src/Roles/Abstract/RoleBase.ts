@@ -39,8 +39,8 @@ export abstract class RoleBase {
     nightActionDone?: boolean
 
     readonly onKilled = (killer?: Player, type?: DeathType) => {
-        if (!this.player.isAlive) return
-        console.log(`onKilled: ${this.player.name}, ${type}`)
+        if (!this.player.isAlive) return;
+        console.log(`onKilled: ${this.player.name}, ${type}`);
         if (this.handleDeath(killer, type)) {
             /*type !== 'lover_death' && */
             this.movePlayer();
@@ -80,22 +80,21 @@ export abstract class RoleBase {
         )
     }
 
-    checkGuardianAngel = (killer: Player): boolean => {
-        const guardianAngelPlayer = RoleBase.game.players.find(player => player.role instanceof GuardianAngel);
+    readonly handleGuardianAngel = (killer: Player) => {
+        const guardianAngelPlayer = killer.role?.targetPlayer?.guardianAngel;
         if (guardianAngelPlayer
-            && guardianAngelPlayer.role instanceof GuardianAngel // Дополнительная проверка нужна для доступа к полям GuardianAngel
-            && guardianAngelPlayer.role?.targetPlayer === this.player) {
-
+            && guardianAngelPlayer.role instanceof GuardianAngel
+            && killer.role?.targetPlayer) { // Дополнительная проверка нужна для доступа к полям GuardianAngel
             RoleBase.game.bot.sendMessage(
                 killer.id,
-                `Придя домой к ${highlightPlayer(this.player)}, ` +
+                `Придя домой к ${highlightPlayer(killer.role.targetPlayer)}, ` +
                 `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
                 'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
             )
 
             RoleBase.game.bot.sendMessage(
-                this.player.id,
-                `${guardianAngelPlayer.role.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
+                killer.role.targetPlayer.id,
+                `${guardianAngelPlayer.role.roleName} наблюдал за тобой этой ночью и защитил тебя от зла!`
             )
 
             let ending: string = '';
@@ -104,15 +103,13 @@ export abstract class RoleBase {
 
             RoleBase.game.bot.sendMessage(
                 guardianAngelPlayer.id,
-                `С выбором ты угадал, на ${highlightPlayer(this.player)} действительно напали! Ты спас ему жизнь!`
+                `С выбором ты угадал, на ` +
+                `${highlightPlayer(killer.role.targetPlayer)} действительно напали! Ты спас ему жизнь!`
                 + ending
             )
 
             guardianAngelPlayer.role.numberOfAttacks++;
-
-            return false;
         }
-        return true;
     }
 
     doneNightAction = () => {
@@ -151,7 +148,7 @@ export abstract class RoleBase {
     }
 
     handleDeath = (killer?: Player, type?: DeathType): boolean => {
-        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`)
+        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
         if (type === 'lover_death') {
             killer?.role && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
@@ -205,7 +202,65 @@ export abstract class RoleBase {
         this.player.isAlive = false;
         return true;
     }
-    readonly originalHandleDeath = this.handleDeath
+
+
+    defaultHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
+        if (type === 'lover_death') {
+            killer?.role && RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Бросив взгляд на мертвое тело ${highlightPlayer(killer)}, ` +
+                `${highlightPlayer(this.player)} падает на колени и рыдает. ` +
+                `${highlightPlayer(this.player)}, не выдерживая боли, хватает ближайший пистолет и ` +
+                (this.player.role instanceof Suicide
+                    ? 'перед тем, как нажать на курок, его сердце останавливается от горя! ' +
+                    'Он не успевает покончить с собой!'
+                    : 'выстреливает в себя...') +
+                `\n${highlightPlayer(this.player)} был(а) *${this.roleName}*.`
+            )
+
+            // new message for players if their lover died
+        } else if (type === 'lover_betrayal') {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                'Жители деревни просыпаются на следующее утро и обнаруживают, ' +
+                `что ${highlightPlayer(this.player)} покончил(а) с собой прошлой ночью. ` +
+                'Возле остывающего тела лежит недописанное любовное письмо.'
+            )
+
+            killer && RoleBase.game.bot.sendMessage(
+                killer.id,
+                'Поскольку ты влюбляешься в другого(ую), ' +
+                `${highlightPlayer(this.player)} должен(на) покинуть тебя. ` +
+                'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
+            )
+        } else if (killer?.role) {
+            if (killer.role instanceof Gunner)
+                killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
+                    RoleBase.game.chatId,
+                    killer.role.actionAnnouncement().gif, {caption: killer.role.actionAnnouncement().message}
+                )
+            killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                killer.role.killMessageAll(this.player)
+            );
+
+            killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
+                this.player.id,
+                killer.role.killMessageDead
+            );
+        } else if (!killer) {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+                + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`
+            )
+        }
+        this.player.isAlive = false;
+        return true;
+    }
+
+    readonly originalHandleDeath = this.defaultHandleDeath
 
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(

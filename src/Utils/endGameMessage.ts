@@ -3,7 +3,7 @@ import {Win} from "../Game/checkEndGame";
 export const endGameMessage: { [type in Win]: { text: string, gif: string } } = {
     serialKiller: {
         text: 'Последним оставшимся в живых стал Серийный Убийца! Кажется, он выиграл!',
-        gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
+        gif: 'https://media.giphy.com/media/4MUx7BRJEZh6veeFym/giphy.gif',
     },
     wolves: {
         text: 'Волки выиграли!',
