@@ -32,7 +32,7 @@ export class Harlot extends RoleBase {
 
         if (this.targetPlayer.role instanceof Wolf || this.targetPlayer.role instanceof SerialKiller) {
             this.onKilled(this.targetPlayer);
-        } else if (this.targetPlayer.role instanceof Beauty) {
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
         } else {
             if (this.targetPlayer) {

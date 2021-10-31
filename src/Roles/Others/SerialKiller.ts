@@ -40,6 +40,8 @@ export class SerialKiller extends RoleBase {
     }
 
     action = () => {
+        this.targetPlayer = undefined
+
         SerialKiller.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь запихнуть пару-тройку ножей?',
@@ -54,12 +56,10 @@ export class SerialKiller extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
-        if (this.targetPlayer.role instanceof Beauty)
+        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
             this.loveBind(this.targetPlayer);
         else
             this.targetPlayer.role?.onKilled(this.player);
-
-        this.targetPlayer = undefined
     }
 
     handleChoice = (choice?: string) => {

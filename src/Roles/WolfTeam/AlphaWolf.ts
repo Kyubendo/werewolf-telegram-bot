@@ -1,6 +1,7 @@
 import {Wolf} from "./Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
+import {Beauty} from "../Villagers/Beauty";
 
 export class AlphaWolf extends Wolf {
     roleName = 'Альфа-волк 🐺⚡';
@@ -12,6 +13,11 @@ export class AlphaWolf extends Wolf {
 
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
+
+        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer);
+            return;
+        }
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
         this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {

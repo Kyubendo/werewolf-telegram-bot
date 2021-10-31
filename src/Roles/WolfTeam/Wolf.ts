@@ -36,7 +36,7 @@ export class Wolf extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
-        if (this.targetPlayer.role instanceof Beauty) {
+        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
         } else {
             this.targetPlayer.role?.onKilled(this.player);
