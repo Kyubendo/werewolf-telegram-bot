@@ -35,7 +35,7 @@ export const assignRoles = (game: Game) => {
 
     const testPool = [
 
-        Villager, ClumsyGuy, Cursed, WoodMan, Mason,
+        Cursed, SerialKiller, WildChild, Villager, ClumsyGuy, Cursed, WoodMan, Mason,
         Beholder, // Passive Villagers
 
         Seer, Monarch, Fool, Harlot, Oracle, Gunner, GuardianAngel,
@@ -44,44 +44,44 @@ export const assignRoles = (game: Game) => {
         Suicide, Thief, Necromancer, // Other
     ]
 
-    let balanced = false
-    do {
-        const availableKillers = [...killersPool]
-        arrayShuffle(availableKillers)
+    // let balanced = false
+    // do {
+    //     const availableKillers = [...killersPool]
+    //     arrayShuffle(availableKillers)
+    //
+    //     let rolePool = [...villagersPool]
+    //     console.log(11)
+    //
+    //     const evilCount = Math.floor((players.length - 4) / 2) + +(Math.random() >= .5)
+    //     const evils = [...Array(evilCount)].map(() => availableKillers.pop())
+    //     evils.find(e => e instanceof Wolf) && rolePool.push(...wolfNeededRoles)
+    //
+    //     console.log(12)
+    //
+    //     arrayShuffle(rolePool)
+    //
+    //     if ([...rolePool].slice(0, players.length - evilCount).find(e => e === Mason)) {
+    //         for (let i = 0; i < players.length / 3 - 1; i++) Math.random() >= .5 && rolePool.unshift(Mason)
+    //     }
+    //
+    //     evils.forEach(e => e && rolePool.unshift(e))
+    //     rolePool = rolePool.slice(0, players.length)
+    //     arrayShuffle(rolePool)
+    //     console.log(13)
+    //
+    //     const currentRoles = players.map((player, i) => player.role = new rolePool[i](player))
+    //     console.log(14)
+    //
+    //     const weight = Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
+    //     const currentEvilCount = currentRoles.filter(r => evilPool.find(e => r instanceof e)).length
+    //
+    //     console.log(15)
+    //     balanced = currentEvilCount <= players.length / 2 - 1
+    //         && weight <= players.length / 3
+    //
+    // } while (!balanced)
 
-        let rolePool = [...villagersPool]
-        console.log(11)
-
-        const evilCount = Math.floor((players.length - 4) / 2) + +(Math.random() >= .5)
-        const evils = [...Array(evilCount)].map(() => availableKillers.pop())
-        evils.find(e => e instanceof Wolf) && rolePool.push(...wolfNeededRoles)
-
-        console.log(12)
-
-        arrayShuffle(rolePool)
-
-        if ([...rolePool].slice(0, players.length - evilCount).find(e => e === Mason)) {
-            for (let i = 0; i < players.length / 3 - 1; i++) Math.random() >= .5 && rolePool.unshift(Mason)
-        }
-
-        evils.forEach(e => e && rolePool.unshift(e))
-        rolePool = rolePool.slice(0, players.length)
-        arrayShuffle(rolePool)
-        console.log(13)
-
-        const currentRoles = players.map((player, i) => player.role = new rolePool[i](player))
-        console.log(14)
-
-        const weight = Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
-        const currentEvilCount = currentRoles.filter(r => evilPool.find(e => r instanceof e)).length
-
-        console.log(15)
-        balanced = currentEvilCount <= players.length / 2 - 1
-            && weight <= players.length / 3
-
-    } while (!balanced)
-
-    //const currentRoles = players.map((player, i) => player.role = new testPool[i](player))
+    const currentRoles = players.map((player, i) => player.role = new testPool[i](player))
 
 
     console.log(100)
