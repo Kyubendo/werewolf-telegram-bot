@@ -11,6 +11,8 @@ export class Thief extends RoleBase {
         `у кого хочешь украсть. Если тебе повезет, тебе удастся украсть его роль, и вместо этого он станет вором!`
     weight = () => -4; // change?
 
+    nightActionDone = false
+
     action = () => {
         this.targetPlayer = undefined;
         Thief.game.bot.sendMessage(this.player.id,
@@ -70,5 +72,6 @@ export class Thief extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Thief.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

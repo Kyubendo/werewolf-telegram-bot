@@ -13,8 +13,13 @@ export class Doppelganger extends RoleBase {
         'ты получишь его роль.'
     weight = () => -1;
 
+    nightActionDone = false
+
     action = () => {
-        if (this.targetPlayer?.role) return;
+        if (this.targetPlayer?.role) {
+            this.nightActionDone = true
+            return;
+        }
 
         Doppelganger.game.bot.sendMessage(
             this.player.id,
@@ -60,5 +65,6 @@ export class Doppelganger extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Doppelganger.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

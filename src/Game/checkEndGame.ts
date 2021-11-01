@@ -1,15 +1,29 @@
 import {Player} from "../Player/Player";
 import {
     ApprenticeSeer,
-    Beholder, Blacksmith,
+    Beholder,
+    Blacksmith,
     ClumsyGuy,
     Cursed,
     Drunk,
     GuardianAngel,
     Gunner,
-    Harlot, Martyr,
+    Harlot,
+    Martyr,
     Mason,
-    Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
+    Monarch,
+    Oracle,
+    Sandman,
+    Seer,
+    SerialKiller,
+    Traitor,
+    Villager,
+    WiseElder,
+    Wolf,
+    WoodMan,
+    WildChild,
+    Beauty,
+    JackOLantern,
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -21,16 +35,22 @@ const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller]
 const nonWolfKillers: Function[] = [SerialKiller]
 
-export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody'
+export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
     const wolvesTeamPlayers = players.filter(p => wolfTeam.find(wa => p.role instanceof wa))
     const villagersTeamPlayers = players.filter(p => villagers.find(v => p.role instanceof v))
     const alivePlayers = players.filter(p => p.isAlive)
     const aliveWolves = alivePlayers.filter(p => p.role instanceof Wolf)
     const aliveEvilPlayer = alivePlayers.find(p => evil.find(e => p.role instanceof e))
+    const aliveJackPlayers = alivePlayers.filter(player => player.role instanceof JackOLantern);
 
     if (alivePlayers.length === 2 && alivePlayers[0].lover === alivePlayers[1]) {
         return {winners: alivePlayers.filter(player => player.lover), type: 'lovers'}
+    }
+
+
+    if (aliveJackPlayers.length * 2 >= alivePlayers.length) {
+        return { winners: aliveJackPlayers, type: 'jack' }
     }
 
     if (!aliveEvilPlayer) {

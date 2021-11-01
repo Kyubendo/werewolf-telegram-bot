@@ -1,9 +1,9 @@
 import {Game} from "../../Game";
 import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner, Suicide} from "../index";
+import {GuardianAngel, Gunner, Suicide} from "../index";
 
-export type DeathType = 'lover_death' | 'lover_betrayal'; // Harlot
+export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath'; // Harlot
 
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
@@ -39,12 +39,15 @@ export abstract class RoleBase {
 
     specialCondition?: specialConditionType;
 
+    nightActionDone?: boolean
+
     readonly onKilled = (killer?: Player, type?: DeathType) => {
-        if (!this.player.isAlive) return
-        console.log(`onKilled: ${this.player.name}, ${type}`)
+        if (!this.player.isAlive) return;
+        console.log(`onKilled: ${this.player.name}, ${type}`);
         if (this.handleDeath(killer, type)) {
-            /*type !== 'lover_death' && */ this.movePlayer();
-            this.killLover('lover_death')
+            /*type !== 'loverDeath' && */
+            this.movePlayer();
+            this.killLover('loverDeath')
         }
     }
 
@@ -65,7 +68,7 @@ export abstract class RoleBase {
         if (!this.player.lover) return
         console.log(`killLover: ${this.player.name}, ${type}`)
 
-        if (type !== 'lover_death')
+        if (type !== 'loverDeath')
             this.player.lover.lover = undefined;
 
         this.player.lover.role?.onKilled(this.player, type);
@@ -80,22 +83,21 @@ export abstract class RoleBase {
         )
     }
 
-    checkGuardianAngel = (killer: Player): boolean => {
-        const guardianAngelPlayer = RoleBase.game.players.find(player => player.role instanceof GuardianAngel);
+    readonly handleGuardianAngel = (killer: Player) => {
+        const guardianAngelPlayer = killer.role?.targetPlayer?.guardianAngel;
         if (guardianAngelPlayer
-            && guardianAngelPlayer.role instanceof GuardianAngel // Дополнительная проверка нужна для доступа к полям GuardianAngel
-            && guardianAngelPlayer.role?.targetPlayer === this.player) {
-
+            && guardianAngelPlayer.role instanceof GuardianAngel
+            && killer.role?.targetPlayer) { // Дополнительная проверка нужна для доступа к полям GuardianAngel
             RoleBase.game.bot.sendMessage(
                 killer.id,
-                `Придя домой к ${highlightPlayer(this.player)}, ` +
+                `Придя домой к ${highlightPlayer(killer.role.targetPlayer)}, ` +
                 `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
                 'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
             )
 
             RoleBase.game.bot.sendMessage(
-                this.player.id,
-                `${guardianAngelPlayer.role.roleName}  наблюдал за тобой этой ночью и защитил тебя от зла!`
+                killer.role.targetPlayer.id,
+                `${guardianAngelPlayer.role.roleName} наблюдал за тобой этой ночью и защитил тебя от зла!`
             )
 
             let ending: string = '';
@@ -104,40 +106,18 @@ export abstract class RoleBase {
 
             RoleBase.game.bot.sendMessage(
                 guardianAngelPlayer.id,
-                `С выбором ты угадал, на ${highlightPlayer(this.player)} действительно напали! Ты спас ему жизнь!`
+                `С выбором ты угадал, на ` +
+                `${highlightPlayer(killer.role.targetPlayer)} действительно напали! Ты спас ему жизнь!`
                 + ending
             )
 
             guardianAngelPlayer.role.numberOfAttacks++;
-
-            return false;
         }
-        return true;
     }
 
-    checkHarlotDeath = (killer: Player) => {
-        const harlotPlayer = RoleBase.game.players.find(player => player.role instanceof Harlot);
-        if (harlotPlayer && harlotPlayer.role?.targetPlayer === this.player) {
-            if (killer.role instanceof Wolf) {
-                RoleBase.game.bot.sendMessage(
-                    RoleBase.game.chatId,
-                    `${highlightPlayer(harlotPlayer)} проскользнула в дом ${highlightPlayer(this.player)}, ` +
-                    'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
-                    `пожирающего ${highlightPlayer(this.player)}! Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
-                    `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} мертва.`,
-                )
-            } else if (killer.role instanceof SerialKiller) {
-                RoleBase.game.bot.sendMessage(
-                    RoleBase.game.chatId,
-                    `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} проникла в дом ` +
-                    `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
-                    `${highlightPlayer(this.player)}! Серийный Убийца решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
-                    `прежде чем взять сердце к себе в коллекцию!`,
-                )
-            }
-
-            harlotPlayer.role.onKilled(harlotPlayer);
-        }
+    doneNightAction = () => {
+        this.nightActionDone = true
+        if (!RoleBase.game.players.find(p => p.role?.nightActionDone === false)) RoleBase.game.setNextStage()
     }
 
     movePlayer = () => {
@@ -146,8 +126,8 @@ export abstract class RoleBase {
     }
 
     handleDeath = (killer?: Player, type?: DeathType): boolean => {
-        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`)
-        if (type === 'lover_death') {
+        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
+        if (type === 'loverDeath') {
             killer?.role && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 `Бросив взгляд на мертвое тело ${highlightPlayer(killer)}, ` +
@@ -200,7 +180,65 @@ export abstract class RoleBase {
         this.player.isAlive = false;
         return true;
     }
-    readonly originalHandleDeath = this.handleDeath
+
+
+    defaultHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
+        if (type === 'loverDeath') {
+            killer?.role && RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Бросив взгляд на мертвое тело ${highlightPlayer(killer)}, ` +
+                `${highlightPlayer(this.player)} падает на колени и рыдает. ` +
+                `${highlightPlayer(this.player)}, не выдерживая боли, хватает ближайший пистолет и ` +
+                (this.player.role instanceof Suicide
+                    ? 'перед тем, как нажать на курок, его сердце останавливается от горя! ' +
+                    'Он не успевает покончить с собой!'
+                    : 'выстреливает в себя...') +
+                `\n${highlightPlayer(this.player)} был(а) *${this.roleName}*.`
+            )
+
+            // new message for players if their lover died
+        } else if (type === 'lover_betrayal') {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                'Жители деревни просыпаются на следующее утро и обнаруживают, ' +
+                `что ${highlightPlayer(this.player)} покончил(а) с собой прошлой ночью. ` +
+                'Возле остывающего тела лежит недописанное любовное письмо.'
+            )
+
+            killer && RoleBase.game.bot.sendMessage(
+                killer.id,
+                'Поскольку ты влюбляешься в другого(ую), ' +
+                `${highlightPlayer(this.player)} должен(на) покинуть тебя. ` +
+                'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
+            )
+        } else if (killer?.role) {
+            if (killer.role instanceof Gunner)
+                killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
+                    RoleBase.game.chatId,
+                    killer.role.actionAnnouncement().gif, {caption: killer.role.actionAnnouncement().message}
+                )
+            killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                killer.role.killMessageAll(this.player)
+            );
+
+            killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
+                this.player.id,
+                killer.role.killMessageDead
+            );
+        } else if (!killer) {
+            RoleBase.game.bot.sendMessage(
+                RoleBase.game.chatId,
+                `Жители отдали свои голоса в подозрениях и сомнениях... \n`
+                + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`
+            )
+        }
+        this.player.isAlive = false;
+        return true;
+    }
+
+    readonly originalHandleDeath = this.defaultHandleDeath
 
     choiceMsgEditText = () => {
         RoleBase.game.bot.editMessageText(

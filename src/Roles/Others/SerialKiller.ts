@@ -1,9 +1,10 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
 import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
@@ -13,6 +14,8 @@ export class SerialKiller extends RoleBase {
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -14; // change?
 
+    nightActionDone = false
+
     killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
         `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
         `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
@@ -20,7 +23,7 @@ export class SerialKiller extends RoleBase {
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
-    originalHandleDeath = (killer?: Player) => {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
@@ -33,10 +36,10 @@ export class SerialKiller extends RoleBase {
                 + ' Жертвой, которую разрезали на сотню маленьких кусочков.',
             )
 
-            killer.role.onKilled(killer)
+            killer.isAlive = false;
             return false;
         } else
-            return super.handleDeath(killer);
+            return this.defaultHandleDeath(killer, type);
     }
 
     action = () => {
@@ -56,7 +59,10 @@ export class SerialKiller extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
-        if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
+        if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+            this.handleGuardianAngel(this.player);
+            return;
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
             this.loveBind(this.targetPlayer);
         else
             this.targetPlayer.role?.onKilled(this.player);
@@ -65,5 +71,6 @@ export class SerialKiller extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, SerialKiller.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

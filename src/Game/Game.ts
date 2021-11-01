@@ -4,9 +4,10 @@ import {gameStageMsg} from "./gameStageMsg";
 import {Lynch} from "./Voting/Lynch";
 import {WolfFeast} from "./Voting/WolfFeast";
 import {roleResolves} from "./roleResolves";
-import {checkEndGame, setWinners} from "./checkEndGame";
+import {checkEndGame, setWinners, Win} from "./checkEndGame";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {endGameMessage} from "../Utils/endGameMessage";
+import {JackOLantern, Pumpkin} from "../Roles";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -16,7 +17,7 @@ export class Game {
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,
-        readonly onEnd: () => boolean,
+        readonly deleteGame: () => boolean,
         public playerCountMsgId: number,
     ) {
     }
@@ -60,21 +61,16 @@ export class Game {
         }
         this.resetStageTimer(stageDuration)
 
-        this.runResolves()
+        if (this.runResolves()) return//fix
+
 
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if (endGame) {
-            setWinners(endGame.winners, this.players)
-            this.bot.sendAnimation(
-                this.chatId,
-                endGameMessage[endGame.type].gif,
-                {caption: endGameMessage[endGame.type].text}
-            ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.onEnd()))
-            this.stageTimer && clearTimeout(this.stageTimer)
-            return
-        }
+        // if(endGame){
+        //     this.onGameEnd(endGame)
+        //     return
+        // }
 
         this.checkNightDeaths(nextStage)
 
@@ -92,9 +88,30 @@ export class Game {
             50)
     }
 
+    onGameEnd = (endGame: { winners: Player[], type: Win }) => {
+        setWinners(endGame.winners, this.players)
+        this.bot.sendAnimation(
+            this.chatId,
+            endGameMessage[endGame.type].gif,
+            {caption: endGameMessage[endGame.type].text}
+        ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame()))
+        this.stageTimer && clearTimeout(this.stageTimer)
+    }
+
     private runResolves = () => {
-        this.lynch?.handleVoteEnd()
+        if (this.lynch?.handleVoteEnd()) return true
         this.wolfFeast?.handleVoteEnd()
+
+        // this.players.filter(player => player.role instanceof Pumpkin).forEach(pumpkinPlayer => {
+        //     console.log('тыква')
+        //     if (Math.random() >= 0.25)
+        //         pumpkinPlayer.role = pumpkinPlayer.role?.previousRole?.createThisRole(pumpkinPlayer, pumpkinPlayer.role);
+        //     else
+        //         pumpkinPlayer.role = new JackOLantern(pumpkinPlayer, pumpkinPlayer.role);
+        //     console.log(pumpkinPlayer.role?.roleName)
+        // }) // Note: change to lynch actions
+
+
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && player.role instanceof role)
@@ -103,6 +120,9 @@ export class Game {
     }
 
     private runActions = () => {
+        if (this.stage === 'night') this.players.forEach(p => {
+            if (p.role?.nightActionDone) p.role.nightActionDone = false
+        })
         if (this.stage !== 'lynch') { // change?
             this.players
                 .filter(player => player.isAlive)
@@ -137,8 +157,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.choiceMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )

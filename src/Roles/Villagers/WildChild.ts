@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -13,13 +13,17 @@ export class WildChild extends RoleBase {
     startMessageText = () => 'Выбери любого игрока, чтобы он стал твоим "примером". Если он умрет, ты станешь волком!'
     weight = () => -1;
 
+    nightActionDone = false
+
     specialCondition: specialConditionWildChild = {
         roleModel: undefined
     }
 
     action = () => {
-        if (this.specialCondition.roleModel?.role) return;
-
+        if (this.specialCondition.roleModel?.role) {
+            this.nightActionDone = true
+            return
+        }
         WildChild.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь выбрать своим примером?',
@@ -70,7 +74,7 @@ export class WildChild extends RoleBase {
         }
     }
 
-    originalHandleDeath = (killer ?: Player): boolean => {
+    originalHandleDeath = (killer?: Player, type?: DeathType) => {
         if (killer?.role instanceof Wolf) {
             WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
@@ -88,7 +92,7 @@ export class WildChild extends RoleBase {
             this.player.isAlive = false;
             return true;
         } else
-            return super.handleDeath(killer);
+            return this.defaultHandleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {

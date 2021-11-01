@@ -6,7 +6,9 @@ export class Necromancer extends RoleBase {
     roleName = 'Некромант ⚰';
     startMessageText = () => 'Ночью ты можешь выбрать роль мертвого для оставшейся части игры. ' +
         'Но выбирай мудро, так как ты не можешь выиграть как Некромант.'
-    weight = () => 3;
+    weight = () => 0;
+
+    nightActionDone = false
 
     action = () => {
         const deadPlayers = Necromancer.game.players
@@ -32,5 +34,6 @@ export class Necromancer extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Necromancer.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

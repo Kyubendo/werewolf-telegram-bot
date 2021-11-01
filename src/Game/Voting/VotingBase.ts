@@ -17,7 +17,7 @@ export abstract class VotingBase {
 
     abstract getVoters(): Player[]
 
-    abstract handleVoteResult(voteResult: Player[]): void
+    abstract handleVoteResult(voteResult: Player[]): boolean | void
 
     abstract handleVotingChoiceResult(voter: Player, target?: Player): void
 
@@ -79,7 +79,8 @@ export abstract class VotingBase {
     handleVoteEnd = () => {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
-        this.handleVoteResult(this.voteResults())
+        if (this.handleVoteResult(this.voteResults())) return true
+
         this.votes = {}
         this.votedPlayers = []
     }

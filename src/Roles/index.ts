@@ -32,6 +32,8 @@ import {Thief} from "./Others/Thief";
 import {Doppelganger} from "./Others/Doppelganger";
 import {Necromancer} from "./Others/Necromancer";
 import {SerialKiller} from "./Others/SerialKiller";
+import {JackOLantern} from "./Villagers/JackOLanther";
+import {Pumpkin} from "./Others/Pumpkin";
 
 export {
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Beholder, ApprenticeSeer,
@@ -41,5 +43,7 @@ export {
 
     Wolf, Lycan, Sorcerer, AlphaWolf,
 
-    Suicide, Thief, Necromancer, SerialKiller, Doppelganger, 
+    Suicide, Thief, Necromancer, SerialKiller, Doppelganger, JackOLantern,
+
+    Pumpkin,
 }

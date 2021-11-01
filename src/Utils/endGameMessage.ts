@@ -3,7 +3,7 @@ import {Win} from "../Game/checkEndGame";
 export const endGameMessage: { [type in Win]: { text: string, gif: string } } = {
     serialKiller: {
         text: 'Последним оставшимся в живых стал Серийный Убийца! Кажется, он выиграл!',
-        gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
+        gif: 'https://media.giphy.com/media/4MUx7BRJEZh6veeFym/giphy.gif',
     },
     wolves: {
         text: 'Волки выиграли!',
@@ -25,6 +25,10 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
     lovers: {
         text: 'Настоящая любовь побеждает! Любовники выиграли!',
         gif: 'https://media.giphy.com/media/M2zS4fBQbxZReOhlTa/giphy.gif' // Note: placeholder
+    },
+    jack: {
+        text: 'Теперь село не отличить от тыквенной грядки... Все преваритились в тыквы! Победа Джека!',
+        gif: 'https://media.giphy.com/media/rtgu0LxGT0R56/giphy.gif'
     },
 
 }
