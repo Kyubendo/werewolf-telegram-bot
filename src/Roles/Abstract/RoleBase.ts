@@ -40,7 +40,6 @@ export abstract class RoleBase {
 
     readonly onKilled = (killer?: Player, type?: DeathType) => {
         if (!this.player.isAlive) return;
-        console.log(`onKilled: ${this.player.name}, ${type}`);
         if (this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
             this.movePlayer();
@@ -50,7 +49,6 @@ export abstract class RoleBase {
 
     readonly loveBind = (newLover: Player) => {
         if (this.player.lover === this.player) return;
-        console.log(`loveBind: ${this.player.name}, ${newLover.name}`)
         this.killLover('lover_betrayal');
         newLover.role?.killLover('lover_betrayal');
 
@@ -63,7 +61,6 @@ export abstract class RoleBase {
 
     readonly killLover = (type: DeathType) => {
         if (!this.player.lover) return
-        console.log(`killLover: ${this.player.name}, ${type}`)
 
         if (type !== 'loverDeath')
             this.player.lover.lover = undefined;
@@ -114,7 +111,8 @@ export abstract class RoleBase {
 
     doneNightAction = () => {
         this.nightActionDone = true
-        if (!RoleBase.game.players.find(p => p.role?.nightActionDone === false)) RoleBase.game.setNextStage()
+        if (!RoleBase.game.players.find(p => p.isAlive && p.role?.nightActionDone === false))
+            RoleBase.game.setNextStage()
     }
 
     movePlayer = () => {
@@ -180,7 +178,6 @@ export abstract class RoleBase {
 
 
     defaultHandleDeath = (killer?: Player, type?: DeathType): boolean => {
-        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
         if (type === 'loverDeath') {
             killer?.role && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,

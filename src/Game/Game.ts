@@ -4,10 +4,9 @@ import {gameStageMsg} from "./gameStageMsg";
 import {Lynch} from "./Voting/Lynch";
 import {WolfFeast} from "./Voting/WolfFeast";
 import {roleResolves} from "./roleResolves";
-import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {endGameMessage} from "../Utils/endGameMessage";
-import {JackOLantern, Pumpkin} from "../Roles";
+import {endPlayerList, playerGameList} from "../Utils/playerLists";
+import {checkEndGame, setWinners, Win} from "./checkEndGame";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -102,16 +101,6 @@ export class Game {
         if (this.lynch?.handleVoteEnd()) return true
         this.wolfFeast?.handleVoteEnd()
 
-        // this.players.filter(player => player.role instanceof Pumpkin).forEach(pumpkinPlayer => {
-        //     console.log('тыква')
-        //     if (Math.random() >= 0.25)
-        //         pumpkinPlayer.role = pumpkinPlayer.role?.previousRole?.createThisRole(pumpkinPlayer, pumpkinPlayer.role);
-        //     else
-        //         pumpkinPlayer.role = new JackOLantern(pumpkinPlayer, pumpkinPlayer.role);
-        //     console.log(pumpkinPlayer.role?.roleName)
-        // }) // Note: change to lynch actions
-
-
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && player.role instanceof role)
@@ -121,7 +110,7 @@ export class Game {
 
     private runActions = () => {
         if (this.stage === 'night') this.players.forEach(p => {
-            if (p.role?.nightActionDone) p.role.nightActionDone = false
+            if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
         })
         if (this.stage !== 'lynch') { // change?
             this.players
@@ -157,8 +146,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.choiceMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )

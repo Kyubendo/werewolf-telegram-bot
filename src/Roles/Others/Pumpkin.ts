@@ -9,18 +9,13 @@ export class Pumpkin extends RoleBase {
     weight = () => 0;
 
     actionResolve = () => {
-        //if (Pumpkin.game.stage !== 'lynch') return
-
-        console.log('тыква')
         if (Math.random() >= 0.25)
             this.player.role = this.previousRole?.createThisRole(this.player, this.player.role);
         else
             this.player.role = new JackOLantern(this.player, this.player.role);
-        console.log(this.player.role?.roleName)
     }
 
     originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
-        console.log('pumpkin - handleDeath ' + this.player.role?.roleName)
         if (!killer) {
             Pumpkin.game.bot.sendAnimation(
                 Pumpkin.game.chatId,
