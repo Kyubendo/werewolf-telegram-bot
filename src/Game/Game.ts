@@ -66,7 +66,7 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if(endGame){
+        if (endGame) {
             this.onGameEnd(endGame)
             return
         }
@@ -136,7 +136,10 @@ export class Game {
     private runResults = () => {
         for (const role of roleResolves(this.stage)) {
             this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
-                .forEach(player => player.role?.actionResult && player.role.actionResult())
+                .forEach(player => {
+                    player.role?.actionResult && player.role.actionResult()
+                    if (player.guardianAngel) player.guardianAngel = undefined
+                })
         }
     }
 
@@ -146,8 +149,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.choiceMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
