@@ -25,9 +25,9 @@ export class Game {
     lynch?: Lynch
     wolfFeast?: WolfFeast
 
-    lynchDuration = 10_000
-    dayDuration = 10000_000
-    nightDuration = 5000_000
+    lynchDuration = 120_000
+    dayDuration = 120_000
+    nightDuration = 120_000
 
     deadPlayersCount = 0
 
@@ -67,10 +67,10 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        // if(endGame){
-        //     this.onGameEnd(endGame)
-        //     return
-        // }
+        if(endGame){
+            this.onGameEnd(endGame)
+            return
+        }
 
         this.checkNightDeaths(nextStage)
 
