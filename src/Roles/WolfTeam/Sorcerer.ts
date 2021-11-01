@@ -3,6 +3,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {Seer, Fool, ApprenticeSeer} from "../index";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {wolfTeam} from "../../Utils/teams";
+import {findPlayer} from "../../Game/findPlayer";
 
 export class Sorcerer extends ForecasterBase {
     roleName = 'Колдунья 🔮';
@@ -12,6 +13,8 @@ export class Sorcerer extends ForecasterBase {
         'а также провидцев. Ты победишь лишь тогда, когда победят волки. ' +
         'Наслаждайся убийством несчастных сельских жителей.'
     weight = () => -2;
+
+    nightActionDone = false
 
     actionResult = () => {
         if (!this.targetPlayer?.role) return;
@@ -32,5 +35,11 @@ export class Sorcerer extends ForecasterBase {
             || (targetRole instanceof ApprenticeSeer && Math.random() < 0.5))
             return new Seer(this.player).roleName;
         return undefined;
+    }
+
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, ForecasterBase.game.players)
+        this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

@@ -36,6 +36,8 @@ export abstract class RoleBase {
     targetPlayer?: Player
     choiceMsgId?: number
 
+    nightActionDone?: boolean
+
     readonly onKilled = (killer?: Player, type?: DeathType) => {
         if (!this.player.isAlive) return;
         console.log(`onKilled: ${this.player.name}, ${type}`);
@@ -110,30 +112,10 @@ export abstract class RoleBase {
         }
     }
 
-    // checkHarlotDeath = (killer: Player) => {
-    //     const harlotPlayer = RoleBase.game.players.find(player => player.role instanceof Harlot);
-    //     if (harlotPlayer && harlotPlayer.role?.targetPlayer === this.player) {
-    //         if (killer.role instanceof Wolf) {
-    //             RoleBase.game.bot.sendMessage(
-    //                 RoleBase.game.chatId,
-    //                 `${highlightPlayer(harlotPlayer)} проскользнула в дом ${highlightPlayer(this.player)}, ` +
-    //                 'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
-    //                 `пожирающего ${highlightPlayer(this.player)}! Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
-    //                 `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} мертва.`,
-    //             )
-    //         } else if (killer.role instanceof SerialKiller) {
-    //             RoleBase.game.bot.sendMessage(
-    //                 RoleBase.game.chatId,
-    //                 `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} проникла в дом ` +
-    //                 `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
-    //                 `${highlightPlayer(this.player)}! Серийный Убийца решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
-    //                 `прежде чем взять сердце к себе в коллекцию!`,
-    //             )
-    //         }
-    //
-    //         harlotPlayer.role.onKilled(harlotPlayer);
-    //     }
-    // }
+    doneNightAction = () => {
+        this.nightActionDone = true
+        if (!RoleBase.game.players.find(p => p.role?.nightActionDone === false)) RoleBase.game.setNextStage()
+    }
 
     movePlayer = () => {
         RoleBase.game.players.push(...RoleBase.game.players.splice(

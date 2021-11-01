@@ -9,6 +9,7 @@ import {Player} from "../../Player/Player";
 import {ApprenticeSeer} from "./ApprenticeSeer";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {SerialKiller} from "../Others/SerialKiller";
+import {findPlayer} from "../../Game/findPlayer";
 
 
 export class Seer extends ForecasterBase {
@@ -16,6 +17,8 @@ export class Seer extends ForecasterBase {
     roleIntroductionText = () => 'Ты Провидец 👳! ';
     startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
+
+    nightActionDone = false
 
     originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
@@ -60,5 +63,11 @@ export class Seer extends ForecasterBase {
         // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
 
         return `это *${targetRole.roleName}*!`;
+    }
+
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, ForecasterBase.game.players)
+        this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

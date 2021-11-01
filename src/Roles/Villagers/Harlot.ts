@@ -15,6 +15,7 @@ export class Harlot extends RoleBase {
         'тебя не будет, ты останешься жить, логично...';
     weight = () => 6;
 
+    nightActionDone = false
 
     action = () => {
         this.targetPlayer = undefined;
@@ -65,6 +66,7 @@ export class Harlot extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Harlot.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 
     originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
