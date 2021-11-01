@@ -1,5 +1,5 @@
 import {highlightPlayer} from "./highlightPlayer";
-import {Player} from "../Player/Player";
+import {Player} from "../Game";
 
 const bubbleAliveSort = (arr: Player[]) => {
     for (let i = 0; i < arr.length; i++)

@@ -1,5 +1,5 @@
 import {Player} from "../../Player/Player";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
 import {GuardianAngel} from "../Villagers/GuardianAngel";

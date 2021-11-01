@@ -1,4 +1,4 @@
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";

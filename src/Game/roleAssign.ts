@@ -1,5 +1,5 @@
 import {Game} from "./Game";
-import {RoleBase} from "../Roles/Abstract/RoleBase";
+import {RoleBase} from "../Game";
 import {arrayShuffle} from "../Utils/arrayShuffle";
 import {
     AlphaWolf, ApprenticeSeer, Beauty,

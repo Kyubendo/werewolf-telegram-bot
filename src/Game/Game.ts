@@ -1,4 +1,4 @@
-import {Player} from "../Player/Player";
+import {Player} from "../Game";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
 import {Lynch} from "./Voting/Lynch";

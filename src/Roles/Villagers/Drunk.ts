@@ -1,8 +1,7 @@
-import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
-import {SerialKiller} from "../Others/SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../../Game";
+import {SerialKiller, Wolf} from "../index";
 
 export class Drunk extends RoleBase {
     roleName = 'Пьяница 🍻';
