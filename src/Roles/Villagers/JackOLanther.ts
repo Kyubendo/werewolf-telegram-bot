@@ -38,7 +38,7 @@ export class JackOLantern extends RoleBase {
             this.targetPlayer.id,
             'https://media.giphy.com/media/12eLy0DOnVE6mA/giphy.gif',
             {
-                caption: 'О нет! Тебя превартили в тыкву...'
+                caption: 'О нет! Тебя превратили в тыкву...'
             }
         )
 
