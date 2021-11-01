@@ -43,10 +43,11 @@ const nightRoleResolves = [
     Harlot, //Prowler
     Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
-    Thief, Necromancer,
+     Necromancer,
     Wolf,
     SerialKiller,
     Sorcerer, Seer, Oracle,
+    Thief,
 ]
 
 const lynchRoleResolves = [
