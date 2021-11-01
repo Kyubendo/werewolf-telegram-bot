@@ -38,10 +38,10 @@ const dayRoleResolves = [
 ]
 
 const nightRoleResolves = [
+    Martyr, WildChild, Doppelganger, // constant choices
     // PuppetMaster,
     JackOLantern,
     Harlot, //Prowler
-    Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
     Necromancer,
     SerialKiller,
