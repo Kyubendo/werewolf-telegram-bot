@@ -45,7 +45,7 @@ export class WildChild extends RoleBase {
 
         if (!this.targetPlayer.role) return;
 
-        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
+        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
         this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
             if (!this.targetPlayer) return false;
 
@@ -69,7 +69,7 @@ export class WildChild extends RoleBase {
         }
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType) => {
+    handleDeath(killer?: Player, type?: DeathType) {
         if (killer?.role instanceof Wolf) {
             WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
@@ -87,11 +87,12 @@ export class WildChild extends RoleBase {
             this.player.isAlive = false;
             return true;
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, WildChild.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

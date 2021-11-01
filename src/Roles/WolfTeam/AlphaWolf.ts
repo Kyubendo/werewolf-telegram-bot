@@ -25,7 +25,7 @@ export class AlphaWolf extends Wolf {
             return;
         }
 
-        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
+        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
             if (!this.targetPlayer || Math.random() >= .25) return currentTargetHandleDeath(killer);
 

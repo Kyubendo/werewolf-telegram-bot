@@ -16,9 +16,10 @@ export class Fool extends Seer {
             const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
             this.targetPlayer = randomElement(otherPlayers);
         }
+        this.doneNightAction()
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         this.player.isAlive = false;
         Fool.game.bot.sendMessage(
             Fool.game.chatId,

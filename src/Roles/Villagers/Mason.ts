@@ -17,14 +17,14 @@ export class Mason extends RoleBase {
 
     roleName = 'Каменщик 👷';
     roleIntroductionText = () => ''
-    startMessageText = () =>`Тебе ничего не остается делать, кроме как идти и пахать на стройке, `+
+    startMessageText = () => `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ` +
         `ведь ты ${this.roleName}.` + this.showMasonPlayers();
     weight = () => {
         const otherMasonsAmount = this.findMasonPlayers().length;
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         Mason.game.bot.sendMessage(
             Mason.game.chatId,
             `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +

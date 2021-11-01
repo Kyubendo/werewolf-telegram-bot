@@ -62,7 +62,7 @@ export class GuardianAngel extends RoleBase {
         this.doneNightAction()
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         this.player.isAlive = false;
 
         if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)
@@ -115,7 +115,7 @@ export class GuardianAngel extends RoleBase {
                     `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`
                 )
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
         return true;
     }
 }

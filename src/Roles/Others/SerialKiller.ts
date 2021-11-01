@@ -23,7 +23,7 @@ export class SerialKiller extends RoleBase {
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath (killer?: Player, type?: DeathType): boolean {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
@@ -40,7 +40,7 @@ export class SerialKiller extends RoleBase {
             killer.isAlive = false;
             return false;
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
     }
 
     action = () => {

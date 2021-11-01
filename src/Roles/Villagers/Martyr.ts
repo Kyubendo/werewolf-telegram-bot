@@ -73,8 +73,7 @@ export class Martyr extends RoleBase {
         }
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
-        console.log(this.targetPlayer?.name)
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         if (killer === this.player && this.targetPlayer) {
             let deathMessage: string | undefined
             if (!this.targetKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
@@ -103,7 +102,7 @@ export class Martyr extends RoleBase {
             this.player.isAlive = false;
             return true;
         }
-        return this.defaultHandleDeath(killer, type);
+        return super.handleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {
