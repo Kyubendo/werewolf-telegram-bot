@@ -22,22 +22,24 @@ export class Blacksmith extends RoleBase {
         message: 'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +
             `как ${highlightPlayer(this.player)} блуждает вокруг и ` +
             'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
-            'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)',
+            'деревня защищена от нападения волков.\n(Этой ночью волки дезактивированы)',
         gif: 'https://media.giphy.com/media/dUBR5zjuoZwBChZ1aC/giphy.gif'
     })
 
-    silverDust ?: boolean;
     specialCondition: specialConditionBlacksmith = {
         silverDust: undefined
     }
 
     action = () => {
-        if (this.specialCondition.silverDust === false) return;
-
         if (this.specialCondition.silverDust) {
             this.specialCondition.silverDust = false;
             return;
         }
+
+        console.log(this.player.name)
+        console.log('action ' + this.specialCondition.silverDust)
+
+        if (this.specialCondition.silverDust === false) return;
 
         Blacksmith.game.bot.sendMessage(
             this.player.id,
@@ -72,6 +74,7 @@ export class Blacksmith extends RoleBase {
             Blacksmith.game.chatId,
             this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
         )
+        console.log('handleChoice ' + this.specialCondition.silverDust)
     }
 
     choiceMsgEditText = () => {

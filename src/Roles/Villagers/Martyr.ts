@@ -25,9 +25,6 @@ export class Martyr extends RoleBase {
     }
     nightActionDone = false
 
-    targetKiller?: Player
-    diedForTarget: boolean = false
-
     action = () => {
         if (this.targetPlayer?.role) {
             this.nightActionDone = true

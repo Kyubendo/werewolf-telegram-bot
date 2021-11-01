@@ -22,15 +22,12 @@ export class Monarch extends RoleBase {
         gif: 'https://media.giphy.com/media/okLCopqw6ElCDnIhuS/giphy.gif'
     })
 
-    comingOut?: boolean;
-
     action = () => {
-        if (this.specialCondition.comingOut === false) return;
-
         if (this.specialCondition.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.specialCondition.comingOut = false;
             return;
         }
+        if (this.specialCondition.comingOut === false) return;
 
         Monarch.game.bot.sendMessage(
             this.player.id,
