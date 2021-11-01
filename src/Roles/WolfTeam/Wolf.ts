@@ -61,6 +61,21 @@ export class Wolf extends RoleBase {
                 `Теперь ты ${traitorPlayer.role.roleName}!`
             )
         }
+
+        if (type === 'wolfCameToSerialKiller') {
+            Wolf.game.bot.sendMessage(
+                Wolf.game.chatId,
+                `*${this.roleName}* ${highlightPlayer(this.player)} ` +
+                `попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!`,
+            )
+            Wolf.game.bot.sendMessage(
+                this.player.id,
+                'Ты вышел на охоту, но сам оказался жертвой.'
+                + ' Жертвой, которую разрезали на сотню маленьких кусочков.',
+            )
+            this.player.isAlive = false;
+            return true;
+        }
         return super.handleDeath(killer, type);
     }
 }

@@ -1,10 +1,12 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";
 import {GuardianAngel} from "../Villagers/GuardianAngel";
 import {Beauty} from "../Villagers/Beauty";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Player} from "../../Player/Player";
+import {SerialKiller} from "../Others/SerialKiller";
 
 type DecisionType = 'kill' | 'protect';
 
@@ -38,10 +40,16 @@ export class FallenAngel extends RoleBase {
                     reply_markup: {
                         inline_keyboard: [
                             [{
-                                text: 'Убить', callback_data: JSON.stringify({type: 'role', choice: 'kill'})
+                                text: 'Убить',
+                                callback_data: JSON.stringify({type: 'role', choice: 'kill'})
                             }],
                             [{
-                                text: 'Защитить', callback_data: JSON.stringify({type: 'role', choice: 'protect'})
+                                text: 'Защитить',
+                                callback_data: JSON.stringify({type: 'role', choice: 'protect'})
+                            }],
+                            [{
+                                text: 'Пропустить',
+                                callback_data: JSON.stringify({type: 'role', choice: 'skip'})
                             }],
                         ]
                     }
@@ -97,8 +105,8 @@ export class FallenAngel extends RoleBase {
         if (!this.numberOfAttacks) {
             GuardianAngel.game.bot.sendMessage(
                 this.player.id,
-                `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
-                'поэтому ничего не произошло особо...'
+                `Ты защищал волка ${highlightPlayer(this.targetPlayer)} сегодня ночью, ` +
+                `но с ним ничего не случилось...`
             )
         }
     }
@@ -115,9 +123,36 @@ export class FallenAngel extends RoleBase {
         }
     }
 
+    handleDeath(killer?: Player, type?: DeathType): boolean {
+        if (killer?.role instanceof SerialKiller) {
+            FallenAngel.game.bot.sendMessage(
+                this.player.id,
+                killer.role.killMessageDead
+            )
+
+            FallenAngel.game.bot.sendMessage(
+                FallenAngel.game.chatId,
+                `Ночью ангел ${highlightPlayer(this.player)} раз и навсегда пытался спасти от маньяка ` +
+                ` дерев... Стоп что?! Волков?! ` +
+                'А ангелок-то оказался падшим! ' +
+                `В общем *${this.roleName}* пытался помочь волкам, ` +
+                `но маньяк отрезал ${highlightPlayer(this.player)} его чёрные крылья! ` +
+                'Неужто никто в этой деревне не сможет справиться с этим дьяволом во плоти... '
+            )
+
+            this.player.isAlive = false;
+            return true;
+        } else
+            return super.handleDeath(killer, type);
+    }
+
     choiceMsgEditText = () => {
         FallenAngel.game.bot.editMessageText(
-            `Выбор принят: ${this.killOrProtect === 'kill' ? 'Убить' : 'Защитить'}.`,
+            `Выбор принят: ${this.killOrProtect === 'kill'
+                ? 'Убить'
+                : this.killOrProtect === 'protect'
+                    ? 'Защитить'
+                    : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,

@@ -36,7 +36,7 @@ export class GuardianAngel extends RoleBase {
         if (this.targetPlayer.role instanceof SerialKiller
             || (this.targetPlayer.role instanceof Wolf
                 && Math.random() >= 0.5)) {
-            this.onKilled(this.player);
+            this.onKilled(this.targetPlayer, 'angelProtectedKiller');
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
         } else {
@@ -65,8 +65,8 @@ export class GuardianAngel extends RoleBase {
     handleDeath(killer?: Player, type?: DeathType): boolean {
         this.player.isAlive = false;
 
-        if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)
-            if (this.targetPlayer?.role instanceof SerialKiller) { // Если ангел попытался защитить серийника
+        if (type === 'angelProtectedKiller') {
+            if (killer?.role instanceof SerialKiller) {
                 GuardianAngel.game.bot.sendMessage(
                     this.player.id,
                     'Ты попытался сохранить жизнь Серийному убийце, ' +
@@ -79,7 +79,7 @@ export class GuardianAngel extends RoleBase {
                     `от маньяка раз и навсегда, но маньяк отрезал ${highlightPlayer(this.player)} крылья! ` +
                     'Рядом с его телом была записка: "Я не нуждаюсь в твоей защите!"'
                 )
-            } else if (this.targetPlayer?.role instanceof Wolf) { // Если ангел попытался защитить волка
+            } else if (killer?.role instanceof Wolf) { // Если ангел попытался защитить волка
                 GuardianAngel.game.bot.sendMessage(
                     this.player.id,
                     'Твоя сила подвела тебя, ты неудачно защитил волка, и тебя съели!'

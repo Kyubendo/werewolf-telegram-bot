@@ -33,7 +33,10 @@ export class AlphaWolf extends Wolf {
                 this.targetPlayer.id,
                 `Ты был(а) атакован(а) волками, но ${this.roleName} избрал тебя. ` +
                 'Вместо того, чтобы быть убитым(ой), ты был(а) заражен(а)... ' +
-                'И завтрашней ночью превратишься в волка!'
+                'И завтрашней ночью превратишься' +
+                (this.targetPlayer.role instanceof GuardianAngel)
+                    ? '... Падшего Ангела!'
+                    : ' в волка!'
             )
 
             const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);
@@ -46,8 +49,12 @@ export class AlphaWolf extends Wolf {
                         `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
                         `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
                         'присоединиться к стае вместо того, ' +
-                        `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией. ` +
-                        'Он(а) станет волком завтра ночью.'
+                        `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией.\n`
+                        + (this.targetPlayer.role instanceof GuardianAngel)
+                            ? 'Следующей ночью у вас появится союзник, которого сложно переоценить... ' +
+                            'Он отбросит всё святое, чтобы вступить в волчьи ряды. ' +
+                            'Конечно же речь идёт о Падшем Ангеле!'
+                            : 'Он(а) станет волком завтра ночью.'
                     )
             )
 

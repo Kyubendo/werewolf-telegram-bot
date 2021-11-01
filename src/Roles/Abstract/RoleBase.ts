@@ -3,7 +3,8 @@ import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {GuardianAngel, Gunner, Suicide} from "../index";
 
-export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath'; // Harlot
+export type DeathType = 'loverDeath' | 'loverBetrayal' | 'harlotCameToDead' | 'angelProtectedKiller'
+    | 'wolfCameToSerialKiller';
 
 
 export abstract class RoleBase {
@@ -51,8 +52,8 @@ export abstract class RoleBase {
 
     readonly loveBind = (newLover: Player) => {
         if (this.player.lover === this.player) return;
-        this.killLover('lover_betrayal');
-        newLover.role?.killLover('lover_betrayal');
+        this.killLover('loverBetrayal');
+        newLover.role?.killLover('loverBetrayal');
 
         this.player.lover = newLover;
         newLover.lover = this.player;
@@ -137,7 +138,7 @@ export abstract class RoleBase {
             )
 
             // new message for players if their lover died
-        } else if (type === 'lover_betrayal') {
+        } else if (type === 'loverBetrayal') {
             RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 'Жители деревни просыпаются на следующее утро и обнаруживают, ' +

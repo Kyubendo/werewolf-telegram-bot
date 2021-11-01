@@ -6,6 +6,7 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {GuardianAngel} from "../Villagers/GuardianAngel";
 import {Beauty} from "../Villagers/Beauty";
+import {FallenAngel} from "../WolfTeam/FallenAngel";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
@@ -23,18 +24,16 @@ export class SerialKiller extends RoleBase {
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
-    handleDeath (killer?: Player, type?: DeathType): boolean {
-        if (killer?.role instanceof Wolf) {
-            SerialKiller.game.bot.sendMessage(
-                SerialKiller.game.chatId,
-                `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка! ` +
-                `*${killer.role.roleName}* ${highlightPlayer(killer)} погиб.`,
-            )
-            SerialKiller.game.bot.sendMessage(
-                killer.id,
-                'Ты вышел на охоту, но сам оказался жертвой.'
-                + ' Жертвой, которую разрезали на сотню маленьких кусочков.',
-            )
+    handleDeath(killer?: Player, type?: DeathType): boolean {
+        if (killer?.role instanceof Wolf || killer?.role instanceof FallenAngel) {
+            if (killer.role instanceof Wolf)
+                killer.role.onKilled(this.player, 'wolfCameToSerialKiller');
+             else {
+                SerialKiller.game.bot.sendMessage(
+                    SerialKiller.game.chatId,
+                    `*${killer.role.roleName}* из-за всех сил пытался покончить`
+                )
+            }
 
 
             killer.isAlive = false;

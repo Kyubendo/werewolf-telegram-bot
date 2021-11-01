@@ -40,9 +40,9 @@ export class Player {
                 && otherPlayer.isAlive
             )
             const wolfText = '\n' + (allies.length > 1
-                ? 'Волки'
+                ? 'Волки: '
                 : allies.length === 1
-                    ? 'Волк'
+                    ? 'Волк: '
                     : 'Однако волков уже нет в живых...' + allies.map(ally => highlightPlayer(ally)).join(', '));
 
             text = 'Боль пробегает по твоему телу, когда твои белые крылья становятся черными. ' +

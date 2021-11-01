@@ -41,7 +41,7 @@ export class Harlot extends RoleBase {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
             this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
                 if (this.targetPlayer)
-                    this.onKilled(killer, 'harlotDeath')
+                    this.onKilled(killer, 'harlotCameToDead')
 
                 return currentTargetHandleDeath(killer, type);
             }
@@ -70,7 +70,7 @@ export class Harlot extends RoleBase {
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        if (type === 'harlotDeath'
+        if (type === 'harlotCameToDead'
             && killer
             && this.targetPlayer) {
             const harlotPlayer = this.player;
