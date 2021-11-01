@@ -20,7 +20,7 @@ export class Seer extends ForecasterBase {
 
     nightActionDone = false
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
         if (apprenticeSeerPlayer) {
             apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
@@ -47,7 +47,7 @@ export class Seer extends ForecasterBase {
                 killer.role.killMessageDead
             )
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
 
         this.player.isAlive = false;
         return true;

@@ -11,7 +11,7 @@ export class Drunk extends RoleBase {
     weight = () => Drunk.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
 
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
             let text: string = ''; // change to let text be killer standard message
             if (killer?.role instanceof Wolf) {
@@ -34,6 +34,6 @@ export class Drunk extends RoleBase {
             this.player.isAlive = false;
             return true;
         }
-        return this.defaultHandleDeath(killer, type);
+        return super.handleDeath(killer, type);
     }
 }

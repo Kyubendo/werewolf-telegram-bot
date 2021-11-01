@@ -49,8 +49,8 @@ export class Doppelganger extends RoleBase {
 
         if (!this.targetPlayer.role) return;
 
-        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
-        this.targetPlayer.role.handleDeath = (killer?: Player) => {
+        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
+        this.targetPlayer.role.handleDeath = (killer, type) => {
             if (!this.targetPlayer?.role) return false;
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
             Doppelganger.game.bot.sendMessage(
@@ -58,7 +58,7 @@ export class Doppelganger extends RoleBase {
                 `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
                 this.player.role.roleIntroductionText() + this.player.role.startMessageText()
             )
-            return currentTargetHandleDeath(killer);
+            return currentTargetHandleDeath(killer, type);
         }
     }
 

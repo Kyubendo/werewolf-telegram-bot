@@ -38,8 +38,9 @@ export class Harlot extends RoleBase {
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
         } else {
-            const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
+            const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
             this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
+                console.log('handleDeath override by Harlot')
                 if (this.targetPlayer)
                     this.onKilled(killer, 'harlotDeath')
 
@@ -69,7 +70,8 @@ export class Harlot extends RoleBase {
         this.doneNightAction()
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
+        console.log('harlot handleDeath')
         if (type === 'harlotDeath'
             && killer
             && this.targetPlayer) {
@@ -109,7 +111,7 @@ export class Harlot extends RoleBase {
                 return false;
             }
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
 
         this.player.isAlive = false;
         return true;
