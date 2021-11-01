@@ -11,12 +11,11 @@ export class Mason extends RoleBase {
 
     showOtherMasonPlayers = () => {
         const allies = this.findOtherMasonPlayers();
-        return `${allies?.length > 0 
-            ? (allies?.length > 1 
-                ? '\nКаменщики: '
-                : '\nТвой напарник на стройке — '
-            + allies?.map(ally => highlightPlayer(ally)).join(', ')) 
-            : ''}`
+        if (!allies?.length) return ''
+        return (allies?.length > 1
+            ? '\nКаменщики: '
+            : '\nТвой напарник на стройке — ')
+            + allies?.map(ally => highlightPlayer(ally)).join(', ')
     }
 
     roleName = 'Каменщик 👷';
