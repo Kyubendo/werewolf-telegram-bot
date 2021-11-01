@@ -66,10 +66,10 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        // if(endGame){
-        //     this.onGameEnd(endGame)
-        //     return
-        // }
+        if(endGame){
+            this.onGameEnd(endGame)
+            return
+        }
 
         this.checkNightDeaths(nextStage)
 

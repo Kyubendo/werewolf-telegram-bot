@@ -38,7 +38,6 @@ const dayRoleResolves = [
 ]
 
 const nightRoleResolves = [
-    //Pumpkin,
     // PuppetMaster,
     JackOLantern,
     Harlot, //Prowler

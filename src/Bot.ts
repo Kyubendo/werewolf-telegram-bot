@@ -2,13 +2,12 @@ import {config} from "dotenv";
 
 config({path: __dirname + '/./../.env'})
 import TelegramBot from "node-telegram-bot-api";
-import {Game} from "./Game/Game";
+import {Game} from "./Game";
 import {initGame} from "./Game/commands/init";
 import {callbackHandle} from "./Game/commands/callbackHandle";
 import {forceStart} from "./Game/commands/forceStart";
 import {nextStage} from "./Game/commands/nextStage";
 import {TgBot} from "./TgBot";
-//optimize imports
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!

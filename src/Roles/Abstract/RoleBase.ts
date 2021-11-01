@@ -123,7 +123,6 @@ export abstract class RoleBase {
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
         if (type === 'loverDeath') {
             killer?.role && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
