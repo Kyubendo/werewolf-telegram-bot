@@ -7,7 +7,6 @@ type DecisionType = 'kill' | 'protect';
 
 export class FallenAngel extends RoleBase {
     roleName = 'Падший ангел 👼🐺';
-    roleIntroductionText = () => '';
     startMessageText = () => 'Боль пробегает по твоему телу, ' +
         'когда твои белые крылья становятся черными. ' +
         'Сквозь боль трансформации ты борешься с собой и с тем злом, ' +
@@ -21,6 +20,7 @@ export class FallenAngel extends RoleBase {
     killOrProtect?: DecisionType;
 
     action = () => {
+        this.targetPlayer = undefined;
         if (!this.killOrProtect)
             FallenAngel.game.bot.sendMessage(
                 this.player.id,
@@ -28,8 +28,12 @@ export class FallenAngel extends RoleBase {
                 {
                     reply_markup: {
                         inline_keyboard: [
-                            [{text: 'Убить', callback_data: JSON.stringify({type: 'role', choice: 'kill'})}],
-                            [{text: 'Защитить', callback_data: JSON.stringify({type: 'role', choice: 'protect'})}],
+                            [{
+                                text: 'Убить', callback_data: JSON.stringify({type: 'role', choice: 'kill'})
+                            }],
+                            [{
+                                text: 'Защитить', callback_data: JSON.stringify({type: 'role', choice: 'protect'})
+                            }],
                         ]
                     }
                 }
@@ -66,12 +70,11 @@ export class FallenAngel extends RoleBase {
         if (choice === 'kill' || choice === 'protect') {
             this.killOrProtect = choice;
             this.choiceMsgEditText();
-            this.action();
+            this.player.role?.action && this.player.role?.action();
         } else {
             this.targetPlayer = findPlayer(choice, FallenAngel.game.players);
             super.choiceMsgEditText();
         }
-
     }
 
     choiceMsgEditText = () => {

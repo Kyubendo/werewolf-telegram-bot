@@ -1,7 +1,7 @@
 import {Game} from "../../Game";
 import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner, Suicide} from "../index";
+import {GuardianAngel, Gunner, Suicide} from "../index";
 
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath'; // Harlot
 

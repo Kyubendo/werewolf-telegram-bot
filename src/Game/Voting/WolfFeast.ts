@@ -1,7 +1,7 @@
 import {VotingBase} from "./VotingBase";
 import {GameStage} from "../Game";
 import {Player} from "../../Player/Player";
-import {Wolf} from "../../Roles";
+import {FallenAngel, Wolf} from "../../Roles";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {randomElement} from "../../Utils/randomElement";
 
@@ -13,6 +13,7 @@ export class WolfFeast extends VotingBase {
     getVoters = () => this.game.players.filter(player => player.isAlive && player.role instanceof Wolf)
 
     voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive && !(otherPlayer.role instanceof Wolf)
+        && !(otherPlayer.role instanceof FallenAngel)
 
     beforeVotingAction = () => this.getVoters().length > 1
         && this.getVoters().forEach(player => this.game.bot.sendMessage(
