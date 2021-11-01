@@ -93,5 +93,6 @@ export class WildChild extends RoleBase {
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, WildChild.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

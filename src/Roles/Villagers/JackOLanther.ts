@@ -33,7 +33,6 @@ export class JackOLantern extends RoleBase {
         if (!this.targetPlayer) return;
 
         this.targetPlayer.role = new Pumpkin(this.targetPlayer, this.targetPlayer.role)
-        console.log(this.targetPlayer.role.roleName)
 
         JackOLantern.game.bot.sendAnimation(
             this.targetPlayer.id,

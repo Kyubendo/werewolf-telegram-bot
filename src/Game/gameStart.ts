@@ -4,5 +4,5 @@ import {Game} from "./Game";
 
 export const gameStart = (bot: TelegramBot, game: Game) => {
     assignRoles(game) // fix async
-    game.setNextStage()
+    setTimeout(game.setNextStage, 40)
 }

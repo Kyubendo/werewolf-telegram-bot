@@ -2,10 +2,10 @@ import {Game} from "./Game";
 import {RoleBase} from "../Roles/Abstract/RoleBase";
 import {arrayShuffle} from "../Utils/arrayShuffle";
 import {
-    AlphaWolf,
+    AlphaWolf, ApprenticeSeer, Beauty,
     Beholder, Blacksmith,
     ClumsyGuy,
-    Cursed, Fool, GuardianAngel, Gunner, Harlot, JackOLantern, Lycan,
+    Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, JackOLantern, Lycan, Martyr,
     Mason, Monarch, Necromancer, Oracle, Sandman, Seer,
     SerialKiller,
     Sorcerer, Suicide, Thief,
@@ -24,19 +24,19 @@ export const assignRoles = (game: Game) => {
     const evilPool = [...killersPool, Sorcerer]
     const villagersPool = [
         Villager,
-        Villager, ClumsyGuy, Cursed, WoodMan, Mason,
-        Beholder, // Passive Villagers
-
+        //ClumsyGuy,
+        Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, // Passive Villagers
+        // ApprenticeSeer.ts
         Seer, Monarch, Fool, Harlot, Oracle, Gunner, GuardianAngel,
-        WiseElder, Sandman, Blacksmith, WildChild, // Active Villagers
+        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 
-        Suicide, Thief, Necromancer, // Other
+        Suicide, Thief, Necromancer, Doppelganger// Other
     ]
 
     const testPool = [
-        Harlot, Wolf,
-        JackOLantern, Oracle, Villager, GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
-
+        Harlot, Wolf, WildChild, Villager,
+        Oracle, Villager, GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
+        Harlot,
         Beholder, // Passive Villagers
 
         Seer, Monarch, Fool, Harlot, Oracle, Gunner, GuardianAngel,
@@ -51,13 +51,9 @@ export const assignRoles = (game: Game) => {
     //     arrayShuffle(availableKillers)
     //
     //     let rolePool = [...villagersPool]
-    //     console.log(11)
-    //
     //     const evilCount = Math.floor((players.length - 4) / 2) + +(Math.random() >= .5)
     //     const evils = [...Array(evilCount)].map(() => availableKillers.pop())
     //     evils.find(e => e instanceof Wolf) && rolePool.push(...wolfNeededRoles)
-    //
-    //     console.log(12)
     //
     //     arrayShuffle(rolePool)
     //
@@ -68,15 +64,11 @@ export const assignRoles = (game: Game) => {
     //     evils.forEach(e => e && rolePool.unshift(e))
     //     rolePool = rolePool.slice(0, players.length)
     //     arrayShuffle(rolePool)
-    //     console.log(13)
     //
     //     const currentRoles = players.map((player, i) => player.role = new rolePool[i](player))
-    //     console.log(14)
-    //
     //     const weight = Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
     //     const currentEvilCount = currentRoles.filter(r => evilPool.find(e => r instanceof e)).length
     //
-    //     console.log(15)
     //     balanced = currentEvilCount <= players.length / 2 - 1
     //         && weight <= players.length / 3
     //
@@ -84,8 +76,6 @@ export const assignRoles = (game: Game) => {
 
     const currentRoles = players.map((player, i) => player.role = new testPool[i](player))
 
-
-    console.log(100)
     players.forEach(player => player.role && game.bot.sendMessage(
         player.id,
         player.role.roleIntroductionText() + player.role.startMessageText())
