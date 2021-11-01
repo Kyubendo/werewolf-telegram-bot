@@ -1,14 +1,16 @@
 import {
-    Detective, FallenAngel,
+    Blacksmith,
+    Detective, Doppelganger,
+    FallenAngel,
     GuardianAngel,
     Gunner,
-    Harlot,
+    Harlot, JackOLantern,
     Martyr,
-    Monarch,
-    Oracle,
+    Monarch, Necromancer,
+    Oracle, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
-    Thief,
+    Thief, WildChild,
     WiseElder,
     Wolf
 } from "../Roles";
@@ -20,26 +22,35 @@ export const roleResolves = (stage: GameStage) => {
             return dayRoleResolves
         case 'night':
             return nightRoleResolves
+        case 'lynch':
+            return lynchRoleResolves
         default:
             return []
     }
 }
 
 const dayRoleResolves = [
-    Martyr, // WildChild, // constant choices
-    Monarch, // only action
+    Martyr, WildChild, Doppelganger,  // WildChild, // constant choices
+    Monarch,
     Gunner,
     WiseElder, Detective,
+    Sandman, // pre-last because he freeze all other actions including Blacksmith's
+    Blacksmith, // last because he can freeze action of infected but still not wolf player
 ]
 
 const nightRoleResolves = [
+    //Pumpkin,
     // PuppetMaster,
-    // Jack
+    JackOLantern,
     Harlot, //Prowler
-    Martyr,
+    Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel, FallenAngel,
-    Thief,
+    Thief, Necromancer,
     Wolf,
     SerialKiller,
     Sorcerer, Seer, Oracle,
+]
+
+const lynchRoleResolves = [
+    Pumpkin,
 ]

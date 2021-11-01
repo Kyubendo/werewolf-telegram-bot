@@ -5,6 +5,8 @@ import {findPlayer} from "../../Game/findPlayer";
 
 export abstract class ForecasterBase extends RoleBase {
     action = () => {
+        this.targetPlayer = undefined
+
         ForecasterBase.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь посмотреть?',
@@ -15,7 +17,7 @@ export abstract class ForecasterBase extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResult = () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
@@ -23,14 +25,12 @@ export abstract class ForecasterBase extends RoleBase {
             this.player.id,
             `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
         )
-        this.targetPlayer = undefined
     }
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, ForecasterBase.game.players);
         this.choiceMsgEditText();
     }
-
 
     abstract forecastRoleName:(targetRole: RoleBase) => string | undefined;
 }

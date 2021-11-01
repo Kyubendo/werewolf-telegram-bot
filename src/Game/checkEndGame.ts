@@ -2,32 +2,57 @@ import {Player} from "../Player/Player";
 import {
     ApprenticeSeer,
     Beholder,
+    Blacksmith,
     ClumsyGuy,
     Cursed,
     Drunk, FallenAngel,
     GuardianAngel,
     Gunner,
-    Harlot, Martyr,
+    Harlot,
+    Martyr,
     Mason,
-    Monarch, Oracle, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan
+    Monarch,
+    Oracle,
+    Sandman,
+    Seer,
+    SerialKiller,
+    Traitor,
+    Villager,
+    WiseElder,
+    Wolf,
+    WoodMan,
+    WildChild,
+    Beauty,
+    JackOLantern,
 } from "../Roles";
 import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan, Martyr
+    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty,
 ]
 const wolfTeam: Function[] = [Wolf, FallenAngel,]
 const evil: Function[] = [Wolf, SerialKiller, FallenAngel,]
 const nonWolfKillers: Function[] = [SerialKiller, FallenAngel,] // Fallen Angel??
 
-export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'suicide' | 'nobody'
+export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
     const wolvesTeamPlayers = players.filter(p => wolfTeam.find(wa => p.role instanceof wa))
     const villagersTeamPlayers = players.filter(p => villagers.find(v => p.role instanceof v))
     const alivePlayers = players.filter(p => p.isAlive)
     const aliveWolves = alivePlayers.filter(p => p.role instanceof Wolf)
     const aliveEvilPlayer = alivePlayers.find(p => evil.find(e => p.role instanceof e))
+    const aliveJackPlayers = alivePlayers.filter(player => player.role instanceof JackOLantern);
+
+    if (alivePlayers.length === 2 && alivePlayers[0].lover === alivePlayers[1]) {
+        return {winners: alivePlayers.filter(player => player.lover), type: 'lovers'}
+    }
+
+
+    if (aliveJackPlayers.length * 2 >= alivePlayers.length) {
+        return { winners: aliveJackPlayers, type: 'jack' }
+    }
+
     if (!aliveEvilPlayer) {
         return {winners: villagersTeamPlayers, type: 'villagers'}
     }
@@ -74,6 +99,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
 export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
+    const lovers = players.map(player => player.lover);
     const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForTarget)
     for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm.targetPlayer && !!~winners.indexOf(sm.targetPlayer)
+    for (const lover of lovers) if (lover?.won && lover.lover) lover.lover.won = true;
 }

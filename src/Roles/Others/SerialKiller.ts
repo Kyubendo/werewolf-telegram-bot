@@ -1,16 +1,20 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
+import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
     roleIntroductionText = () => `Ты ${this.roleName}. `
     startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
-    weight = () => -15; // change?
+    weight = () => -14; // change?
+
+    nightActionDone = false
 
     killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
         `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
@@ -19,7 +23,7 @@ export class SerialKiller extends RoleBase {
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
-    handleDeath(killer?: Player) {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
@@ -32,13 +36,15 @@ export class SerialKiller extends RoleBase {
                 + ' Жертвой, которую разрезали на сотню маленьких кусочков.',
             )
 
-            killer.role.onKilled(killer)
+            killer.isAlive = false;
             return false;
         } else
-            return super.handleDeath(killer);
+            return this.defaultHandleDeath(killer, type);
     }
 
     action = () => {
+        this.targetPlayer = undefined
+
         SerialKiller.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь запихнуть пару-тройку ножей?',
@@ -52,12 +58,19 @@ export class SerialKiller extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer) return;
-        this.targetPlayer.role?.onKilled(this.player);
-        this.targetPlayer = undefined
+
+        if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+            this.handleGuardianAngel(this.player);
+            return;
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
+            this.loveBind(this.targetPlayer);
+        else
+            this.targetPlayer.role?.onKilled(this.player);
     }
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, SerialKiller.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

@@ -17,6 +17,10 @@ import {Oracle} from "./Villagers/Oracle";
 import {WiseElder} from "./Villagers/WiseElder";
 import {Detective} from "./Villagers/Detective";
 import {Martyr} from "./Villagers/Martyr";
+import {Beauty} from "./Villagers/Beauty";
+import {Sandman} from "./Villagers/Sandman";
+import {Blacksmith} from "./Villagers/Blacksmith";
+import {WildChild} from "./Villagers/WildChild";
 
 import {Wolf} from "./WolfTeam/Wolf";
 import {Lycan} from "./WolfTeam/Lycan";
@@ -26,14 +30,21 @@ import {FallenAngel} from "./WolfTeam/FallenAngel";
 
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";
+import {Doppelganger} from "./Others/Doppelganger";
+import {Necromancer} from "./Others/Necromancer";
 import {SerialKiller} from "./Others/SerialKiller";
+import {JackOLantern} from "./Villagers/JackOLanther";
+import {Pumpkin} from "./Others/Pumpkin";
 
 export {
-    Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Harlot, Beholder, ApprenticeSeer,
+    Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Beholder, ApprenticeSeer,
+    Beauty,
 
-    Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Detective,
-  
+    Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild,
+
     Wolf, Lycan, Sorcerer, AlphaWolf, FallenAngel,
 
-    Suicide, Thief, SerialKiller
+    Suicide, Thief, Necromancer, SerialKiller, Doppelganger, JackOLantern,
+
+    Pumpkin,
 }

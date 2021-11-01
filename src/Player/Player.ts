@@ -1,4 +1,4 @@
-import {RoleBase} from "../Roles/Abstract/RoleBase";
+import {RoleBase} from "../Game";
 import {User} from "node-telegram-bot-api";
 import {FallenAngel, GuardianAngel, Wolf} from "../Roles";
 import {highlightPlayer} from "../Utils/highlightPlayer";
@@ -16,12 +16,16 @@ export class Player {
     readonly id: number;
     readonly name: string;
     readonly username?: string;
-    isAlive: boolean;
-    isFrozen: boolean;
+    isAlive: boolean = true;
+    isFrozen: boolean = false;
     won: boolean = false;
     role?: RoleBase;
 
+    lover?: Player;
+
     infected: boolean = false;
+
+    guardianAngel?: Player;
 
     readonly transformInfected = () => {
         let text: string;

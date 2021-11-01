@@ -1,11 +1,11 @@
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 
 export class Mason extends RoleBase {
     findMasonPlayers = () => Mason.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Mason
-        // && otherPlayer !== this.player
+        && otherPlayer !== this.player
         && otherPlayer.isAlive
     )
 
@@ -24,11 +24,16 @@ export class Mason extends RoleBase {
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
     }
 
-    handleDeath(killer?: Player): boolean {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         Mason.game.bot.sendMessage(
             Mason.game.chatId,
             `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
             `камней, кровь разбрызгана повсюду. *${this.roleName}* мертв!`
+        )
+
+        killer?.role?.killMessageDead && Mason.game.bot.sendMessage(
+            this.player.id,
+            killer?.role?.killMessageDead
         )
         this.player.isAlive = false;
         return true;

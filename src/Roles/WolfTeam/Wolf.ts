@@ -1,20 +1,21 @@
 import {Player} from "../../Player/Player";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Traitor} from "../Villagers/Traitor";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
+import {Beauty} from "../Villagers/Beauty";
 
 export class Wolf extends RoleBase {
     findOtherWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Wolf
-        // && otherPlayer !== this.player
+        && otherPlayer !== this.player
         && otherPlayer.isAlive
     )
-
 
     showOtherWolfPlayers(): string {
         const allies = this.findOtherWolfPlayers();
         if (!allies.length)
-            return ''
+            return '\nНо ты один в стае, крепись.'
         return `\n${(allies.length > 1
             ? '\nДругие волки: '
             : 'Твой брат по волчьему делу — ')
@@ -28,17 +29,28 @@ export class Wolf extends RoleBase {
 
     weight = () => -10;
 
+    nightActionDone = false
+
     killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
         `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`
     killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF
 
     actionResolve = () => {
         if (!this.targetPlayer) return;
-        this.targetPlayer.role?.onKilled(this.player);
+
+        if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+            this.handleGuardianAngel(this.player);
+            return;
+        } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
+            this.loveBind(this.targetPlayer);
+        } else {
+            this.targetPlayer.role?.onKilled(this.player);
+        }
+
         this.targetPlayer = undefined
     }
 
-    handleDeath(killer?: Player): boolean {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         const traitorPlayer = Wolf.game.players.find(player => player.role instanceof Traitor && player.isAlive);
 
         if (this.findOtherWolfPlayers().length <= 1 && traitorPlayer) {
@@ -49,6 +61,6 @@ export class Wolf extends RoleBase {
                 `Теперь ты ${traitorPlayer.role.roleName}!`
             )
         }
-        return super.handleDeath(killer);
+        return this.defaultHandleDeath(killer, type);
     }
 }

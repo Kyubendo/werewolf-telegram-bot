@@ -7,4 +7,7 @@ export class TgBot extends TelegramBot {
     editMessageText(text: string, options?: TelegramBot.EditMessageTextOptions): Promise<TelegramBot.Message | boolean> {
         return super.editMessageText(text, {parse_mode: 'Markdown', ...options});
     }
+    sendAnimation(chatId: TelegramBot.ChatId, animation: string, options?: TelegramBot.SendAnimationOptions): Promise<TelegramBot.Message> {
+        return super.sendAnimation(chatId, animation, {parse_mode: 'Markdown', ...options});
+    }
 }

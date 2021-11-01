@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -16,19 +16,23 @@ export class Martyr extends RoleBase {
         'только если этот человек выиграет.'
     weight = () => 6;
 
+    nightActionDone = false
+
     targetKiller?: Player
     diedForTarget: boolean = false
 
     action = () => {
-        if (this.targetPlayer?.role) return
+        if (this.targetPlayer?.role) {
+            this.nightActionDone = true
+            return
+        }
 
         Martyr.game.bot.sendMessage(
             this.player.id,
             'За кого ты хочешь умереть?',
             {
                 reply_markup: generateInlineKeyboard(
-                    Martyr.game.players.filter(player => player !== this.player && player.isAlive),
-                    false
+                    Martyr.game.players.filter(player => player !== this.player && player.isAlive), false
                 )
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
@@ -36,9 +40,10 @@ export class Martyr extends RoleBase {
 
     actionResolve = () => {
         if (!this.targetPlayer?.role) {
-            this.targetPlayer = randomElement(Martyr.game.players.filter(p => p !== this.player))
+            this.targetPlayer = randomElement(Martyr.game.players.filter(p => p !== this.player && p.isAlive))
             Martyr.game.bot.editMessageText(
-                `Боги сделали выбор за вас — ${highlightPlayer(this.targetPlayer)}`,
+                `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
+                `за тебя — ${highlightPlayer(this.targetPlayer)}`,
                 {
                     chat_id: this.player.id,
                     message_id: this.choiceMsgId
@@ -46,7 +51,7 @@ export class Martyr extends RoleBase {
             )
         }
         if (!this.targetPlayer.role) return
-        this.targetPlayer.role.handleDeath = (killer) => {
+        this.targetPlayer.role.handleDeath = (killer?: Player) => {
             if (!this.targetPlayer) return false;
 
             this.targetKiller = killer
@@ -68,19 +73,20 @@ export class Martyr extends RoleBase {
         }
     }
 
-    handleDeath(killer?: Player): boolean {
+    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+        console.log(this.targetPlayer?.name)
         if (killer === this.player && this.targetPlayer) {
-            let deathMessage
+            let deathMessage: string | undefined
             if (!this.targetKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.targetPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
                 + `закончилось, они увидели мертвое тело ${highlightPlayer(this.player)} на виселице, в то время как `
                 + `${highlightPlayer(this.targetPlayer)} стоит рядом как ни в чем не бывало.`
             else if (this.targetKiller.role instanceof SerialKiller || this.targetKiller.role instanceof Wolf) deathMessage = `Селяне собрались `
                 + `на следующее утро и увидели лежащее на площади тело Мученицы ${highlightPlayer(this.player)}. `
-                + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью ${this.roleName} умерла за `
+                + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью *${this.roleName}* умерла за `
                 + `другого человека.`
             else if (this.targetKiller.role instanceof Gunner) deathMessage = `Вдруг раздался оглушительный выстрел, и все на площади `
-                + `увидели, как ${this.targetKiller.role.roleName} ${highlightPlayer(this.targetKiller)} все еще целится в голову `
+                + `увидели, как *${this.targetKiller.role.roleName}* ${highlightPlayer(this.targetKiller)} все еще целится в голову `
                 + `${highlightPlayer(this.targetPlayer)}… Но промахивается и попадает в ${highlightPlayer(this.player)}, в `
                 + `то время как ${highlightPlayer(this.targetPlayer)} стоит абсолютно невредим(а).`
             // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `
@@ -89,16 +95,20 @@ export class Martyr extends RoleBase {
             //     + `и невредимый(ая).`
 
             setTimeout(
-                (deathMessage) => deathMessage && Martyr.game.bot.sendMessage(Martyr.game.chatId, deathMessage),
+                (deathMessage) => deathMessage && Martyr.game.bot
+                    .sendMessage(Martyr.game.chatId, deathMessage),
                 25,
                 deathMessage
             )
+            this.player.isAlive = false;
+            return true;
         }
-        return super.handleDeath(killer)
+        return this.defaultHandleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Martyr.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }
