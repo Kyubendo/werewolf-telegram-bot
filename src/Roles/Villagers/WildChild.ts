@@ -49,6 +49,8 @@ export class WildChild extends RoleBase {
         this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
             if (!this.targetPlayer) return false;
 
+            currentTargetHandleDeath(killer);
+
             this.player.role = new Wolf(this.player, this.player.role);
 
             if (this.player.role instanceof Wolf) {
@@ -65,7 +67,7 @@ export class WildChild extends RoleBase {
                 ))
             }
 
-            return currentTargetHandleDeath(killer);
+            return true;
         }
     }
 
