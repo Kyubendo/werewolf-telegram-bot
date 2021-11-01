@@ -18,7 +18,7 @@ export class SerialKiller extends RoleBase {
 
     killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
         `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
-        `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
+        `на месте...\n${this.roleName} снова атаковал!\n${highlightPlayer(deadPlayer)} ` +
         `был(а) *${deadPlayer.role?.roleName}*`;
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
