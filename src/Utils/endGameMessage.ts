@@ -16,11 +16,11 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
     nobody: {
         text: 'Все в деревне мертвы... ' +
             'Здесь больше нет ничего, кроме мертвых тел. Никто не выиграл, кроме стервятников.',
-        gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
+        gif: 'https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif',
     },
     suicide: {
         text: 'О нет! Вы казнили Самоубийцу! Он выиграл игру...',
-        gif: 'https://media.giphy.com/media/mXnu6HiBvOckU/giphy.gif',
+        gif: 'https://media.giphy.com/media/3ornka9rAaKRA2Rkac/giphy.gif',
     },
     lovers: {
         text: 'Настоящая любовь побеждает! Любовники выиграли!',
