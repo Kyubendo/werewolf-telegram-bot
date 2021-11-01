@@ -38,17 +38,12 @@ export class Harlot extends RoleBase {
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
         } else {
-            if (this.targetPlayer) {
-                Harlot.game.bot.sendMessage(
-                    this.player.id,
-                    `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
-                    `не серийный убийца, потому что ночь была слишком хороша...`,
-                )
-                Harlot.game.bot.sendMessage(
-                    this.targetPlayer.id,
-                    'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
-                    'И вы оба хорошо провели время!' // GIF
-                )
+            const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
+            this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
+                if (this.targetPlayer)
+                    this.onKilled(killer, 'harlotDeath')
+
+                return currentTargetHandleDeath(killer, type);
             }
         }
     }
@@ -75,27 +70,48 @@ export class Harlot extends RoleBase {
     }
 
     originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
-        if (killer?.role instanceof Wolf) { // Если волк пытается убить шлюху
-            if (this.targetPlayer?.role instanceof Wolf) { // Убивает, если её целью является любой из волков
-                this.player.isAlive = false;
-
+        if (type === 'harlotDeath'
+            && killer
+            && this.targetPlayer) {
+            const harlotPlayer = this.player;
+            if (killer.role instanceof Wolf) {
+                RoleBase.game.bot.sendMessage(
+                    RoleBase.game.chatId,
+                    `${highlightPlayer(harlotPlayer)} проскользнула ` +
+                    `в дом ${highlightPlayer(this.targetPlayer)}, ` +
+                    'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
+                    `пожирающего ${highlightPlayer(this.targetPlayer)}! ` +
+                    `Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
+                    `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} мертва.`,
+                )
+            } else if (killer.role instanceof SerialKiller) {
+                RoleBase.game.bot.sendMessage(
+                    RoleBase.game.chatId,
+                    `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} проникла в дом ` +
+                    `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
+                    `${highlightPlayer(this.player)}! ` +
+                    `*${killer.role.roleName}* решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
+                    `прежде чем взять сердце к себе в коллекцию!`,
+                )
+            }
+        } else if (killer?.role instanceof Wolf) {
+            if (this.targetPlayer?.role instanceof Wolf) {
                 Harlot.game.bot.sendMessage(
                     Harlot.game.chatId,
                     `${highlightPlayer(this.player)} проскользнула в не тот дом прошлой ночью!  ` +
                     'Останки распутной жительницы были найдены пригвожденными к дверям цверкви... Как жалко :(')
-                return true;
-            } else { // Не убивает, если её целью является не волк
-                this.targetPlayer && Harlot.game.bot.sendMessage( // Переделать на много волков
-                    this.targetPlayer.id, // Сообщение волку, если он пошёл в шлюху, а её не было дома
-                    `Странно... ${this.targetPlayer?.role?.targetPlayer} не была дома! ` +
+            } else {
+                this.targetPlayer && Harlot.game.bot.sendMessage(
+                    killer.id,
+                    `Странно... ${highlightPlayer(this.player)} не была дома! ` +
                     `Нет ужина для тебя сегодня...`,
                 )
                 return false;
             }
-        } else if (killer?.role instanceof Harlot) {
-            this.player.isAlive = false;
-            return true;
-        }
-        return this.defaultHandleDeath(killer, type);
+        } else
+            return this.defaultHandleDeath(killer, type);
+
+        this.player.isAlive = false;
+        return true;
     }
 }
