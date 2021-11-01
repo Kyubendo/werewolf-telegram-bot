@@ -2,11 +2,9 @@ import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";
-import {GuardianAngel} from "../Villagers/GuardianAngel";
-import {Beauty} from "../Villagers/Beauty";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Player} from "../../Player/Player";
-import {SerialKiller} from "../Others/SerialKiller";
+import {Beauty, GuardianAngel, SerialKiller} from "../index";
+import {Player} from "../../Game";
 
 type DecisionType = 'kill' | 'protect';
 
@@ -64,7 +62,7 @@ export class FallenAngel extends RoleBase {
                         reply_markup: generateInlineKeyboard(FallenAngel.game.players
                             .filter(player => player !== this.player
                                 && player.isAlive
-                                && !(wolfTeam.find(wolfTeamPlayer => player.role instanceof wolfTeamPlayer))))
+                                && !(wolfTeam.find(wolfTeamRole => player.role instanceof wolfTeamRole))))
                     }
                 ).then(msg => this.choiceMsgId = msg.message_id)
             } else {
@@ -75,7 +73,7 @@ export class FallenAngel extends RoleBase {
                         reply_markup: generateInlineKeyboard(FallenAngel.game.players
                             .filter(player => player !== this.player
                                 && player.isAlive
-                                && wolfTeam.find(wolfTeamPlayer => player.role instanceof wolfTeamPlayer)))
+                                && wolfTeam.find(wolfTeamRole => player.role instanceof wolfTeamRole)))
                     }
                 ).then(msg => this.choiceMsgId = msg.message_id)
             }
@@ -145,6 +143,8 @@ export class FallenAngel extends RoleBase {
         } else
             return super.handleDeath(killer, type);
     }
+
+
 
     choiceMsgEditText = () => {
         FallenAngel.game.bot.editMessageText(

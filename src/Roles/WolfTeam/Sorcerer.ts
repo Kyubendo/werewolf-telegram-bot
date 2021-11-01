@@ -4,6 +4,7 @@ import {Seer, Fool, ApprenticeSeer} from "../index";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";
+i
 
 export class Sorcerer extends ForecasterBase {
     roleName = 'Колдунья 🔮';

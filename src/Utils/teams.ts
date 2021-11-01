@@ -1,3 +1,4 @@
-import {FallenAngel, Sorcerer, Wolf} from "../Roles";
+import {Wolf, FallenAngel, Sorcerer} from "../Roles";
+
 
 export const wolfTeam = [Wolf, FallenAngel, Sorcerer];
