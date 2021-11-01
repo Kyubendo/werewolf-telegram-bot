@@ -4,7 +4,7 @@ import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {Beauty} from "./Beauty";
 
 export class Harlot extends RoleBase {

@@ -1,10 +1,11 @@
-import {DeathType} from "../../Game";
-import {Player, RoleBase} from "../../Game";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {Player} from "../../Player/Player";
+import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Beauty, GuardianAngel, Wolf} from "../index";
-
+import {GuardianAngel} from "../Villagers/GuardianAngel";
+import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';

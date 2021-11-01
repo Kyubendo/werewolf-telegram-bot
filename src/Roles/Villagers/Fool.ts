@@ -3,7 +3,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {randomElement} from "../../Utils/randomElement";
-import {DeathType} from "../../Game";
+import {DeathType} from "../Abstract/RoleBase";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';

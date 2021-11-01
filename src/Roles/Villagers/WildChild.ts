@@ -1,4 +1,4 @@
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -47,7 +47,9 @@ export class WildChild extends RoleBase {
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
         this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
-            if (!this.targetPlayer) return false;
+            if (!this.targetPlayer?.role) return false;
+
+            currentTargetHandleDeath(killer);
 
             this.player.role = new Wolf(this.player, this.player.role);
 
@@ -65,7 +67,7 @@ export class WildChild extends RoleBase {
                 ))
             }
 
-            return currentTargetHandleDeath(killer);
+            return true;
         }
     }
 

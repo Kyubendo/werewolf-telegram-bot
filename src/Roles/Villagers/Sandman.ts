@@ -1,5 +1,4 @@
 import {RoleBase} from "../Abstract/RoleBase";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Sandman extends RoleBase {
     roleName = 'Морфей 💤';
@@ -12,7 +11,7 @@ export class Sandman extends RoleBase {
 
     actionAnnouncement = () => ({
         message: 'Пока жители деревни обсуждают события прошедшей ночи, ' +
-            `${highlightPlayer(this.player)} возвращается в дом и начинает ` +
+            `${this.player} возвращается в дом и начинает ` +
             'напевать мягкую мелодию. Сегодня ночью все будут спать очень глубоко, ' +
             'и никто не сможет выполнить свои ночные действия.',
         gif: 'https://media.giphy.com/media/fvJIuEVeNjpYs/giphy.gif'

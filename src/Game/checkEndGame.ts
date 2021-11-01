@@ -1,4 +1,4 @@
-import {Player} from "../Game";
+import {Player} from "../Player/Player";
 import {
     ApprenticeSeer,
     Beholder,

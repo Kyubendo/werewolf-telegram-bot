@@ -10,7 +10,6 @@ import {nextStage} from "./Game/commands/nextStage";
 import {TgBot} from "./TgBot";
 import express from "express";
 import * as bodyParser from "body-parser";
-import {hardReset} from "./Game/commands/hardReset";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -32,7 +31,7 @@ initGame(bot, state)
 callbackHandle(bot, state)
 forceStart(bot, state)
 nextStage(bot, state)
-hardReset(bot, state)
+
 
 const app = express();
 app.use(bodyParser.json());

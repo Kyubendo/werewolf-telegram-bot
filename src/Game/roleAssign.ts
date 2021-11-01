@@ -1,5 +1,5 @@
 import {Game} from "./Game";
-import {RoleBase} from "../Game";
+import {RoleBase} from "../Roles/Abstract/RoleBase";
 import {arrayShuffle} from "../Utils/arrayShuffle";
 import {
     AlphaWolf, ApprenticeSeer, Beauty,
@@ -75,7 +75,7 @@ export const assignRoles = (game: Game) => {
 
     } while (!balanced)
 
-    // const currentRoles = players.map((player, i) => player.role = new testPool[i](player))
+    //const currentRoles = players.map((player, i) => player.role = new testPool[i](player))
 
     players.forEach(player => player.role && game.bot.sendMessage(
         player.id,

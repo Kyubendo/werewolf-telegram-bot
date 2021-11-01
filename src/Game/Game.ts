@@ -1,4 +1,4 @@
-import {Player} from "../Game";
+import {Player} from "../Player/Player";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
 import {Lynch} from "./Voting/Lynch";
@@ -24,9 +24,9 @@ export class Game {
     lynch?: Lynch
     wolfFeast?: WolfFeast
 
-    lynchDuration = 60_000
-    dayDuration = 120_000
-    nightDuration = 60_000
+    lynchDuration = 10_000
+    dayDuration = 10000_000
+    nightDuration = 5000_000
 
     deadPlayersCount = 0
 
@@ -66,7 +66,7 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if (endGame) {
+        if(endGame){
             this.onGameEnd(endGame)
             return
         }
@@ -136,10 +136,7 @@ export class Game {
     private runResults = () => {
         for (const role of roleResolves(this.stage)) {
             this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
-                .forEach(player => {
-                    player.role?.actionResult && player.role.actionResult()
-                    if (player.guardianAngel) player.guardianAngel = undefined
-                })
+                .forEach(player => player.role?.actionResult && player.role.actionResult())
         }
     }
 
@@ -149,8 +146,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.choiceMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
