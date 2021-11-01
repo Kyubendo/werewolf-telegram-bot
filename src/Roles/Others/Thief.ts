@@ -5,6 +5,8 @@ import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Beauty} from "../Villagers/Beauty";
 import {Doppelganger} from "./Doppelganger";
+import {Mason} from "../Villagers/Mason";
+import {Wolf} from "../WolfTeam/Wolf";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -61,7 +63,43 @@ export class Thief extends RoleBase {
             )
         } else if (this.player.role) {
             this.player.role = this.targetPlayer.role
-                .createThisRole(this.player, this.player.role, this.targetPlayer.role.specialCondition);
+                .createThisRole(this.player, this.player.role);
+            this.player.role.specialCondition = this.targetPlayer.role.specialCondition;
+
+            if (this.player.role instanceof Mason) {
+                Thief.game.bot.sendMessage(
+                    this.player.id,
+                    this.player.role.showMasonPlayers()
+                )
+
+                this.player.role.findMasonPlayers().forEach(masonPlayer => {
+                        Thief.game.bot.sendMessage(
+                            masonPlayer.id,
+                            `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
+                            `каменщиков вместо ${highlightPlayer(this.targetPlayer)}!`
+                        )
+                    }
+                )
+            } else if (this.player.role instanceof Wolf) {
+                Thief.game.bot.sendMessage(
+                    this.player.id,
+                    this.player.role.showOtherWolfPlayers()
+                )
+
+                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => {
+                    Thief.game.bot.sendMessage(
+                        wolfPlayer.id,
+                        `Странно, ${highlightPlayer(this.targetPlayer)} решил стать веганом, ` +
+                        `а ${highlightPlayer(this.player)} протяжно выл в ночи и щёлкал зубами! ` +
+                        `${highlightPlayer(this.player)} теперь волк.`
+                    )
+                })
+            }
+
+            Thief.game.bot.sendMessage(
+                this.player.id,
+                this.player.role.stealMessage()
+            )
 
             this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 

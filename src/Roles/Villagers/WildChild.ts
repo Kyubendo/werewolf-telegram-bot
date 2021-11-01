@@ -19,6 +19,9 @@ export class WildChild extends RoleBase {
         roleModel: undefined
     }
 
+    stealMessage = () => this.specialCondition.roleModel
+        && `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`
+
     action = () => {
         if (this.specialCondition.roleModel?.role) {
             this.nightActionDone = true

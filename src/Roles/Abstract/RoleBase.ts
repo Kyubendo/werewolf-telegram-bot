@@ -8,9 +8,8 @@ export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath'; // Harl
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
 export abstract class RoleBase {
-    constructor(readonly player: Player, previousRole?: RoleBase, specialCondition?: specialConditionType) {
+    constructor(readonly player: Player, previousRole?: RoleBase) {
         this.previousRole = previousRole;
-        this.specialCondition = specialCondition;
     }
 
     static game: Game
@@ -29,6 +28,9 @@ export abstract class RoleBase {
         message: string,
         gif: string
     }
+
+    readonly stealMessage?: () => string
+
 
     readonly action?: () => void
     readonly actionResolve?: () => void
@@ -253,6 +255,6 @@ export abstract class RoleBase {
         )
     }
 
-    createThisRole = (player: Player, previousRole?: RoleBase, specialCondition?: specialConditionType): RoleBase =>
-        new (this.constructor as any)(player, previousRole, specialCondition);
+    createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
+        new (this.constructor as any)(player, previousRole);
 }

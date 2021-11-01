@@ -22,6 +22,8 @@ export class Monarch extends RoleBase {
         gif: 'https://media.giphy.com/media/okLCopqw6ElCDnIhuS/giphy.gif'
     })
 
+    stealMessage = () => this.specialCondition.comingOut === false && `\nОднако все в деревне уже узнали о монархе!`;
+
     action = () => {
         if (this.specialCondition.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.specialCondition.comingOut = false;
