@@ -6,7 +6,7 @@ import {
     Harlot, JackOLantern,
     Martyr,
     Monarch, Necromancer,
-    Oracle, Pumpkin, Sandman,
+    Oracle, Prowler, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
     Thief, WildChild,
@@ -41,7 +41,7 @@ const nightRoleResolves = [
     //Pumpkin,
     // PuppetMaster,
     JackOLantern,
-    Harlot, //Prowler
+    Harlot, Prowler,
     Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
     Thief, Necromancer,

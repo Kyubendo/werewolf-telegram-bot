@@ -15,7 +15,7 @@ export abstract class RoleBase {
 
     abstract readonly roleName: string
     abstract readonly weight: () => number
-    readonly roleIntroductionText = () => `Ты ${this.roleName}! `;
+    readonly roleIntroductionText = () => `Ты ${this.roleName}!\n`;
     abstract readonly startMessageText: () => string
 
     readonly previousRole?: RoleBase;

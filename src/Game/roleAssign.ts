@@ -6,7 +6,7 @@ import {
     Beholder, Blacksmith,
     ClumsyGuy,
     Cursed, Fool, GuardianAngel, Gunner, Harlot, JackOLantern, Lycan,
-    Mason, Monarch, Necromancer, Oracle, Sandman, Seer,
+    Mason, Monarch, Necromancer, Oracle, Prowler, Sandman, Seer,
     SerialKiller,
     Sorcerer, Suicide, Thief,
     Traitor,
@@ -34,7 +34,7 @@ export const assignRoles = (game: Game) => {
     ]
 
     const testPool = [
-        JackOLantern, Oracle, Villager, GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
+        Prowler, Oracle, Villager, GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
 
         Beholder, // Passive Villagers
 

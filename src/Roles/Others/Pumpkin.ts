@@ -5,6 +5,7 @@ import {JackOLantern} from "../Villagers/JackOLanther";
 
 export class Pumpkin extends RoleBase {
     roleName = 'Тыква 🎃';
+    roleIntroductionText = () => `Ты ${this.roleName}...\n`
     startMessageText = () => 'Ты проиграл!';
     weight = () => 0;
 

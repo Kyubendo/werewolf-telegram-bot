@@ -23,7 +23,7 @@ export class Wolf extends RoleBase {
     }
 
     roleName = 'Волк 🐺';
-    roleIntroductionText = () => `Новый ${this.roleName} в селе! `;
+    roleIntroductionText = () => `Новый ${this.roleName} в селе!\n`;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
         + this.showOtherWolfPlayers();
 

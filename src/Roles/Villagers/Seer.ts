@@ -14,7 +14,7 @@ import {findPlayer} from "../../Game/findPlayer";
 
 export class Seer extends ForecasterBase {
     roleName = 'Провидец 👳';
-    roleIntroductionText = () => 'Ты Провидец 👳! ';
+    roleIntroductionText = () => 'Ты Провидец 👳!\n';
     startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 7;
 

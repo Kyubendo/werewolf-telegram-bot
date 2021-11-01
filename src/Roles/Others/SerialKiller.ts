@@ -9,7 +9,7 @@ import {Beauty} from "../Villagers/Beauty";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.\n`
     startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -14; // change?

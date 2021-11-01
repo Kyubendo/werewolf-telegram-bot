@@ -8,7 +8,7 @@ import {randomElement} from "../../Utils/randomElement";
 
 export class Martyr extends RoleBase {
     readonly roleName = 'Мученица 🕯';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.\n`
     startMessageText = () => 'В начале игры ты выбираешь человека, ' +
         'за которого умрешь. Если этот человек умрет, ты умрешь за него, ' +
         'и этот человек выживет. Пока ты не умрешь, ты в команде селян, ' +
