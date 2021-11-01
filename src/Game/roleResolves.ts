@@ -43,9 +43,9 @@ const nightRoleResolves = [
     Harlot, //Prowler
     Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
-     Necromancer,
-    Wolf,
+    Necromancer,
     SerialKiller,
+    Wolf,
     Sorcerer, Seer, Oracle,
     Thief,
 ]
