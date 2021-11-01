@@ -36,6 +36,7 @@ export class SerialKiller extends RoleBase {
                 + ' Жертвой, которую разрезали на сотню маленьких кусочков.',
             )
 
+
             killer.isAlive = false;
             return false;
         } else

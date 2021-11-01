@@ -237,7 +237,7 @@ export abstract class RoleBase {
 
     readonly originalHandleDeath = this.defaultHandleDeath
 
-    choiceMsgEditText = () => {
+    choiceMsgEditText(): void {
         RoleBase.game.bot.editMessageText(
             `Выбор принят — ${this.targetPlayer
                 ? highlightPlayer(this.targetPlayer)

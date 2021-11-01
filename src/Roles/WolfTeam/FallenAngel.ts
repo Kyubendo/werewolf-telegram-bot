@@ -2,6 +2,9 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";
+import {GuardianAngel} from "../Villagers/GuardianAngel";
+import {Beauty} from "../Villagers/Beauty";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 type DecisionType = 'kill' | 'protect';
 
@@ -17,10 +20,16 @@ export class FallenAngel extends RoleBase {
         'Ты стал Падшим Ангелом, союзником волков.'
     weight = () => -20; // can't drop at the start of the game anyway
 
+    nightActionDone = false
+
     killOrProtect?: DecisionType;
+
+    numberOfAttacks: number = 0;
+
 
     action = () => {
         this.targetPlayer = undefined;
+        this.numberOfAttacks = 0;
         if (!this.killOrProtect)
             FallenAngel.game.bot.sendMessage(
                 this.player.id,
@@ -62,7 +71,35 @@ export class FallenAngel extends RoleBase {
                     }
                 ).then(msg => this.choiceMsgId = msg.message_id)
             }
-            this.killOrProtect = undefined;
+        }
+    }
+
+    actionResolve = () => {
+        if (!this.targetPlayer) return
+
+        if (this.killOrProtect === 'kill')
+            if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+                this.handleGuardianAngel(this.player);
+                return;
+            } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
+                this.loveBind(this.targetPlayer)
+            else
+                this.targetPlayer.role?.onKilled(this.player);
+        else // protect
+            this.targetPlayer.guardianAngel = this.player;
+
+        this.killOrProtect = undefined; // в таком случае он должен убивать после совы
+    }
+
+    actionResult = () => {
+        if (!this.targetPlayer?.role) return;
+
+        if (!this.numberOfAttacks) {
+            GuardianAngel.game.bot.sendMessage(
+                this.player.id,
+                `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а),` +
+                'поэтому ничего не произошло особо...'
+            )
         }
     }
 
@@ -74,6 +111,7 @@ export class FallenAngel extends RoleBase {
         } else {
             this.targetPlayer = findPlayer(choice, FallenAngel.game.players);
             super.choiceMsgEditText();
+            this.doneNightAction();
         }
     }
 
