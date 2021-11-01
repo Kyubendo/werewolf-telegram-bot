@@ -3,7 +3,7 @@ import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Harlot, SerialKiller, Wolf, GuardianAngel, Gunner, Suicide} from "../index";
 
-export type DeathType = 'lover_death' | 'lover_betrayal'; // Harlot
+export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath'; // Harlot
 
 
 export abstract class RoleBase {
@@ -40,9 +40,9 @@ export abstract class RoleBase {
         if (!this.player.isAlive) return;
         console.log(`onKilled: ${this.player.name}, ${type}`);
         if (this.handleDeath(killer, type)) {
-            /*type !== 'lover_death' && */
+            /*type !== 'loverDeath' && */
             this.movePlayer();
-            this.killLover('lover_death')
+            this.killLover('loverDeath')
         }
     }
 
@@ -63,7 +63,7 @@ export abstract class RoleBase {
         if (!this.player.lover) return
         console.log(`killLover: ${this.player.name}, ${type}`)
 
-        if (type !== 'lover_death')
+        if (type !== 'loverDeath')
             this.player.lover.lover = undefined;
 
         this.player.lover.role?.onKilled(this.player, type);
@@ -110,30 +110,30 @@ export abstract class RoleBase {
         }
     }
 
-    checkHarlotDeath = (killer: Player) => {
-        const harlotPlayer = RoleBase.game.players.find(player => player.role instanceof Harlot);
-        if (harlotPlayer && harlotPlayer.role?.targetPlayer === this.player) {
-            if (killer.role instanceof Wolf) {
-                RoleBase.game.bot.sendMessage(
-                    RoleBase.game.chatId,
-                    `${highlightPlayer(harlotPlayer)} проскользнула в дом ${highlightPlayer(this.player)}, ` +
-                    'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
-                    `пожирающего ${highlightPlayer(this.player)}! Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
-                    `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} мертва.`,
-                )
-            } else if (killer.role instanceof SerialKiller) {
-                RoleBase.game.bot.sendMessage(
-                    RoleBase.game.chatId,
-                    `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} проникла в дом ` +
-                    `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
-                    `${highlightPlayer(this.player)}! Серийный Убийца решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
-                    `прежде чем взять сердце к себе в коллекцию!`,
-                )
-            }
-
-            harlotPlayer.role.onKilled(harlotPlayer);
-        }
-    }
+    // checkHarlotDeath = (killer: Player) => {
+    //     const harlotPlayer = RoleBase.game.players.find(player => player.role instanceof Harlot);
+    //     if (harlotPlayer && harlotPlayer.role?.targetPlayer === this.player) {
+    //         if (killer.role instanceof Wolf) {
+    //             RoleBase.game.bot.sendMessage(
+    //                 RoleBase.game.chatId,
+    //                 `${highlightPlayer(harlotPlayer)} проскользнула в дом ${highlightPlayer(this.player)}, ` +
+    //                 'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
+    //                 `пожирающего ${highlightPlayer(this.player)}! Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
+    //                 `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} мертва.`,
+    //             )
+    //         } else if (killer.role instanceof SerialKiller) {
+    //             RoleBase.game.bot.sendMessage(
+    //                 RoleBase.game.chatId,
+    //                 `${harlotPlayer.role.roleName}  —  ${highlightPlayer(harlotPlayer)} проникла в дом ` +
+    //                 `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
+    //                 `${highlightPlayer(this.player)}! Серийный Убийца решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
+    //                 `прежде чем взять сердце к себе в коллекцию!`,
+    //             )
+    //         }
+    //
+    //         harlotPlayer.role.onKilled(harlotPlayer);
+    //     }
+    // }
 
     movePlayer = () => {
         RoleBase.game.players.push(...RoleBase.game.players.splice(
@@ -142,7 +142,7 @@ export abstract class RoleBase {
 
     handleDeath = (killer?: Player, type?: DeathType): boolean => {
         console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
-        if (type === 'lover_death') {
+        if (type === 'loverDeath') {
             killer?.role && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 `Бросив взгляд на мертвое тело ${highlightPlayer(killer)}, ` +
@@ -199,7 +199,7 @@ export abstract class RoleBase {
 
     defaultHandleDeath = (killer?: Player, type?: DeathType): boolean => {
         console.log(`handleDeath: ${this.player.name} killed by ${killer?.name}, ${type}`);
-        if (type === 'lover_death') {
+        if (type === 'loverDeath') {
             killer?.role && RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 `Бросив взгляд на мертвое тело ${highlightPlayer(killer)}, ` +
