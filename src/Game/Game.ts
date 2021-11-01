@@ -24,9 +24,9 @@ export class Game {
     lynch?: Lynch
     wolfFeast?: WolfFeast
 
-    lynchDuration = 10_000
-    dayDuration = 10000_000
-    nightDuration = 5000_000
+    lynchDuration = 60_000
+    dayDuration = 120_000
+    nightDuration = 60_000
 
     deadPlayersCount = 0
 
