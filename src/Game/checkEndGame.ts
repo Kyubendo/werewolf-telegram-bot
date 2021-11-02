@@ -49,7 +49,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     if (aliveJackPlayers.length
-        && (alivePlayers.filter(p => !(p.role instanceof Pumpkin)).length - aliveJackPlayers.length <= 0)) {
+        && !alivePlayers.filter(p => !(p.role instanceof Pumpkin) && !(p.role instanceof JackOLantern)).length) {
         return {winners: aliveJackPlayers, type: 'jack'}
     }
 

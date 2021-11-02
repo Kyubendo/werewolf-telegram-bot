@@ -5,6 +5,8 @@ import {State} from "../../Bot";
 import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
+import {gameStageMsg} from "../gameStageMsg";
+import {gameStart} from "../gameStart";
 
 const joinButton = {
     inline_keyboard: [
@@ -43,10 +45,11 @@ export const initGame = (bot: TelegramBot, state: State) => {
             delete state.game
         }
         endGameTimeout = setTimeout(() => {
-            if (state.game && !state.game?.stage) {
+            if (!state.game || state.game?.stage) return
+            if (state.game.players.length < 6) {
                 bot.sendMessage(state.game.chatId, 'Время вышло, игра отменяется!')
                 onEnd()
-            }
+            } else gameStart(bot, state.game)
         }, 600_000)
 
         state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, onEnd, 0)
