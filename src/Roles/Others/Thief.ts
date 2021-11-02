@@ -70,12 +70,13 @@ export class Thief extends RoleBase {
                 this.player.id,
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
-            )
-
-            this.targetPlayer.role.stealMessage && Thief.game.bot.sendMessage(
-                this.player.id,
-                this.targetPlayer.role.stealMessage
-            )
+            ).then(() => {
+                if (this.targetPlayer?.role?.stealMessage)
+                    Thief.game.bot.sendMessage(
+                        this.player.id,
+                        this.targetPlayer.role.stealMessage
+                    )
+            })
 
             if (this.player.role instanceof Mason) {
                 Thief.game.bot.sendMessage(
