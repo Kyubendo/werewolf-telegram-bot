@@ -22,11 +22,10 @@ export class Detective extends ForecasterBase {
     }
 
     forecastRoleName = (targetRole: RoleBase) => {
-        if (targetRole instanceof Wolf)
-            Detective.game.bot.sendMessage(
-                targetRole.player.id,
-                `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
-            )
+        if (targetRole instanceof Wolf) Detective.game.bot.sendMessage(
+            targetRole.player.id,
+            `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
+        )
 
         return targetRole.roleName;
     }
