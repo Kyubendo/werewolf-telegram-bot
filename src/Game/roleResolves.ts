@@ -29,7 +29,7 @@ export const roleResolves = (stage: GameStage) => {
 }
 
 const dayRoleResolves = [
-    Martyr, WildChild, Doppelganger,  // WildChild, // constant choices
+    WildChild, Martyr, Doppelganger, WildChild, // constant choices
     Monarch,
     Gunner,
     WiseElder, Detective,
@@ -38,16 +38,16 @@ const dayRoleResolves = [
 ]
 
 const nightRoleResolves = [
-    //Pumpkin,
+    WildChild, Martyr, Doppelganger, // constant choices
     // PuppetMaster,
     JackOLantern,
     Harlot, //Prowler
-    Martyr, WildChild, Doppelganger, // constant choices
     GuardianAngel,
-    Thief, Necromancer,
-    Wolf,
+    Necromancer,
     SerialKiller,
+    Wolf,
     Sorcerer, Seer, Oracle,
+    Thief,
 ]
 
 const lynchRoleResolves = [

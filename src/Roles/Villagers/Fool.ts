@@ -3,7 +3,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {randomElement} from "../../Utils/randomElement";
-import {DeathType} from "../Abstract/RoleBase";
+import {DeathType} from "../../Game";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
@@ -16,9 +16,10 @@ export class Fool extends Seer {
             const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
             this.targetPlayer = randomElement(otherPlayers);
         }
+        this.doneNightAction()
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         this.player.isAlive = false;
         Fool.game.bot.sendMessage(
             Fool.game.chatId,

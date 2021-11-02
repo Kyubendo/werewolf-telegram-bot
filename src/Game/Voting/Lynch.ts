@@ -31,7 +31,6 @@ export class Lynch extends VotingBase {
         if (voteResult.length === 1) {
             if (voteResult[0].role instanceof Suicide) {
                 this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
-                console.log('432')
                 return true
             } else {
                 voteResult[0].role?.onKilled()

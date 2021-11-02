@@ -1,7 +1,7 @@
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../../Game";
 
 export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';
@@ -11,8 +11,7 @@ export class Cursed extends RoleBase {
         return (wolvesAmount ? 1 - wolvesAmount : 1)
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType) => {
-        console.log('originalHandleDeath123');
+    handleDeath(killer?: Player, type?: DeathType) {
         if (killer?.role instanceof Wolf) {
             Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
                 .forEach(player => Cursed.game.bot.sendMessage(
@@ -30,7 +29,7 @@ export class Cursed extends RoleBase {
                 );
             return false;
         } else {
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
         }
     }
 }

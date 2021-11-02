@@ -1,4 +1,4 @@
-import {Player} from "../Player/Player";
+import {Player} from "../Game";
 import {
     ApprenticeSeer,
     Beholder,
@@ -32,8 +32,8 @@ const villagers: Function[] = [
     Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty,
 ]
 const wolfTeam: Function[] = [Wolf,]
-const evil: Function[] = [Wolf, SerialKiller]
-const nonWolfKillers: Function[] = [SerialKiller]
+const evil: Function[] = [Wolf, SerialKiller, JackOLantern]
+const nonWolfKillers: Function[] = [SerialKiller, JackOLantern]
 
 export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
@@ -50,7 +50,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
 
     if (aliveJackPlayers.length * 2 >= alivePlayers.length) {
-        return { winners: aliveJackPlayers, type: 'jack' }
+        return {winners: aliveJackPlayers, type: 'jack'}
     }
 
     if (!aliveEvilPlayer) {

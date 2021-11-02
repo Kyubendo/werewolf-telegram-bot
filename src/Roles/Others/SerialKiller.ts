@@ -1,11 +1,10 @@
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
-import {Player} from "../../Player/Player";
-import {Wolf} from "../WolfTeam/Wolf";
+import {DeathType} from "../../Game";
+import {Player, RoleBase} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {GuardianAngel} from "../Villagers/GuardianAngel";
-import {Beauty} from "../Villagers/Beauty";
+import {Beauty, GuardianAngel, Wolf} from "../index";
+
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
@@ -23,7 +22,7 @@ export class SerialKiller extends RoleBase {
     killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
         'извлекает твои органы. Ты мертв(а).' // GIF
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath (killer?: Player, type?: DeathType): boolean {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
@@ -39,7 +38,7 @@ export class SerialKiller extends RoleBase {
             killer.isAlive = false;
             return false;
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
     }
 
     action = () => {

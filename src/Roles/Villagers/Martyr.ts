@@ -1,4 +1,4 @@
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -82,9 +82,10 @@ export class Martyr extends RoleBase {
         }
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
-        console.log(this.targetPlayer?.name)
-        if (killer === this.player && this.specialCondition.protectedPlayer) {
+
+    handleDeath(killer?: Player, type?: DeathType): boolean {
+        if (killer === this.player && this.specialCondition.targetPlayer) {
+
             let deathMessage: string | undefined
             if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.specialCondition.protectedPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
@@ -112,7 +113,7 @@ export class Martyr extends RoleBase {
             this.player.isAlive = false;
             return true;
         }
-        return this.defaultHandleDeath(killer, type);
+        return super.handleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {

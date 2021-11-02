@@ -1,4 +1,4 @@
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType, RoleBase} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -53,9 +53,10 @@ export class WildChild extends RoleBase {
 
         if (!this.specialCondition.roleModel.role) return;
 
-        const currentTargetHandleDeath = this.specialCondition.roleModel.role.handleDeath;
-        this.specialCondition.roleModel.role.handleDeath = (killer?: Player): boolean => {
-            if (!this.specialCondition.roleModel) return false;
+        const currentTargetHandleDeath = this.specialCondition.roleModel.role.handleDeath.bind(this.targetPlayer.role);
+        this.specialCondition.roleModel.role.handleDeath = (killer?: Player, type?: DeathType): boolean => {
+            if (!this.specialCondition.roleMode) return false;
+            currentTargetHandleDeath(killer, type);
 
             this.player.role = new Wolf(this.player, this.player.role);
 
@@ -73,11 +74,11 @@ export class WildChild extends RoleBase {
                 ))
             }
 
-            return currentTargetHandleDeath(killer);
+            return true;
         }
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType) => {
+    handleDeath(killer?: Player, type?: DeathType) {
         if (killer?.role instanceof Wolf) {
             WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
@@ -93,11 +94,12 @@ export class WildChild extends RoleBase {
             this.player.isAlive = false;
             return true;
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
     }
 
     handleChoice = (choice?: string) => {
         this.specialCondition.roleModel = findPlayer(choice, WildChild.game.players);
         this.choiceMsgEditText();
+        this.doneNightAction()
     }
 }

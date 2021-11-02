@@ -1,4 +1,4 @@
-import {Player} from "../Player/Player";
+import {Player} from "../Game";
 
 export const generateInlineKeyboard = (players: Player[], withSkip = true, type: string = 'role') => {
     const output = {

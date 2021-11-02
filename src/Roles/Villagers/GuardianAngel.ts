@@ -1,10 +1,9 @@
+import {DeathType, RoleBase} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {SerialKiller, Wolf} from "../index";
-import {Player} from "../../Player/Player";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
-import {Beauty} from "./Beauty";
+import {SerialKiller, Wolf,Beauty} from "../";
+import {Player} from "../../Game";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
@@ -60,7 +59,7 @@ export class GuardianAngel extends RoleBase {
         this.doneNightAction()
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         this.player.isAlive = false;
 
         if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)
@@ -113,7 +112,7 @@ export class GuardianAngel extends RoleBase {
                     `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`
                 )
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
         return true;
     }
 }

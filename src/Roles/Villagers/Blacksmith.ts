@@ -60,8 +60,7 @@ export class Blacksmith extends RoleBase {
 
     actionResolve = () => {
         if (this.specialCondition.silverDust)
-            Blacksmith.game.players.filter(player => player.isAlive
-                && (player.role instanceof Wolf || player.infected)).forEach(player => player.isFrozen = true)
+            Blacksmith.game.wolvesDeactivated = true;
     }
 
     handleChoice = (choice?: string) => {
