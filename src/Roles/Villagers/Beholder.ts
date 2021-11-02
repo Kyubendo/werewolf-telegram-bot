@@ -10,8 +10,10 @@ export class Beholder extends RoleBase {
         .map(player => highlightPlayer(player))
 
     startMessageText = () => `Ты знаешь, кто настоящий провидец, а не дурак... В общем это ` +
-        `твоя единственная функция.\n${this.seers?.length ? this.seers.join(', ') + ' - провид' +
-            (this.seers.length === 1 ? 'ец!' : 'цы.') :
-            'Провидца нет!'}`
-    weight = () => this.seers ? 6 : 2;
+        `твоя единственная функция.\n${this.seers?.length === 0
+            ? 'Провидца нет!'
+            : this.seers?.length === 1
+                ? `${this.seers[0]} может спасти народ, защищай его!`
+                : 'Провидцы: ' + this.seers?.join(', ')}`
+    weight = () => this.seers?.length ? 6 : 2;
 }
