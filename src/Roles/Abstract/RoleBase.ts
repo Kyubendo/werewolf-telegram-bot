@@ -30,7 +30,7 @@ export abstract class RoleBase {
         gif: string
     }
 
-    readonly stealMessage?: () => string
+    stealMessage?: string;
 
 
     readonly action?: () => void

@@ -69,11 +69,11 @@ export class Thief extends RoleBase {
             if (this.player.role instanceof Mason) {
                 Thief.game.bot.sendMessage(
                     this.player.id,
-                    this.player.role.showMasonPlayers()
+                    this.player.role.showOtherMasonPlayers()
                 )
 
-                this.player.role.findMasonPlayers().forEach(masonPlayer => {
-                        Thief.game.bot.sendMessage(
+                this.player.role.findOtherMasonPlayers().forEach(masonPlayer => {
+                    this.targetPlayer && Thief.game.bot.sendMessage(
                             masonPlayer.id,
                             `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
                             `каменщиков вместо ${highlightPlayer(this.targetPlayer)}!`
@@ -87,7 +87,7 @@ export class Thief extends RoleBase {
                 )
 
                 this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => {
-                    Thief.game.bot.sendMessage(
+                    this.targetPlayer && Thief.game.bot.sendMessage(
                         wolfPlayer.id,
                         `Странно, ${highlightPlayer(this.targetPlayer)} решил стать веганом, ` +
                         `а ${highlightPlayer(this.player)} протяжно выл в ночи и щёлкал зубами! ` +
@@ -96,9 +96,9 @@ export class Thief extends RoleBase {
                 })
             }
 
-            Thief.game.bot.sendMessage(
+            this.player.role.stealMessage && Thief.game.bot.sendMessage(
                 this.player.id,
-                this.player.role.stealMessage()
+                this.player.role.stealMessage
             )
 
             this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);

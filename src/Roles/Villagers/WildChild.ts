@@ -19,9 +19,6 @@ export class WildChild extends RoleBase {
         roleModel: undefined
     }
 
-    stealMessage = () => this.specialCondition.roleModel
-        && `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`
-
     action = () => {
         if (this.specialCondition.roleModel?.role) {
             this.nightActionDone = true
@@ -53,9 +50,10 @@ export class WildChild extends RoleBase {
 
         if (!this.specialCondition.roleModel.role) return;
 
-        const currentTargetHandleDeath = this.specialCondition.roleModel.role.handleDeath.bind(this.targetPlayer.role);
+        const currentTargetHandleDeath = this.specialCondition.roleModel.role
+            .handleDeath.bind(this.specialCondition.roleModel.role);
         this.specialCondition.roleModel.role.handleDeath = (killer?: Player, type?: DeathType): boolean => {
-            if (!this.specialCondition.roleMode) return false;
+            if (!this.specialCondition.roleModel) return false;
             currentTargetHandleDeath(killer, type);
 
             this.player.role = new Wolf(this.player, this.player.role);
@@ -99,6 +97,8 @@ export class WildChild extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.specialCondition.roleModel = findPlayer(choice, WildChild.game.players);
+        if (this.specialCondition.roleModel)
+            this.stealMessage = `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`;
         this.choiceMsgEditText();
         this.doneNightAction()
     }

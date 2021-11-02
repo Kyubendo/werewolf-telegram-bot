@@ -25,9 +25,6 @@ export class Martyr extends RoleBase {
     }
     nightActionDone = false
 
-    stealMessage = () => this.specialCondition.protectedPlayer
-        && `\nТы умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`
-
     action = () => {
         if (this.targetPlayer?.role) {
             this.nightActionDone = true
@@ -84,7 +81,7 @@ export class Martyr extends RoleBase {
 
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        if (killer === this.player && this.specialCondition.targetPlayer) {
+        if (killer === this.player && this.specialCondition.protectedPlayer) {
 
             let deathMessage: string | undefined
             if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.specialCondition.protectedPlayer)}, но внезапно яркая `
@@ -118,6 +115,8 @@ export class Martyr extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.specialCondition.protectedPlayer = findPlayer(choice, Martyr.game.players);
+        if (this.specialCondition.protectedPlayer)
+            this.stealMessage = `\nТы умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`;
         this.choiceMsgEditText();
         this.doneNightAction()
     }

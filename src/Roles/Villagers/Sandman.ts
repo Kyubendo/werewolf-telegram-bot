@@ -22,12 +22,10 @@ export class Sandman extends RoleBase {
         gif: 'https://media.giphy.com/media/fvJIuEVeNjpYs/giphy.gif'
     })
 
-    stealMessage = () => this.specialCondition.sleep === false
-        && '\nОднако ты чувствуешь, что твоей магии не хватит на ещё одно заклинание...'
-
     action = () => {
         if (this.specialCondition.sleep) {
             this.specialCondition.sleep = false;
+            this.stealMessage = '\nОднако ты чувствуешь, что твоей магии не хватит на ещё одно заклинание...';
             return;
         }
 

@@ -30,12 +30,11 @@ export class Blacksmith extends RoleBase {
         silverDust: undefined
     }
 
-    stealMessage = () => this.specialCondition.silverDust === false && '\nОднако ты видишь, ' +
-        'что серебрянная пыль уже кончилась'
 
     action = () => {
         if (this.specialCondition.silverDust) {
             this.specialCondition.silverDust = false;
+            this.stealMessage = '\nОднако ты видишь, что серебрянная пыль уже кончилась';
             return;
         }
 
