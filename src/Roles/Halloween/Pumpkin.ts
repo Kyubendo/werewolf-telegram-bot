@@ -10,7 +10,11 @@ export class Pumpkin extends RoleBase {
 
     actionResolve = () => {
         if (Math.random() >= 0.25) {
+            const specialCondition = this.player.role?.specialCondition;
             this.player.role = this.previousRole?.createThisRole(this.player, this.player.role);
+            if (this.player.role)
+                this.player.role.specialCondition = specialCondition;
+
             Pumpkin.game.bot.sendMessage(
                 this.player.id,
                 `Наконец-то этот кошмар закончился! Теперь ты снова ${this.player.role?.roleName}.`
