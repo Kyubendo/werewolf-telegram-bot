@@ -19,7 +19,7 @@ const news = [
 ]
 
 const messageAppend = (news.length
-        ? '\n\n*Новости*\n' + news.map(n => `— _${n}_`).join('\n')
+        ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
         : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
