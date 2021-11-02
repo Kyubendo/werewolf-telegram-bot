@@ -23,7 +23,7 @@ import {
     WoodMan,
     WildChild,
     Beauty,
-    JackOLantern,
+    JackOLantern, Pumpkin,
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -48,8 +48,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
         return {winners: alivePlayers.filter(player => player.lover), type: 'lovers'}
     }
 
-
-    if (aliveJackPlayers.length * 2 >= alivePlayers.length) {
+    if (aliveJackPlayers.length && !alivePlayers.filter(p => !(p.role instanceof Pumpkin)).length) {
         return {winners: aliveJackPlayers, type: 'jack'}
     }
 
