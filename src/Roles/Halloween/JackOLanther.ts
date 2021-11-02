@@ -32,7 +32,10 @@ export class JackOLantern extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
+        const specialCondition = this.targetPlayer.role?.specialCondition;
         this.targetPlayer.role = new Pumpkin(this.targetPlayer, this.targetPlayer.role)
+        this.targetPlayer.role.specialCondition = specialCondition;
+
 
         JackOLantern.game.bot.sendAnimation(
             this.targetPlayer.id,
