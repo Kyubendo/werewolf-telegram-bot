@@ -4,6 +4,9 @@ import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Beauty} from "../Villagers/Beauty";
+import {Doppelganger} from "./Doppelganger";
+import {Mason} from "../Villagers/Mason";
+import {Wolf} from "../WolfTeam/Wolf";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -50,16 +53,62 @@ export class Thief extends RoleBase {
             )
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
-        } else if (this.player.role) { // Note: place Doppelganger here
-            this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
-
-            this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
+        } else if (this.targetPlayer.role instanceof Doppelganger) {
+            Thief.game.bot.sendMessage(
+                this.player.id,
+                'Ты попытался украсть роль... ' +
+                `но даже лучший ${this.roleName} не в силах повторить такое искуство. ` +
+                `Ты понимаешь, что это *${this.targetPlayer.role}*, наследник легендарных Метаморфов, ` +
+                'и его роль украсть не удасться. По крайней мере пока...'
+            )
+        } else if (this.player.role) {
+            this.player.role = this.targetPlayer.role
+                .createThisRole(this.player, this.player.role);
+            this.player.role.specialCondition = this.targetPlayer.role.specialCondition;
 
             Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
-            )
+            ).then(() => {
+                if (this.targetPlayer?.role?.stealMessage)
+                    Thief.game.bot.sendMessage(
+                        this.player.id,
+                        this.targetPlayer.role.stealMessage
+                    )
+            })
+
+            if (this.player.role instanceof Mason) {
+                Thief.game.bot.sendMessage(
+                    this.player.id,
+                    this.player.role.showOtherMasonPlayers()
+                )
+
+                this.player.role.findOtherMasonPlayers().forEach(masonPlayer => {
+                        this.targetPlayer && Thief.game.bot.sendMessage(
+                            masonPlayer.id,
+                            `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
+                            `каменщиков вместо ${highlightPlayer(this.targetPlayer)}!`
+                        )
+                    }
+                )
+            } else if (this.player.role instanceof Wolf) {
+                Thief.game.bot.sendMessage(
+                    this.player.id,
+                    this.player.role.showOtherWolfPlayers()
+                )
+
+                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => {
+                    this.targetPlayer && Thief.game.bot.sendMessage(
+                        wolfPlayer.id,
+                        `Странно, ${highlightPlayer(this.targetPlayer)} решил стать веганом, ` +
+                        `а ${highlightPlayer(this.player)} протяжно выл в ночи и щёлкал зубами! ` +
+                        `${highlightPlayer(this.player)} теперь волк.`
+                    )
+                })
+            }
+
+            this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 
             Thief.game.bot.sendMessage(
                 this.targetPlayer.id,

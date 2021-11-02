@@ -35,5 +35,6 @@ export class Player {
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
             + (this.role instanceof Wolf && this.role.showOtherWolfPlayers()) // check this line later
         )
+        this.infected = false
     }
 }

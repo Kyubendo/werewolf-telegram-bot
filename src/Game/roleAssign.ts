@@ -27,10 +27,11 @@ export const assignRoles = (game: Game) => {
         //ClumsyGuy,
         Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, // Passive Villagers
         Seer, Monarch, Fool, Harlot, Oracle, Gunner, GuardianAngel,
-        WiseElder, Sandman, /*Blacksmith,*/ WildChild, Detective, Martyr,// Active Villagers
+        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 
         Suicide, Thief, Necromancer, Doppelganger// Other
     ]
+
 
     const testPool = [Thief, Wolf, Beauty,
         Harlot, Wolf, WildChild, Villager,
