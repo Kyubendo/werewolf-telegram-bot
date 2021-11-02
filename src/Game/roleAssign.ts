@@ -32,6 +32,7 @@ export const assignRoles = (game: Game) => {
         Suicide, Thief, Necromancer, Doppelganger// Other
     ]
 
+
     const testPool = [Thief, Wolf, Beauty,
         Harlot, Wolf, WildChild, Villager,
         Oracle, Villager, GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
