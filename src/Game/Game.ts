@@ -132,6 +132,10 @@ export class Game {
                     this.wolvesDeactivated = false;
                 }
                 // Note: add SigmaWolf here
+
+                if (!this.players.find(player => !player.isFrozen))
+                    this.setNextStage();
+
             })
 
             if (this.stage === 'day')

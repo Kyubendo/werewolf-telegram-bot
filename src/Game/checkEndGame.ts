@@ -23,13 +23,13 @@ import {
     WoodMan,
     WildChild,
     Beauty,
-    JackOLantern, Pumpkin,
+    JackOLantern, Pumpkin, Detective,
 } from "../Roles";
 import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty,
+    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective,
 ]
 const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller, JackOLantern]
@@ -64,7 +64,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     aliveWolves.length && aliveUniqueKillers.push(Wolf)
 
     if (aliveUniqueKillers.length > 1) {
-        if (alivePlayers.length > 2) return undefined
+        if (alivePlayers.length > 2 || aliveJackPlayers.length) return undefined
         else {
             const wolf = players.find(p => p.role instanceof Wolf)
             const serialKiller = players.find(p => p.role instanceof SerialKiller)
