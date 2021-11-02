@@ -30,6 +30,8 @@ export class Harlot extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
+    niceNight:boolean = false;
+
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
@@ -40,16 +42,23 @@ export class Harlot extends RoleBase {
         } else {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
             this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
-                if (this.targetPlayer)
+                if (this.targetPlayer) {
+                    this.niceNight = false;
                     this.onKilled(killer, 'harlotDeath')
+                }
 
                 return currentTargetHandleDeath(killer, type);
             }
         }
+
+        this.niceNight = true;
     }
 
     actionResult = () => {
-        if (!this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role || !this.niceNight) {
+            this.niceNight = false;
+            return;
+        }
 
         Harlot.game.bot.sendMessage(
             this.player.id,
