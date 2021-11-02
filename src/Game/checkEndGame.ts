@@ -64,11 +64,14 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     aliveWolves.length && aliveUniqueKillers.push(Wolf)
 
     if (aliveUniqueKillers.length > 1) {
-        if (alivePlayers.length > 2 || aliveJackPlayers.length) return undefined
+        if (alivePlayers.length > 2) return undefined
         else {
             const wolf = players.find(p => p.role instanceof Wolf)
             const serialKiller = players.find(p => p.role instanceof SerialKiller)
             const gunner = players.find(p => p.role instanceof Gunner)
+
+            if (aliveJackPlayers[0]) return undefined;
+
             // const cowboy = players.filter(p => p.role instanceof Cowboy)
             // const puppetMaster = players.filter(p => p.role instanceof PuppetMaster)
 

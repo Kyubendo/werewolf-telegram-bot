@@ -133,8 +133,8 @@ export class Game {
                 }
                 // Note: add SigmaWolf here
 
-                if (!this.players.find(player => !player.isFrozen))
-                    this.setNextStage();
+                // if (!this.players.find(player => !player.isFrozen))
+                //     this.setNextStage();
 
             })
 
