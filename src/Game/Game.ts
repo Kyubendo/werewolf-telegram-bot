@@ -7,6 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
+import {Wolf} from "../Roles";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -23,6 +24,8 @@ export class Game {
 
     lynch?: Lynch
     wolfFeast?: WolfFeast
+
+    wolvesDeactivated: boolean = false
 
     lynchDuration = 60_000
     dayDuration = 120_000
@@ -109,9 +112,6 @@ export class Game {
     }
 
     private runActions = () => {
-        if (this.stage === 'night') this.players.forEach(p => {
-            if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
-        })
         if (this.stage !== 'lynch') { // change?
             this.players
                 .filter(player => player.isAlive)
@@ -119,13 +119,26 @@ export class Game {
                     if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
                 })
 
+            if (this.stage === 'night') this.players.forEach(p => {
+                if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
+
+                this.players.forEach(player => player.isAlive && player.infected
+                    && player.transformInfected())
+
+                if (this.wolvesDeactivated) {
+                    this.players
+                        .filter(player => player.role instanceof Wolf && player.isAlive)
+                        .forEach(wolfPlayer => wolfPlayer.isFrozen = true);
+                    this.wolvesDeactivated = false;
+                }
+                // Note: add SigmaWolf here
+            })
+
             if (this.stage === 'day')
                 this.players.forEach(player => player.isFrozen = false)
         }
         this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
-        this.stage === 'night' && this.players.forEach(player => player.isAlive && player.infected
-            && player.transformInfected())
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
@@ -149,8 +162,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.choiceMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
