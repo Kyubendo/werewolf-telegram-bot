@@ -13,7 +13,7 @@ export class Pumpkin extends RoleBase {
             this.player.role = this.previousRole?.createThisRole(this.player, this.player.role);
             Pumpkin.game.bot.sendMessage(
                 this.player.id,
-                `Наконец-то этот кошмар закончился! Теперь ты снова ${this.player.role?.roleName}`
+                `Наконец-то этот кошмар закончился! Теперь ты снова ${this.player.role?.roleName}.`
             )
         } else {
             this.player.role = new JackOLantern(this.player, this.player.role);
