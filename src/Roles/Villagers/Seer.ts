@@ -24,27 +24,28 @@ export class Seer extends ForecasterBase {
     handleDeath(killer?: Player, type?: DeathType): boolean {
         const apprenticeSeerPlayers = Seer.game.players
             .filter(player => player.role instanceof ApprenticeSeer && player.isAlive);
-        apprenticeSeerPlayers.forEach(apprenticeSeerPlayer => {
-            if (apprenticeSeerPlayer) {
-                apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
+        if (apprenticeSeerPlayers.length) {
+            apprenticeSeerPlayers.forEach(apprenticeSeerPlayer => {
+                if (apprenticeSeerPlayer) {
+                    apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
+                    Seer.game.bot.sendMessage(
+                        apprenticeSeerPlayer.id,
+                        `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
+                        `Ты занял его место по случаю его смерти.`
+                    )
+                }
+            })
+
+            const beholderPlayers = Seer.game.players
+                .filter(player => player.role instanceof Beholder && player.isAlive)
+            beholderPlayers.forEach(beholderPlayer => {
                 Seer.game.bot.sendMessage(
-                    apprenticeSeerPlayer.id,
-                    `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
-                    `Ты занял его место по случаю его смерти.`
+                    beholderPlayer.id,
+                    apprenticeSeerPlayers.length === 1 ?
                 )
-                const beholderPlayers = Seer.game.players
-                    .filter(player => player.role instanceof Beholder && player.isAlive)
-                beholderPlayers.forEach(beholderPlayer => {
-                    if (beholderPlayer) {
-                        Seer.game.bot.sendMessage(
-                            beholderPlayer.id,
-                            `Провидец ${highlightPlayer(this.player)} мёртв. ` +
-                            `На его место встал ${highlightPlayer(apprenticeSeerPlayer)}.`
-                        )
-                    }
-                })
-            }
-        })
+            })
+        }
+
 
         if (killer?.role) {
             Seer.game.bot.sendMessage(
