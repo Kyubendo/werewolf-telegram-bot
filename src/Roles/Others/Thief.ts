@@ -66,6 +66,17 @@ export class Thief extends RoleBase {
                 .createThisRole(this.player, this.player.role);
             this.player.role.specialCondition = this.targetPlayer.role.specialCondition;
 
+            Thief.game.bot.sendMessage(
+                this.player.id,
+                `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
+                `Теперь ты *${this.player.role?.roleName}*!`
+            )
+
+            this.targetPlayer.role.stealMessage && Thief.game.bot.sendMessage(
+                this.player.id,
+                this.targetPlayer.role.stealMessage
+            )
+
             if (this.player.role instanceof Mason) {
                 Thief.game.bot.sendMessage(
                     this.player.id,
@@ -73,7 +84,7 @@ export class Thief extends RoleBase {
                 )
 
                 this.player.role.findOtherMasonPlayers().forEach(masonPlayer => {
-                    this.targetPlayer && Thief.game.bot.sendMessage(
+                        this.targetPlayer && Thief.game.bot.sendMessage(
                             masonPlayer.id,
                             `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
                             `каменщиков вместо ${highlightPlayer(this.targetPlayer)}!`
@@ -96,18 +107,7 @@ export class Thief extends RoleBase {
                 })
             }
 
-            this.targetPlayer.role.stealMessage && Thief.game.bot.sendMessage(
-                this.player.id,
-                this.targetPlayer.role.stealMessage
-            )
-
             this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
-
-            Thief.game.bot.sendMessage(
-                this.player.id,
-                `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
-                `Теперь ты *${this.player.role?.roleName}*!`
-            )
 
             Thief.game.bot.sendMessage(
                 this.targetPlayer.id,
