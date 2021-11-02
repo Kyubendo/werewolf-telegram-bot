@@ -1,7 +1,7 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Pumpkin} from "../Others/Pumpkin";
+import {Pumpkin} from "./Pumpkin";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class JackOLantern extends RoleBase {
