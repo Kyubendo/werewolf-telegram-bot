@@ -16,7 +16,7 @@ export class Game {
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,
-        readonly deleteGame: () => boolean,
+        readonly deleteGame: () => void,
         public playerCountMsgId: number,
     ) {
     }
