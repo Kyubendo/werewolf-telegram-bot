@@ -69,10 +69,12 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             const wolf = players.find(p => p.role instanceof Wolf)
             const serialKiller = players.find(p => p.role instanceof SerialKiller)
             const gunner = players.find(p => p.role instanceof Gunner)
+            const jack = players.find(p => p.role instanceof JackOLantern)
             // const cowboy = players.filter(p => p.role instanceof Cowboy)
             // const puppetMaster = players.filter(p => p.role instanceof PuppetMaster)
 
             // if(puppetMaster) return puppetMaster
+            if (jack) return undefined
             if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller) && gunner) {
                 if (stage === 'night') return {winners: villagersTeamPlayers, type: 'villagers'}
