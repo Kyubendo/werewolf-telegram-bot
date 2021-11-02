@@ -15,5 +15,5 @@ export class Beholder extends RoleBase {
             : this.seers?.length === 1
                 ? `${this.seers[0]} может спасти народ, защищай его!`
                 : 'Провидцы: ' + this.seers?.join(', ')}`
-    weight = () => this.seers?.length ? 6 : 2;
+    weight = () => this.seers?.length ? 5 : 2;
 }
