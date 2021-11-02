@@ -41,7 +41,12 @@ export class Seer extends ForecasterBase {
             beholderPlayers.forEach(beholderPlayer => {
                 Seer.game.bot.sendMessage(
                     beholderPlayer.id,
-                    apprenticeSeerPlayers.length === 1 ?
+                    `Провидец ${highlightPlayer(this.player)} мёртв. ` + (
+                        apprenticeSeerPlayers.length === 1
+                            ? `На его место встал ${highlightPlayer(apprenticeSeerPlayers[0])}.`
+                            : 'Но не огорчайся, ведь теперь сразу несколько игроков стали провидцами: ' +
+                            apprenticeSeerPlayers.join(', ')
+                    )
                 )
             })
         }
