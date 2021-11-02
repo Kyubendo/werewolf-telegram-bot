@@ -96,9 +96,9 @@ export class Thief extends RoleBase {
                 })
             }
 
-            this.player.role.stealMessage && Thief.game.bot.sendMessage(
+            this.targetPlayer.role.stealMessage && Thief.game.bot.sendMessage(
                 this.player.id,
-                this.player.role.stealMessage
+                this.targetPlayer.role.stealMessage
             )
 
             this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);

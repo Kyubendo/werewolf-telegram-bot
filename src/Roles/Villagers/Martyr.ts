@@ -26,7 +26,7 @@ export class Martyr extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        if (this.targetPlayer?.role) {
+        if (this.specialCondition.protectedPlayer?.role) {
             this.nightActionDone = true
             return
         }
@@ -115,9 +115,21 @@ export class Martyr extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.specialCondition.protectedPlayer = findPlayer(choice, Martyr.game.players);
+        this.choiceMsgEditText();
         if (this.specialCondition.protectedPlayer)
             this.stealMessage = `\nТы умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`;
-        this.choiceMsgEditText();
-        this.doneNightAction()
+        this.doneNightAction();
+    }
+
+    choiceMsgEditText = () => {
+        RoleBase.game.bot.editMessageText(
+            `Выбор принят — ${this.specialCondition.protectedPlayer
+                ? highlightPlayer(this.specialCondition.protectedPlayer)
+                : 'Пропустить'}.`,
+            {
+                message_id: this.choiceMsgId,
+                chat_id: this.player.id,
+            }
+        )
     }
 }

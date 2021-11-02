@@ -102,4 +102,16 @@ export class WildChild extends RoleBase {
         this.choiceMsgEditText();
         this.doneNightAction()
     }
+
+    choiceMsgEditText = () => {
+        RoleBase.game.bot.editMessageText(
+            `Выбор принят — ${this.specialCondition.roleModel
+                ? highlightPlayer(this.specialCondition.roleModel)
+                : 'Пропустить'}.`,
+            {
+                message_id: this.choiceMsgId,
+                chat_id: this.player.id,
+            }
+        )
+    }
 }
