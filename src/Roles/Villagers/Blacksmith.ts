@@ -15,7 +15,7 @@ export class Blacksmith extends RoleBase {
     weight = () => Blacksmith.game.players.filter(player => player.role instanceof Wolf)
         ? 5
         : Blacksmith.game.players.filter(player => player.role instanceof Traitor) // Or WildChild
-            ? 4
+            ? 3.5
             : 3
 
     actionAnnouncement = () => ({

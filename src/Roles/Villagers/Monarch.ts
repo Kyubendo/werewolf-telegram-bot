@@ -9,7 +9,7 @@ export class Monarch extends RoleBase {
         'По крайней мере, на один день! ' +
         `Ты можешь показать деревне свою корону и семейное древо, и один день они позволят тебе ` +
         `вершить правосудие лично.`
-    weight = () => 3;
+    weight = () => 4;
 
     specialCondition: specialConditionMonarch = {
         comingOut: undefined

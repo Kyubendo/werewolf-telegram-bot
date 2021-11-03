@@ -5,5 +5,5 @@ export class Traitor extends RoleBase {
     roleIntroductionText = () => `Ты ${this.roleName}. `
     startMessageText = () => `Вот ты сейчас простой селянин, а убьют волков - станешь последним ` +
         `в их роде!`;
-    weight = () => 0;
+    weight = () => -.5;
 }

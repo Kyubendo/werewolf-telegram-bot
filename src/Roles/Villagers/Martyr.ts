@@ -15,7 +15,7 @@ export class Martyr extends RoleBase {
         'и этот человек выживет. Пока ты не умрешь, ты в команде селян, ' +
         'но как только ты умерла за кого-то, ты можешь выиграть, ' +
         'только если этот человек выиграет.'
-    weight = () => 6;
+    weight = () => 0;
 
     protectedPlayerKiller?: Player
     diedForProtectedPlayer: boolean = false

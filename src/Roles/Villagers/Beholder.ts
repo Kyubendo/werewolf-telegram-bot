@@ -17,5 +17,5 @@ export class Beholder extends RoleBase {
 
     startMessageText = () => `Ты знаешь, кто настоящий провидец, а не дурак... В общем это ` +
         'твоя единственная функция.' + this.stealMessage;
-    weight = () => this.seers?.length ? 5 : 2;
+    weight = () => this.seers?.length ? 4.5 : 2;
 }

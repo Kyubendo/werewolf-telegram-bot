@@ -17,7 +17,7 @@ export class Seer extends ForecasterBase {
     roleName = 'Провидец 👳';
     roleIntroductionText = () => 'Ты Провидец 👳! ';
     startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
-    weight = () => 7;
+    weight = () => 6.5;
 
     nightActionDone = false
 
