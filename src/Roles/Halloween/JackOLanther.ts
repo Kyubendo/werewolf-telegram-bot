@@ -3,6 +3,7 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {Pumpkin} from "./Pumpkin";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Beauty} from "../index";
 
 export class JackOLantern extends RoleBase {
     roleName = 'Jack-O-Lantern 🎃🔥';
@@ -12,7 +13,7 @@ export class JackOLantern extends RoleBase {
         `Учти, что с шансом 25% тыква вместо своей прежней формы обретёт форму Джека ` +
         `и вступит в твою команду, но ты об этом не узнаешь.\n` +
         'Испорти всем людишкам праздник! ';
-    weight = () => -11;
+    weight = () => -12;
 
 
     action = () => {
@@ -38,6 +39,9 @@ export class JackOLantern extends RoleBase {
                 `Ты пришёл домой к ${highlightPlayer(this.targetPlayer)}, но видишь что он уже тыква! ` +
                 `Кто-то тебя опередил.`
             )
+            return;
+        } else if (this.targetPlayer.role instanceof Beauty) {
+            this.player.role?.loveBind(this.targetPlayer);
             return;
         }
 
