@@ -13,8 +13,8 @@ export class Mason extends RoleBase {
         const allies = this.findOtherMasonPlayers();
         if (!allies?.length) return ''
         return (allies?.length > 1
-            ? '\nКаменщики: '
-            : '\nТвой напарник на стройке — ')
+                ? '\nКаменщики: '
+                : '\nТвой напарник на стройке — ')
             + allies?.map(ally => highlightPlayer(ally)).join(', ')
     }
 
@@ -28,17 +28,20 @@ export class Mason extends RoleBase {
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        Mason.game.bot.sendMessage(
-            Mason.game.chatId,
-            `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
-            `камней, кровь разбрызгана повсюду. *${this.roleName}* мертв!`
-        )
+        if (killer?.role && !type) {
+            Mason.game.bot.sendMessage(
+                Mason.game.chatId,
+                `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
+                `камней, кровь разбрызгана повсюду. *${this.roleName}* мертв!`
+            )
 
-        killer?.role?.killMessageDead && Mason.game.bot.sendMessage(
-            this.player.id,
-            killer?.role?.killMessageDead
-        )
-        this.player.isAlive = false;
-        return true;
+            killer?.role?.killMessageDead && Mason.game.bot.sendMessage(
+                this.player.id,
+                killer?.role?.killMessageDead
+            )
+            this.player.isAlive = false;
+            return true;
+        } else
+            return super.handleDeath(killer, type);
     }
 }

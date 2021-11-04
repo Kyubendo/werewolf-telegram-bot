@@ -77,7 +77,7 @@ export class WildChild extends RoleBase {
     }
 
     handleDeath(killer?: Player, type?: DeathType) {
-        if (killer?.role instanceof Wolf) {
+        if (killer?.role instanceof Wolf && !type) {
             WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
                 'НОМНОМНОМНОМ! Прошлой ночью волк(и) ' +

@@ -11,8 +11,8 @@ export class Drunk extends RoleBase {
 
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
-            let text: string = ''; // change to let text be killer standard message
+        if ((killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) && !type) {
+            let text: string = killer.role.killMessageAll(this.player);
             if (killer?.role instanceof Wolf) {
                 killer.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.isFrozen = true);
                 killer.isFrozen = true;

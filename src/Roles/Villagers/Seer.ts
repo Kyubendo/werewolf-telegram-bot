@@ -52,7 +52,7 @@ export class Seer extends ForecasterBase {
         }
 
 
-        if (killer?.role) {
+        if (killer?.role && !type) {
             Seer.game.bot.sendMessage(
                 Seer.game.chatId,
                 killer?.role instanceof SerialKiller

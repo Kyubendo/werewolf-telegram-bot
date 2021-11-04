@@ -30,6 +30,8 @@ export class Harlot extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
+    saved:boolean = false;
+
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
@@ -40,16 +42,20 @@ export class Harlot extends RoleBase {
         } else {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
             this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
-                if (this.targetPlayer)
+                if (this.targetPlayer) {
+                    this.saved = true;
                     this.onKilled(killer, 'harlotDeath')
+                }
 
                 return currentTargetHandleDeath(killer, type);
             }
         }
+
+        this.saved = true;
     }
 
     actionResult = () => {
-        if (!this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role || this.saved) return;
 
         Harlot.game.bot.sendMessage(
             this.player.id,
@@ -94,7 +100,7 @@ export class Harlot extends RoleBase {
                     `прежде чем взять сердце к себе в коллекцию!`,
                 )
             }
-        } else if (killer?.role instanceof Wolf) {
+        } else if (killer?.role instanceof Wolf && !type) {
             if (this.targetPlayer?.role instanceof Wolf) {
                 Harlot.game.bot.sendMessage(
                     Harlot.game.chatId,
