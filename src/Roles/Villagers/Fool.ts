@@ -20,19 +20,22 @@ export class Fool extends Seer {
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        this.player.isAlive = false;
-        Fool.game.bot.sendMessage(
-            Fool.game.chatId,
-            'День начался с печальных новостей. Всем известный Провид... ' +
-            `Так, стоп! Это же никакой не Провидец! Он... *${this.roleName}*!  ` +
-            `Покойся не с миром, ${highlightPlayer(this.player)}...`,
-        )
+        if (killer?.role && !type) {
+            this.player.isAlive = false;
+            Fool.game.bot.sendMessage(
+                Fool.game.chatId,
+                'День начался с печальных новостей. Всем известный Провид... ' +
+                `Так, стоп! Это же никакой не Провидец! Он... *${this.roleName}*!  ` +
+                `Покойся не с миром, ${highlightPlayer(this.player)}...`,
+            )
 
-        killer?.role?.killMessageDead && Fool.game.bot.sendMessage(
-            this.player.id,
-            killer?.role?.killMessageDead
-        )
-        this.player.isAlive = false;
-        return true;
+            killer?.role?.killMessageDead && Fool.game.bot.sendMessage(
+                this.player.id,
+                killer?.role?.killMessageDead
+            )
+            this.player.isAlive = false;
+            return true;
+        } else
+            return super.handleDeath(killer, type);
     }
 }

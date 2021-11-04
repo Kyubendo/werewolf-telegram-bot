@@ -12,7 +12,7 @@ export class Cursed extends RoleBase {
     }
 
     handleDeath(killer?: Player, type?: DeathType) {
-        if (killer?.role instanceof Wolf) {
+        if (killer?.role instanceof Wolf && !type) {
             Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
                 .forEach(player => Cursed.game.bot.sendMessage(
                     player.id,
