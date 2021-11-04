@@ -32,6 +32,15 @@ export class JackOLantern extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
+        if (this.targetPlayer.role instanceof Pumpkin) {
+            JackOLantern.game.bot.sendMessage(
+                this.player.id,
+                `Ты пришёл домой к ${highlightPlayer(this.targetPlayer)}, но видишь что он уже тыква! ` +
+                `Кто-то тебя опередил.`
+            )
+            return;
+        }
+
         const specialCondition = this.targetPlayer.role?.specialCondition;
         this.targetPlayer.role = new Pumpkin(this.targetPlayer, this.targetPlayer.role)
         this.targetPlayer.role.specialCondition = specialCondition;
