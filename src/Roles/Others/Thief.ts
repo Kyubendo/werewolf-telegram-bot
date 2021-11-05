@@ -78,6 +78,8 @@ export class Thief extends RoleBase {
                     )
             })
 
+            this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
+            
             if (this.player.role instanceof Mason) {
                 Thief.game.bot.sendMessage(
                     this.player.id,
@@ -98,7 +100,7 @@ export class Thief extends RoleBase {
                     this.player.role.showOtherWolfPlayers()
                 )
 
-                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => {
+                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => { // maybe add exception for the targetPlayer
                     this.targetPlayer && Thief.game.bot.sendMessage(
                         wolfPlayer.id,
                         `Странно, ${highlightPlayer(this.targetPlayer)} решил стать веганом, ` +
@@ -107,8 +109,6 @@ export class Thief extends RoleBase {
                     )
                 })
             }
-
-            this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 
             Thief.game.bot.sendMessage(
                 this.targetPlayer.id,
