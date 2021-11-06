@@ -7,7 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Wolf} from "../Roles";
+import {Pacifist, Wolf} from "../Roles";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -78,16 +78,29 @@ export class Game {
 
         this.runResults(); // check the position of runResults later
 
-        this.stage = nextStage
+        this.stage = nextStage;
 
-        setTimeout(this.runActions, 30);
+        const pacifists = this.lynch?.getActivePacifists();
+        // if (pacifists && pacifists.length && pacifists[0].role instanceof Pacifist)
+        //     console.log(pacifists[0].role.specialCondition.peace);
+        //
+        // this.runActions();
+        //
+        // const pacifists2 = this.lynch?.getActivePacifists();
+        // if (pacifists2 && pacifists2.length && pacifists2[0].role instanceof Pacifist)
+        //     console.log(pacifists2[0].role.specialCondition.peace);
 
-        setTimeout(() => // stupid kludge
-                this.bot.sendMessage(this.chatId, gameStageMsg(this))
-                    .then(() => {
-                        this.bot.sendMessage(this.chatId, playerGameList(this.players),)
-                    }),
-            50)
+        (!pacifists?.length) && this.bot.sendMessage(this.chatId, gameStageMsg(this))
+            .then(() => {
+                //!this.lynch?.getActivePacifists().length &&
+                this.bot.sendMessage(this.chatId, playerGameList(this.players))
+            })
+
+        if (pacifists)
+            pacifists.forEach(activePacifistPlayer => {
+                if (activePacifistPlayer.role instanceof Pacifist)
+                    activePacifistPlayer.role.specialCondition.peace = false
+            })
     }
 
     onGameEnd = (endGame: { winners: Player[], type: Win }) => {
@@ -102,14 +115,13 @@ export class Game {
 
     private runResolves = () => {
         this.wolfFeast?.handleVoteEnd()
+        if (!this.lynch?.getActivePacifists().length && this.lynch?.handleVoteEnd()) return true
 
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && player.role instanceof role)
                 .forEach(player => player.role?.actionResolve && player.role.actionResolve())
         }
-
-        if (!this.lynch?.getActivePacifists().length && this.lynch?.handleVoteEnd()) return true
     }
 
     private runActions = () => {
@@ -141,6 +153,7 @@ export class Game {
             if (this.stage === 'day')
                 this.players.forEach(player => player.isFrozen = false)
         }
+
         this.wolfFeast?.startVoting()
         this.lynch?.startVoting()
 

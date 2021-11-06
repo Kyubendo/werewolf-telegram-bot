@@ -6,6 +6,7 @@ import {generateInlineKeyboard} from "../playersButtons";
 import {SelectType} from "../commands/callbackHandle";
 import {Lynch} from "./Lynch";
 import {uptime} from "os";
+import {Pacifist} from "../../Roles";
 
 export abstract class VotingBase {
     constructor(readonly game: Game) {
@@ -37,8 +38,11 @@ export abstract class VotingBase {
         if (this.game.stage !== this.voteStage) return;
 
         if ((this instanceof Lynch && this.getActivePacifists().length)) {
+            this.getActivePacifists().forEach(activePacifistPlayer => {
+                if (activePacifistPlayer.role instanceof Pacifist)
+                    activePacifistPlayer.role.specialCondition.peace = false
+            })
             this.game.setNextStage();
-            console.log('VotingBase - 40');
             return;
         }
 

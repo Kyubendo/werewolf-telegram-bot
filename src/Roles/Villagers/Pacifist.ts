@@ -25,10 +25,12 @@ export class Pacifist extends RoleBase {
     })
 
     action = () => {
+        console.log(RoleBase.game.stage?.toString())
         if (this.specialCondition.peace) {
+            console.log('here')
             this.specialCondition.peace = false;
             this.stealMessage = '\nОднако предыдущий игрок уже провёл демонстрацию. ' +
-                'Не думаю, что селяни согласятся на ещё одну..';
+                'Не думаю, что селяни согласятся на ещё одну...';
         }
 
         if (this.specialCondition.peace === false) return;
@@ -63,7 +65,6 @@ export class Pacifist extends RoleBase {
                         caption: this.actionAnnouncement().message
                     }
                 )
-                this.specialCondition.peace = true;
             } else if (Pacifist.game.stage === 'lynch') {
                 Pacifist.game.bot.sendAnimation(
                     Pacifist.game.chatId,
@@ -77,9 +78,9 @@ export class Pacifist extends RoleBase {
 
                     }
                 )
-                this.specialCondition.peace = true;
                 RoleBase.game.setNextStage();
             }
+            this.specialCondition.peace = true;
         }
         this.choiceMsgEditText();
     }
