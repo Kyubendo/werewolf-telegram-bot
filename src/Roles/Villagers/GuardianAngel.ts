@@ -1,9 +1,8 @@
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType, Player, RoleBase} from "../../Game/index";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {SerialKiller, Wolf,Beauty} from "../";
-import {Player} from "../../Game";
+import {Beauty, SerialKiller, Wolf} from "../index";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
@@ -32,7 +31,8 @@ export class GuardianAngel extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer.role instanceof SerialKiller || (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
+        if (this.targetPlayer.role instanceof SerialKiller
+            || (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
             this.onKilled(this.player);
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.loveBind(this.targetPlayer);
@@ -115,5 +115,31 @@ export class GuardianAngel extends RoleBase {
             return super.handleDeath(killer, type);
         return true;
     }
-}
 
+    stopKill = (killer: Player) => {
+        if (killer.role?.targetPlayer) {
+            RoleBase.game.bot.sendMessage(
+                killer.id,
+                `Придя домой к ${highlightPlayer(killer.role.targetPlayer)}, ` +
+                `у дверей ты встретил Ангела-хранителя, ` +
+                'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
+            )
+
+            RoleBase.game.bot.sendMessage(
+                killer.role.targetPlayer.id,
+                `${this.roleName} наблюдал за тобой этой ночью и защитил тебя от зла!`
+            )
+
+            RoleBase.game.bot.sendMessage(
+                this.player.id,
+                `С выбором ты угадал, на ` +
+                `${highlightPlayer(killer.role.targetPlayer)} действительно напали! Ты спас ему жизнь!` +
+                this.numberOfAttacks
+                    ? ' Снова!'
+                    : ''
+            )
+
+            this.numberOfAttacks++;
+        }
+    }
+}

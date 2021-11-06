@@ -26,7 +26,6 @@ export class Monarch extends RoleBase {
         if (this.specialCondition.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.specialCondition.comingOut = false;
             this.stealMessage = `\nОднако все в деревне уже узнали о монархе!`;
-            return;
         }
         if (this.specialCondition.comingOut === false) return;
 

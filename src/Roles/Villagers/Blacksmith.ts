@@ -1,8 +1,7 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Wolf} from "../WolfTeam/Wolf";
-import {Traitor} from "./Traitor";
 import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
+import {Traitor, Wolf} from "../index";
 
 export class Blacksmith extends RoleBase {
     roleName = 'Кузнец ⚒';

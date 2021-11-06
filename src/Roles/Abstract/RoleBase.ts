@@ -1,7 +1,6 @@
-import {Game} from "../../Game";
-import {Player} from "../../Game";
+import {Game, Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {GuardianAngel, Gunner, Suicide} from "../index";
+import {Gunner, Suicide} from "../index";
 
 
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath'; // Harlot
@@ -84,38 +83,6 @@ export abstract class RoleBase {
             'и любовь никогда не погаснет в твоем сердце... Ваша цель выжить! Если один из вас погибнет, ' +
             'другой умрет из-за печали и тоски.'
         )
-    }
-
-    readonly handleGuardianAngel = (killer: Player) => {
-        const guardianAngelPlayer = killer.role?.targetPlayer?.guardianAngel;
-        if (guardianAngelPlayer
-            && guardianAngelPlayer.role instanceof GuardianAngel
-            && killer.role?.targetPlayer) { // Дополнительная проверка нужна для доступа к полям GuardianAngel
-            RoleBase.game.bot.sendMessage(
-                killer.id,
-                `Придя домой к ${highlightPlayer(killer.role.targetPlayer)}, ` +
-                `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
-                'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
-            )
-
-            RoleBase.game.bot.sendMessage(
-                killer.role.targetPlayer.id,
-                `${guardianAngelPlayer.role.roleName} наблюдал за тобой этой ночью и защитил тебя от зла!`
-            )
-
-            let ending: string = '';
-            if (guardianAngelPlayer.role.numberOfAttacks)
-                ending = ' Снова!'
-
-            RoleBase.game.bot.sendMessage(
-                guardianAngelPlayer.id,
-                `С выбором ты угадал, на ` +
-                `${highlightPlayer(killer.role.targetPlayer)} действительно напали! Ты спас ему жизнь!`
-                + ending
-            )
-
-            guardianAngelPlayer.role.numberOfAttacks++;
-        }
     }
 
     doneNightAction = () => {

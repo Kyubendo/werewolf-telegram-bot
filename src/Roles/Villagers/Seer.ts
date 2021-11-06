@@ -1,16 +1,8 @@
-import {Villager} from "./Villager";
-import {Lycan} from "../WolfTeam/Lycan";
-import {DeathType, RoleBase} from "../../Game";
-import {Wolf} from "../WolfTeam/Wolf";
-import {WoodMan} from "./WoodMan";
-import {Traitor} from "./Traitor";
+import {DeathType, Player, RoleBase} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Player} from "../../Player/Player";
-import {ApprenticeSeer} from "./ApprenticeSeer";
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {SerialKiller} from "../Others/SerialKiller";
 import {findPlayer} from "../../Game/findPlayer";
-import {Beholder} from "../index";
+import {ApprenticeSeer, Beholder, Lycan, SerialKiller, Traitor, Villager, Wolf, WoodMan} from "../index";
+import {ForecasterBase} from "../Abstract/ForecasterBase";
 
 
 export class Seer extends ForecasterBase {

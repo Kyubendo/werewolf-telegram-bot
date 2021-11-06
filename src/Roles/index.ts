@@ -2,25 +2,26 @@ import {Seer} from "./Villagers/Seer";
 import {Fool} from "./Villagers/Fool";
 import {Villager} from "./Villagers/Villager";
 import {ClumsyGuy} from "./Villagers/ClumsyGuy";
-import {Cursed} from "./Villagers/Cursed";
 import {Traitor} from "./Villagers/Traitor";
 import {WoodMan} from "./Villagers/WoodMan";
-import {Mason} from "./Villagers/Mason";
-import {Drunk} from "./Villagers/Drunk";
 import {Monarch} from "./Villagers/Monarch";
-import {Harlot} from "./Villagers/Harlot";
 import {Beholder} from "./Villagers/Beholder";
 import {ApprenticeSeer} from "./Villagers/ApprenticeSeer";
 import {Gunner} from "./Villagers/Gunner";
-import {GuardianAngel} from "./Villagers/GuardianAngel";
 import {Oracle} from "./Villagers/Oracle";
 import {WiseElder} from "./Villagers/WiseElder";
 import {Detective} from "./Villagers/Detective";
-import {Martyr} from "./Villagers/Martyr";
 import {Beauty} from "./Villagers/Beauty";
 import {Sandman} from "./Villagers/Sandman";
 import {Blacksmith} from "./Villagers/Blacksmith";
+import {Pacifist} from "./Villagers/Pacifist";
+import {GuardianAngel} from "./Villagers/GuardianAngel";
 import {WildChild} from "./Villagers/WildChild";
+import {Cursed} from "./Villagers/Cursed";
+import {Martyr} from "./Villagers/Martyr";
+import {Harlot} from "./Villagers/Harlot";
+import {Drunk} from "./Villagers/Drunk";
+import {Mason} from "./Villagers/Mason";
 
 import {Wolf} from "./WolfTeam/Wolf";
 import {Lycan} from "./WolfTeam/Lycan";
@@ -39,7 +40,7 @@ export {
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Beholder, ApprenticeSeer,
     Beauty,
 
-    Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild,
+    Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, Pacifist, WildChild,
 
     Wolf, Lycan, Sorcerer, AlphaWolf,
 

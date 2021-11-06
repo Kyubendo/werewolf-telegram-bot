@@ -1,12 +1,9 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Beauty} from "../Villagers/Beauty";
-import {Doppelganger} from "./Doppelganger";
-import {Mason} from "../Villagers/Mason";
-import {Wolf} from "../WolfTeam/Wolf";
+import {Beauty, Doppelganger, Mason, SerialKiller, Wolf} from "../index";
+
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";

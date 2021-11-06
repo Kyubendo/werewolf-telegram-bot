@@ -1,5 +1,4 @@
-import {DeathType} from "../../Game";
-import {Player, RoleBase} from "../../Game";
+import {DeathType, Player, RoleBase} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
@@ -59,7 +58,7 @@ export class SerialKiller extends RoleBase {
         if (!this.targetPlayer) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
-            this.handleGuardianAngel(this.player);
+            this.targetPlayer.guardianAngel.role.stopKill(this.player)
             return;
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
             this.loveBind(this.targetPlayer);

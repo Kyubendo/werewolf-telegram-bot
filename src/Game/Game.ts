@@ -68,11 +68,11 @@ export class Game {
 
         this.clearSelects()
 
-        const endGame = checkEndGame(this.players, this.stage)
-        if (endGame) {
-            this.onGameEnd(endGame)
-            return
-        }
+        // const endGame = checkEndGame(this.players, this.stage)
+        // if (endGame) {
+        //     this.onGameEnd(endGame)
+        //     return
+        // }
 
         this.checkNightDeaths(nextStage)
 
@@ -80,7 +80,7 @@ export class Game {
 
         this.stage = nextStage
 
-        setTimeout(this.runActions, 30)
+        setTimeout(this.runActions, 30);
 
         setTimeout(() => // stupid kludge
                 this.bot.sendMessage(this.chatId, gameStageMsg(this))
@@ -101,7 +101,6 @@ export class Game {
     }
 
     private runResolves = () => {
-        if (this.lynch?.handleVoteEnd()) return true
         this.wolfFeast?.handleVoteEnd()
 
         for (const role of roleResolves(this.stage)) {
@@ -109,6 +108,8 @@ export class Game {
                 .filter(player => player.isAlive && player.role instanceof role)
                 .forEach(player => player.role?.actionResolve && player.role.actionResolve())
         }
+
+        if (!this.lynch?.getActivePacifists().length && this.lynch?.handleVoteEnd()) return true
     }
 
     private runActions = () => {
@@ -135,14 +136,14 @@ export class Game {
 
                 if (!this.players.find(player => !player.isFrozen))
                     this.setNextStage();
-
             })
 
             if (this.stage === 'day')
                 this.players.forEach(player => player.isFrozen = false)
         }
-        this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
+        this.lynch?.startVoting()
+
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)

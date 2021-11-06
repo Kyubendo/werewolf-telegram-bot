@@ -1,9 +1,7 @@
-import {Gunner} from "./Gunner";
-import {SerialKiller} from "../Others/SerialKiller";
-import {Wolf} from "../WolfTeam/Wolf";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
+import {Gunner, SerialKiller, Wolf} from "../index";
 
 export class WiseElder extends ForecasterBase {
     roleName = "Мудрец 📚";

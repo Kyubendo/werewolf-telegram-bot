@@ -1,9 +1,8 @@
-import {Seer} from "./Seer";
 import {findPlayer} from "../../Game/findPlayer";
-import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {randomElement} from "../../Utils/randomElement";
-import {DeathType} from "../../Game";
+import {DeathType, Player} from "../../Game";
+import {Seer} from "./Seer";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';

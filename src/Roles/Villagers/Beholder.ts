@@ -1,7 +1,6 @@
-import {Seer} from "./Seer";
-import {Fool} from "./Fool";
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Fool, Seer} from "../index";
 
 export class Beholder extends RoleBase {
     roleName = 'Очевидец 👁';

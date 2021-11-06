@@ -4,6 +4,8 @@ import {findPlayer} from "../findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../playersButtons";
 import {SelectType} from "../commands/callbackHandle";
+import {Lynch} from "./Lynch";
+import {uptime} from "os";
 
 export abstract class VotingBase {
     constructor(readonly game: Game) {
@@ -33,8 +35,23 @@ export abstract class VotingBase {
 
     startVoting = () => {
         if (this.game.stage !== this.voteStage) return;
+
+        if ((this instanceof Lynch && this.getActivePacifists().length)) {
+            this.game.setNextStage();
+            console.log('VotingBase - 40');
+            return;
+        }
+
         this.beforeVotingAction && this.beforeVotingAction()
-        setTimeout(() => this.getVoters().forEach(player => {
+
+        const voters = this.getVoters();
+
+        if (!voters.length) {
+            this.handleVoteEnd();
+            return;
+        }
+
+        setTimeout(() => voters.forEach(player => {
             this.game.bot.sendMessage(
                 player.id,
                 this.votePromptMessage,
@@ -78,6 +95,8 @@ export abstract class VotingBase {
 
     handleVoteEnd = () => {
         if (this.game.stage !== this.voteStage) return;
+
+
         this.editSkipMessages()
         if (this.handleVoteResult(this.voteResults())) return true
 

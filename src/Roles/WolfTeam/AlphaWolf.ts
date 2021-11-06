@@ -1,8 +1,7 @@
-import {Wolf} from "./Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Beauty, GuardianAngel, Wolf} from "../index";
 import {Player} from "../../Player/Player";
-import {Beauty} from "../Villagers/Beauty";
-import {GuardianAngel} from "../Villagers/GuardianAngel";
+
 
 export class AlphaWolf extends Wolf {
     roleName = 'Альфа-волк 🐺⚡';
@@ -17,7 +16,7 @@ export class AlphaWolf extends Wolf {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
-            this.handleGuardianAngel(this.player);
+            this.targetPlayer.guardianAngel.role.stopKill(this.player);
             return;
         }
 

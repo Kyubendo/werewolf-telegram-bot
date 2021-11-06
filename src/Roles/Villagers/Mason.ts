@@ -1,6 +1,5 @@
-import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType, Player, RoleBase} from "../../Game";
 
 export class Mason extends RoleBase {
     findOtherMasonPlayers = () => Mason.game.players.filter(otherPlayer =>

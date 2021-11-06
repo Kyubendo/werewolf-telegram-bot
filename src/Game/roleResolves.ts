@@ -6,7 +6,7 @@ import {
     Harlot, JackOLantern,
     Martyr,
     Monarch, Necromancer,
-    Oracle, Pumpkin, Sandman,
+    Oracle, Pacifist, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
     Thief, WildChild,
@@ -30,7 +30,7 @@ export const roleResolves = (stage: GameStage) => {
 
 const dayRoleResolves = [
     WildChild, Martyr, Doppelganger, WildChild, // constant choices
-    Monarch,
+    Monarch, Pacifist, // only action
     Gunner,
     WiseElder, Detective,
     Sandman, // pre-last because he freeze all other actions including Blacksmith's
@@ -51,5 +51,6 @@ const nightRoleResolves = [
 ]
 
 const lynchRoleResolves = [
+    Pacifist, // only action
     Pumpkin,
 ]
