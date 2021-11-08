@@ -9,6 +9,9 @@ export const join = (game: Game, select: SelectType) => {
     const newPlayer = new Player(select.from)
     if (game.players.map(e => e.id).includes(newPlayer.id)) return;
     game.addPlayer(newPlayer)
+    game.startGameTimer.extend(60_000)
+    game.bot.sendMessage(game.chatId, `${highlightPlayer(newPlayer)} присоединился к игре! Время увеличено, `
+        + `осталось *${Math.floor(game.startGameTimer.getRemainingTime() / 1000)} секунд(ы)* до начала игры`)
     game.bot.editMessageText(startPlayerList(game.players), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,

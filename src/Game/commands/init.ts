@@ -5,8 +5,6 @@ import {State} from "../../Bot";
 import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
-import {gameStageMsg} from "../gameStageMsg";
-import {gameStart} from "../gameStart";
 
 const joinButton = {
     inline_keyboard: [
@@ -15,9 +13,8 @@ const joinButton = {
 }
 
 const news = [
-    'Добавлен список новостей.',
-    'Добавлен таймер отмены игры.',
-    'Добавлена доска с предложениями и багами.'
+    'Добавлено сообщние о присоединении нового игрока к игре.',
+    'Добавлено увелечение времени игры при присоединении нового игрока.',
 ]
 
 const messageAppend = (news.length
@@ -38,19 +35,9 @@ export const initGame = (bot: TelegramBot, state: State) => {
                 })
             return;
         }
-
-        let endGameTimeout: NodeJS.Timer | undefined
         const onEnd = () => {
-            endGameTimeout && clearTimeout(endGameTimeout)
             delete state.game
         }
-        endGameTimeout = setTimeout(() => {
-            if (!state.game || state.game?.stage) return
-            if (state.game.players.length < 6) {
-                bot.sendMessage(state.game.chatId, 'Время вышло, игра отменяется!')
-                onEnd()
-            } else gameStart(bot, state.game)
-        }, 600_000)
 
         state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, onEnd, 0)
         state.game.lynch = new Lynch(state.game)

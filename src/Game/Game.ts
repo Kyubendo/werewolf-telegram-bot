@@ -8,6 +8,8 @@ import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
 import {Wolf} from "../Roles";
+import {timer, Timer} from "../Utils/Timer";
+import {gameStart} from "./gameStart";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -20,6 +22,13 @@ export class Game {
         readonly deleteGame: () => void,
         public playerCountMsgId: number,
     ) {
+        this.startGameTimer = timer(() => {
+            if (this.stage) return
+            if (this.players.length < 6) {
+                bot.sendMessage(this.chatId, 'Время вышло, игра отменяется!')
+                deleteGame()
+            } else gameStart(bot, this)
+        }, 600_000)
     }
 
     lynch?: Lynch
@@ -34,11 +43,8 @@ export class Game {
     deadPlayersCount = 0
 
     stage: GameStage = undefined
-    stageTimer?: NodeJS.Timer
-    resetStageTimer = (stageDuration: number) => {
-        this.stageTimer && clearTimeout(this.stageTimer)
-        this.stageTimer = setTimeout(this.setNextStage, stageDuration)
-    }
+    startGameTimer: Timer
+    stageTimer?: Timer
 
     setNextStage = () => {
         let stageDuration;
@@ -61,10 +67,11 @@ export class Game {
                 nextStage = "night"
                 stageDuration = this.nightDuration
         }
-        this.resetStageTimer(stageDuration)
+        this.stageTimer
+            ? this.stageTimer.reset(stageDuration)
+            : this.stageTimer = timer(this.setNextStage, stageDuration)
 
         if (this.runResolves()) return//fix
-
 
         this.clearSelects()
 
@@ -97,7 +104,7 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame()))
-        this.stageTimer && clearTimeout(this.stageTimer)
+        this.stageTimer && this.stageTimer.stop()
     }
 
     private runResolves = () => {
