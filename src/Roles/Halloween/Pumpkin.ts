@@ -1,4 +1,5 @@
-import {Player} from "../../Game"; import {RoleBase} from "../"
+import {Player} from "../../Game";
+import {RoleBase} from "../"
 import {DeathType} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {JackOLantern} from "../index";
