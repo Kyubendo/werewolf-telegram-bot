@@ -1,6 +1,6 @@
 import {Villager} from "./Villager";
 import {Lycan} from "../WolfTeam/Lycan";
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType} from "../../Game"; import {RoleBase} from "../"
 import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";

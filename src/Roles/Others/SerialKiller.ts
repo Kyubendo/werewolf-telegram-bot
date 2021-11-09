@@ -1,5 +1,5 @@
 import {DeathType} from "../../Game";
-import {Player, RoleBase} from "../../Game";
+import {Player} from "../../Game"; import {RoleBase} from "../"
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
