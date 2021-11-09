@@ -1,7 +1,8 @@
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType} from "../../Game";
+import {RoleBase} from "../"
 
 export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';

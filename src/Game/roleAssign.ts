@@ -1,12 +1,11 @@
 import {Game} from "./Game";
-import {RoleBase} from "../Game";
 import {arrayShuffle} from "../Utils/arrayShuffle";
 import {
     AlphaWolf, ApprenticeSeer, Beauty,
     Beholder, Blacksmith,
     ClumsyGuy,
     Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, JackOLantern, Lycan, Martyr,
-    Mason, Monarch, Necromancer, Oracle, Sandman, Seer,
+    Mason, Monarch, Necromancer, Oracle, RoleBase, Sandman, Seer,
     SerialKiller,
     Sorcerer, Suicide, Thief,
     Traitor,
@@ -17,8 +16,9 @@ import {
 export const assignRoles = (game: Game) => {
     RoleBase.game = game;
     const players = game.players
+    const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
-        Wolf, Lycan, SerialKiller, AlphaWolf, JackOLantern,
+        ...wolves, SerialKiller, JackOLantern,
     ]
     const wolfNeededRoles = [Sorcerer, Traitor]
     const evilPool = [...killersPool, Sorcerer]
@@ -53,7 +53,7 @@ export const assignRoles = (game: Game) => {
         let rolePool = [...villagersPool]
         const evilCount = Math.floor((players.length - 4) / 2) + +(Math.random() >= .5)
         const evils = [...Array(evilCount)].map(() => availableKillers.pop())
-        evils.find(e => e instanceof Wolf) && rolePool.push(...wolfNeededRoles)
+        evils.find(e => wolves.find(w => w === e)) && rolePool.push(...wolfNeededRoles)
 
         arrayShuffle(rolePool)
 

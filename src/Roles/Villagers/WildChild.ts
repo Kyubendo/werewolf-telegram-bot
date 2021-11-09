@@ -1,4 +1,4 @@
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -6,6 +6,7 @@ import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {findPlayer} from "../../Game/findPlayer";
 import {specialConditionWildChild} from "../../Utils/specialConditionTypes";
+import {RoleBase} from "../index";
 
 export class WildChild extends RoleBase {
     roleName = 'Дикий ребёнок 👶';

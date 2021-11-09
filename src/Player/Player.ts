@@ -1,6 +1,5 @@
-import {RoleBase} from "../Game";
 import {User} from "node-telegram-bot-api";
-import {Wolf} from "../Roles";
+import {RoleBase, Wolf} from "../Roles";
 
 export class Player {
     constructor(user: User) {

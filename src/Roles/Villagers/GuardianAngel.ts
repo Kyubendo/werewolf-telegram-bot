@@ -1,8 +1,8 @@
-import {DeathType, RoleBase} from "../../Game";
+import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {SerialKiller, Wolf,Beauty} from "../";
+import {SerialKiller, Wolf, Beauty, RoleBase} from "../";
 import {Player} from "../../Game";
 
 export class GuardianAngel extends RoleBase {

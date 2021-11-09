@@ -1,9 +1,7 @@
-import {Player} from "../../Player/Player";
-import {DeathType, RoleBase} from "../../Game";
+import {Player} from "../../Game";
+import {DeathType} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Traitor} from "../Villagers/Traitor";
-import {GuardianAngel} from "../Villagers/GuardianAngel";
-import {Beauty} from "../Villagers/Beauty";
+import {Beauty, GuardianAngel, RoleBase, Traitor} from "../index";
 
 export class Wolf extends RoleBase {
     findOtherWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
