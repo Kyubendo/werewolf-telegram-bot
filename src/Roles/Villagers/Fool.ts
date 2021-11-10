@@ -29,9 +29,12 @@ export class Fool extends Seer {
                 `Покойся не с миром, ${highlightPlayer(this.player)}...`,
             )
 
-            killer?.role?.killMessageDead && Fool.game.bot.sendMessage(
+            killer?.role?.killMessage && Fool.game.bot.sendAnimation(
                 this.player.id,
-                killer?.role?.killMessageDead
+                killer?.role?.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
             )
             this.player.isAlive = false;
             return true;
