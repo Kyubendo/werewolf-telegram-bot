@@ -6,6 +6,7 @@ import {GuardianAngel, Gunner, Suicide} from "../index";
 export type DeathType = 'loverDeath' | 'loverBetrayal' | 'harlotCameToDead' | 'angelProtectedKiller'
     | 'wolfCameToSerialKiller';
 
+import {specialConditionType} from "../../Utils/specialConditionTypes";
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
@@ -29,6 +30,9 @@ export abstract class RoleBase {
         gif: string
     }
 
+    stealMessage?: string;
+
+
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly actionResult?: () => void
@@ -36,6 +40,8 @@ export abstract class RoleBase {
 
     targetPlayer?: Player
     choiceMsgId?: number
+
+    specialCondition?: specialConditionType;
 
     nightActionDone?: boolean
 
@@ -114,7 +120,8 @@ export abstract class RoleBase {
 
     doneNightAction = () => {
         this.nightActionDone = true
-        if (!RoleBase.game.players.find(p => p.isAlive && p.role?.nightActionDone === false))
+        if (!RoleBase.game.players
+            .find(p => p.isAlive && p.role?.nightActionDone === false && !p.isFrozen))
             RoleBase.game.setNextStage()
     }
 

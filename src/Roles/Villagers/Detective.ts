@@ -5,10 +5,10 @@ import {Wolf} from "../WolfTeam/Wolf";
 
 export class Detective extends ForecasterBase {
     roleName = 'Детектив 🕵️';
-    roleIntroductionText = () => `${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}. `
     startMessageText = () => 'Ты можешь выбрать игрока днем, чтобы узнать его роль. ' +
         'Но волк узнает, кто ты, если ты выберешь его!'
-    weight = () => 6;
+    weight = () => 7;
 
     actionResult = () => {
         if (!this.targetPlayer?.role) return;
@@ -22,11 +22,10 @@ export class Detective extends ForecasterBase {
     }
 
     forecastRoleName = (targetRole: RoleBase) => {
-        if (targetRole instanceof Wolf)
-            Detective.game.bot.sendMessage(
-                targetRole.player.id,
-                `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
-            )
+        if (targetRole instanceof Wolf) Detective.game.bot.sendMessage(
+            targetRole.player.id,
+            `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
+        )
 
         return targetRole.roleName;
     }

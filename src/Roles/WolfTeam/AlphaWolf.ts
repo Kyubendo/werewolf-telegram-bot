@@ -10,6 +10,7 @@ export class AlphaWolf extends Wolf {
     startMessageText = () => 'Твои укусы передают проклятие, обращающее человека в волка. ' +
         'По ночам ты можешь выбрать человека, а затем атаковать и убить его, но пока ты жив, ' +
         'твои жертвы имеют 25% шанса стать волком.'
+        + this.showOtherWolfPlayers();
     weight = () => -13;
 
     actionResolve = () => {
@@ -33,10 +34,10 @@ export class AlphaWolf extends Wolf {
                 this.targetPlayer.id,
                 `Ты был(а) атакован(а) волками, но ${this.roleName} избрал тебя. ` +
                 'Вместо того, чтобы быть убитым(ой), ты был(а) заражен(а)... ' +
-                'И завтрашней ночью превратишься' +
+                'И завтрашней ночью превратишься в' +
                 (this.targetPlayer.role instanceof GuardianAngel)
                     ? '... Падшего Ангела!'
-                    : ' в волка!'
+                    : ' волка!'
             )
 
             const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);

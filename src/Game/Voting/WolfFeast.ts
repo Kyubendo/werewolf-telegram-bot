@@ -10,7 +10,11 @@ export class WolfFeast extends VotingBase {
     type = 'wolfFeast'
     votePromptMessage = 'Кого ты хочешь съесть?'
 
-    getVoters = () => this.game.players.filter(player => player.isAlive && player.role instanceof Wolf)
+    getVoters = () => this.game.players.filter(
+        player => player.isAlive
+            && !player.isFrozen
+            && player.role instanceof Wolf
+    )
 
     voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive && !(otherPlayer.role instanceof Wolf)
         && !(otherPlayer.role instanceof FallenAngel)

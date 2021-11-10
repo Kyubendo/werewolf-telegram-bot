@@ -1,8 +1,9 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Pumpkin} from "../Others/Pumpkin";
+import {Pumpkin} from "./Pumpkin";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {Beauty} from "../index";
 
 export class JackOLantern extends RoleBase {
     roleName = 'Jack-O-Lantern 🎃🔥';
@@ -12,7 +13,7 @@ export class JackOLantern extends RoleBase {
         `Учти, что с шансом 25% тыква вместо своей прежней формы обретёт форму Джека ` +
         `и вступит в твою команду, но ты об этом не узнаешь.\n` +
         'Испорти всем людишкам праздник! ';
-    weight = () => -7;
+    weight = () => -12;
 
 
     action = () => {
@@ -32,13 +33,28 @@ export class JackOLantern extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer) return;
 
+        if (this.targetPlayer.role instanceof Pumpkin) {
+            JackOLantern.game.bot.sendMessage(
+                this.player.id,
+                `Ты пришёл домой к ${highlightPlayer(this.targetPlayer)}, но видишь что он уже тыква! ` +
+                `Кто-то тебя опередил.`
+            )
+            return;
+        } else if (this.targetPlayer.role instanceof Beauty) {
+            this.player.role?.loveBind(this.targetPlayer);
+            return;
+        }
+
+        const specialCondition = this.targetPlayer.role?.specialCondition;
         this.targetPlayer.role = new Pumpkin(this.targetPlayer, this.targetPlayer.role)
+        this.targetPlayer.role.specialCondition = specialCondition;
+
 
         JackOLantern.game.bot.sendAnimation(
             this.targetPlayer.id,
             'https://media.giphy.com/media/12eLy0DOnVE6mA/giphy.gif',
             {
-                caption: 'О нет! Тебя превартили в тыкву...'
+                caption: 'О нет! Тебя превратили в тыкву...'
             }
         )
 

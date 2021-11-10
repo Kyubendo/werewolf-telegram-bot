@@ -1,16 +1,15 @@
+import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {SerialKiller, Wolf} from "../index";
-import {Player} from "../../Player/Player";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
-import {Beauty} from "./Beauty";
+import {SerialKiller, Wolf, Beauty, RoleBase} from "../";
+import {Player} from "../../Game";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
     startMessageText = () => `Беги спасай свой народ! Но берегись волков, есть ` +
         '50% вероятности что тебя съедят, если выберешь их.';
-    weight = () => 7;
+    weight = () => 6.5;
 
     nightActionDone = false
 

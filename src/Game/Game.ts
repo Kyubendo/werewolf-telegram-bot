@@ -1,4 +1,4 @@
-import {Player} from "../Player/Player";
+import {Player} from "../Game";
 import TelegramBot from "node-telegram-bot-api";
 import {gameStageMsg} from "./gameStageMsg";
 import {Lynch} from "./Voting/Lynch";
@@ -7,6 +7,9 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
+import {Wolf} from "../Roles";
+import {timer, Timer} from "../Utils/Timer";
+import {gameStart} from "./gameStart";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 
@@ -16,26 +19,32 @@ export class Game {
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,
-        readonly deleteGame: () => boolean,
+        readonly deleteGame: () => void,
         public playerCountMsgId: number,
     ) {
+        this.startGameTimer = timer(() => {
+            if (this.stage) return
+            if (this.players.length < 6) {
+                bot.sendMessage(this.chatId, 'Время вышло, игра отменяется!')
+                deleteGame()
+            } else gameStart(bot, this)
+        }, 600_000)
     }
 
     lynch?: Lynch
     wolfFeast?: WolfFeast
 
-    lynchDuration = 10_000
-    dayDuration = 10000_000
-    nightDuration = 5000_000
+    wolvesDeactivated: boolean = false
+
+    lynchDuration = 60_000
+    dayDuration = 120_000
+    nightDuration = 60_000
 
     deadPlayersCount = 0
 
     stage: GameStage = undefined
-    stageTimer?: NodeJS.Timer
-    resetStageTimer = (stageDuration: number) => {
-        this.stageTimer && clearTimeout(this.stageTimer)
-        this.stageTimer = setTimeout(this.setNextStage, stageDuration)
-    }
+    startGameTimer: Timer
+    stageTimer?: Timer
 
     setNextStage = () => {
         let stageDuration;
@@ -58,15 +67,16 @@ export class Game {
                 nextStage = "night"
                 stageDuration = this.nightDuration
         }
-        this.resetStageTimer(stageDuration)
+        this.stageTimer
+            ? this.stageTimer.reset(stageDuration)
+            : this.stageTimer = timer(this.setNextStage, stageDuration)
 
         if (this.runResolves()) return//fix
-
 
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if(endGame){
+        if (endGame) {
             this.onGameEnd(endGame)
             return
         }
@@ -94,7 +104,7 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame()))
-        this.stageTimer && clearTimeout(this.stageTimer)
+        this.stageTimer && this.stageTimer.stop()
     }
 
     private runResolves = () => {
@@ -109,9 +119,6 @@ export class Game {
     }
 
     private runActions = () => {
-        if (this.stage === 'night') this.players.forEach(p => {
-            if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
-        })
         if (this.stage !== 'lynch') { // change?
             this.players
                 .filter(player => player.isAlive)
@@ -119,13 +126,30 @@ export class Game {
                     if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
                 })
 
+            if (this.stage === 'night') this.players.forEach(p => {
+                if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
+
+                this.players.forEach(player => player.isAlive && player.infected
+                    && player.transformInfected())
+
+                if (this.wolvesDeactivated) {
+                    this.players
+                        .filter(player => player.role instanceof Wolf && player.isAlive)
+                        .forEach(wolfPlayer => wolfPlayer.isFrozen = true);
+                    this.wolvesDeactivated = false;
+                }
+                // Note: add SigmaWolf here
+
+                if (!this.players.find(player => !player.isFrozen))
+                    this.setNextStage();
+
+            })
+
             if (this.stage === 'day')
                 this.players.forEach(player => player.isFrozen = false)
         }
         this.lynch?.startVoting()
         this.wolfFeast?.startVoting()
-        this.stage === 'night' && this.players.forEach(player => player.isAlive && player.infected
-            && player.transformInfected())
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
@@ -136,7 +160,10 @@ export class Game {
     private runResults = () => {
         for (const role of roleResolves(this.stage)) {
             this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
-                .forEach(player => player.role?.actionResult && player.role.actionResult())
+                .forEach(player => {
+                    player.role?.actionResult && player.role.actionResult()
+                    if (player.guardianAngel) player.guardianAngel = undefined
+                })
         }
     }
 

@@ -1,9 +1,8 @@
 import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
-import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Beauty, GuardianAngel, SerialKiller} from "../index";
+import {Beauty, GuardianAngel, SerialKiller, Wolf} from "../index";
 import {Player} from "../../Game";
 
 type DecisionType = 'kill' | 'protect';
@@ -30,7 +29,7 @@ export class FallenAngel extends RoleBase {
     action = () => {
         this.targetPlayer = undefined;
         this.numberOfAttacks = 0;
-        if (!this.killOrProtect)
+        if (FallenAngel.game.players.find(player => player.role instanceof Wolf))
             FallenAngel.game.bot.sendMessage(
                 this.player.id,
                 'Что ты хочешь сегодня сделать?',
@@ -54,66 +53,74 @@ export class FallenAngel extends RoleBase {
                 }
             ).then(msg => this.choiceMsgId = msg.message_id)
         else {
-            if (this.killOrProtect === 'kill') {
-                FallenAngel.game.bot.sendMessage(
-                    this.player.id,
-                    'Кого ты хочешь сегодня убить?',
-                    {
-                        reply_markup: generateInlineKeyboard(FallenAngel.game.players
+            this.killOrProtect = 'kill';
+            this.nextAction();
+        }
+    }
+
+    nextAction = () => {
+        if (this.killOrProtect === 'kill') {
+            FallenAngel.game.bot.sendMessage(
+                this.player.id,
+                'Кого ты хочешь сегодня убить?',
+                {
+                    reply_markup: generateInlineKeyboard(
+                        FallenAngel.game.players
                             .filter(player => player !== this.player
                                 && player.isAlive
-                                && !(wolfTeam.find(wolfTeamRole => player.role instanceof wolfTeamRole))))
-                    }
-                ).then(msg => this.choiceMsgId = msg.message_id)
-            } else {
-                FallenAngel.game.bot.sendMessage(
-                    this.player.id,
-                    'Кого ты хочешь сегодня защитить?',
-                    {
-                        reply_markup: generateInlineKeyboard(FallenAngel.game.players
+                                && !(player.role instanceof Wolf)
+                            )
+                    )
+                }
+            ).then(msg => this.choiceMsgId = msg.message_id)
+        } else {
+            FallenAngel.game.bot.sendMessage(
+                this.player.id,
+                'Кого ты хочешь сегодня защитить?',
+                {
+                    reply_markup: generateInlineKeyboard(
+                        FallenAngel.game.players
                             .filter(player => player !== this.player
                                 && player.isAlive
-                                && wolfTeam.find(wolfTeamRole => player.role instanceof wolfTeamRole)))
-                    }
-                ).then(msg => this.choiceMsgId = msg.message_id)
-            }
+                                && player.role instanceof Wolf
+                            )
+                    )
+                }
+            ).then(msg => this.choiceMsgId = msg.message_id)
         }
     }
 
     actionResolve = () => {
-        if (!this.targetPlayer) return
-
-        if (this.killOrProtect === 'kill')
-            if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
-                this.handleGuardianAngel(this.player);
-                return;
-            } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
-                this.loveBind(this.targetPlayer)
-            else
-                this.targetPlayer.role?.onKilled(this.player);
-        else // protect
-            this.targetPlayer.guardianAngel = this.player;
-
-        this.killOrProtect = undefined; // в таком случае он должен убивать после совы
+        if (this.targetPlayer) {
+            if (this.killOrProtect === 'kill') // kill
+                if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
+                    this.handleGuardianAngel(this.player);
+                    return;
+                } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
+                    this.loveBind(this.targetPlayer)
+                else
+                    this.targetPlayer.role?.onKilled(this.player);
+            else // protect
+                this.targetPlayer.guardianAngel = this.player;
+        }
     }
 
     actionResult = () => {
-        if (!this.targetPlayer?.role) return;
-
-        if (!this.numberOfAttacks) {
+        if (this.targetPlayer?.role && this.killOrProtect === 'protect' && !this.numberOfAttacks) {
             GuardianAngel.game.bot.sendMessage(
                 this.player.id,
                 `Ты защищал волка ${highlightPlayer(this.targetPlayer)} сегодня ночью, ` +
                 `но с ним ничего не случилось...`
             )
         }
+        this.killOrProtect = undefined;
     }
 
     handleChoice = (choice?: string) => {
         if (choice === 'kill' || choice === 'protect') {
             this.killOrProtect = choice;
             this.choiceMsgEditText();
-            this.player.role?.action && this.player.role?.action();
+            this.nextAction();
         } else {
             this.targetPlayer = findPlayer(choice, FallenAngel.game.players);
             super.choiceMsgEditText();
@@ -145,10 +152,9 @@ export class FallenAngel extends RoleBase {
     }
 
 
-
     choiceMsgEditText = () => {
         FallenAngel.game.bot.editMessageText(
-            `Выбор принят: ${this.killOrProtect === 'kill'
+            `Выбор принят — ${this.killOrProtect === 'kill'
                 ? 'Убить'
                 : this.killOrProtect === 'protect'
                     ? 'Защитить'

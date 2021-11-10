@@ -1,6 +1,7 @@
 import {Villager} from "./Villager";
 import {Lycan} from "../WolfTeam/Lycan";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType} from "../../Game";
+import {RoleBase} from "../"
 import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
@@ -10,28 +11,49 @@ import {ApprenticeSeer} from "./ApprenticeSeer";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {SerialKiller} from "../Others/SerialKiller";
 import {findPlayer} from "../../Game/findPlayer";
+import {Beholder} from "../index";
 
 
 export class Seer extends ForecasterBase {
     roleName = 'Провидец 👳';
     roleIntroductionText = () => 'Ты Провидец 👳! ';
     startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
-    weight = () => 7;
+    weight = () => 6.5;
 
     nightActionDone = false
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        const apprenticeSeerPlayer = Seer.game.players.find(player => player.role instanceof ApprenticeSeer);
-        if (apprenticeSeerPlayer) {
-            apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
-            Seer.game.bot.sendMessage(
-                apprenticeSeerPlayer.id,
-                `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
-                `Ты занял его место по случаю его смерти.`
-            )
+        const apprenticeSeerPlayers = Seer.game.players
+            .filter(player => player.role instanceof ApprenticeSeer && player.isAlive);
+        if (apprenticeSeerPlayers.length) {
+            apprenticeSeerPlayers.forEach(apprenticeSeerPlayer => {
+                if (apprenticeSeerPlayer) {
+                    apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
+                    Seer.game.bot.sendMessage(
+                        apprenticeSeerPlayer.id,
+                        `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
+                        `Ты занял его место по случаю его смерти.`
+                    )
+                }
+            })
+
+            const beholderPlayers = Seer.game.players
+                .filter(player => player.role instanceof Beholder && player.isAlive)
+            beholderPlayers.forEach(beholderPlayer => {
+                Seer.game.bot.sendMessage(
+                    beholderPlayer.id,
+                    `Провидец ${highlightPlayer(this.player)} мёртв. ` + (
+                        apprenticeSeerPlayers.length === 1
+                            ? `На его место встал ${highlightPlayer(apprenticeSeerPlayers[0])}.`
+                            : 'Но не огорчайся, ведь теперь сразу несколько игроков стали провидцами: ' +
+                            apprenticeSeerPlayers.join(', ')
+                    )
+                )
+            })
         }
 
-        if (killer?.role) {
+
+        if (killer?.role && !type) {
             Seer.game.bot.sendMessage(
                 Seer.game.chatId,
                 killer?.role instanceof SerialKiller

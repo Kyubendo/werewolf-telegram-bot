@@ -1,5 +1,6 @@
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
+import {specialConditionMonarch} from "../../Utils/specialConditionTypes";
 
 export class Monarch extends RoleBase {
     roleName = 'Монарх 🤴';
@@ -8,7 +9,11 @@ export class Monarch extends RoleBase {
         'По крайней мере, на один день! ' +
         `Ты можешь показать деревне свою корону и семейное древо, и один день они позволят тебе ` +
         `вершить правосудие лично.`
-    weight = () => 3;
+    weight = () => 4;
+
+    specialCondition: specialConditionMonarch = {
+        comingOut: undefined
+    }
 
     actionAnnouncement = () => ({
         message: `Пока жители деревни обсуждают ночные проишествия, ${highlightPlayer(this.player)} делает ` +
@@ -17,15 +22,13 @@ export class Monarch extends RoleBase {
         gif: 'https://media.giphy.com/media/okLCopqw6ElCDnIhuS/giphy.gif'
     })
 
-    comingOut?: boolean;
-
     action = () => {
-        if (this.comingOut === false) return;
-
-        if (this.comingOut) { // Изменить переопределение comingOut после добавления голосования
-            this.comingOut = false;
+        if (this.specialCondition.comingOut) { // Изменить переопределение comingOut после добавления голосования
+            this.specialCondition.comingOut = false;
+            this.stealMessage = `\nОднако все в деревне уже узнали о монархе!`;
             return;
         }
+        if (this.specialCondition.comingOut === false) return;
 
         Monarch.game.bot.sendMessage(
             this.player.id,
@@ -47,7 +50,7 @@ export class Monarch extends RoleBase {
             return;
         }
 
-        this.comingOut = true;
+        this.specialCondition.comingOut = true;
         this.choiceMsgEditText();
 
         Monarch.game.bot.sendAnimation(
@@ -58,7 +61,7 @@ export class Monarch extends RoleBase {
 
     choiceMsgEditText = () => {
         Monarch.game.bot.editMessageText(
-            `Выбор принят — ${this.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
+            `Выбор принят — ${this.specialCondition.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
             {
                 message_id: this.choiceMsgId,
                 chat_id: this.player.id,

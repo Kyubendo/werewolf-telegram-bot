@@ -1,6 +1,5 @@
-import {RoleBase} from "../Game";
 import {User} from "node-telegram-bot-api";
-import {FallenAngel, GuardianAngel, Wolf} from "../Roles";
+import {RoleBase, FallenAngel, GuardianAngel, Wolf} from "../Roles";
 import {highlightPlayer} from "../Utils/highlightPlayer";
 
 export class Player {
@@ -60,5 +59,6 @@ export class Player {
             this.id,
             text
         )
+        this.infected = false
     }
 }

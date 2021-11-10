@@ -1,8 +1,7 @@
-import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
-import {SerialKiller} from "../Others/SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType} from "../../Game";
+import {RoleBase, SerialKiller, Wolf} from "../index";
 
 export class Drunk extends RoleBase {
     roleName = 'Пьяница 🍻';
@@ -12,8 +11,8 @@ export class Drunk extends RoleBase {
 
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
-            let text: string = ''; // change to let text be killer standard message
+        if ((killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) && !type) {
+            let text: string = killer.role.killMessageAll(this.player);
             if (killer?.role instanceof Wolf) {
                 killer.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.isFrozen = true);
                 killer.isFrozen = true;

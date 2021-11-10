@@ -1,7 +1,8 @@
-import {Player, RoleBase} from "../../Game";
-import {DeathType} from "../Abstract/RoleBase";
+import {Player} from "../../Game";
+import {RoleBase} from "../"
+import {DeathType} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {JackOLantern} from "../Villagers/JackOLanther";
+import {JackOLantern} from "../index";
 
 export class Pumpkin extends RoleBase {
     roleName = 'Тыква 🎃';
@@ -9,10 +10,26 @@ export class Pumpkin extends RoleBase {
     weight = () => 0;
 
     actionResolve = () => {
-        if (Math.random() >= 0.25)
+        if (Math.random() >= 0.25) {
+            const specialCondition = this.player.role?.specialCondition;
             this.player.role = this.previousRole?.createThisRole(this.player, this.player.role);
-        else
+            if (this.player.role)
+                this.player.role.specialCondition = specialCondition;
+
+            Pumpkin.game.bot.sendMessage(
+                this.player.id,
+                `Наконец-то этот кошмар закончился! Теперь ты снова ${this.player.role?.roleName}.`
+            )
+        } else {
             this.player.role = new JackOLantern(this.player, this.player.role);
+            Pumpkin.game.bot.sendMessage(
+                this.player.id,
+                `Прошли уже сутки, а ты всё ещё тыква... ` +
+                `Ты понимаешь, что теперь ты останешься таким навсегда. ` +
+                `Ты берёшь стоящий рядом фонарь и отправляешься терроризировать жителей деревни. ` +
+                `Теперь ты сам ${this.player.role.roleName}!`
+            )
+        }
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
