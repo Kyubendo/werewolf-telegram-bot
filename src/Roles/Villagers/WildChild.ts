@@ -86,9 +86,12 @@ export class WildChild extends RoleBase {
                 'Селяне поняли, насколько волк(и) безжалостны, раз так хладнокровно ' +
                 'убивают(ет) беззащитных детей.'
             )
-            WildChild.game.bot.sendMessage(
+            WildChild.game.bot.sendAnimation(
                 this.player.id,
-                killer.role.killMessageDead // change to sendAnimation and add gif later
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
             )
             this.player.isAlive = false;
             return true;

@@ -92,9 +92,12 @@ export class GuardianAngel extends RoleBase {
                 )
             }
         } else if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
-            GuardianAngel.game.bot.sendMessage(
+            GuardianAngel.game.bot.sendAnimation(
                 this.player.id,
-                killer.role.killMessageDead
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
             )
 
             if (killer.role instanceof Wolf)

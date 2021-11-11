@@ -64,9 +64,12 @@ export class Seer extends ForecasterBase {
                     `Всем известный *${this.roleName}* мертв! Покойся с миром ${highlightPlayer(this.player)}...`
             )
 
-            killer.role.killMessageDead && Seer.game.bot.sendMessage(
+            killer.role.killMessage && Seer.game.bot.sendAnimation(
                 this.player.id,
-                killer.role.killMessageDead
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
             )
         } else
             return super.handleDeath(killer, type);

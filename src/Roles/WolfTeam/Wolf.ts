@@ -29,9 +29,14 @@ export class Wolf extends RoleBase {
 
     nightActionDone = false
 
-    killMessageAll = (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
-        `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`
-    killMessageDead = 'О нет! Ты съеден(а) волком!'; // GIF
+    killMessage = () => ({
+        text: {
+            toChat: (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
+                `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`,
+            toTarget: 'О нет! Ты съеден(а) волком!'
+        },
+        gif: 'https://media.giphy.com/media/10arlAx4rI0xHO/giphy.gif'
+    })
 
     actionResolve = () => {
         if (!this.targetPlayer) return;

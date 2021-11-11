@@ -12,7 +12,7 @@ export class Drunk extends RoleBase {
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
         if ((killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) && !type) {
-            let text: string = killer.role.killMessageAll(this.player);
+            let text: string = killer.role.killMessage().text.toChat(this.player);
             if (killer?.role instanceof Wolf) {
                 killer.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.isFrozen = true);
                 killer.isFrozen = true;
@@ -29,7 +29,15 @@ export class Drunk extends RoleBase {
                 Drunk.game.chatId,
                 text
             )
-            // kill message and gif
+
+            Drunk.game.bot.sendAnimation(
+                this.player.id,
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
+            )
+
             this.player.isAlive = false;
             return true;
         }

@@ -22,8 +22,13 @@ export abstract class RoleBase {
 
     readonly previousRole?: RoleBase;
 
-    readonly killMessageAll?: (deadPlayer: Player) => string
-    readonly killMessageDead?: string
+    readonly killMessage?: () => {
+        text: {
+            toChat: (deadPlayer: Player) => string,
+            toTarget: string,
+        }
+        gif: string
+    }
 
     readonly actionAnnouncement?: () => {
         message: string,
@@ -165,15 +170,20 @@ export abstract class RoleBase {
                     RoleBase.game.chatId,
                     killer.role.actionAnnouncement().gif, {caption: killer.role.actionAnnouncement().message}
                 )
-            killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
-                RoleBase.game.chatId,
-                killer.role.killMessageAll(this.player)
-            );
+            else if (killer.role.killMessage) {
+                RoleBase.game.bot.sendMessage(
+                    RoleBase.game.chatId,
+                    killer.role.killMessage().text.toChat(this.player)
+                );
 
-            killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
-                this.player.id,
-                killer.role.killMessageDead
-            );
+                RoleBase.game.bot.sendAnimation(
+                    this.player.id,
+                    killer.role.killMessage().gif,
+                    {
+                        caption: killer.role.killMessage().text.toTarget
+                    }
+                );
+            }
         } else if (!killer) {
             RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
