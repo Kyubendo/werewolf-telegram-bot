@@ -1,10 +1,10 @@
 import {Game} from "../../Game";
 import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {GuardianAngel, Gunner, Suicide} from "../index";
+import {GuardianAngel, Suicide} from "../index";
 
 
-export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath'; // Harlot
+export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner'; // Harlot
 
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
@@ -160,7 +160,7 @@ export abstract class RoleBase {
                 'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
             )
         } else if (killer?.role) {
-            if (killer.role instanceof Gunner)
+            if (type === 'shotByGunner')
                 killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
                     RoleBase.game.chatId,
                     killer.role.actionAnnouncement().gif, {caption: killer.role.actionAnnouncement().message}
