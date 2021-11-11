@@ -4,13 +4,14 @@ import {
     AlphaWolf, ApprenticeSeer, Beauty,
     Beholder, Blacksmith,
     ClumsyGuy,
-    Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, JackOLantern, Lycan, Martyr,
+    Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, Lycan, Martyr,
     Mason, Monarch, Necromancer, Oracle, RoleBase, Sandman, Seer,
     SerialKiller,
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
     WoodMan
+    // JackOLantern
 } from "../Roles";
 
 export const assignRoles = async (game: Game) => {
@@ -18,7 +19,8 @@ export const assignRoles = async (game: Game) => {
     const players = game.players
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
-        ...wolves, SerialKiller, JackOLantern,
+        ...wolves, SerialKiller,
+        //JackOLantern,
     ]
     const wolfNeededRoles = [Sorcerer, Traitor]
     const evilPool = [...killersPool, Sorcerer]
