@@ -13,7 +13,7 @@ import {
     WoodMan
 } from "../Roles";
 
-export const assignRoles = (game: Game) => {
+export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const wolves = [Wolf, Lycan, AlphaWolf,]
@@ -33,7 +33,9 @@ export const assignRoles = (game: Game) => {
     ]
 
 
-    const testPool = [Thief, Wolf, Beauty,
+    const testPool = [
+        Sandman, GuardianAngel, Wolf,
+        Beholder, Necromancer,
         Harlot, Wolf, WildChild, Villager,
         Oracle, Villager, GuardianAngel, Villager, Wolf, Cursed, WoodMan, Mason,
         Harlot,
@@ -78,8 +80,10 @@ export const assignRoles = (game: Game) => {
 
     // const currentRoles = players.map((player, i) => player.role = new testPool[i](player))
 
-    players.forEach(player => player.role && game.bot.sendMessage(
-        player.id,
-        player.role.roleIntroductionText() + player.role.startMessageText())
-    );
+    for (const player of players) {
+        player.role && await game.bot.sendMessage(
+            player.id,
+            player.role.roleIntroductionText() + player.role.startMessageText()
+        );
+    }
 }

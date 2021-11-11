@@ -55,17 +55,15 @@ export class Monarch extends RoleBase {
 
         Monarch.game.bot.sendAnimation(
             Monarch.game.chatId,
-            this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
+            this.actionAnnouncement().gif, {caption: this.actionAnnouncement().message}
         )
     }
 
-    choiceMsgEditText = () => {
-        Monarch.game.bot.editMessageText(
-            `Выбор принят — ${this.specialCondition.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => Monarch.game.bot.editMessageText(
+        `Выбор принят — ${this.specialCondition.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }

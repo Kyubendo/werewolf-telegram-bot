@@ -31,11 +31,11 @@ export abstract class VotingBase {
 
     votedPlayers: Player[] = []
 
-    startVoting = () => {
+    startVoting = async () => {
         if (this.game.stage !== this.voteStage) return;
         this.beforeVotingAction && this.beforeVotingAction()
-        setTimeout(() => this.getVoters().forEach(player => {
-            this.game.bot.sendMessage(
+        for (const player of this.getVoters()) {
+            await this.game.bot.sendMessage(
                 player.id,
                 this.votePromptMessage,
                 {
@@ -50,7 +50,7 @@ export abstract class VotingBase {
             ).then(msg => {
                 if (player.role) player.role.choiceMsgId = msg.message_id
             })
-        }), 50)
+        }
     }
 
     handleVotingChoice = (select: SelectType) => {
