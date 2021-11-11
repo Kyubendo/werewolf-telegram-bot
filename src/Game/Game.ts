@@ -122,13 +122,14 @@ export class Game {
                 })
 
             if (this.stage === 'night') {
+                this.players.forEach(player => player.isAlive && player.infected && player.transformInfected())
+
                 if (this.wolvesDeactivated) {
                     this.players
                         .filter(player => player.role instanceof Wolf && player.isAlive)
                         .forEach(wolfPlayer => wolfPlayer.isFrozen = true);
                     this.wolvesDeactivated = false;
                 }
-                this.players.forEach(player => player.isAlive && player.infected && player.transformInfected())
 
                 if (!this.players.find(p => p.isAlive && !p.isFrozen)) this.setNextStage();
 
