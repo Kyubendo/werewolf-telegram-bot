@@ -38,9 +38,6 @@ export class Blacksmith extends RoleBase {
             return;
         }
 
-        console.log(this.player.name)
-        console.log('action ' + this.specialCondition.silverDust)
-
         if (this.specialCondition.silverDust === false) return;
 
         Blacksmith.game.bot.sendMessage(
@@ -78,13 +75,11 @@ export class Blacksmith extends RoleBase {
         console.log('handleChoice ' + this.specialCondition.silverDust)
     }
 
-    choiceMsgEditText = () => {
-        Blacksmith.game.bot.editMessageText(
-            `Выбор принят — ${this.specialCondition.silverDust ? 'Распылить' : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => Blacksmith.game.bot.editMessageText(
+        `Выбор принят — ${this.specialCondition.silverDust ? 'Распылить' : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }

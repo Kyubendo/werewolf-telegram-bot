@@ -25,6 +25,19 @@ export class FallenAngel extends RoleBase {
 
     numberOfAttacks: number = 0;
 
+    killMessage = () => ({
+        text: {
+            toChat: (deadPlayer: Player) => `${highlightPlayer(this.player)} повезло — ` +
+                `сегодня ночью до него смогли добраться ни волки, ни сумасшедний маньяк. ` +
+                `Однако, жители, собравшись, на утро ` +
+                `всё же обнаружили бездыханное тело ${highlightPlayer(this.player)}. Кто же тогда его убил? ` +
+                `Ответ стал ясен, когда один из жителей указал на разбросанные рядом с трупом чёрные перья. ` +
+                `На этот раз атаковал ${this.roleName}! ${highlightPlayer(deadPlayer)} ` +
+                `был(а) *${deadPlayer.role?.roleName}*`,
+            toTarget: `О нет! Ты убил ${this.roleName}!`
+        },
+        gif: 'https://tenor.com/view/wings-fly-angel-open-wings-black-and-white-gif-17886279'
+    })
 
     action = () => {
         this.targetPlayer = undefined;
@@ -129,12 +142,7 @@ export class FallenAngel extends RoleBase {
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        if (killer?.role instanceof SerialKiller) {
-            FallenAngel.game.bot.sendMessage(
-                this.player.id,
-                killer.role.killMessageDead
-            )
-
+        if (type === 'wolfCameToSerialKiller') {
             FallenAngel.game.bot.sendMessage(
                 FallenAngel.game.chatId,
                 `Ночью ангел ${highlightPlayer(this.player)} раз и навсегда пытался спасти от маньяка ` +
@@ -145,24 +153,28 @@ export class FallenAngel extends RoleBase {
                 'Неужто никто в этой деревне не сможет справиться с этим дьяволом во плоти... '
             )
 
+            FallenAngel.game.bot.sendMessage(
+                this.player.id,
+                'Ты вышел на охоту, но сам оказался жертвой, ведь ты наткнулся на сумасшедшего маньяка. '
+                + 'Перед тем как испробовать на тебе свою новую вилку, ' +
+                'он отрезал тебе твои драгоценные чёрные крылья! Ты умер. Зря ты перешёл на тёмную сторону...'
+            )
+
             this.player.isAlive = false;
             return true;
         } else
             return super.handleDeath(killer, type);
     }
 
-
-    choiceMsgEditText = () => {
-        FallenAngel.game.bot.editMessageText(
-            `Выбор принят — ${this.killOrProtect === 'kill'
-                ? 'Убить'
-                : this.killOrProtect === 'protect'
-                    ? 'Защитить'
-                    : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => FallenAngel.game.bot.editMessageText(
+        `Выбор принят — ${this.killOrProtect === 'kill'
+            ? 'Убить'
+            : this.killOrProtect === 'protect'
+                ? 'Защитить'
+                : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }

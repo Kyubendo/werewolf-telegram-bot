@@ -74,7 +74,7 @@ export class GuardianAngel extends RoleBase {
 
                 GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
-                    `Ночью *${this.roleName}* — ${highlightPlayer(this.player)} пытался спасти деревню ` +
+                    `Ночью *${this.roleName}* ${highlightPlayer(this.player)} пытался спасти деревню ` +
                     `от маньяка раз и навсегда, но маньяк отрезал ${highlightPlayer(this.player)} крылья! ` +
                     'Рядом с его телом была записка: "Я не нуждаюсь в твоей защите!"'
                 )
@@ -94,9 +94,12 @@ export class GuardianAngel extends RoleBase {
                 )
             }
         } else if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
-            GuardianAngel.game.bot.sendMessage(
+            GuardianAngel.game.bot.sendAnimation(
                 this.player.id,
-                killer.role.killMessageDead
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
             )
 
             if (killer.role instanceof Wolf)

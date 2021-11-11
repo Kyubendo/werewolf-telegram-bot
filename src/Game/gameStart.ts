@@ -3,6 +3,5 @@ import {assignRoles} from "./roleAssign";
 import {Game} from "./Game";
 
 export const gameStart = (bot: TelegramBot, game: Game) => {
-    assignRoles(game)
-    setTimeout(game.setNextStage, 40)
+    assignRoles(game).then(() => game.setNextStage())
 }

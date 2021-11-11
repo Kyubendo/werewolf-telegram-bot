@@ -1,10 +1,10 @@
 import {Game} from "../../Game";
 import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {GuardianAngel, Gunner, Suicide} from "../index";
+import {GuardianAngel, Suicide} from "../index";
 
 export type DeathType = 'loverDeath' | 'loverBetrayal' | 'harlotCameToDead' | 'angelProtectedKiller'
-    | 'wolfCameToSerialKiller';
+    | 'wolfCameToSerialKiller' | 'shotByGunner';
 
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
@@ -22,8 +22,13 @@ export abstract class RoleBase {
 
     readonly previousRole?: RoleBase;
 
-    readonly killMessageAll?: (deadPlayer: Player) => string
-    readonly killMessageDead?: string
+    readonly killMessage?: () => {
+        text: {
+            toChat: (deadPlayer: Player) => string,
+            toTarget: string,
+        }
+        gif: string
+    }
 
     readonly actionAnnouncement?: () => {
         message: string,
@@ -160,20 +165,25 @@ export abstract class RoleBase {
                 'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
             )
         } else if (killer?.role) {
-            if (killer.role instanceof Gunner)
+            if (type === 'shotByGunner')
                 killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
                     RoleBase.game.chatId,
                     killer.role.actionAnnouncement().gif, {caption: killer.role.actionAnnouncement().message}
                 )
-            killer?.role?.killMessageAll && RoleBase.game.bot.sendMessage(
-                RoleBase.game.chatId,
-                killer.role.killMessageAll(this.player)
-            );
+            else if (killer.role.killMessage) {
+                RoleBase.game.bot.sendMessage(
+                    RoleBase.game.chatId,
+                    killer.role.killMessage().text.toChat(this.player)
+                );
 
-            killer?.role?.killMessageDead && RoleBase.game.bot.sendMessage(
-                this.player.id,
-                killer.role.killMessageDead
-            );
+                RoleBase.game.bot.sendAnimation(
+                    this.player.id,
+                    killer.role.killMessage().gif,
+                    {
+                        caption: killer.role.killMessage().text.toTarget
+                    }
+                );
+            }
         } else if (!killer) {
             RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
@@ -185,17 +195,15 @@ export abstract class RoleBase {
         return true;
     }
 
-    choiceMsgEditText(): void {
-        RoleBase.game.bot.editMessageText(
-            `Выбор принят — ${this.targetPlayer
-                ? highlightPlayer(this.targetPlayer)
-                : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
+        `Выбор принят — ${this.targetPlayer
+            ? highlightPlayer(this.targetPlayer)
+            : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 
     createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
         new (this.constructor as any)(player, previousRole);

@@ -54,8 +54,9 @@ export class WildChild extends RoleBase {
         const currentTargetHandleDeath = this.specialCondition.roleModel.role
             .handleDeath.bind(this.specialCondition.roleModel.role);
         this.specialCondition.roleModel.role.handleDeath = (killer?: Player, type?: DeathType): boolean => {
-            if (!this.specialCondition.roleModel) return false;
             currentTargetHandleDeath(killer, type);
+
+            if (!this.specialCondition.roleModel || this.player.role instanceof Wolf) return false;
 
             this.player.role = new Wolf(this.player, this.player.role);
 
@@ -86,9 +87,12 @@ export class WildChild extends RoleBase {
                 'Селяне поняли, насколько волк(и) безжалостны, раз так хладнокровно ' +
                 'убивают(ет) беззащитных детей.'
             )
-            WildChild.game.bot.sendMessage(
+            WildChild.game.bot.sendAnimation(
                 this.player.id,
-                killer.role.killMessageDead // change to sendAnimation and add gif later
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
             )
             this.player.isAlive = false;
             return true;
@@ -104,15 +108,13 @@ export class WildChild extends RoleBase {
         this.doneNightAction()
     }
 
-    choiceMsgEditText = () => {
-        RoleBase.game.bot.editMessageText(
-            `Выбор принят — ${this.specialCondition.roleModel
-                ? highlightPlayer(this.specialCondition.roleModel)
-                : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
+        `Выбор принят — ${this.specialCondition.roleModel
+            ? highlightPlayer(this.specialCondition.roleModel)
+            : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }

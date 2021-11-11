@@ -121,15 +121,13 @@ export class Martyr extends RoleBase {
         this.doneNightAction();
     }
 
-    choiceMsgEditText = () => {
-        RoleBase.game.bot.editMessageText(
-            `Выбор принят — ${this.specialCondition.protectedPlayer
-                ? highlightPlayer(this.specialCondition.protectedPlayer)
-                : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
+        `Выбор принят — ${this.specialCondition.protectedPlayer
+            ? highlightPlayer(this.specialCondition.protectedPlayer)
+            : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }

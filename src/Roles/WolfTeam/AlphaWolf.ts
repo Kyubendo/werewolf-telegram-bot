@@ -3,6 +3,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Player} from "../../Player/Player";
 import {Beauty} from "../Villagers/Beauty";
 import {GuardianAngel} from "../Villagers/GuardianAngel";
+import {Cursed} from "../index";
 
 export class AlphaWolf extends Wolf {
     roleName = 'Альфа-волк 🐺⚡';
@@ -28,7 +29,9 @@ export class AlphaWolf extends Wolf {
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
-            if (!this.targetPlayer || Math.random() >= .25) return currentTargetHandleDeath(killer);
+            if (!this.targetPlayer
+                || Math.random() >= .99
+                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer);
 
             AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,

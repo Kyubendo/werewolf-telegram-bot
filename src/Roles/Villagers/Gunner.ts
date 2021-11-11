@@ -11,8 +11,6 @@ export class Gunner extends RoleBase {
         'Но имей ввиду, все услышат твой выстрел...';
     weight = () => 6;
 
-    killMessageDead = 'В тебя попала серебрянная пуля стрелка! Ты мёртв!' // GIF
-
     actionAnnouncement = () => ({
         message: this.targetPlayer ? 'Вдруг послышался выстрел!  Все село оборачивается, ' +
             `чтобы увидеть стоящего ${highlightPlayer(this.player)} над ${highlightPlayer(this.targetPlayer)}, и ` +
@@ -20,7 +18,6 @@ export class Gunner extends RoleBase {
             `${highlightPlayer(this.targetPlayer)} был(а) *${this.targetPlayer.role?.roleName}*!` : 'ERROR! Gunner-19',
         gif: 'https://media.giphy.com/media/reNAILRU3ab96/giphy.gif'
     })
-
 
     specialCondition: specialConditionGunner = {
         ammo: 2
@@ -43,7 +40,7 @@ export class Gunner extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        this.targetPlayer.role.onKilled(this.player);
+        this.targetPlayer.role.onKilled(this.player, 'shotByGunner');
 
         this.specialCondition.ammo--;
 

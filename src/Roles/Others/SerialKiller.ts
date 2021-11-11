@@ -13,26 +13,23 @@ export class SerialKiller extends RoleBase {
 
     nightActionDone = false
 
-    killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
-        `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
-        `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
-        `был(а) *${deadPlayer.role?.roleName}*`;
-    killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
-        'извлекает твои органы. Ты мертв(а).' // GIF
+    killMessage = () => ({
+        text: {
+            toChat: (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
+                `но не тут-то было. Жители, собравшись, ` +
+                `обнаружили расчлененное тело, но, на удивление, печени не было ` +
+                `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
+                `был(а) *${deadPlayer.role?.roleName}*`,
+            toTarget: `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
+                'извлекает твои органы. Ты мертв(а).'
+        },
+        gif: 'https://media.giphy.com/media/xzW34nyNLcSUE/giphy.gif'
+    })
+
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
         if (killer?.role instanceof Wolf || killer?.role instanceof FallenAngel) {
-            if (killer.role instanceof Wolf)
-                killer.role.onKilled(this.player, 'wolfCameToSerialKiller');
-             else {
-                SerialKiller.game.bot.sendMessage(
-                    SerialKiller.game.chatId,
-                    `*${killer.role.roleName}* из-за всех сил пытался покончить`
-                )
-            }
-
-
-            killer.isAlive = false;
+            killer.role.onKilled(this.player, 'wolfCameToSerialKiller');
             return false;
         } else
             return super.handleDeath(killer, type);
