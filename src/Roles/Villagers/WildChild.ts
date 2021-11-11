@@ -54,8 +54,9 @@ export class WildChild extends RoleBase {
         const currentTargetHandleDeath = this.specialCondition.roleModel.role
             .handleDeath.bind(this.specialCondition.roleModel.role);
         this.specialCondition.roleModel.role.handleDeath = (killer?: Player, type?: DeathType): boolean => {
-            if (!this.specialCondition.roleModel) return false;
             currentTargetHandleDeath(killer, type);
+
+            if (!this.specialCondition.roleModel || this.player.role instanceof Wolf) return false;
 
             this.player.role = new Wolf(this.player, this.player.role);
 
