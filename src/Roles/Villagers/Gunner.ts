@@ -43,7 +43,7 @@ export class Gunner extends RoleBase {
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
-        this.targetPlayer.role.onKilled(this.player);
+        this.targetPlayer.role.onKilled(this.player, 'shotByGunner');
 
         this.specialCondition.ammo--;
 
