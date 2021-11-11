@@ -23,7 +23,7 @@ const messageAppend = (news.length
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
 export const initGame = (bot: TelegramBot, state: State) => {
-    bot.onText(/\/start_classic/, msg => {
+    bot.onText(new RegExp(`\/start_classic@${process.env.BOT_NAME}`), msg => {
         if (msg.chat.type === 'private' || msg.chat.type === 'channel') return;
         if (!msg.from) return;
         if (state.game) {

@@ -87,14 +87,9 @@ export class Game {
 
         this.stage = nextStage
 
-        setTimeout(this.runActions, 30)
-
-        setTimeout(() => // stupid kludge
-                this.bot.sendMessage(this.chatId, gameStageMsg(this))
-                    .then(() => {
-                        this.bot.sendMessage(this.chatId, playerGameList(this.players),)
-                    }),
-            50)
+        this.bot.sendMessage(this.chatId, gameStageMsg(this))
+            .then(() => this.bot.sendMessage(this.chatId, playerGameList(this.players),))
+            .then(() => this.runActions())
     }
 
     onGameEnd = (endGame: { winners: Player[], type: Win }) => {
@@ -118,7 +113,7 @@ export class Game {
         }
     }
 
-    private runActions = () => {
+    private runActions = async () => {
         if (this.stage !== 'lynch') { // change?
             this.players
                 .filter(player => player.isAlive)
@@ -126,30 +121,27 @@ export class Game {
                     if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
                 })
 
-            if (this.stage === 'night') this.players.forEach(p => {
-                if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
-
-                this.players.forEach(player => player.isAlive && player.infected
-                    && player.transformInfected())
-
+            if (this.stage === 'night') {
                 if (this.wolvesDeactivated) {
                     this.players
                         .filter(player => player.role instanceof Wolf && player.isAlive)
                         .forEach(wolfPlayer => wolfPlayer.isFrozen = true);
                     this.wolvesDeactivated = false;
                 }
-                // Note: add SigmaWolf here
+                this.players.forEach(player => player.isAlive && player.infected && player.transformInfected())
 
-                if (!this.players.find(player => !player.isFrozen))
-                    this.setNextStage();
+                if (!this.players.find(p => p.isAlive && !p.isFrozen)) this.setNextStage();
 
-            })
+                this.players.forEach(p => {
+                    if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
+                })
+            }
 
             if (this.stage === 'day')
                 this.players.forEach(player => player.isFrozen = false)
         }
-        this.lynch?.startVoting()
-        this.wolfFeast?.startVoting()
+        await this.lynch?.startVoting()
+        await this.wolfFeast?.startVoting()
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
