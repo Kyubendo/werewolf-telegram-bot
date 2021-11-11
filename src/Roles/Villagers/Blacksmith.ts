@@ -38,9 +38,6 @@ export class Blacksmith extends RoleBase {
             return;
         }
 
-        console.log(this.player.name)
-        console.log('action ' + this.specialCondition.silverDust)
-
         if (this.specialCondition.silverDust === false) return;
 
         Blacksmith.game.bot.sendMessage(
