@@ -6,7 +6,7 @@ import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
 
-const joinButton = {
+export const joinButton = {
     inline_keyboard: [
         [{text: 'Присоединиться', callback_data: JSON.stringify({type: 'join'}),}]
     ]

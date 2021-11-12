@@ -4,6 +4,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {SelectType} from "../commands/callbackHandle";
 import {startPlayerList} from "../../Utils/playerLists";
 import {msToMinutes} from "../../Utils/msToMinutes";
+import {joinButton} from "../commands/init";
 
 export const join = (game: Game, select: SelectType) => {
     if (game.stage) return;
@@ -11,8 +12,12 @@ export const join = (game: Game, select: SelectType) => {
     if (game.players.map(e => e.id).includes(newPlayer.id)) return;
     game.addPlayer(newPlayer)
     game.startGameTimer.extend(60_000)
-    game.bot.sendMessage(game.chatId, `${highlightPlayer(newPlayer)} присоединился к игре! Время увеличено, `
-        + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры`)
+    game.bot.sendMessage(game.chatId,
+        `${highlightPlayer(newPlayer)} присоединился к игре! Время увеличено, `
+        + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры`,
+        {
+            reply_markup: joinButton
+        })
     game.bot.editMessageText(startPlayerList(game.players), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,
