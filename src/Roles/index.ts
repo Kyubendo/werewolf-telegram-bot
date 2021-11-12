@@ -1,4 +1,6 @@
 import {RoleBase} from "./Abstract/RoleBase";
+import {ForecasterBase} from "./Abstract/ForecasterBase";
+import {RulerBase} from "./Abstract/RulerBase";
 
 import {Seer} from "./Villagers/Seer";
 import {Fool} from "./Villagers/Fool";
@@ -38,7 +40,7 @@ import {JackOLantern} from "./Halloween/JackOLanther";
 import {Pumpkin} from "./Halloween/Pumpkin";
 
 export {
-    RoleBase,
+    RoleBase, ForecasterBase, RulerBase,
 
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Beholder, ApprenticeSeer,
     Beauty,
