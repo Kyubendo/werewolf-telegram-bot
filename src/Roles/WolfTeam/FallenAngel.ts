@@ -2,7 +2,7 @@ import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Beauty, GuardianAngel, SerialKiller, Wolf} from "../index";
+import {Beauty, GuardianAngel, Wolf} from "../index";
 import {Player} from "../../Game";
 
 type DecisionType = 'kill' | 'protect';

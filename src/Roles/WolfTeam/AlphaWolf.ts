@@ -1,9 +1,6 @@
-import {Wolf} from "./Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Player} from "../../Player/Player";
-import {Beauty} from "../Villagers/Beauty";
-import {GuardianAngel} from "../Villagers/GuardianAngel";
-import {Cursed} from "../index";
+import {Beauty, Cursed, GuardianAngel, Wolf} from "../index";
+import {Player} from "../../Game";
 
 export class AlphaWolf extends Wolf {
     roleName = 'Альфа-волк 🐺⚡';
@@ -38,9 +35,9 @@ export class AlphaWolf extends Wolf {
                 `Ты был(а) атакован(а) волками, но ${this.roleName} избрал тебя. ` +
                 'Вместо того, чтобы быть убитым(ой), ты был(а) заражен(а)... ' +
                 'И завтрашней ночью превратишься в' +
-                (this.targetPlayer.role instanceof GuardianAngel)
+                ((this.targetPlayer.role instanceof GuardianAngel)
                     ? '... Падшего Ангела!'
-                    : ' волка!'
+                    : ' волка!')
             )
 
             const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);

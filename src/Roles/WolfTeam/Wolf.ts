@@ -1,23 +1,35 @@
 import {Player} from "../../Game";
 import {DeathType} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Beauty, GuardianAngel, RoleBase, Traitor} from "../index";
+import {Beauty, FallenAngel, GuardianAngel, RoleBase, Traitor} from "../index";
 
 export class Wolf extends RoleBase {
     findOtherWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
-        otherPlayer.role instanceof Wolf
+        otherPlayer.isAlive
+        && otherPlayer.role instanceof Wolf
         && otherPlayer !== this.player
-        && otherPlayer.isAlive
     )
 
+    findFallenAngelPlayers = (exceptionPlayer?: Player) => Wolf.game.players.filter(player =>
+        player.isAlive
+        && player.role instanceof FallenAngel
+        && exceptionPlayer !== player)
+
     showOtherWolfPlayers(): string {
-        const allies = this.findOtherWolfPlayers();
-        if (!allies.length)
+        const otherWolfPlayers = this.findOtherWolfPlayers();
+        const fallenAngelPlayers = this.findFallenAngelPlayers();
+        if (!(otherWolfPlayers.length + fallenAngelPlayers.length))
             return '\nНо ты один в стае, крепись.'
-        return `\n${(allies.length > 1
-            ? '\nДругие волки: '
-            : 'Твой брат по волчьему делу — ')
-        + allies?.map(ally => highlightPlayer(ally)).join(', ')}`
+        return (otherWolfPlayers.length > 1
+                ? '\nДругие волки: '
+                : '\nТвой брат по волчьему делу — ')
+            + otherWolfPlayers?.map(ally => highlightPlayer(ally)).join(', ')
+            + (!fallenAngelPlayers.length
+                ? ''
+                : fallenAngelPlayers.length > 1
+                    ? '\nПадшие ангелы: '
+                    : '\nПадший ангел — ')
+            + fallenAngelPlayers.map(fallenAngelPlayer => highlightPlayer(fallenAngelPlayer)).join(', ')
     }
 
     roleName = 'Волк 🐺';
