@@ -9,7 +9,7 @@ export class Beholder extends RoleBase {
 
     stealMessage = this.seers().length === 0
             ? '\nПровидца нет!'
-            : this.seers?.length === 1
+            : this.seers().length === 1
                 ? `\n${this.seers()[0]} может спасти народ, защищай его!`
                 : '\nПровидцы: ' + this.seers().join(', ');
 
