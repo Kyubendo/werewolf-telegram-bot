@@ -2,7 +2,7 @@ import {
     Blacksmith,
     Detective, Doppelganger,
     GuardianAngel,
-    Gunner,
+    Gunner, Cupid,
     Harlot, JackOLantern,
     Martyr,
     Monarch, Mayor,
@@ -40,7 +40,7 @@ const dayRoleResolves = [
 
 const nightRoleResolves = [
     WildChild, Martyr, Doppelganger, // constant choices
-    // PuppetMaster,
+    Cupid,
     JackOLantern,
     Harlot, //Prowler
     GuardianAngel,

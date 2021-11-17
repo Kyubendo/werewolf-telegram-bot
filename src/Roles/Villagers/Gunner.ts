@@ -31,8 +31,7 @@ export class Gunner extends RoleBase {
             this.player.id,
             'Кого ты хочешь пристрелить сегодня?',
             {
-                reply_markup: generateInlineKeyboard(Gunner.game.players.filter(player => player !== this.player &&
-                    player.isAlive))
+                reply_markup: generateInlineKeyboard(Gunner.game.players.filter(p => p !== this.player && p.isAlive))
             }
         ).then(msg => this.choiceMsgId = msg.message_id)
     }

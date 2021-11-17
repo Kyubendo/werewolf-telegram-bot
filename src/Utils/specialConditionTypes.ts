@@ -6,5 +6,6 @@ export type specialConditionSandman = { sleep?: boolean }
 export type specialConditionBlacksmith = { silverDust?: boolean }
 export type specialConditionWildChild = { roleModel?: Player }
 export type specialConditionMartyr = { protectedPlayer?: Player }
+export type specialConditionCupid = { loversBound: boolean }
 export type specialConditionType = specialConditionGunner | specialConditionBlacksmith | specialConditionMartyr |
-    specialConditionWildChild | specialConditionRuler | specialConditionSandman
+    specialConditionWildChild | specialConditionRuler | specialConditionSandman | specialConditionCupid

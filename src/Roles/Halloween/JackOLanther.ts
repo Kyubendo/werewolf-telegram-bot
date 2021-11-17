@@ -41,7 +41,7 @@ export class JackOLantern extends RoleBase {
             )
             return;
         } else if (this.targetPlayer.role instanceof Beauty) {
-            this.player.role?.loveBind(this.targetPlayer);
+            this.player.loveBind(this.targetPlayer);
             return;
         }
 

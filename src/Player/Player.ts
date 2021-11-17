@@ -36,4 +36,16 @@ export class Player {
         )
         this.infected = false
     }
+
+    readonly loveBind = (newLover: Player) => {
+        if (!this.role) return;
+        this.role.killLover('lover_betrayal');
+        newLover.role?.killLover('lover_betrayal');
+
+        this.lover = newLover;
+        newLover.lover = this;
+
+        this.role.loverMessage(this);
+        this.role.loverMessage(newLover);
+    }
 }

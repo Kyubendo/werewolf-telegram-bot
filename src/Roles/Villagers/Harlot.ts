@@ -31,7 +31,7 @@ export class Harlot extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    saved:boolean = true;
+    saved: boolean = true;
 
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
@@ -40,7 +40,7 @@ export class Harlot extends RoleBase {
             this.onKilled(this.targetPlayer);
             return;
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.loveBind(this.targetPlayer);
+            this.player.loveBind(this.targetPlayer);
             return;
         } else {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
@@ -79,9 +79,7 @@ export class Harlot extends RoleBase {
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        if (type === 'harlotDeath'
-            && killer
-            && this.targetPlayer) {
+        if (type === 'harlotDeath' && killer && this.targetPlayer) {
             const harlotPlayer = this.player;
             if (killer.role instanceof Wolf) {
                 RoleBase.game.bot.sendMessage(

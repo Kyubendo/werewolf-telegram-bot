@@ -23,14 +23,13 @@ import {
     WoodMan,
     WildChild,
     Beauty,
-    JackOLantern, Pumpkin, Detective,
+    JackOLantern, Pumpkin, Detective, Cupid, Mayor,
 } from "../Roles";
 import {GameStage} from "./Game";
-import {Mayor} from "../Roles/Villagers/Mayor";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Mayor, Monarch, Oracle,
-    Seer, Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective,
+    Seer, Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective, Cupid,
 ]
 const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller, JackOLantern]

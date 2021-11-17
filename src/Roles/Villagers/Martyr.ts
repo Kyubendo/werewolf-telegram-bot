@@ -27,7 +27,7 @@ export class Martyr extends RoleBase {
 
     action = () => {
         if (this.specialCondition.protectedPlayer?.role) {
-            this.nightActionDone = true
+            this.doneNightAction()
             return
         }
         if (this.specialCondition.protectedPlayer?.role) return
