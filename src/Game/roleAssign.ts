@@ -5,7 +5,7 @@ import {
     Beholder, Blacksmith,
     ClumsyGuy, Cupid,
     Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, Lycan, Martyr,
-    Mason, Monarch, Necromancer, Oracle, RoleBase, Sandman, Seer,
+    Mason, Monarch, Necromancer, Oracle, Princess, RoleBase, Sandman, Seer,
     SerialKiller,
     Sorcerer, Suicide, Thief,
     Traitor,
@@ -26,7 +26,7 @@ export const assignRoles = async (game: Game) => {
     const evilPool = [...killersPool, Sorcerer]
     const villagersPool = [
         Villager,
-        ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, // Passive Villagers
+        ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, // Passive Villagers
         Seer, Monarch, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid,
         WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 

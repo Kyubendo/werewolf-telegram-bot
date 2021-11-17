@@ -37,12 +37,13 @@ import {SerialKiller} from "./Others/SerialKiller";
 import {JackOLantern} from "./Halloween/JackOLanther";
 import {Pumpkin} from "./Halloween/Pumpkin";
 import {Cupid} from "./Villagers/Cupid";
+import {Princess} from "./Villagers/Princess";
 
 export {
     RoleBase,
 
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Beholder, ApprenticeSeer,
-    Beauty, Cupid,
+    Beauty, Cupid, Princess,
 
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild,
 
