@@ -46,7 +46,7 @@ export class Game {
     startGameTimer: Timer
     stageTimer?: Timer
 
-    setNextStage = () => {
+    setNextStage = async () => {
         let stageDuration;
         let nextStage: GameStage;
 
@@ -71,12 +71,12 @@ export class Game {
             ? this.stageTimer.reset(stageDuration)
             : this.stageTimer = timer(this.setNextStage, stageDuration)
 
-        if (this.runResolves()) return//fix
+        if (await this.runResolves()) return//fix
 
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if (endGame) {
+        if (!process.env.ROLE_TEST && endGame) {
             this.onGameEnd(endGame)
             return
         }
@@ -99,17 +99,17 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame()))
-        this.stageTimer && this.stageTimer.stop()
+        this.stageTimer?.stop()
     }
 
-    private runResolves = () => {
+    private runResolves = async () => {
         if (this.lynch?.handleVoteEnd()) return true
         this.wolfFeast?.handleVoteEnd()
 
         for (const role of roleResolves(this.stage)) {
-            this.players
-                .filter(player => player.isAlive && player.role instanceof role)
-                .forEach(player => player.role?.actionResolve && player.role.actionResolve())
+            for (const player of this.players.filter(p => p.isAlive && p.role instanceof role)) {
+                await player.role?.actionResolve?.();
+            }
         }
     }
 
@@ -131,7 +131,7 @@ export class Game {
                     this.wolvesDeactivated = false;
                 }
 
-                if (!this.players.find(p => p.isAlive && !p.isFrozen)) this.setNextStage();
+                if (!this.players.find(p => p.isAlive && !p.isFrozen)) await this.setNextStage();
 
                 this.players.forEach(p => {
                     if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
@@ -146,7 +146,7 @@ export class Game {
         for (const role of roleResolves(this.stage)) {
             this.players
                 .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
-                .forEach(player => player.role?.action && player.role.action())
+                .forEach(player => player.role?.action?.())
         }
     }
 
@@ -154,7 +154,7 @@ export class Game {
         for (const role of roleResolves(this.stage)) {
             this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
                 .forEach(player => {
-                    player.role?.actionResult && player.role.actionResult()
+                    player.role?.actionResult?.()
                     if (player.guardianAngel) player.guardianAngel = undefined
                 })
         }

@@ -16,7 +16,7 @@ export class Doppelganger extends RoleBase {
 
     action = () => {
         if (this.targetPlayer?.role) {
-            this.nightActionDone = true
+            this.doneNightAction()
             return;
         }
 
