@@ -72,8 +72,6 @@ export class Thief extends RoleBase {
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
             ).then(() => {
-                console.log(this.targetPlayer?.role?.roleName)
-                console.log(targetStealMessage);
                 (async () => targetStealMessage && await Thief.game.bot.sendMessage(
                     this.player.id,
                     targetStealMessage

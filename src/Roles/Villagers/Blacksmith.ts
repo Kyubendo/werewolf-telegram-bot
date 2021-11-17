@@ -74,7 +74,6 @@ export class Blacksmith extends RoleBase {
             Blacksmith.game.chatId,
             this.actionAnnouncement().gif, {caption: this.actionAnnouncement().message}
         )
-        console.log('handleChoice ' + this.specialCondition.silverDust)
     }
 
     choiceMsgEditText = () => Blacksmith.game.bot.editMessageText(
