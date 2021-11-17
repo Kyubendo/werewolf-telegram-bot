@@ -7,13 +7,13 @@ export class Beholder extends RoleBase {
         .filter(player => player.role instanceof Seer && !(player.role instanceof Fool))
         .map(player => highlightPlayer(player))
 
-    stealMessage = this.seers().length === 0
-            ? '\nПровидца нет!'
+    stealMessage = () => this.seers().length === 0
+            ? 'Провидца нет!'
             : this.seers().length === 1
-                ? `\n${this.seers()[0]} может спасти народ, защищай его!`
-                : '\nПровидцы: ' + this.seers().join(', ');
+                ? `${this.seers()[0]} может спасти народ, защищай его!`
+                : 'Провидцы: ' + this.seers().join(', ');
 
     startMessageText = () => `Ты знаешь, кто настоящий провидец, а не дурак... В общем это ` +
-        'твоя единственная функция.' + this.stealMessage;
+        'твоя единственная функция.\n' + this.stealMessage();
     weight = () => this.seers().length ? 4.5 : 2;
 }

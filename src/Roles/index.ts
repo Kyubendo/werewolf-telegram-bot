@@ -1,4 +1,6 @@
 import {RoleBase} from "./Abstract/RoleBase";
+import {ForecasterBase} from "./Abstract/ForecasterBase";
+import {RulerBase} from "./Abstract/RulerBase";
 
 import {Seer} from "./Villagers/Seer";
 import {Fool} from "./Villagers/Fool";
@@ -9,6 +11,7 @@ import {Traitor} from "./Villagers/Traitor";
 import {WoodMan} from "./Villagers/WoodMan";
 import {Mason} from "./Villagers/Mason";
 import {Drunk} from "./Villagers/Drunk";
+import {Mayor} from "./Villagers/Mayor";
 import {Monarch} from "./Villagers/Monarch";
 import {Harlot} from "./Villagers/Harlot";
 import {Beholder} from "./Villagers/Beholder";
@@ -40,12 +43,13 @@ import {Cupid} from "./Villagers/Cupid";
 import {Princess} from "./Villagers/Princess";
 
 export {
-    RoleBase,
+    RoleBase, ForecasterBase, RulerBase,
 
-    Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Beholder, ApprenticeSeer,
-    Beauty, Cupid, Princess,
+    Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Beholder, ApprenticeSeer,
+    Beauty, Princess,
 
-    Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild,
+    Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild, Monarch, Mayor,
+    Cupid,
 
     Wolf, Lycan, Sorcerer, AlphaWolf,
 

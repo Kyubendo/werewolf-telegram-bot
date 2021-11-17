@@ -25,7 +25,7 @@ export abstract class VotingBase {
 
     defineTarget = (voter: Player, target?: Player) => target
 
-    calculateVoteWeight = (target: Player) => 1
+    calculateVoteWeight = (voter: Player) => 1
 
     beforeVotingAction?: () => void
 
