@@ -27,7 +27,7 @@ export const assignRoles = async (game: Game) => {
     const villagersPool = [
         Villager,
         //ClumsyGuy,
-        Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, // Passive Villagers
+        Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, // Passive Villagers
         Seer, Monarch, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid,
         WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 
