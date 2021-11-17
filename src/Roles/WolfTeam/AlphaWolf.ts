@@ -20,7 +20,7 @@ export class AlphaWolf extends Wolf {
         }
 
         if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.loveBind(this.targetPlayer);
+            this.player.loveBind(this.targetPlayer);
             return;
         }
 

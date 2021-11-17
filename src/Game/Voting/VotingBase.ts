@@ -23,6 +23,8 @@ export abstract class VotingBase {
 
     abstract voteTargetCondition(otherPlayer: Player): boolean
 
+    defineTarget = (voter: Player, target?: Player) => target
+
     calculateVoteWeight = (target: Player) => 1
 
     beforeVotingAction?: () => void
@@ -33,7 +35,7 @@ export abstract class VotingBase {
 
     startVoting = async () => {
         if (this.game.stage !== this.voteStage) return;
-        this.beforeVotingAction && this.beforeVotingAction()
+        await this.beforeVotingAction?.()
         for (const player of this.getVoters()) {
             await this.game.bot.sendMessage(
                 player.id,
@@ -60,7 +62,7 @@ export abstract class VotingBase {
         this.votedPlayers.push(voter)
         let target: Player | undefined;
         if (select.choice !== 'skip') {
-            target = findPlayer(select.choice, this.game.players)
+            target = this.defineTarget(voter, findPlayer(select.choice, this.game.players))
             if (target) {
                 const voteWeight = this.calculateVoteWeight(target)
                 this.votes[target.id] ? this.votes[target.id] += voteWeight : this.votes[target.id] = voteWeight

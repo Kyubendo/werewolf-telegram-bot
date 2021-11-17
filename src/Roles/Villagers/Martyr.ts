@@ -27,7 +27,7 @@ export class Martyr extends RoleBase {
 
     action = () => {
         if (this.specialCondition.protectedPlayer?.role) {
-            this.nightActionDone = true
+            this.doneNightAction()
             return
         }
         if (this.specialCondition.protectedPlayer?.role) return
@@ -81,7 +81,7 @@ export class Martyr extends RoleBase {
 
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
-        if (killer === this.player && this.specialCondition.protectedPlayer) {
+        if (killer === this.player && this.specialCondition.protectedPlayer && !type) {
 
             let deathMessage: string | undefined
             if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.specialCondition.protectedPlayer)}, но внезапно яркая `
