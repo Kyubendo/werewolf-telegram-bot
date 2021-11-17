@@ -183,15 +183,17 @@ export abstract class RoleBase {
         return true;
     }
 
-    choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
-        `Выбор принят — ${this.targetPlayer
-            ? highlightPlayer(this.targetPlayer)
-            : 'Пропустить'}.`,
-        {
-            message_id: this.choiceMsgId,
-            chat_id: this.player.id,
-        }
-    )
+    choiceMsgEditText() {
+        return RoleBase.game.bot.editMessageText(
+            `Выбор принят — ${this.targetPlayer
+                ? highlightPlayer(this.targetPlayer)
+                : 'Пропустить'}.`,
+            {
+                message_id: this.choiceMsgId,
+                chat_id: this.player.id,
+            }
+        )
+    }
 
     createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
         new (this.constructor as any)(player, previousRole);

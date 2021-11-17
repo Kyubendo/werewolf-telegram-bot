@@ -27,14 +27,14 @@ export class FallenAngel extends RoleBase {
 
     killMessage = () => ({
         text: {
-            toChat: (deadPlayer: Player) => `${highlightPlayer(this.player)} повезло — ` +
+            toChat: (deadPlayer: Player) => `${highlightPlayer(deadPlayer)} повезло — ` +
                 `сегодня ночью до него смогли добраться ни волки, ни сумасшедний маньяк. ` +
                 `Однако, жители, собравшись, на утро ` +
-                `всё же обнаружили бездыханное тело ${highlightPlayer(this.player)}. Кто же тогда его убил? ` +
+                `всё же обнаружили бездыханное тело ${highlightPlayer(deadPlayer)}. Кто же тогда его убил? ` +
                 `Ответ стал ясен, когда один из жителей указал на разбросанные рядом с трупом чёрные перья. ` +
                 `На этот раз атаковал ${this.roleName}! ${highlightPlayer(deadPlayer)} ` +
                 `был(а) *${deadPlayer.role?.roleName}*`,
-            toTarget: `О нет! Ты убил ${this.roleName}!`
+            toTarget: `О нет! Тебя убил ${this.roleName}!`
         },
         gif: 'https://tenor.com/view/wings-fly-angel-open-wings-black-and-white-gif-17886279'
     })
@@ -72,6 +72,7 @@ export class FallenAngel extends RoleBase {
     }
 
     nextAction = () => {
+        console.log(this.killOrProtect)
         if (this.killOrProtect === 'kill') {
             FallenAngel.game.bot.sendMessage(
                 this.player.id,
@@ -100,6 +101,7 @@ export class FallenAngel extends RoleBase {
                     )
                 }
             ).then(msg => this.choiceMsgId = msg.message_id)
+            console.log(this.choiceMsgId)
         }
     }
 
@@ -110,7 +112,7 @@ export class FallenAngel extends RoleBase {
                     this.handleGuardianAngel(this.player);
                     return;
                 } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
-                    this.loveBind(this.targetPlayer)
+                    this.player.loveBind(this.targetPlayer)
                 else
                     this.targetPlayer.role?.onKilled(this.player);
             else // protect
@@ -130,12 +132,17 @@ export class FallenAngel extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
+        console.log(1)
         if (choice === 'kill' || choice === 'protect') {
+            console.log(2)
             this.killOrProtect = choice;
             this.choiceMsgEditText().then(this.nextAction)
         } else {
+            console.log(3)
             this.targetPlayer = findPlayer(choice, FallenAngel.game.players);
+            console.log(4)
             super.choiceMsgEditText();
+            console.log(5)
             this.doneNightAction();
         }
     }

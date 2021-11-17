@@ -70,8 +70,8 @@ export class Player {
 
     readonly loveBind = (newLover: Player) => {
         if (!this.role) return;
-        this.role.killLover('lover_betrayal');
-        newLover.role?.killLover('lover_betrayal');
+        this.role.killLover('loverBetrayal');
+        newLover.role?.killLover('loverBetrayal');
 
         this.lover = newLover;
         newLover.lover = this;
