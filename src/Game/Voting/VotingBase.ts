@@ -4,7 +4,6 @@ import {findPlayer} from "../findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../playersButtons";
 import {SelectType} from "../commands/callbackHandle";
-import {Mayor} from "../../Roles";
 
 export abstract class VotingBase {
     constructor(readonly game: Game) {
@@ -24,8 +23,7 @@ export abstract class VotingBase {
 
     abstract voteTargetCondition(otherPlayer: Player): boolean
 
-    calculateVoteWeight = (voter: Player) => (voter.role instanceof Mayor
-        && voter.role.specialCondition.comingOut !== undefined) ? 2 : 1
+    calculateVoteWeight = (voter: Player) => 1
 
     beforeVotingAction?: () => void
 

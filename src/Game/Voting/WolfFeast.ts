@@ -1,7 +1,7 @@
 import {VotingBase} from "./VotingBase";
 import {GameStage} from "../Game";
 import {Player} from "../../Player/Player";
-import {Wolf} from "../../Roles";
+import {AlphaWolf, Wolf} from "../../Roles";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {randomElement} from "../../Utils/randomElement";
 
@@ -48,8 +48,12 @@ export class WolfFeast extends VotingBase {
         this.getVoters().filter(player => player !== voter).forEach(player => this.game.bot.sendMessage(
             player.id,
             target
-                ? `${highlightPlayer(voter)} облизывается на ${highlightPlayer(target)}.`
+                ? target.role instanceof AlphaWolf
+                    ? target.role.roleName + ` ${highlightPlayer(voter)} облизывается на ${highlightPlayer(target)}.`
+                    : `${highlightPlayer(voter)} облизывается на ${highlightPlayer(target)}.`
                 : `${highlightPlayer(voter)} облизывается в ожидании решения.`
         ))
     }
+
+    calculateVoteWeight = (voter: Player) => (voter.role instanceof AlphaWolf) ? 2 : 1;
 }
