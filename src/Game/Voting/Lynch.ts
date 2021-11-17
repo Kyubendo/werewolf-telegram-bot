@@ -1,7 +1,8 @@
 import {GameStage} from "../Game";
-import {Monarch, Pumpkin, Suicide} from "../../Roles";
+import {ClumsyGuy, Monarch, Pumpkin, Suicide} from "../../Roles";
 import {Player} from "../../Player/Player";
 import {VotingBase} from "./VotingBase";
+import {randomElement} from "../../Utils/randomElement";
 
 export class Lynch extends VotingBase {
     voteStage: GameStage = 'lynch'
@@ -18,6 +19,19 @@ export class Lynch extends VotingBase {
 
     getActiveMonarchs = () => this.game.players
         .filter(player => player.role instanceof Monarch && player.role.specialCondition.comingOut && player.isAlive);
+
+    defineTarget = (voter: Player, target?: Player) => {
+        if (target && voter.role instanceof ClumsyGuy && Math.random() < .5) {
+            this.game.bot.sendMessage(
+                voter.id,
+                'Кажется ты опять что-то напутала и отдала свой голос не за того...')
+            return randomElement(this.game.players.filter(otherPlayer =>
+                otherPlayer !== voter
+                && otherPlayer !== target
+                && this.voteTargetCondition(otherPlayer)))
+        }
+        return target
+    }
 
     handleVotingChoiceResult = () => {
         this.game.bot.sendMessage(
