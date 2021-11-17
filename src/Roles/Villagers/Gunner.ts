@@ -23,6 +23,13 @@ export class Gunner extends RoleBase {
         ammo: 2
     }
 
+    stealMessage = () => !this.specialCondition.ammo
+        ? 'Однако все серебрянные пули уже кончились...'
+        : this.specialCondition.ammo === 1
+            ? 'Но целься аккуратно, у тебя остался только одна серебрянная пуля.'
+            : 'У тебя осталось ещё две серебрянных пули.';
+
+
     action = () => {
         if (!this.specialCondition.ammo) return;
         this.targetPlayer = undefined;
@@ -42,12 +49,6 @@ export class Gunner extends RoleBase {
         this.targetPlayer.role.onKilled(this.player, 'shotByGunner');
 
         this.specialCondition.ammo--;
-
-        this.stealMessage = '\n' + !this.specialCondition.ammo
-            ? 'Однако все серебрянные пули уже кончились...'
-            : this.specialCondition.ammo === 1
-                ? 'Но целься аккуратно, у тебя остался только одна серебрянная пуля.'
-                : 'У тебя осталось ещё две серебрянных пули.';
 
         this.targetPlayer = undefined;
     }

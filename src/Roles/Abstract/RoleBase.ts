@@ -35,7 +35,7 @@ export abstract class RoleBase {
         gif: string
     }
 
-    stealMessage?: string;
+    stealMessage?: () => string | false;
 
 
     readonly action?: () => void
@@ -49,6 +49,8 @@ export abstract class RoleBase {
     specialCondition?: specialConditionType;
 
     nightActionDone?: boolean
+
+
 
     readonly originalHandleDeath = this.handleDeath;
 

@@ -8,10 +8,12 @@ export abstract class RulerBase extends RoleBase {
         comingOut: undefined
     }
 
+    stealMessage = () => this.specialCondition.comingOut !== undefined
+        && `Однако все в деревне уже узнали о твоём статусе!`
+
     action = () => {
         if (this.specialCondition.comingOut) { // Изменить переопределение comingOut после добавления голосования
             this.specialCondition.comingOut = false;
-            this.stealMessage = `\nОднако все в деревне уже узнали о твоём статусе!`;
             return;
         }
         if (this.specialCondition.comingOut === false) return;

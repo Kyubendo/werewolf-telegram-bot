@@ -20,6 +20,9 @@ export class WildChild extends RoleBase {
         roleModel: undefined
     }
 
+    stealMessage = () => !!this.specialCondition.roleModel
+        && `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`
+
     action = () => {
         if (this.specialCondition.roleModel?.role) {
             this.doneNightAction()
@@ -102,8 +105,6 @@ export class WildChild extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.specialCondition.roleModel = findPlayer(choice, WildChild.game.players);
-        if (this.specialCondition.roleModel)
-            this.stealMessage = `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`;
         this.choiceMsgEditText();
         this.doneNightAction()
     }
