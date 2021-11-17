@@ -132,8 +132,7 @@ export class FallenAngel extends RoleBase {
     handleChoice = (choice?: string) => {
         if (choice === 'kill' || choice === 'protect') {
             this.killOrProtect = choice;
-            this.choiceMsgEditText();
-            this.nextAction();
+            this.choiceMsgEditText().then(this.nextAction)
         } else {
             this.targetPlayer = findPlayer(choice, FallenAngel.game.players);
             super.choiceMsgEditText();
