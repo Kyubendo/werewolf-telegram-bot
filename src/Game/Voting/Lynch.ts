@@ -1,7 +1,8 @@
 import {GameStage} from "../Game";
-import {Monarch, Pumpkin, Suicide} from "../../Roles";
+import {Monarch, Pumpkin, Suicide, Princess} from "../../Roles";
 import {Player} from "../../Player/Player";
 import {VotingBase} from "./VotingBase";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Lynch extends VotingBase {
     voteStage: GameStage = 'lynch'
@@ -32,6 +33,15 @@ export class Lynch extends VotingBase {
             if (voteResult[0].role instanceof Suicide) {
                 this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
                 return true
+            } else if (voteResult[0].role instanceof Princess && !voteResult[0].role.specialCondition.ringShowed) {
+                this.game.bot.sendMessage(
+                    this.game.chatId,
+                    `Как только селяне решили казнить ${highlightPlayer(voteResult[0])}, она воскликнула `
+                    + `“Постойте! Я Принцесса! Это королевское кольцо, эта печать короля все подтверждают! `
+                    + `Каждую ночь я в окружении слуг, так что я не могу быть злой!” `
+                    + `Почувствовав себя глупо, смущенные жители разошлись спать.`
+                )
+                voteResult[0].role.specialCondition.ringShowed = true
             } else {
                 voteResult[0].role?.onKilled()
             }

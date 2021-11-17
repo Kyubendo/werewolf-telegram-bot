@@ -7,5 +7,7 @@ export type specialConditionBlacksmith = { silverDust?: boolean }
 export type specialConditionWildChild = { roleModel?: Player }
 export type specialConditionMartyr = { protectedPlayer?: Player }
 export type specialConditionCupid = { loversBound: boolean }
+export type specialConditionPrincess = { ringShowed: boolean }
 export type specialConditionType = specialConditionGunner | specialConditionBlacksmith | specialConditionMartyr |
-    specialConditionWildChild | specialConditionMonarch | specialConditionSandman | specialConditionCupid
+    specialConditionWildChild | specialConditionMonarch | specialConditionSandman | specialConditionCupid |
+    specialConditionPrincess

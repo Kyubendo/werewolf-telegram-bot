@@ -1,35 +1,14 @@
 import {Player} from "../Game";
 import {
-    ApprenticeSeer,
-    Beholder,
-    Blacksmith,
-    ClumsyGuy,
-    Cursed,
-    Drunk,
-    GuardianAngel,
-    Gunner,
-    Harlot,
-    Martyr,
-    Mason,
-    Monarch,
-    Oracle,
-    Sandman,
-    Seer,
-    SerialKiller,
-    Traitor,
-    Villager,
-    WiseElder,
-    Wolf,
-    WoodMan,
-    WildChild,
-    Beauty,
-    JackOLantern, Pumpkin, Detective, Cupid,
+    ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
+    Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
+    JackOLantern, Pumpkin, Detective, Cupid, Princess,
 } from "../Roles";
 import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective, Cupid,
+    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective, Cupid, Princess
 ]
 const wolfTeam: Function[] = [Wolf,]
 const evil: Function[] = [Wolf, SerialKiller, JackOLantern]
