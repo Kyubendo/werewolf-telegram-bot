@@ -61,18 +61,6 @@ export abstract class RoleBase {
         }
     }
 
-    readonly loveBind = (newLover: Player) => {
-        if (this.player.lover === this.player) return;
-        this.killLover('lover_betrayal');
-        newLover.role?.killLover('lover_betrayal');
-
-        this.player.lover = newLover;
-        newLover.lover = this.player;
-
-        this.loverMessage(this.player);
-        this.loverMessage(newLover);
-    }
-
     readonly killLover = (type: DeathType) => {
         if (!this.player.lover) return
 

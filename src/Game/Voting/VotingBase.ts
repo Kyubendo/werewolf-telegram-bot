@@ -33,7 +33,7 @@ export abstract class VotingBase {
 
     startVoting = async () => {
         if (this.game.stage !== this.voteStage) return;
-        this.beforeVotingAction && this.beforeVotingAction()
+        await this.beforeVotingAction?.()
         for (const player of this.getVoters()) {
             await this.game.bot.sendMessage(
                 player.id,

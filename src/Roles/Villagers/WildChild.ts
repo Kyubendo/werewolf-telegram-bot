@@ -22,7 +22,7 @@ export class WildChild extends RoleBase {
 
     action = () => {
         if (this.specialCondition.roleModel?.role) {
-            this.nightActionDone = true
+            this.doneNightAction()
             return
         }
         WildChild.game.bot.sendMessage(

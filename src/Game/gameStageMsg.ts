@@ -10,7 +10,7 @@ export const gameStageMsg = (game: Game) => {
                 `У вас есть ${game.dayDuration / 1000} секунд...`;
         case 'lynch':
             const activeMonarchs = game.lynch?.getActiveMonarchs();
-            return activeMonarchs && activeMonarchs.length
+            return activeMonarchs?.length
                 ? `${activeMonarchs[0].role?.roleName} раскрылся, так что он решит, кто умрёт сегодня!`
                 : 'Все селяне пришли на городское собрание, чтобы сделать выбор, кого же будут сегодня казнить!\n' +
                 `Есть ${game.lynchDuration / 1000} секунд, чтобы сделать выбор!`;
