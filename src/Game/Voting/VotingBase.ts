@@ -4,7 +4,7 @@ import {findPlayer} from "../findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../playersButtons";
 import {SelectType} from "../commands/callbackHandle";
-import {Mayor} from "../../Roles/Villagers/Mayor";
+import {Mayor} from "../../Roles";
 
 export abstract class VotingBase {
     constructor(readonly game: Game) {
@@ -24,8 +24,8 @@ export abstract class VotingBase {
 
     abstract voteTargetCondition(otherPlayer: Player): boolean
 
-    calculateVoteWeight = (target: Player) => (target.role instanceof Mayor
-        && target.role.specialCondition.comingOut !== undefined) ? 2 : 1
+    calculateVoteWeight = (voter: Player) => (voter.role instanceof Mayor
+        && voter.role.specialCondition.comingOut !== undefined) ? 2 : 1
 
     beforeVotingAction?: () => void
 
@@ -64,7 +64,7 @@ export abstract class VotingBase {
         if (select.choice !== 'skip') {
             target = findPlayer(select.choice, this.game.players)
             if (target) {
-                const voteWeight = this.calculateVoteWeight(target)
+                const voteWeight = this.calculateVoteWeight(voter)
                 this.votes[target.id] ? this.votes[target.id] += voteWeight : this.votes[target.id] = voteWeight
             }
         }
