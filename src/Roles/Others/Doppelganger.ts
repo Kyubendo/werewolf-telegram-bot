@@ -49,7 +49,7 @@ export class Doppelganger extends RoleBase {
         if (!this.targetPlayer.role) return;
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
-        this.targetPlayer.role.handleDeath = (killer, type) => {
+        this.targetPlayer.role.handleDeath = (killer?, type?) => {
             if (!this.targetPlayer?.role) return false;
             Doppelganger.game.bot.sendMessage(
                 this.player.id,

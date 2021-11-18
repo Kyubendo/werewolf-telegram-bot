@@ -1,29 +1,31 @@
-import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
-import {Beauty} from "../Villagers/Beauty";
+import {Beauty, RoleBase, Wolf} from "../index";
+import {ForecasterBase} from "../Abstract/ForecasterBase";
+import {DeathType} from "../Abstract/RoleBase";
 import {Player} from "../../Player/Player";
-import {Wolf} from "./Wolf";
 
 export class Prowler extends ForecasterBase {
     roleName = 'Сова 🦉';
-    roleIntroductionText = () => `Ты ${this.roleName}.\n`
+    roleIntroductionText = () => `Ты ${this.roleName}\n`
     startMessageText = () => 'Твои союзники - волки. ' +
         'Каждую ночь ты можешь гулять по деревне и подглядывать за селянами через окна домов. ' +
         'Ты увидишь, спит игрок ночью или нет. Если же его съедят, ты увидишь всю стаю волков и узнаешь их имена.'
     weight = () => -4;
 
+    showResult = true;
+
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.loveBind(this.targetPlayer.role.player);
+            this.player.loveBind(this.targetPlayer.role.player);
+            this.showResult = false;
             return;
         }
 
-        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath;
+        const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
-            if (!this.targetPlayer) return false; // Note: probably fix this later
+            if (!this.targetPlayer || type) return false; // Note: probably fix this later
 
             if (killer?.role instanceof Wolf) {
                 const wolves = killer.role.findOtherWolfPlayers();
@@ -41,6 +43,7 @@ export class Prowler extends ForecasterBase {
                         `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
                         'Кажется, ты нашла своего союзника.'
                 )
+                this.showResult = false;
             }
             return currentTargetHandleDeath(killer, type);
         }
@@ -48,6 +51,10 @@ export class Prowler extends ForecasterBase {
 
     actionResult = () => {
         if (!this.targetPlayer?.role) return;
+        if (!this.showResult) {
+            this.showResult = true;
+            return;
+        }
 
         Prowler.game.bot.sendMessage(
             this.player.id,
@@ -61,5 +68,4 @@ export class Prowler extends ForecasterBase {
         : 'Ты не можешь увидеть ничего через окно, ' +
         `потому что внутри дома ${highlightPlayer(targetRole.player)} не горит ни одна свеча. ` +
         `Вероятно, он(а) спит.`
-
 }

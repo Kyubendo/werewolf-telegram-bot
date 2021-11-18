@@ -22,8 +22,8 @@ export const assignRoles = async (game: Game) => {
         ...wolves, SerialKiller,
         //JackOLantern,
     ]
-    const wolfNeededRoles = [Sorcerer, Traitor]
-    const evilPool = [...killersPool, Sorcerer]
+    const wolfNeededRoles = [Sorcerer, Traitor, Prowler]
+    const evilPool = [...killersPool, Sorcerer, Prowler]
     const villagersPool = [
         Villager,
         ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, // Passive Villagers
@@ -35,7 +35,7 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
-        ClumsyGuy, Villager, Villager,
+        Prowler, Wolf, Villager,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -55,7 +55,8 @@ export const assignRoles = async (game: Game) => {
             if ([...rolePool].slice(0, players.length - evilCount).find(e => e === Mason)) {
                 for (let i = 0; i < players.length / 3 - 1; i++) Math.random() >= .5 && rolePool.unshift(Mason)
             }
-            if ([...rolePool].slice(0, players.length - evilCount - 1).find(e => e === Seer)) rolePool.unshift(ApprenticeSeer)
+            if ([...rolePool].slice(0, players.length - evilCount - 1).find(e => e === Seer))
+                rolePool.unshift(ApprenticeSeer)
 
             evils.forEach(e => e && rolePool.unshift(e))
 
