@@ -18,6 +18,7 @@ export class Player {
     isFrozen: boolean = false;
     won: boolean = false;
     role?: RoleBase;
+    readyToArson = false;
 
     lover?: Player;
 
