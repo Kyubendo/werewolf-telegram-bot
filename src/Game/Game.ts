@@ -116,9 +116,9 @@ export class Game {
 
     private clearTargetPlayers = () => this.players
         .filter(p => p.isAlive && p.role?.targetPlayer && !(p.role instanceof Doppelganger))
-        .map(p => p.role).forEach(r => {
-            if (r)
-                r.targetPlayer = undefined
+        .forEach(p => {
+            if (p.role)
+                p.role.targetPlayer = undefined
         })
 
     private runActions = async () => {
