@@ -7,7 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Wolf} from "../Roles";
+import {Doppelganger, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 
@@ -89,6 +89,7 @@ export class Game {
 
         this.bot.sendMessage(this.chatId, gameStageMsg(this))
             .then(() => this.bot.sendMessage(this.chatId, playerGameList(this.players),))
+            .then(() => this.clearTargetPlayers())
             .then(() => this.runActions())
     }
 
@@ -112,6 +113,14 @@ export class Game {
             }
         }
     }
+
+    private clearTargetPlayers = () => this.players
+        .filter(p => p.isAlive && p.role?.targetPlayer && !(p.role instanceof Doppelganger))
+        .map(p => p.role)
+        .forEach(r => {
+            if (r)
+                r.targetPlayer = undefined
+        })
 
     private runActions = async () => {
         if (this.stage !== 'lynch') { // change?
