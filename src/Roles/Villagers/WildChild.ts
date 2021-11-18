@@ -58,22 +58,22 @@ export class WildChild extends RoleBase {
         this.specialCondition.roleModel.role.handleDeath = (killer?: Player, type?: DeathType): boolean => {
             currentTargetHandleDeath(killer, type);
 
-            if (!this.specialCondition.roleModel || this.player.role instanceof Wolf) return false;
+            if (this.specialCondition.roleModel && !(this.player.role instanceof Wolf)) {
+                this.player.role = new Wolf(this.player, this.player.role);
 
-            this.player.role = new Wolf(this.player, this.player.role);
+                if (this.player.role instanceof Wolf) {
+                    WildChild.game.bot.sendMessage(
+                        this.player.id,
+                        `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
+                        `Теперь ты ${this.player.role.roleName}! ` +
+                        this.player.role.showOtherWolfPlayers()
+                    )
 
-            if (this.player.role instanceof Wolf) {
-                WildChild.game.bot.sendMessage(
-                    this.player.id,
-                    `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
-                    `Теперь ты ${this.player.role.roleName}! ` +
-                    this.player.role.showOtherWolfPlayers()
-                )
-
-                this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
-                    player.id,
-                    `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
-                ))
+                    this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
+                        player.id,
+                        `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
+                    ))
+                }
             }
 
             return true;
