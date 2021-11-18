@@ -28,9 +28,7 @@ export class Prowler extends ForecasterBase {
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
-            if (!this.targetPlayer || type) return false; // Note: probably fix this later
-
-            if (killer?.role instanceof Wolf) {
+            if (this.targetPlayer && !type && killer?.role instanceof Wolf) {
                 const wolves = killer.role.findOtherWolfPlayers();
                 wolves.unshift(killer)
                 RoleBase.game.bot.sendMessage(
