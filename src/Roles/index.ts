@@ -1,3 +1,5 @@
+import {RoleBase} from "./Abstract/RoleBase";
+
 import {Seer} from "./Villagers/Seer";
 import {Fool} from "./Villagers/Fool";
 import {Villager} from "./Villagers/Villager";
@@ -33,12 +35,16 @@ import {Thief} from "./Others/Thief";
 import {Doppelganger} from "./Others/Doppelganger";
 import {Necromancer} from "./Others/Necromancer";
 import {SerialKiller} from "./Others/SerialKiller";
-import {JackOLantern} from "./Villagers/JackOLanther";
-import {Pumpkin} from "./Others/Pumpkin";
+import {JackOLantern} from "./Halloween/JackOLanther";
+import {Pumpkin} from "./Halloween/Pumpkin";
+import {Cupid} from "./Villagers/Cupid";
+import {Princess} from "./Villagers/Princess";
 
 export {
+    RoleBase,
+
     Seer, Fool, Villager, ClumsyGuy, Cursed, Traitor, WoodMan, Mason, Drunk, Monarch, Beholder, ApprenticeSeer,
-    Beauty,
+    Beauty, Cupid, Princess,
 
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild,
 

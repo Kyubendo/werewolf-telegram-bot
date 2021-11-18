@@ -1,8 +1,7 @@
-import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
-import {SerialKiller} from "../Others/SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
+import {DeathType} from "../../Game";
+import {RoleBase, SerialKiller, Wolf} from "../index";
 
 export class Drunk extends RoleBase {
     roleName = 'Пьяница 🍻';
@@ -11,9 +10,9 @@ export class Drunk extends RoleBase {
     weight = () => Drunk.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
 
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
-        if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
-            let text: string = ''; // change to let text be killer standard message
+    handleDeath(killer?: Player, type?: DeathType): boolean {
+        if ((killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) && !type) {
+            let text: string = killer.role.killMessage().text.toChat(this.player);
             if (killer?.role instanceof Wolf) {
                 killer.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.isFrozen = true);
                 killer.isFrozen = true;
@@ -30,10 +29,18 @@ export class Drunk extends RoleBase {
                 Drunk.game.chatId,
                 text
             )
-            // kill message and gif
+
+            Drunk.game.bot.sendAnimation(
+                this.player.id,
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
+            )
+
             this.player.isAlive = false;
             return true;
         }
-        return this.defaultHandleDeath(killer, type);
+        return super.handleDeath(killer, type);
     }
 }

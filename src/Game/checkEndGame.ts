@@ -1,39 +1,18 @@
-import {Player} from "../Player/Player";
+import {Player} from "../Game";
 import {
-    ApprenticeSeer,
-    Beholder,
-    Blacksmith,
-    ClumsyGuy,
-    Cursed,
-    Drunk,
-    GuardianAngel,
-    Gunner,
-    Harlot,
-    Martyr,
-    Mason,
-    Monarch,
-    Oracle,
-    Sandman,
-    Seer,
-    SerialKiller,
-    Traitor,
-    Villager,
-    WiseElder,
-    Wolf,
-    WoodMan,
-    WildChild,
-    Beauty,
-    JackOLantern,
+    ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
+    Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
+    JackOLantern, Pumpkin, Detective, Cupid, Princess,
 } from "../Roles";
 import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Monarch, Oracle, Seer,
-    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty,
+    Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective, Cupid, Princess
 ]
 const wolfTeam: Function[] = [Wolf,]
-const evil: Function[] = [Wolf, SerialKiller]
-const nonWolfKillers: Function[] = [SerialKiller]
+const evil: Function[] = [Wolf, SerialKiller, JackOLantern]
+const nonWolfKillers: Function[] = [SerialKiller, JackOLantern]
 
 export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
@@ -48,16 +27,16 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
         return {winners: alivePlayers.filter(player => player.lover), type: 'lovers'}
     }
 
-
-    if (aliveJackPlayers.length * 2 >= alivePlayers.length) {
-        return { winners: aliveJackPlayers, type: 'jack' }
+    if (aliveJackPlayers.length
+        && !alivePlayers.filter(p => !(p.role instanceof Pumpkin) && !(p.role instanceof JackOLantern)).length) {
+        return {winners: players.filter(player => player.role instanceof JackOLantern), type: 'jack'}
     }
 
     if (!aliveEvilPlayer) {
         return {winners: villagersTeamPlayers, type: 'villagers'}
     }
 
-    alivePlayers.find(p => p.role instanceof Gunner && p.role.ammo) && nonWolfKillers.push(Gunner)
+    alivePlayers.find(p => p.role instanceof Gunner && p.role.specialCondition.ammo) && nonWolfKillers.push(Gunner)
     const aliveUniqueKillers = [...new Set(alivePlayers
         .filter(p => nonWolfKillers.find(k => p.role instanceof k))
         .map(p => p.role!.constructor))]
@@ -69,6 +48,9 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             const wolf = players.find(p => p.role instanceof Wolf)
             const serialKiller = players.find(p => p.role instanceof SerialKiller)
             const gunner = players.find(p => p.role instanceof Gunner)
+
+            if (aliveJackPlayers.length) return undefined;
+
             // const cowboy = players.filter(p => p.role instanceof Cowboy)
             // const puppetMaster = players.filter(p => p.role instanceof PuppetMaster)
 
@@ -100,7 +82,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
     const lovers = players.map(player => player.lover);
-    const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForTarget)
+    const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForProtectedPlayer)
     for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm.targetPlayer && !!~winners.indexOf(sm.targetPlayer)
     for (const lover of lovers) if (lover?.won && lover.lover) lover.lover.won = true;
 }

@@ -1,7 +1,7 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {RoleBase} from "./RoleBase";
 import {findPlayer} from "../../Game/findPlayer";
+import {RoleBase} from "../index";
 
 export abstract class ForecasterBase extends RoleBase {
     action = () => {

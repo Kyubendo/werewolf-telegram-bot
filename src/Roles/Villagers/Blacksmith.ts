@@ -2,6 +2,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Traitor} from "./Traitor";
+import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
 
 export class Blacksmith extends RoleBase {
     roleName = 'Кузнец ⚒';
@@ -14,26 +15,30 @@ export class Blacksmith extends RoleBase {
     weight = () => Blacksmith.game.players.filter(player => player.role instanceof Wolf)
         ? 5
         : Blacksmith.game.players.filter(player => player.role instanceof Traitor) // Or WildChild
-            ? 4
+            ? 3.5
             : 3
 
     actionAnnouncement = () => ({
         message: 'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +
             `как ${highlightPlayer(this.player)} блуждает вокруг и ` +
             'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
-            'деревня защищена от нападения волков. (Этой ночью волки дезактивированы)',
+            'деревня защищена от нападения волков.\n(Этой ночью волки дезактивированы)',
         gif: 'https://media.giphy.com/media/dUBR5zjuoZwBChZ1aC/giphy.gif'
     })
 
-    silverDust ?: boolean;
+    specialCondition: specialConditionBlacksmith = {
+        silverDust: undefined
+    }
+
 
     action = () => {
-        if (this.silverDust === false) return;
-
-        if (this.silverDust) {
-            this.silverDust = false;
+        if (this.specialCondition.silverDust) {
+            this.specialCondition.silverDust = false;
+            this.stealMessage = '\nОднако ты видишь, что серебрянная пыль уже кончилась';
             return;
         }
+
+        if (this.specialCondition.silverDust === false) return;
 
         Blacksmith.game.bot.sendMessage(
             this.player.id,
@@ -50,9 +55,8 @@ export class Blacksmith extends RoleBase {
     }
 
     actionResolve = () => {
-        if (this.silverDust)
-            Blacksmith.game.players.filter(player => player.isAlive
-                && (player.role instanceof Wolf || player.infected)).forEach(player => player.isFrozen = true)
+        if (this.specialCondition.silverDust)
+            Blacksmith.game.wolvesDeactivated = true;
     }
 
     handleChoice = (choice?: string) => {
@@ -61,22 +65,21 @@ export class Blacksmith extends RoleBase {
             return;
         }
 
-        this.silverDust = true;
+        this.specialCondition.silverDust = true;
         this.choiceMsgEditText();
 
         Blacksmith.game.bot.sendAnimation(
             Blacksmith.game.chatId,
-            this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
+            this.actionAnnouncement().gif, {caption: this.actionAnnouncement().message}
         )
+        console.log('handleChoice ' + this.specialCondition.silverDust)
     }
 
-    choiceMsgEditText = () => {
-        Blacksmith.game.bot.editMessageText(
-            `Выбор принят — ${this.silverDust ? 'Распылить' : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => Blacksmith.game.bot.editMessageText(
+        `Выбор принят — ${this.specialCondition.silverDust ? 'Распылить' : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }

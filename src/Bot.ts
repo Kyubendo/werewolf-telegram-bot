@@ -2,13 +2,15 @@ import {config} from "dotenv";
 
 config({path: __dirname + '/./../.env'})
 import TelegramBot from "node-telegram-bot-api";
-import {Game} from "./Game/Game";
+import {Game} from "./Game";
 import {initGame} from "./Game/commands/init";
 import {callbackHandle} from "./Game/commands/callbackHandle";
 import {forceStart} from "./Game/commands/forceStart";
 import {nextStage} from "./Game/commands/nextStage";
 import {TgBot} from "./TgBot";
-//optimize imports
+import express from "express";
+import * as bodyParser from "body-parser";
+import {hardReset} from "./Game/commands/hardReset";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -30,3 +32,14 @@ initGame(bot, state)
 callbackHandle(bot, state)
 forceStart(bot, state)
 nextStage(bot, state)
+hardReset(bot, state)
+
+const app = express();
+app.use(bodyParser.json());
+app.listen(process.env.PORT);
+app.post('/' + botToken, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+});
+
+app.get('/', (req, res) => res.send('im a heroku kludge'))

@@ -17,11 +17,13 @@ export abstract class VotingBase {
 
     abstract getVoters(): Player[]
 
-    abstract handleVoteResult(voteResult: Player[]): void
+    abstract handleVoteResult(voteResult: Player[]): boolean | void
 
     abstract handleVotingChoiceResult(voter: Player, target?: Player): void
 
     abstract voteTargetCondition(otherPlayer: Player): boolean
+
+    defineTarget = (voter: Player, target?: Player) => target
 
     calculateVoteWeight = (target: Player) => 1
 
@@ -31,11 +33,11 @@ export abstract class VotingBase {
 
     votedPlayers: Player[] = []
 
-    startVoting = () => {
+    startVoting = async () => {
         if (this.game.stage !== this.voteStage) return;
-        this.beforeVotingAction && this.beforeVotingAction()
-        setTimeout(() => this.getVoters().forEach(player => {
-            this.game.bot.sendMessage(
+        await this.beforeVotingAction?.()
+        for (const player of this.getVoters()) {
+            await this.game.bot.sendMessage(
                 player.id,
                 this.votePromptMessage,
                 {
@@ -50,7 +52,7 @@ export abstract class VotingBase {
             ).then(msg => {
                 if (player.role) player.role.choiceMsgId = msg.message_id
             })
-        }), 50)
+        }
     }
 
     handleVotingChoice = (select: SelectType) => {
@@ -60,7 +62,7 @@ export abstract class VotingBase {
         this.votedPlayers.push(voter)
         let target: Player | undefined;
         if (select.choice !== 'skip') {
-            target = findPlayer(select.choice, this.game.players)
+            target = this.defineTarget(voter, findPlayer(select.choice, this.game.players))
             if (target) {
                 const voteWeight = this.calculateVoteWeight(target)
                 this.votes[target.id] ? this.votes[target.id] += voteWeight : this.votes[target.id] = voteWeight
@@ -79,7 +81,8 @@ export abstract class VotingBase {
     handleVoteEnd = () => {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
-        this.handleVoteResult(this.voteResults())
+        if (this.handleVoteResult(this.voteResults())) return true
+
         this.votes = {}
         this.votedPlayers = []
     }

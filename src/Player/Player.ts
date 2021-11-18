@@ -1,6 +1,5 @@
-import {RoleBase} from "../Game";
 import {User} from "node-telegram-bot-api";
-import {Wolf} from "../Roles";
+import {RoleBase, Wolf} from "../Roles";
 
 export class Player {
     constructor(user: User) {
@@ -35,5 +34,18 @@ export class Player {
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
             + (this.role instanceof Wolf && this.role.showOtherWolfPlayers()) // check this line later
         )
+        this.infected = false
+    }
+
+    readonly loveBind = (newLover: Player) => {
+        if (!this.role) return;
+        this.role.killLover('lover_betrayal');
+        newLover.role?.killLover('lover_betrayal');
+
+        this.lover = newLover;
+        newLover.lover = this;
+
+        this.role.loverMessage(this);
+        this.role.loverMessage(newLover);
     }
 }

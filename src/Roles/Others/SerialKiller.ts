@@ -1,29 +1,35 @@
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
-import {Player} from "../../Player/Player";
-import {Wolf} from "../WolfTeam/Wolf";
+import {DeathType} from "../../Game";
+import {Player} from "../../Game";
+import {RoleBase} from "../"
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {GuardianAngel} from "../Villagers/GuardianAngel";
-import {Beauty} from "../Villagers/Beauty";
+import {Beauty, GuardianAngel, Wolf} from "../index";
+
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
     roleIntroductionText = () => `Ты ${this.roleName}.\n`
     startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
-    weight = () => -14; // change?
+    weight = () => -13.5; // change?
 
     nightActionDone = false
 
-    killMessageAll = (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
-        `но не тут-то было. Жители, собравшись, обнаружили расчлененное тело, но, на удивление, печени не было ` +
-        `на месте...\n${this.roleName} снова атаковал!\n${highlightPlayer(deadPlayer)} ` +
-        `был(а) *${deadPlayer.role?.roleName}*`;
-    killMessageDead = `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
-        'извлекает твои органы. Ты мертв(а).' // GIF
+    killMessage = () => ({
+        text: {
+            toChat: (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
+                `но не тут-то было. Жители, собравшись, ` +
+                `обнаружили расчлененное тело, но, на удивление, печени не было ` +
+                `на месте...\n${this.roleName} снова атаковал!\n${highlightPlayer(deadPlayer)} ` +
+                `был(а) *${deadPlayer.role?.roleName}*`,
+            toTarget: `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
+                'извлекает твои органы. Ты мертв(а).'
+        },
+        gif: 'https://media.giphy.com/media/xzW34nyNLcSUE/giphy.gif'
+    })
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         if (killer?.role instanceof Wolf) {
             SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
@@ -39,7 +45,7 @@ export class SerialKiller extends RoleBase {
             killer.isAlive = false;
             return false;
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
     }
 
     action = () => {
@@ -63,7 +69,7 @@ export class SerialKiller extends RoleBase {
             this.handleGuardianAngel(this.player);
             return;
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
-            this.loveBind(this.targetPlayer);
+            this.player.loveBind(this.targetPlayer);
         else
             this.targetPlayer.role?.onKilled(this.player);
     }

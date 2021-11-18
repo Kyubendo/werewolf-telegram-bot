@@ -1,4 +1,7 @@
 import {RoleBase} from "../Abstract/RoleBase";
+import {specialConditionSandman} from "../../Utils/specialConditionTypes";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
+
 
 export class Sandman extends RoleBase {
     roleName = 'Морфей 💤';
@@ -7,22 +10,26 @@ export class Sandman extends RoleBase {
         `так крепко, что никто не сможет выполнить свои ночные действия.`
     weight = () => 3;
 
-    sleep?: boolean;
+    specialCondition: specialConditionSandman = {
+        sleep: undefined
+    }
 
     actionAnnouncement = () => ({
         message: 'Пока жители деревни обсуждают события прошедшей ночи, ' +
-            `${this.player} возвращается в дом и начинает ` +
+            `${highlightPlayer(this.player)} возвращается в дом и начинает ` +
             'напевать мягкую мелодию. Сегодня ночью все будут спать очень глубоко, ' +
             'и никто не сможет выполнить свои ночные действия.',
         gif: 'https://media.giphy.com/media/fvJIuEVeNjpYs/giphy.gif'
     })
 
     action = () => {
-        if (this.sleep === false) return;
-        if (this.sleep) {
-            this.sleep = false;
+        if (this.specialCondition.sleep) {
+            this.specialCondition.sleep = false;
+            this.stealMessage = '\nОднако ты чувствуешь, что твоей магии не хватит на ещё одно заклинание...';
             return;
         }
+
+        if (this.specialCondition.sleep === false) return;
 
         Sandman.game.bot.sendMessage(
             this.player.id,
@@ -39,7 +46,7 @@ export class Sandman extends RoleBase {
     }
 
     actionResolve = () => {
-        if (!this.sleep) return
+        if (!this.specialCondition.sleep) return
 
         Sandman.game.players.filter(player => player.isAlive).forEach(player => player.isFrozen = true);
     }
@@ -50,22 +57,20 @@ export class Sandman extends RoleBase {
             return;
         }
 
-        this.sleep = true;
+        this.specialCondition.sleep = true;
         this.choiceMsgEditText();
 
         Sandman.game.bot.sendAnimation(
             Sandman.game.chatId,
-            this.actionAnnouncement().gif, { caption: this.actionAnnouncement().message }
+            this.actionAnnouncement().gif, {caption: this.actionAnnouncement().message}
         )
     }
 
-    choiceMsgEditText = () => {
-        Sandman.game.bot.editMessageText(
-            `Выбор принят: ${this.sleep ? 'Использовать' : 'Пропустить'}.`,
-            {
-                message_id: this.choiceMsgId,
-                chat_id: this.player.id,
-            }
-        )
-    }
+    choiceMsgEditText = () => Sandman.game.bot.editMessageText(
+        `Выбор принят: ${this.specialCondition.sleep ? 'Использовать' : 'Пропустить'}.`,
+        {
+            message_id: this.choiceMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }

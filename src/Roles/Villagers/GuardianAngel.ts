@@ -1,16 +1,15 @@
+import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {SerialKiller, Wolf} from "../index";
-import {Player} from "../../Player/Player";
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
-import {Beauty} from "./Beauty";
+import {SerialKiller, Wolf, Beauty, RoleBase} from "../";
+import {Player} from "../../Game";
 
 export class GuardianAngel extends RoleBase {
     roleName = 'Ангел-хранитель 👼';
     startMessageText = () => `Беги спасай свой народ! Но берегись волков, есть ` +
         '50% вероятности что тебя съедят, если выберешь их.';
-    weight = () => 7;
+    weight = () => 6.5;
 
     nightActionDone = false
 
@@ -36,7 +35,7 @@ export class GuardianAngel extends RoleBase {
         if (this.targetPlayer.role instanceof SerialKiller || (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
             this.onKilled(this.player);
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.loveBind(this.targetPlayer);
+            this.player.loveBind(this.targetPlayer);
         } else {
             this.targetPlayer.guardianAngel = this.player;
         }
@@ -60,7 +59,7 @@ export class GuardianAngel extends RoleBase {
         this.doneNightAction()
     }
 
-    originalHandleDeath = (killer?: Player, type?: DeathType): boolean => {
+    handleDeath(killer?: Player, type?: DeathType): boolean {
         this.player.isAlive = false;
 
         if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)
@@ -93,9 +92,12 @@ export class GuardianAngel extends RoleBase {
                 )
             }
         } else if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
-            GuardianAngel.game.bot.sendMessage(
+            GuardianAngel.game.bot.sendAnimation(
                 this.player.id,
-                killer.role.killMessageDead
+                killer.role.killMessage().gif,
+                {
+                    caption: killer.role.killMessage().text.toTarget
+                }
             )
 
             if (killer.role instanceof Wolf)
@@ -113,7 +115,7 @@ export class GuardianAngel extends RoleBase {
                     `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`
                 )
         } else
-            return this.defaultHandleDeath(killer, type);
+            return super.handleDeath(killer, type);
         return true;
     }
 }

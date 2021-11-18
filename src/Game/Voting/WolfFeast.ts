@@ -10,15 +10,23 @@ export class WolfFeast extends VotingBase {
     type = 'wolfFeast'
     votePromptMessage = 'Кого ты хочешь съесть?'
 
-    getVoters = () => this.game.players.filter(player => player.isAlive && player.role instanceof Wolf)
+    getVoters = () => this.game.players.filter(
+        player => player.isAlive
+            && !player.isFrozen
+            && player.role instanceof Wolf
+    )
 
     voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive && !(otherPlayer.role instanceof Wolf)
 
-    beforeVotingAction = () => this.getVoters().length > 1
-        && this.getVoters().forEach(player => this.game.bot.sendMessage(
-            player.id,
-            'Ты со стаей собрался покушать.'
-        ))
+    beforeVotingAction = async () => {
+        if (this.getVoters().length <= 1) return
+        for (const voter of this.getVoters()) {
+            await this.game.bot.sendMessage(
+                voter.id,
+                'Ты со стаей собрался покушать.'
+            );
+        }
+    }
 
     handleVoteResult = (voteResults: Player[]) => {
         if (!voteResults.length) {
@@ -36,7 +44,7 @@ export class WolfFeast extends VotingBase {
     }
 
     handleVotingChoiceResult = (voter: Player, target?: Player) => {
-        voter.role && voter.role.doneNightAction()
+        voter.role?.doneNightAction()
         this.getVoters().filter(player => player !== voter).forEach(player => this.game.bot.sendMessage(
             player.id,
             target
