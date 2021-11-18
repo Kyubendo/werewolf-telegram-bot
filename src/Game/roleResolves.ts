@@ -7,7 +7,7 @@ import {
     Martyr,
     Monarch, Mayor,
     Necromancer,
-    Oracle, Pumpkin, Sandman,
+    Oracle, Prowler, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
     Thief, WildChild,
@@ -30,7 +30,7 @@ export const roleResolves = (stage: GameStage) => {
 }
 
 const dayRoleResolves = [
-    WildChild, Martyr, Doppelganger, WildChild, // constant choices
+    WildChild, Martyr, Doppelganger, // constant choices
     Monarch, Mayor,
     Gunner,
     WiseElder, Detective,

@@ -6,7 +6,7 @@ import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
 
 export class Blacksmith extends RoleBase {
     roleName = 'Кузнец ⚒';
-    roleIntroductionText = () => `Ты ${this.roleName} `;
+    roleIntroductionText = () => `Ты ${this.roleName}`;
     startMessageText = () => '- ремесленник по металлу этой деревни. ' +
         'Ты не умеешь кучи серебра, но у тебя его достаточно, ' +
         'чтобы предотвратить волчью атаку ровно на одну ночь. ' +

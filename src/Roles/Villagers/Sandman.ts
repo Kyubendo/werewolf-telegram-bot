@@ -5,7 +5,7 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Sandman extends RoleBase {
     roleName = 'Морфей 💤';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Один раз за игру ты можешь использовать свою магию, чтобы заставить всех спать ` +
         `так крепко, что никто не сможет выполнить свои ночные действия.`
     weight = () => 3;
@@ -32,7 +32,6 @@ export class Sandman extends RoleBase {
         }
 
         if (this.specialCondition.sleep === false) return;
-
 
         Sandman.game.bot.sendMessage(
             this.player.id,

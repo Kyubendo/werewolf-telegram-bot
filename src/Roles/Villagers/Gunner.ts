@@ -6,7 +6,7 @@ import {specialConditionGunner} from "../../Utils/specialConditionTypes";
 
 export class Gunner extends RoleBase {
     roleName = "Стрелок 🔫";
-    roleIntroductionText = () => `${this.roleName} выходит на охоту! `
+    roleIntroductionText = () => `${this.roleName} выходит на охоту!`
     startMessageText = () => 'У тебя есть две серебрянных пули, чтобы убить кого-то днем. ' +
         'Но имей ввиду, все услышат твой выстрел...';
     weight = () => 6;
@@ -32,7 +32,7 @@ export class Gunner extends RoleBase {
 
     action = () => {
         if (!this.specialCondition.ammo) return;
-        this.targetPlayer = undefined;
+
 
         Gunner.game.bot.sendMessage(
             this.player.id,
@@ -49,8 +49,6 @@ export class Gunner extends RoleBase {
         this.targetPlayer.role.onKilled(this.player, 'shotByGunner');
 
         this.specialCondition.ammo--;
-
-        this.targetPlayer = undefined;
     }
 
     handleChoice = (choice?: string) => {

@@ -21,7 +21,7 @@ export class Wolf extends RoleBase {
     }
 
     roleName = 'Волк 🐺';
-    roleIntroductionText = () => `Новый ${this.roleName} в селе! `;
+    roleIntroductionText = () => `Новый ${this.roleName} в селе!`;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
         + this.showOtherWolfPlayers();
 
@@ -49,8 +49,6 @@ export class Wolf extends RoleBase {
         } else {
             this.targetPlayer.role?.onKilled(this.player);
         }
-
-        this.targetPlayer = undefined
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {

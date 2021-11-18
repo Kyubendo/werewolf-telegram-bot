@@ -17,7 +17,7 @@ export abstract class RoleBase {
 
     abstract readonly roleName: string
     abstract readonly weight: () => number
-    readonly roleIntroductionText = () => `Ты ${this.roleName}! `;
+    readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
     abstract readonly startMessageText: () => string
 
     readonly previousRole?: RoleBase;
@@ -114,10 +114,12 @@ export abstract class RoleBase {
     }
 
     doneNightAction = () => {
-        this.nightActionDone = true
-        if (!RoleBase.game.players
-            .find(p => p.isAlive && p.role?.nightActionDone === false && !p.isFrozen))
-            RoleBase.game.setNextStage()
+        if (RoleBase.game.stage === 'night') {
+            this.nightActionDone = true
+            if (!RoleBase.game.players
+                .find(p => p.isAlive && p.role?.nightActionDone === false && !p.isFrozen))
+                RoleBase.game.setNextStage()
+        }
     }
 
     movePlayer = () => {

@@ -17,8 +17,6 @@ export class JackOLantern extends RoleBase {
 
 
     action = () => {
-        this.targetPlayer = undefined;
-
         JackOLantern.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь превратить в тыкву?',

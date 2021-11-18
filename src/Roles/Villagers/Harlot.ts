@@ -10,7 +10,7 @@ import {RoleBase} from "../index";
 
 export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
-    roleIntroductionText = () => `Ах ты ${this.roleName}! `
+    roleIntroductionText = () => `Ах ты ${this.roleName}!`
     startMessageText = () => `Ты можешь пойти к кому-то ночью и хорошо провести время... \n` +
         'Но, если зло выберет того, к кому ты пошла, вы оба умрете! А если волки выберут тебя, а дома ' +
         'тебя не будет, ты останешься жить, логично...';
@@ -19,7 +19,7 @@ export class Harlot extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        this.targetPlayer = undefined;
+        
 
         Harlot.game.bot.sendMessage(
             this.player.id,

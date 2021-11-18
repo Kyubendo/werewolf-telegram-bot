@@ -9,7 +9,7 @@ import {Beauty, GuardianAngel, Wolf} from "../index";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
     weight = () => -13.5; // change?
@@ -21,14 +21,13 @@ export class SerialKiller extends RoleBase {
             toChat: (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
                 `но не тут-то было. Жители, собравшись, ` +
                 `обнаружили расчлененное тело, но, на удивление, печени не было ` +
-                `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
+                `на месте...\n${this.roleName} снова атаковал!\n${highlightPlayer(deadPlayer)} ` +
                 `был(а) *${deadPlayer.role?.roleName}*`,
             toTarget: `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
                 'извлекает твои органы. Ты мертв(а).'
         },
         gif: 'https://media.giphy.com/media/xzW34nyNLcSUE/giphy.gif'
     })
-
 
     handleDeath(killer?: Player, type?: DeathType): boolean {
         if (killer?.role instanceof Wolf) {
@@ -50,8 +49,6 @@ export class SerialKiller extends RoleBase {
     }
 
     action = () => {
-        this.targetPlayer = undefined
-
         SerialKiller.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь запихнуть пару-тройку ножей?',
