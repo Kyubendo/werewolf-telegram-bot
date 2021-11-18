@@ -5,7 +5,8 @@ import {
     Gunner, Cupid,
     Harlot, JackOLantern,
     Martyr,
-    Monarch, Necromancer,
+    Monarch, Mayor,
+    Necromancer,
     Oracle, Prowler, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
@@ -30,7 +31,7 @@ export const roleResolves = (stage: GameStage) => {
 
 const dayRoleResolves = [
     WildChild, Martyr, Doppelganger, // constant choices
-    Monarch,
+    Monarch, Mayor,
     Gunner,
     WiseElder, Detective,
     Sandman, // pre-last because he freeze all other actions including Blacksmith's
@@ -41,7 +42,7 @@ const nightRoleResolves = [
     WildChild, Martyr, Doppelganger, // constant choices
     Cupid,
     JackOLantern,
-    Harlot, Prowler,
+    Harlot, //Prowler
     GuardianAngel,
     Necromancer,
     SerialKiller,

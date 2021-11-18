@@ -3,6 +3,6 @@ import {State} from "../../Bot";
 
 export const hardReset = (bot: TelegramBot, state: State) => {
     bot.onText(/\/hard_reset/, msg => {
-        if (msg.from?.id === 305891812) delete state.game;
+        if (JSON.parse(process.env.ADMINS_ID!).includes(msg.from?.id)) delete state.game;
     })
 }

@@ -30,11 +30,13 @@ export class Blacksmith extends RoleBase {
         silverDust: undefined
     }
 
+    stealMessage = () => this.specialCondition.silverDust !== undefined
+        && '\nОднако ты видишь, что серебрянная пыль уже кончилась'
+
 
     action = () => {
         if (this.specialCondition.silverDust) {
             this.specialCondition.silverDust = false;
-            this.stealMessage = '\nОднако ты видишь, что серебрянная пыль уже кончилась';
             return;
         }
 
@@ -72,7 +74,6 @@ export class Blacksmith extends RoleBase {
             Blacksmith.game.chatId,
             this.actionAnnouncement().gif, {caption: this.actionAnnouncement().message}
         )
-        console.log('handleChoice ' + this.specialCondition.silverDust)
     }
 
     choiceMsgEditText = () => Blacksmith.game.bot.editMessageText(

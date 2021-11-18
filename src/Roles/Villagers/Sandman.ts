@@ -14,6 +14,9 @@ export class Sandman extends RoleBase {
         sleep: undefined
     }
 
+    stealMessage = () => this.specialCondition.sleep !== undefined
+        && '\nОднако ты чувствуешь, что твоей магии не хватит на ещё одно заклинание...'
+
     actionAnnouncement = () => ({
         message: 'Пока жители деревни обсуждают события прошедшей ночи, ' +
             `${highlightPlayer(this.player)} возвращается в дом и начинает ` +
@@ -25,7 +28,6 @@ export class Sandman extends RoleBase {
     action = () => {
         if (this.specialCondition.sleep) {
             this.specialCondition.sleep = false;
-            this.stealMessage = '\nОднако ты чувствуешь, что твоей магии не хватит на ещё одно заклинание...';
             return;
         }
 

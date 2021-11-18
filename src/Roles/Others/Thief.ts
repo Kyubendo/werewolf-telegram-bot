@@ -65,20 +65,23 @@ export class Thief extends RoleBase {
                 .createThisRole(this.player, this.player.role);
             this.player.role.specialCondition = this.targetPlayer.role.specialCondition;
 
+            const targetStealMessage: string | false | undefined = this.targetPlayer?.role?.stealMessage?.();
+
             Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
             ).then(() => {
-                if (this.targetPlayer?.role?.stealMessage)
-                    Thief.game.bot.sendMessage(
-                        this.player.id,
-                        this.targetPlayer.role.stealMessage
-                    )
+                (async () => targetStealMessage && await Thief.game.bot.sendMessage(
+                    this.player.id,
+                    targetStealMessage
+                ))().then(() => {
+                    if (this.targetPlayer)
+                        this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
+                })
             })
 
-            this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
-            
+
             if (this.player.role instanceof Mason) {
                 Thief.game.bot.sendMessage(
                     this.player.id,

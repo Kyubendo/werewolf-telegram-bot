@@ -1,5 +1,5 @@
 import {GameStage} from "../Game";
-import {ClumsyGuy, Monarch, Pumpkin, Suicide} from "../../Roles";
+import {Mayor, ClumsyGuy, Monarch, Pumpkin, Suicide} from "../../Roles";
 import {Player} from "../../Player/Player";
 import {VotingBase} from "./VotingBase";
 import {randomElement} from "../../Utils/randomElement";
@@ -40,6 +40,9 @@ export class Lynch extends VotingBase {
         )
         if (this.votedPlayers.length === this.getVoters().length) this.game.setNextStage()
     }
+
+    calculateVoteWeight = (voter: Player) => (voter.role instanceof Mayor
+        && voter.role.specialCondition.comingOut !== undefined) ? 2 : 1;
 
     handleVoteResult(voteResult: Player[]) {
         if (voteResult.length === 1) {

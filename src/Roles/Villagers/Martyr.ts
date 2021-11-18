@@ -25,6 +25,9 @@ export class Martyr extends RoleBase {
     }
     nightActionDone = false
 
+    stealMessage = () => !!this.specialCondition.protectedPlayer &&
+        `Ты умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`;
+
     action = () => {
         if (this.specialCondition.protectedPlayer?.role) {
             this.doneNightAction()
@@ -116,8 +119,6 @@ export class Martyr extends RoleBase {
     handleChoice = (choice?: string) => {
         this.specialCondition.protectedPlayer = findPlayer(choice, Martyr.game.players);
         this.choiceMsgEditText();
-        if (this.specialCondition.protectedPlayer)
-            this.stealMessage = `\nТы умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`;
         this.doneNightAction();
     }
 

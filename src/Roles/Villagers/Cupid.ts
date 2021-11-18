@@ -22,6 +22,9 @@ export class Cupid extends RoleBase {
 
     targets = () => Cupid.game.players.filter(player => player !== this.targetPlayer && player.isAlive)
 
+    stealMessage = () => this.specialCondition.loversBound
+        && 'Однако, ты видишь, что в колчане кончились любовные стрелы.'
+
     action = () => {
         if (!this.specialCondition.loversBound) this.loveArrowChoice()
     }
@@ -49,7 +52,6 @@ export class Cupid extends RoleBase {
 
     actionResolve = async () => {
         this.specialCondition.loversBound = true
-        this.stealMessage = 'Однако, ты видишь, что в колчане кончались любовные стрелы.'
         if (!this.targetPlayer2) {
             if (!this.targetPlayer) this.targetPlayer = randomElement(this.targets())
             this.targetPlayer2 = randomElement(this.targets())
