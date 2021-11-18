@@ -49,8 +49,6 @@ export class Wolf extends RoleBase {
         } else {
             this.targetPlayer.role?.onKilled(this.player);
         }
-
-        
     }
 
     handleDeath(killer?: Player, type?: DeathType): boolean {

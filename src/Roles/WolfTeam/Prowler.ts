@@ -3,6 +3,7 @@ import {Beauty, RoleBase, Wolf} from "../index";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {DeathType} from "../Abstract/RoleBase";
 import {Player} from "../../Player/Player";
+import {findPlayer} from "../../Game/findPlayer";
 
 export class Prowler extends ForecasterBase {
     roleName = 'Сова 🦉';
@@ -13,6 +14,8 @@ export class Prowler extends ForecasterBase {
     weight = () => -4;
 
     showResult = true;
+
+    nightActionDone = false;
 
     actionResolve = () => {
         if (!this.targetPlayer?.role) return;
@@ -60,6 +63,12 @@ export class Prowler extends ForecasterBase {
             this.player.id,
             this.forecastRoleName(this.targetPlayer.role)
         )
+    }
+
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, ForecasterBase.game.players)
+        this.choiceMsgEditText();
+        this.doneNightAction();
     }
 
     forecastRoleName = (targetRole: RoleBase) => targetRole.targetPlayer
