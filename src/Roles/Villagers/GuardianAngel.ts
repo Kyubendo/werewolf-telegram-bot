@@ -16,7 +16,7 @@ export class GuardianAngel extends RoleBase {
     numberOfAttacks: number = 0;
 
     action = () => {
-        this.targetPlayer = undefined;
+        
         this.numberOfAttacks = 0;
 
         GuardianAngel.game.bot.sendMessage(

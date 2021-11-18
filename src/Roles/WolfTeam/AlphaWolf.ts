@@ -61,6 +61,6 @@ export class AlphaWolf extends Wolf {
         }
 
         this.targetPlayer.role?.onKilled(this.player);
-        this.targetPlayer = undefined
+        
     }
 }

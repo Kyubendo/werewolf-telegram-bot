@@ -19,7 +19,7 @@ export class Harlot extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        this.targetPlayer = undefined;
+        
 
         Harlot.game.bot.sendMessage(
             this.player.id,

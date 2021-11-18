@@ -17,7 +17,7 @@ export class Thief extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        this.targetPlayer = undefined;
+        
         Thief.game.bot.sendMessage(this.player.id,
             'Чью роль ты хочешь украсть?',
             {

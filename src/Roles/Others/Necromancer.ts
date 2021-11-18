@@ -11,8 +11,6 @@ export class Necromancer extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        this.targetPlayer = undefined;
-
         const deadPlayers = Necromancer.game.players
             .filter(player => !player.isAlive);
         if (!deadPlayers.length) return

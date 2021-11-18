@@ -5,8 +5,6 @@ import {RoleBase} from "../index";
 
 export abstract class ForecasterBase extends RoleBase {
     action = () => {
-        this.targetPlayer = undefined
-
         ForecasterBase.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь посмотреть?',

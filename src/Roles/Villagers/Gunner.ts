@@ -25,7 +25,7 @@ export class Gunner extends RoleBase {
 
     action = () => {
         if (!this.specialCondition.ammo) return;
-        this.targetPlayer = undefined;
+        
 
         Gunner.game.bot.sendMessage(
             this.player.id,
@@ -49,7 +49,7 @@ export class Gunner extends RoleBase {
                 ? 'Но целься аккуратно, у тебя остался только одна серебрянная пуля.'
                 : 'У тебя осталось ещё две серебрянных пули.';
 
-        this.targetPlayer = undefined;
+        
     }
 
     handleChoice = (choice?: string) => {

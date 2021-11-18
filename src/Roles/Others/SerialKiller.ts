@@ -49,8 +49,6 @@ export class SerialKiller extends RoleBase {
     }
 
     action = () => {
-        this.targetPlayer = undefined
-
         SerialKiller.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь запихнуть пару-тройку ножей?',
