@@ -1,6 +1,8 @@
 import {RoleBase} from "../index";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
+import {Player} from "../../Player/Player";
+import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Arsonist extends RoleBase {
     roleName = 'Поджигатель 🔥';
@@ -8,11 +10,22 @@ export class Arsonist extends RoleBase {
         ? 'У тебя есть секретный рецепт легковоспламеняющегося раствора, который может сжечь село до основания. '
         + 'Каждую ночь ты можешь обливать чей-то дом этим зельем. Если хотя бы один дом залит, ты можешь зажечь все '
         + 'залитые, сжигая жителей внутри.'
-        : 'Ты можешь нарисовать магическую картину и незаметно оставить её в доме одного из жителей. Магия этой '
+        : 'Ты можешь нарисовать волшебную картину и незаметно оставить её в доме одного из жителей. Магия этой '
         + 'картины может превратить весь дом в горстку пепла. Если хотя бы в одном доме висит картина, ты можешь '
         + 'использовать свою магию, чтобы сжечь все дома с картинами, сжигая жителей внутри.'
     weight = () => -8
 
+    killMessage = () => ({
+        text: {
+            toChat: (deadPlayer: Player) => `Когда деревня просыпается, кто-то замечает, что дом `
+                + `${highlightPlayer(deadPlayer)} уже не тот, что был раньше! Вместо прекрасного светлого дома `
+                + `лежат только пепел и сажа.`,
+            toTarget: 'Ты сгорел.',
+        },
+        gif: '',
+    })
+
+    burn = false
     action = () => {
         if (Arsonist.game.players.find(p => p.readyToArson)) {
             Arsonist.game.bot.sendMessage(
@@ -45,6 +58,12 @@ export class Arsonist extends RoleBase {
         }
     ).then(msg => this.choiceMsgId = msg.message_id)
 
+
+    actionResolve = () => {
+        if (this.burn) Arsonist.game.players.forEach(p => p.readyToArson && p.role?.onKilled(this.player))
+        else if (this.targetPlayer) this.targetPlayer.readyToArson = true
+    }
+
     handleChoice = (choice?: string) => {
         switch (choice) {
             case undefined:
@@ -56,9 +75,8 @@ export class Arsonist extends RoleBase {
                 ).then(this.prepareHouse)
                 break
             case 'burn':
-                const burnedPlayers = Arsonist.game.players.filter(p => p.readyToArson && p.role?.onKilled(this.player))
-
                 this.doneNightAction()
+                this.burn = true
                 break
             default:
                 this.targetPlayer = findPlayer(choice, Arsonist.game.players);
