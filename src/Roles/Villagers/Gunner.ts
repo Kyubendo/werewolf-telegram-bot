@@ -6,7 +6,7 @@ import {specialConditionGunner} from "../../Utils/specialConditionTypes";
 
 export class Gunner extends RoleBase {
     roleName = "Стрелок 🔫";
-    roleIntroductionText = () => `${this.roleName} выходит на охоту!\n`
+    roleIntroductionText = () => `${this.roleName} выходит на охоту!`
     startMessageText = () => 'У тебя есть две серебрянных пули, чтобы убить кого-то днем. ' +
         'Но имей ввиду, все услышат твой выстрел...';
     weight = () => 6;

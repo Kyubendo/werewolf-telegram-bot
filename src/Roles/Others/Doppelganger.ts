@@ -6,7 +6,7 @@ import {findPlayer} from "../../Game/findPlayer";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
-    roleIntroductionText = () => `Ты ${this.roleName}.\n`
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => 'Легенда гласит, что твои предки были Метаморфами и могли выбирать любую форму бытия, ' +
         'какую только пожелали... Ты унаследовал часть их способностей! Выбери игрока, когда он умрет, ' +
         'ты получишь его роль.'
@@ -54,7 +54,7 @@ export class Doppelganger extends RoleBase {
             Doppelganger.game.bot.sendMessage(
                 this.player.id,
                 `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
-                this.targetPlayer.role.roleIntroductionText() + this.targetPlayer.role.startMessageText()
+                this.targetPlayer.role.roleIntroductionText() + ' ' + this.targetPlayer.role.startMessageText()
             )
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
             return currentTargetHandleDeath(killer, type);

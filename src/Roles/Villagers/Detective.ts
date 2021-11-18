@@ -5,7 +5,7 @@ import {Wolf} from "../WolfTeam/Wolf";
 
 export class Detective extends ForecasterBase {
     roleName = 'Детектив 🕵️';
-    roleIntroductionText = () => `Ты ${this.roleName}.\n`
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => 'Ты можешь выбрать игрока днем, чтобы узнать его роль. ' +
         'Но волк узнает, кто ты, если ты выберешь его!'
     weight = () => 7;

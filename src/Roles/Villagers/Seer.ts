@@ -16,7 +16,7 @@ import {Beholder} from "../index";
 
 export class Seer extends ForecasterBase {
     roleName = 'Провидец 👳';
-    roleIntroductionText = () => 'Ты Провидец 👳!\n';
+    roleIntroductionText = () => 'Ты Провидец 👳!';
     startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 6.5;
 

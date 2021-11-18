@@ -76,7 +76,7 @@ export const assignRoles = async (game: Game) => {
     for (const player of players) {
         player.role && await game.bot.sendMessage(
             player.id,
-            player.role.roleIntroductionText() + player.role.startMessageText()
+            player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
         );
     }
 }
