@@ -29,7 +29,7 @@ export const roleResolves = (stage: GameStage) => {
 }
 
 const dayRoleResolves = [
-    WildChild, Martyr, Doppelganger, WildChild, // constant choices
+    WildChild, Martyr, Doppelganger, // constant choices
     Monarch,
     Gunner,
     WiseElder, Detective,

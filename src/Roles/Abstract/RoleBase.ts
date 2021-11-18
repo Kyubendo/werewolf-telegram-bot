@@ -112,10 +112,12 @@ export abstract class RoleBase {
     }
 
     doneNightAction = () => {
-        this.nightActionDone = true
-        if (!RoleBase.game.players
-            .find(p => p.isAlive && p.role?.nightActionDone === false && !p.isFrozen))
-            RoleBase.game.setNextStage()
+        if (RoleBase.game.stage === 'night') {
+            this.nightActionDone = true
+            if (!RoleBase.game.players
+                .find(p => p.isAlive && p.role?.nightActionDone === false && !p.isFrozen))
+                RoleBase.game.setNextStage()
+        }
     }
 
     movePlayer = () => {
