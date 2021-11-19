@@ -29,25 +29,28 @@ export class Arsonist extends RoleBase {
 
     burn = false
     action = () => {
-        if (Arsonist.game.players.find(p => p.readyToArson)) {
-            Arsonist.game.bot.sendMessage(
-                this.player.id,
-                'Что ты хочешь сделать?',
-                {
-                    reply_markup: {
-                        inline_keyboard: [
-                            [{
-                                text: 'Подготовить ещё один дом',
-                                callback_data: JSON.stringify({type: 'role', choice: 'prepare'})
-                            }],
-                            [{text: 'Сжечь всё!', callback_data: JSON.stringify({type: 'role', choice: 'burn'})}],
-                        ]
-                    }
-                }
-            ).then(msg => this.choiceMsgId = msg.message_id)
-        } else {
-            this.prepareHouse()
-        }
+        this.burn = false
+        const inline_keyboard = []
+
+        Arsonist.game.players.find(p => p.readyToArson) &&
+        inline_keyboard.push([{
+            text: 'Сжечь всё!',
+            callback_data: JSON.stringify({type: 'role', choice: 'burn'})
+        }])
+        Arsonist.game.players.find(p => p !== this.player && !p.readyToArson) &&
+        inline_keyboard.push([{
+            text: 'Подготовить дом к поджогу',
+            callback_data: JSON.stringify({type: 'role', choice: 'prepare'})
+        }])
+        inline_keyboard.push([{
+            text: 'Пропустить',
+            callback_data: JSON.stringify({type: 'role', choice: 'skip'})
+        }])
+        Arsonist.game.bot.sendMessage(
+            this.player.id,
+            'Что ты хочешь сделать?',
+            {reply_markup: {inline_keyboard}}
+        ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
     prepareHouse = () => Arsonist.game.bot.sendMessage(
@@ -55,7 +58,8 @@ export class Arsonist extends RoleBase {
         'Кто станет твоей жертвой?',
         {
             reply_markup: generateInlineKeyboard(
-                Arsonist.game.players.filter(p => p !== this.player && p.isAlive && !p.readyToArson)
+                Arsonist.game.players.filter(p => p !== this.player && p.isAlive && !p.readyToArson),
+                false
             )
         }
     ).then(msg => this.choiceMsgId = msg.message_id)
@@ -67,26 +71,30 @@ export class Arsonist extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
+        let selectedChoice
         switch (choice) {
             case undefined:
+            case 'skip':
+                selectedChoice = 'Пропустить'
+                this.doneNightAction()
                 break
             case 'prepare':
-                Arsonist.game.bot.editMessageText(
-                    `Выбор принят — *Подготовить ещё один дом.*`,
-                    {message_id: this.choiceMsgId, chat_id: this.player.id,}
-                ).then(this.prepareHouse)
+                selectedChoice = 'Подготовить дом к поджогу'
+                this.prepareHouse()
                 break
             case 'burn':
-                Arsonist.game.bot.editMessageText(
-                    `Выбор принят — *Сжечь всё.*`,
-                    {message_id: this.choiceMsgId, chat_id: this.player.id,}
-                ).then(this.doneNightAction)
+                selectedChoice = 'Сжечь всё!'
                 this.burn = true
+                this.doneNightAction()
                 break
             default:
                 this.targetPlayer = findPlayer(choice, Arsonist.game.players);
                 this.choiceMsgEditText();
                 this.doneNightAction()
         }
+        selectedChoice && Arsonist.game.bot.editMessageText(
+            `Выбор принят — *${selectedChoice}*`,
+            {message_id: this.choiceMsgId, chat_id: this.player.id,}
+        )
     }
 }

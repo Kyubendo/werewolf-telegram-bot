@@ -13,6 +13,7 @@ import {
     WoodMan
     // JackOLantern
 } from "../Roles";
+import {Arsonist} from "../Roles/Others/Arsonist";
 
 export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
@@ -35,7 +36,7 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
-        ClumsyGuy, Villager, Villager,
+        Arsonist, Villager, Villager,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 

@@ -15,6 +15,7 @@ import {
     Wolf
 } from "../Roles";
 import {GameStage} from "./Game";
+import {Arsonist} from "../Roles/Others/Arsonist";
 
 export const roleResolves = (stage: GameStage) => {
     switch (stage) {
@@ -45,6 +46,7 @@ const nightRoleResolves = [
     Harlot, //Prowler
     GuardianAngel,
     Necromancer,
+    Arsonist,
     SerialKiller,
     Wolf,
     Sorcerer, Seer, Oracle,
