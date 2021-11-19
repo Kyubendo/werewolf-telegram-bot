@@ -27,6 +27,7 @@ export class Cupid extends RoleBase {
 
     action = () => {
         if (!this.specialCondition.loversBound) this.loveArrowChoice()
+        this.doneNightAction()
     }
 
     loveArrowChoice = () => Cupid.game.bot.sendMessage(
