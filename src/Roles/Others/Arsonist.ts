@@ -15,6 +15,8 @@ export class Arsonist extends RoleBase {
         + 'использовать свою магию, чтобы сжечь все дома с картинами, сжигая жителей внутри.'
     weight = () => -8
 
+    nightActionDone = false
+
     killMessage = () => ({
         text: {
             toChat: (deadPlayer: Player) => `Когда деревня просыпается, кто-то замечает, что дом `
@@ -22,7 +24,7 @@ export class Arsonist extends RoleBase {
                 + `лежат только пепел и сажа.`,
             toTarget: 'Ты сгорел.',
         },
-        gif: '',
+        gif: 'https://media.giphy.com/media/xzW34nyNLcSUE/giphy.gif', // change
     })
 
     burn = false
@@ -44,7 +46,7 @@ export class Arsonist extends RoleBase {
                 }
             ).then(msg => this.choiceMsgId = msg.message_id)
         } else {
-
+            this.prepareHouse()
         }
     }
 
@@ -75,7 +77,10 @@ export class Arsonist extends RoleBase {
                 ).then(this.prepareHouse)
                 break
             case 'burn':
-                this.doneNightAction()
+                Arsonist.game.bot.editMessageText(
+                    `Выбор принят — *Сжечь всё.*`,
+                    {message_id: this.choiceMsgId, chat_id: this.player.id,}
+                ).then(this.doneNightAction)
                 this.burn = true
                 break
             default:
@@ -84,7 +89,4 @@ export class Arsonist extends RoleBase {
                 this.doneNightAction()
         }
     }
-
-
-    nightActionDone = false
 }
