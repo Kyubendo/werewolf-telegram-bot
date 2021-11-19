@@ -30,6 +30,9 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
         text: 'Теперь село не отличить от тыквенной грядки... Все преваритились в тыквы! Победа Джека!',
         gif: 'https://media.giphy.com/media/rtgu0LxGT0R56/giphy.gif'
     },
-
+    arsonist: {
+        text: 'Слышно только потрескивание пламени  вся деревня в огне. Поджигатель стоит посреди села, довольно улыбаясь',
+        gif: 'https://media.giphy.com/media/rtgu0LxGT0R56/giphy.gif' // change
+    }
 }
 
