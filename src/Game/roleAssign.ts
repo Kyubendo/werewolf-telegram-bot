@@ -10,17 +10,16 @@ import {
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
-    WoodMan
+    WoodMan, Arsonist
     // JackOLantern
 } from "../Roles";
-import {Arsonist} from "../Roles/Others/Arsonist";
 
 export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
     const players = game.players
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
-        ...wolves, SerialKiller,
+        ...wolves, SerialKiller, /*Arsonist*/
         //JackOLantern,
     ]
     const wolfNeededRoles = [Sorcerer, Traitor, Prowler]

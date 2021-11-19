@@ -42,6 +42,7 @@ import {JackOLantern} from "./Halloween/JackOLanther";
 import {Pumpkin} from "./Halloween/Pumpkin";
 import {Cupid} from "./Villagers/Cupid";
 import {Princess} from "./Villagers/Princess";
+import {Arsonist} from "./Others/Arsonist";
 
 export {
     RoleBase, ForecasterBase, RulerBase,
@@ -54,7 +55,7 @@ export {
 
     Wolf, Lycan, Sorcerer, AlphaWolf, Prowler,
 
-    Suicide, Thief, Necromancer, SerialKiller, Doppelganger, JackOLantern,
+    Suicide, Thief, Necromancer, SerialKiller, Doppelganger, JackOLantern, Arsonist,
 
     Pumpkin,
 }

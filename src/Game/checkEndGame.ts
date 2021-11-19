@@ -2,7 +2,7 @@ import {Player} from "../Game";
 import {
     ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
     Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
-    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor,
+    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Arsonist,
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -12,8 +12,8 @@ const villagers: Function[] = [
     Princess
 ]
 const wolfTeam: Function[] = [Wolf,]
-const evil: Function[] = [Wolf, SerialKiller, JackOLantern]
-const nonWolfKillers: Function[] = [SerialKiller, JackOLantern]
+const evil: Function[] = [Wolf, SerialKiller, Arsonist, JackOLantern]
+const nonWolfKillers: Function[] = [SerialKiller, Arsonist, JackOLantern] //delete?
 
 export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
