@@ -2,7 +2,7 @@ import {Player} from "../Game";
 import {
     ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
     Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
-    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor,
+    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Sorcerer, Prowler,
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -11,7 +11,7 @@ const villagers: Function[] = [
     Seer, Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective, Cupid,
     Princess
 ]
-const wolfTeam: Function[] = [Wolf,]
+const wolfTeam: Function[] = [Wolf, Sorcerer, Prowler]
 const evil: Function[] = [Wolf, SerialKiller, JackOLantern]
 const nonWolfKillers: Function[] = [SerialKiller, JackOLantern]
 
