@@ -2,7 +2,7 @@ import {Player} from "../Game";
 import {
     ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
     Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
-    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Arsonist,
+    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Sorcerer, Prowler, Arsonist,
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -11,7 +11,8 @@ const villagers: Function[] = [
     Seer, Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective, Cupid,
     Princess
 ]
-const wolfTeam: Function[] = [Wolf,]
+
+const wolfTeam: Function[] = [Wolf, Sorcerer, Prowler]
 const nonWolfKillers: Function[] = [SerialKiller, Arsonist, JackOLantern]
 const evil: Function[] = [Wolf, ...nonWolfKillers]
 
@@ -86,7 +87,11 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
     const lovers = players.map(player => player.lover);
-    const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForProtectedPlayer)
-    for (const sm of sacrificedMartyrs) if (sm) sm.player.won = !!sm.targetPlayer && !!~winners.indexOf(sm.targetPlayer)
     for (const lover of lovers) if (lover?.won && lover.lover) lover.lover.won = true;
+    const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForProtectedPlayer)
+    for (const sm of sacrificedMartyrs) {
+        if (sm) sm.player.won =
+            sm instanceof Martyr
+            && !!winners.find(p => p === sm.specialCondition.protectedPlayer)
+    }
 }

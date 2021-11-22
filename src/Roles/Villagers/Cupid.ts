@@ -26,7 +26,9 @@ export class Cupid extends RoleBase {
         && 'Однако, ты видишь, что в колчане кончились любовные стрелы.'
 
     action = () => {
+        this.targetPlayer2 = undefined
         if (!this.specialCondition.loversBound) this.loveArrowChoice()
+        this.doneNightAction()
     }
 
     loveArrowChoice = () => Cupid.game.bot.sendMessage(
@@ -51,6 +53,7 @@ export class Cupid extends RoleBase {
     }
 
     actionResolve = async () => {
+        if (this.specialCondition.loversBound) return
         this.specialCondition.loversBound = true
         if (!this.targetPlayer2) {
             if (!this.targetPlayer) this.targetPlayer = randomElement(this.targets())
