@@ -76,7 +76,7 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if (!process.env.ROLE_TEST && endGame) {
+        if ( endGame) {
             this.onGameEnd(endGame)
             return
         }

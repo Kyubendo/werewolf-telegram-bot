@@ -22,9 +22,9 @@ export class Arsonist extends RoleBase {
             toChat: (deadPlayer: Player) => `Когда деревня просыпается, кто-то замечает, что дом `
                 + `${highlightPlayer(deadPlayer)} уже не тот, что был раньше! Вместо прекрасного светлого дома `
                 + `лежат только пепел и сажа.`,
-            toTarget: 'Ты сгорел.',
+            toTarget: 'Когда ты открываешь глаза, ты видишь только пламя сжигающее весь твой дом... Ты сгорел.',
         },
-        gif: 'https://media.giphy.com/media/xzW34nyNLcSUE/giphy.gif', // change
+        gif: 'https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif', // https://media.giphy.com/media/xUOwGpaKq5xjHNz8Bi/giphy.gif
     })
 
     burn = false

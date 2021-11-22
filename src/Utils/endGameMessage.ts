@@ -31,9 +31,9 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
         gif: 'https://media.giphy.com/media/rtgu0LxGT0R56/giphy.gif'
     },
     arsonist: {
-        text: 'Слышно только потрескивание пламени — вся деревня в огне.' +
-            'Поджигатель стоит посреди села, довольно улыбаясь',
-        gif: 'https://media.giphy.com/media/rtgu0LxGT0R56/giphy.gif' // change
+        text: 'Слышно только потрескивание пламени — вся деревня в огне. ' +
+            'Только поджигатель сидит посреди села, довольно улыбаясь',
+        gif: 'https://media.giphy.com/media/IguL9zRYV20X1QeKuV/giphy.gif'
     }
 }
 

@@ -57,12 +57,13 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
             // if(puppetMaster) return puppetMaster
 
-            if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
-            if ((wolf || serialKiller) && gunner) {
+            if (wolf && arsonist) return {winners: [arsonist], type: 'arsonist'}
+            if ((wolf || arsonist) && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
+            if ((wolf || serialKiller || arsonist) && gunner) {
                 if (stage === 'night') return {winners: villagersTeamPlayers, type: 'villagers'}
-                return wolf
-                    ? {winners: wolvesTeamPlayers, type: 'wolves'}
-                    : {winners: [serialKiller!], type: 'serialKiller'}
+                if (wolf) return {winners: wolvesTeamPlayers, type: 'wolves'}
+                if (serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
+                if (arsonist) return {winners: [arsonist], type: 'arsonist'}
             }
             // if(cowboy && serialKiller) return []
             // if(cowboy && wolf) return [Math.random()>.3 wolf:cowboy]
@@ -75,7 +76,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
     if (alivePlayers.length < 3) {
         if (aliveEvilPlayer.role instanceof SerialKiller) return {winners: [aliveEvilPlayer], type: 'serialKiller'}
-        else if(aliveEvilPlayer.role instanceof Arsonist) return {winners: [aliveEvilPlayer], type: 'arsonist'}
+        else if (aliveEvilPlayer.role instanceof Arsonist) return {winners: [aliveEvilPlayer], type: 'arsonist'}
     }
 
     return undefined
