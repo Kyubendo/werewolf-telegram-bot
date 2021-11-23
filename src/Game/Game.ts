@@ -49,9 +49,6 @@ export class Game {
     gameStartedTime?: number
 
     setNextStage = async () => {
-        if (!this.gameStartedTime)
-            this.gameStartedTime = (new Date).getTime();
-
         let stageDuration;
         let nextStage: GameStage;
 

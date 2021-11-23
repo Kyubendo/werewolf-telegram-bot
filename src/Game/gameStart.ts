@@ -3,5 +3,8 @@ import {assignRoles} from "./roleAssign";
 import {Game} from "./Game";
 
 export const gameStart = (bot: TelegramBot, game: Game) => {
-    assignRoles(game).then(() => game.setNextStage())
+    assignRoles(game).then(() => {
+        game.gameStartedTime = (new Date).getTime();
+        game.setNextStage()
+    })
 }
