@@ -4,18 +4,24 @@ import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {randomElement} from "../../Utils/randomElement";
 import {DeathType} from "../../Game";
+import {RoleBase} from "../Abstract/RoleBase";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
     weight = () => 4;
 
-    handleChoice = (choice?: string) => {
-        this.targetPlayer = findPlayer(choice, Fool.game.players);
-        this.choiceMsgEditText();
+    forecastRoleName(targetRole: RoleBase) {
         if (Math.random() >= 0.5) { // 50% for right guess
             const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
             this.targetPlayer = randomElement(otherPlayers);
         }
+
+        return super.forecastRoleName(targetRole);
+    }
+
+    handleChoice = (choice?: string) => {
+        this.targetPlayer = findPlayer(choice, Fool.game.players);
+        this.choiceMsgEditText();
         this.doneNightAction()
     }
 
