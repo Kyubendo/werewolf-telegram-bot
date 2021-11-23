@@ -78,7 +78,7 @@ export class Seer extends ForecasterBase {
         return true;
     }
 
-    seerSees = (role: RoleBase) => {
+    seerSees = (role: RoleBase): string => {
         if (role instanceof Lycan)
             return new Villager(this.player).roleName;
         else if (role instanceof Wolf || role instanceof WoodMan)
