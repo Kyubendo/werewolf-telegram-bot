@@ -47,7 +47,7 @@ export class Pacifist extends RoleBase {
                         }],
                         [{
                             text: 'Пропустить',
-                            callback_data: JSON.stringify({type: 'role', choice: 'skip'})
+                            callback_data: JSON.stringify({type: 'role', choice: 'notToday'})
                         }]
                     ]
                 }
@@ -66,8 +66,7 @@ export class Pacifist extends RoleBase {
                         caption: this.actionAnnouncement().message
                     }
                 )
-            }
-            else if (Pacifist.game.stage === 'lynch') {
+            } else if (Pacifist.game.stage === 'lynch') {
                 Pacifist.game.bot.sendAnimation(
                     Pacifist.game.chatId,
                     this.actionAnnouncement().gif,
@@ -80,18 +79,24 @@ export class Pacifist extends RoleBase {
 
                     }
                 )
+                RoleBase.game.lynch?.editSkipMessages();
                 RoleBase.game.setNextStage();
             }
         }
         this.choiceMsgEditText();
     }
 
-    choiceMsgEditText = () => Pacifist.game.bot.editMessageText(
-        `Выбор принят — ${this.specialCondition.peace ? 'Провести' : 'Пропустить'}.`,
-        {
-            message_id: this.choiceMsgId,
-            chat_id: this.player.id,
-        }
-    )
+    choiceMsgEditText = () => {
+        if (Pacifist.game.stage === 'lynch')
+            Pacifist.game.lynch?.editSkipMessages();
+
+        return Pacifist.game.bot.editMessageText(
+            `Выбор принят — ${this.specialCondition.peace ? 'Провести' : 'Пропустить'}.`,
+            {
+                message_id: this.choiceMsgId,
+                chat_id: this.player.id,
+            }
+        )
+    }
 
 } 
