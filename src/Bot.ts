@@ -11,6 +11,7 @@ import {TgBot} from "./TgBot";
 import express from "express";
 import * as bodyParser from "body-parser";
 import {hardReset} from "./Game/commands/hardReset";
+import {roleList} from "./Game/commands/roleList";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -33,6 +34,7 @@ callbackHandle(bot, state)
 forceStart(bot, state)
 nextStage(bot, state)
 hardReset(bot, state)
+roleList(bot)
 
 const app = express();
 app.use(bodyParser.json());
