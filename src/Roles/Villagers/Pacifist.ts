@@ -28,9 +28,7 @@ export class Pacifist extends RoleBase {
     })
 
     action = () => {
-        console.log(RoleBase.game.stage?.toString())
         if (this.specialCondition.peace) {
-            console.log('here')
             this.specialCondition.peace = false;
             return;
         }
