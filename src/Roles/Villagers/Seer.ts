@@ -85,6 +85,7 @@ export class Seer extends ForecasterBase {
             return new Wolf(this.player).roleName;
         else if (role instanceof Traitor)
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
+        else return role.roleName
     }
 
     forecastRoleName = (targetRole: RoleBase) => `это *${this.seerSees(targetRole)}*!`
