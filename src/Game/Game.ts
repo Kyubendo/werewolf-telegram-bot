@@ -40,6 +40,8 @@ export class Game {
     dayDuration = 120_000
     nightDuration = 60_000
 
+    dayCount = 0;
+
     deadPlayersCount = 0
 
     stage: GameStage = undefined
@@ -86,6 +88,9 @@ export class Game {
         this.runResults(); // check the position of runResults later
 
         this.stage = nextStage
+
+        if (this.stage === 'day')
+            this.dayCount++;
 
         this.bot.sendMessage(this.chatId, gameStageMsg(this))
             .then(() => this.bot.sendMessage(this.chatId, playerGameList(this.players),))
