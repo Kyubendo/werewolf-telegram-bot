@@ -19,7 +19,7 @@ export class Harlot extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        
+
 
         Harlot.game.bot.sendMessage(
             this.player.id,
@@ -60,15 +60,24 @@ export class Harlot extends RoleBase {
     actionResult = () => {
         if (!this.targetPlayer?.role || this.saved) return;
 
-        Harlot.game.bot.sendMessage(
+        Harlot.game.bot.sendAnimation(
             this.player.id,
-            `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
-            `не серийный убийца, потому что ночь была слишком хороша...`,
+            'https://media.giphy.com/media/XuYxt55O5WHsOtd722/giphy.gif',
+            {
+                caption: `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
+                    `не серийный убийца, потому что ночь была слишком хороша...`
+            }
         )
-        Harlot.game.bot.sendMessage(
+        Harlot.game.bot.sendAnimation(
             this.targetPlayer.id,
-            'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
-            'И вы оба хорошо провели время!' // GIF
+            'https://media.giphy.com/media/Saavhnp9YYN7a/giphy.gif',
+            // https://giphy.com/gifs/fallontonight-jimmy-fallon-tonight-show-babysitter-efUxm7LktwacWqDRyh
+            // https://giphy.com/gifs/lloyd-saddle-BycHXN5xIY6e4
+            // https://giphy.com/gifs/disney-toy-story-9Jp68LHctc8Qo
+            {
+                caption: 'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
+                    'И вы оба хорошо провели время!'
+            }
         )
     }
 

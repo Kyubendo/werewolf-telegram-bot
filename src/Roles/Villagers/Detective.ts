@@ -15,18 +15,17 @@ export class Detective extends ForecasterBase {
 
         Detective.game.bot.sendMessage(
             this.player.id,
-            `Твои выслеживания показали, что ${highlightPlayer(this.targetPlayer)} ` +
-            `это ${this.forecastRoleName(this.targetPlayer.role)}.`
+            this.forecastRoleName(this.targetPlayer.role)
         )
+        if (this.targetPlayer.role instanceof Wolf)
+            Detective.game.bot.sendMessage(
+                this.targetPlayer.id,
+                `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
+            )
 
     }
 
-    forecastRoleName = (targetRole: RoleBase) => {
-        if (targetRole instanceof Wolf) Detective.game.bot.sendMessage(
-            targetRole.player.id,
-            `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
-        )
-
-        return targetRole.roleName;
-    }
+    forecastRoleName = (targetRole: RoleBase) =>
+        `Твои выслеживания показали, что ${highlightPlayer(targetRole.player)} ` +
+        `это *${targetRole.roleName}*.`
 }
