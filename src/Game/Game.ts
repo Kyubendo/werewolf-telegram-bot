@@ -49,6 +49,7 @@ export class Game {
     stageTimer?: Timer
 
     gameStartedTime?: number
+    started = false
 
     setNextStage = async () => {
         let stageDuration;
