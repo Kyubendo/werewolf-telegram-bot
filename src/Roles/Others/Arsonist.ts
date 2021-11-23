@@ -13,7 +13,7 @@ export class Arsonist extends RoleBase {
         : 'Ты можешь нарисовать волшебную картину и незаметно оставить её в доме одного из жителей. Магия этой '
         + 'картины может превратить весь дом в горстку пепла. Если хотя бы в одном доме висит картина, ты можешь '
         + 'использовать свою магию, чтобы поджечь все дома с картинами, сжигая жителей внутри.'
-    weight = () => -8
+    weight = () => -7
 
     nightActionDone = false
 
@@ -26,6 +26,13 @@ export class Arsonist extends RoleBase {
         },
         gif: 'https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif', // https://media.giphy.com/media/xUOwGpaKq5xjHNz8Bi/giphy.gif
     })
+    stealMessage = () => {
+        const preparedPlayers = Arsonist.game.players.filter(p => p.isAlive && p.readyToArson)
+        return preparedPlayers.length
+            ? 'И дома этих игроков уже подготовлены: ' + preparedPlayers.map(p => highlightPlayer(p)).join(', ')
+            : 'Но ещё ни один дом не готов к поджогу.'
+    }
+
 
     burn = false
     action = () => this.firstChoice()
