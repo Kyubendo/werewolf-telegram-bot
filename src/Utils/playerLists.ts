@@ -1,5 +1,7 @@
 import {highlightPlayer} from "./highlightPlayer";
 import {Player} from "../Game";
+import {RoleBase} from "../Roles";
+import {msToMinutes} from "./msToMinutes";
 
 const bubbleAliveSort = (arr: Player[]) => {
     for (let i = 0; i < arr.length; i++)
@@ -37,5 +39,11 @@ export const endPlayerList = (players: Player[]) => {
                 + (previousRoles.length
                     ? `(${previousRoles.map(r => r.roleName?.match(/[\p{Emoji}\u200d]+/gu)).join(', ')})`
                     : '') + (p.lover ? '❤' : '')
-        }).join('\n')
+        }).join('\n') + `\n\nВремя игры: *${getGameDurationTime()}*`
 }
+
+const getGameDurationTime = () => {
+    if (RoleBase.game.gameStartedTime)
+        return msToMinutes((new Date).getTime() - RoleBase.game.gameStartedTime)
+}
+
