@@ -53,5 +53,6 @@ const nightRoleResolves = [
 ]
 
 const lynchRoleResolves = [
+    Pacifist, // only action
     Pumpkin,
 ]

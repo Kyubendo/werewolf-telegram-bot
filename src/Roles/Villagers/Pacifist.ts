@@ -57,6 +57,7 @@ export class Pacifist extends RoleBase {
 
     handleChoice = (choice?: string) => {
         if (choice === 'demonstration') {
+            this.specialCondition.peace = true;
             if (Pacifist.game.stage === 'day') {
                 Pacifist.game.bot.sendAnimation(
                     Pacifist.game.chatId,
@@ -66,22 +67,21 @@ export class Pacifist extends RoleBase {
                     }
                 )
             }
-            // else if (Pacifist.game.stage === 'lynch') {
-            //     Pacifist.game.bot.sendAnimation(
-            //         Pacifist.game.chatId,
-            //         this.actionAnnouncement().gif,
-            //         {
-            //             caption: 'Жители уже проводят вечернее голосование, ' +
-            //                 `но ${highlightPlayer(this.player)} не может больше сдерживать эмоций. ` +
-            //                 `Селяне наблюдают приверженность Пацифиста любви и миру. ` +
-            //                 'Любовь всегда побеждает войну, ' +
-            //                 'потому их голосование прекращено и решение о казни не будет исполнено.'
-            //
-            //         }
-            //     )
-            //     RoleBase.game.setNextStage();
-            // }
-            this.specialCondition.peace = true;
+            else if (Pacifist.game.stage === 'lynch') {
+                Pacifist.game.bot.sendAnimation(
+                    Pacifist.game.chatId,
+                    this.actionAnnouncement().gif,
+                    {
+                        caption: 'Жители уже проводят вечернее голосование, ' +
+                            `но ${highlightPlayer(this.player)} не может больше сдерживать эмоций. ` +
+                            `Селяне наблюдают приверженность Пацифиста любви и миру. ` +
+                            'Любовь всегда побеждает войну, ' +
+                            'потому их голосование прекращено и решение о казни не будет исполнено.'
+
+                    }
+                )
+                RoleBase.game.setNextStage();
+            }
         }
         this.choiceMsgEditText();
     }

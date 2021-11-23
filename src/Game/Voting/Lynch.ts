@@ -21,7 +21,7 @@ export class Lynch extends VotingBase {
         .filter(player => player.role instanceof Monarch && player.role.specialCondition.comingOut && player.isAlive);
 
     getActivePacifists = () => this.game.players
-        .filter(player => player.isAlive && player.role instanceof Pacifist && player.role.specialCondition.peace);
+        .filter(player => player.role instanceof Pacifist && player.role.specialCondition.peace && player.isAlive);
 
     defineTarget = (voter: Player, target?: Player) => {
         if (target && voter.role instanceof ClumsyGuy && Math.random() < .5) {
