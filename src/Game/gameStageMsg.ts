@@ -10,10 +10,13 @@ export const gameStageMsg = (game: Game) => {
                 `У вас есть ${game.dayDuration / 1000} секунд...`;
         case 'lynch':
             const activeMonarchs = game.lynch?.getActiveMonarchs();
-            return activeMonarchs?.length
-                ? `${activeMonarchs[0].role?.roleName} раскрылся, так что он решит, кто умрёт сегодня!`
-                : 'Все селяне пришли на городское собрание, чтобы сделать выбор, кого же будут сегодня казнить!' +
-                `\n\nЕсть ${game.lynchDuration / 1000} секунд, чтобы сделать выбор!`;
+            const activePacifists = game.lynch?.getActivePacifists();
+            return activePacifists && activePacifists.length ? `Так как ${activePacifists[0].role?.roleName} провел ` +
+                'демонстрацию во имя любви и мира, селяне решают никого не казнить.'
+                : activeMonarchs && activeMonarchs.length
+                    ? `${activeMonarchs[0].role?.roleName} раскрылся, так что он решит, кто умрёт сегодня!`
+                    : 'Все селяне пришли на городское собрание, чтобы сделать выбор, кого же будут сегодня казнить!' +
+                    `\n\nЕсть ${game.lynchDuration / 1000} секунд, чтобы сделать выбор!`;
         default:
             return 'gameStage default case'
     }

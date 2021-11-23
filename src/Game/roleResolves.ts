@@ -7,12 +7,12 @@ import {
     Martyr,
     Monarch, Mayor,
     Necromancer,
-    Oracle, Prowler, Pumpkin, Sandman,
+    Oracle, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
     Thief, WildChild,
     WiseElder,
-    Wolf
+    Wolf, Pacifist
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -34,8 +34,9 @@ const dayRoleResolves = [
     Monarch, Mayor,
     Gunner,
     WiseElder, Detective,
+    Pacifist,
     Sandman, // pre-last because he freeze all other actions including Blacksmith's
-    Blacksmith, // last because he can freeze action of infected but still not wolf player
+    Blacksmith,
 ]
 
 const nightRoleResolves = [

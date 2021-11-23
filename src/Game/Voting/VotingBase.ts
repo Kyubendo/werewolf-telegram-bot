@@ -4,6 +4,7 @@ import {findPlayer} from "../findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {generateInlineKeyboard} from "../playersButtons";
 import {SelectType} from "../commands/callbackHandle";
+import {Lynch} from "./Lynch";
 
 export abstract class VotingBase {
     constructor(readonly game: Game) {
@@ -35,6 +36,12 @@ export abstract class VotingBase {
 
     startVoting = async () => {
         if (this.game.stage !== this.voteStage) return;
+
+        if (this instanceof Lynch && this.getActivePacifists().length) {
+            await this.game.setNextStage();
+            return;
+        }
+
         await this.beforeVotingAction?.()
         for (const player of this.getVoters()) {
             await this.game.bot.sendMessage(

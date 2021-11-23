@@ -1,5 +1,5 @@
 import {GameStage} from "../Game";
-import {Mayor, ClumsyGuy, Monarch, Pumpkin, Suicide} from "../../Roles";
+import {Mayor, ClumsyGuy, Monarch, Pumpkin, Suicide, Pacifist} from "../../Roles";
 import {Player} from "../../Player/Player";
 import {VotingBase} from "./VotingBase";
 import {randomElement} from "../../Utils/randomElement";
@@ -19,6 +19,9 @@ export class Lynch extends VotingBase {
 
     getActiveMonarchs = () => this.game.players
         .filter(player => player.role instanceof Monarch && player.role.specialCondition.comingOut && player.isAlive);
+
+    getActivePacifists = () => this.game.players
+        .filter(player => player.isAlive && player.role instanceof Pacifist && player.role.specialCondition.peace);
 
     defineTarget = (voter: Player, target?: Player) => {
         if (target && voter.role instanceof ClumsyGuy && Math.random() < .5) {
@@ -45,6 +48,8 @@ export class Lynch extends VotingBase {
         && voter.role.specialCondition.comingOut !== undefined) ? 2 : 1;
 
     handleVoteResult(voteResult: Player[]) {
+        if (this.getActivePacifists().length) return;
+
         if (voteResult.length === 1) {
             if (voteResult[0].role instanceof Suicide) {
                 this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
