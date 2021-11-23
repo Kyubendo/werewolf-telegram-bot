@@ -46,7 +46,12 @@ export class Game {
     startGameTimer: Timer
     stageTimer?: Timer
 
+    gameStartedTime?: number
+
     setNextStage = async () => {
+        if (!this.gameStartedTime)
+            this.gameStartedTime = (new Date).getTime();
+
         let stageDuration;
         let nextStage: GameStage;
 
@@ -69,7 +74,8 @@ export class Game {
         }
         this.stageTimer
             ? this.stageTimer.reset(stageDuration)
-            : this.stageTimer = timer(this.setNextStage, stageDuration)
+            : this.stageTimer = timer(this.setNextStage, stageDuration);
+
 
         if (await this.runResolves()) return//fix
 
