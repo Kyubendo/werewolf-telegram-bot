@@ -28,7 +28,9 @@ export class Arsonist extends RoleBase {
     })
 
     burn = false
-    action = () => {
+    action = () => this.firstChoice()
+
+    firstChoice = () => {
         this.burn = false
         const inline_keyboard = []
 
@@ -59,8 +61,10 @@ export class Arsonist extends RoleBase {
         {
             reply_markup: generateInlineKeyboard(
                 Arsonist.game.players.filter(p => p !== this.player && p.isAlive && !p.readyToArson),
-                false
-            )
+                false,
+                'role',
+                true,
+            ),
         }
     ).then(msg => this.choiceMsgId = msg.message_id)
 
@@ -86,6 +90,10 @@ export class Arsonist extends RoleBase {
                 selectedChoice = 'Сжечь всё!'
                 this.burn = true
                 this.doneNightAction()
+                break
+            case 'back':
+                selectedChoice = 'Назад'
+                this.firstChoice()
                 break
             default:
                 this.targetPlayer = findPlayer(choice, Arsonist.game.players);
