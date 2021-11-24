@@ -13,9 +13,9 @@ export class Blacksmith extends RoleBase {
         'Днём ты можешь растолочь и распылить его по всей деревне. ' +
         'А в остальном ты простой селянин.'
     weight = () => Blacksmith.game.players.filter(player => player.role instanceof Wolf)
-        ? 5
+        ? 8
         : Blacksmith.game.players.filter(player => player.role instanceof Traitor) // Or WildChild
-            ? 3.5
+            ? 4
             : 3
 
     actionAnnouncement = () => ({
