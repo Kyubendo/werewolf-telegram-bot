@@ -68,11 +68,14 @@ export abstract class RoleBase {
     }
 
     readonly loverMessage = (newLover: Player) => {
-        newLover.lover && RoleBase.game.bot.sendMessage(
+        newLover.lover && RoleBase.game.bot.sendAnimation(
             newLover.id,
-            `Ты был(а) поражен(а) любовью. ${highlightPlayer(newLover.lover)} навсегда в твоей памяти ` +
-            'и любовь никогда не погаснет в твоем сердце... Ваша цель выжить! Если один из вас погибнет, ' +
-            'другой умрет из-за печали и тоски.'
+            'https://media.giphy.com/media/VgU9D8avczJWJi08dT/giphy.gif',
+            {
+                caption: `Ты был(а) поражен(а) любовью. ${highlightPlayer(newLover.lover)} навсегда в твоей памяти ` +
+                    'и любовь никогда не погаснет в твоем сердце... Ваша цель выжить! Если один из вас погибнет, ' +
+                    'другой умрет из-за печали и тоски.'
+            }
         )
     }
 
@@ -110,7 +113,7 @@ export abstract class RoleBase {
 
     doneNightAction = () => {
         if (RoleBase.game.stage === 'night') {
-            this.nightActionDone = true
+            this.nightActionDone = true;
             if (!RoleBase.game.players
                 .find(p => p.isAlive && p.role?.nightActionDone === false && !p.isFrozen))
                 RoleBase.game.setNextStage()
