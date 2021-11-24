@@ -10,7 +10,7 @@ import {
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
-    WoodMan
+    WoodMan, Arsonist
     // JackOLantern
 } from "../Roles";
 
@@ -19,10 +19,10 @@ export const assignRoles = async (game: Game) => {
     const players = game.players
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
-        ...wolves, SerialKiller,
+        ...wolves, SerialKiller, Arsonist,
         //JackOLantern,
     ]
-    const wolfNeededRoles = [Sorcerer, Traitor, /*Prowler*/]
+    const wolfNeededRoles = [Sorcerer, Traitor, Prowler]
     const evilPool = [...killersPool, Sorcerer, Prowler]
     const villagersPool = [
         Villager,
@@ -35,7 +35,7 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
-        Detective, Villager,
+        Prowler, Wolf, Villager,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 

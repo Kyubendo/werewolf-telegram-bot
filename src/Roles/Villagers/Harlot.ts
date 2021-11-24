@@ -6,7 +6,7 @@ import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {DeathType} from "../../Game";
 import {Beauty} from "./Beauty";
-import {RoleBase} from "../index";
+import {Arsonist, RoleBase} from "../index";
 
 export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
@@ -108,6 +108,13 @@ export class Harlot extends RoleBase {
                     `${highlightPlayer(this.player)}! ` +
                     `*${killer.role.roleName}* решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
                     `прежде чем взять сердце к себе в коллекцию!`,
+                )
+            } else if (killer.role instanceof Arsonist) {
+                RoleBase.game.bot.sendMessage(
+                    RoleBase.game.chatId,
+                    `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} пришла развлечься к ` +
+                    `${highlightPlayer(this.player)}, но, видимо, ночь оказалось слишком горячей...` +
+                    `${highlightPlayer(harlotPlayer)} сгорела вместе с домом ${highlightPlayer(this.player)}!`
                 )
             }
         } else if (killer?.role instanceof Wolf && !type) {

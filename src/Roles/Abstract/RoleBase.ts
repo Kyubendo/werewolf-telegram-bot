@@ -2,11 +2,9 @@ import {Game} from "../../Game";
 import {Player} from "../../Game";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {GuardianAngel, Suicide} from "../index";
-
+import {specialConditionType} from "../../Utils/specialConditionTypes";
 
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner'; // Harlot
-
-import {specialConditionType} from "../../Utils/specialConditionTypes";
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
@@ -37,7 +35,6 @@ export abstract class RoleBase {
 
     stealMessage?: () => string | false;
 
-
     readonly action?: () => void
     readonly actionResolve?: () => void
     readonly actionResult?: () => void
@@ -49,7 +46,6 @@ export abstract class RoleBase {
     specialCondition?: specialConditionType;
 
     nightActionDone?: boolean
-
 
     readonly originalHandleDeath = this.handleDeath;
 

@@ -12,7 +12,7 @@ import {
     SerialKiller, Sorcerer,
     Thief, WildChild,
     WiseElder,
-    Wolf
+    Wolf, Arsonist
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -42,9 +42,10 @@ const nightRoleResolves = [
     WildChild, Martyr, Doppelganger, // constant choices
     Cupid,
     JackOLantern,
-    Harlot, //Prowler
+    Harlot, Prowler,
     GuardianAngel,
     Necromancer,
+    Arsonist,
     SerialKiller,
     Wolf,
     Sorcerer, Seer, Oracle,

@@ -40,11 +40,16 @@ export class Game {
     dayDuration = 120_000
     nightDuration = 60_000
 
+    dayCount = 0;
+
     deadPlayersCount = 0
 
     stage: GameStage = undefined
     startGameTimer: Timer
     stageTimer?: Timer
+
+    gameStartedTime?: number
+    started = false
 
     setNextStage = async () => {
         let stageDuration;
@@ -69,7 +74,8 @@ export class Game {
         }
         this.stageTimer
             ? this.stageTimer.reset(stageDuration)
-            : this.stageTimer = timer(this.setNextStage, stageDuration)
+            : this.stageTimer = timer(this.setNextStage, stageDuration);
+
 
         if (await this.runResolves()) return//fix
 
@@ -86,6 +92,9 @@ export class Game {
         this.runResults(); // check the position of runResults later
 
         this.stage = nextStage
+
+        if (this.stage === 'day')
+            this.dayCount++;
 
         this.bot.sendMessage(this.chatId, gameStageMsg(this))
             .then(() => this.bot.sendMessage(this.chatId, playerGameList(this.players),))
