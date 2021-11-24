@@ -81,7 +81,7 @@ export class Game {
         if (await this.runResolves()) return//fix
 
         await this.runResults();
-
+        this.clearAngel()
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
@@ -173,7 +173,6 @@ export class Game {
             const alivePlayers = this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
             for (const alivePlayer of alivePlayers) {
                 await alivePlayer.role?.actionResult?.()
-                if (alivePlayer.guardianAngel) alivePlayer.guardianAngel = undefined
             }
         }
     }
@@ -184,12 +183,14 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.choiceMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.choiceMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.choiceMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
     }
+
+    clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
 
     checkNightDeaths = (nextStage: GameStage) => {
         if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
