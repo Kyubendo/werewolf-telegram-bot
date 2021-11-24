@@ -50,6 +50,7 @@ export class Game {
 
     gameStartedTime?: number
     started = false
+    canPinPlayers = true
 
     setNextStage = async () => {
         let stageDuration;
