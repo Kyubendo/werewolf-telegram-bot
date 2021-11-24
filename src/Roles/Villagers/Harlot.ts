@@ -33,7 +33,7 @@ export class Harlot extends RoleBase {
 
     saved: boolean = true;
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof Wolf || this.targetPlayer.role instanceof SerialKiller) {
@@ -57,10 +57,10 @@ export class Harlot extends RoleBase {
         this.saved = false;
     }
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role || this.saved) return;
 
-        Harlot.game.bot.sendAnimation(
+       await Harlot.game.bot.sendAnimation(
             this.player.id,
             'https://media.giphy.com/media/XuYxt55O5WHsOtd722/giphy.gif',
             {
@@ -68,7 +68,7 @@ export class Harlot extends RoleBase {
                     `не серийный убийца, потому что ночь была слишком хороша...`
             }
         )
-        Harlot.game.bot.sendAnimation(
+      await  Harlot.game.bot.sendAnimation(
             this.targetPlayer.id,
             'https://media.giphy.com/media/Saavhnp9YYN7a/giphy.gif',
             // https://giphy.com/gifs/fallontonight-jimmy-fallon-tonight-show-babysitter-efUxm7LktwacWqDRyh

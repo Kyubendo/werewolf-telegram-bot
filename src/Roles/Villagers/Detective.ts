@@ -10,15 +10,15 @@ export class Detective extends ForecasterBase {
         'Но волк узнает, кто ты, если ты выберешь его!'
     weight = () => 7;
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
 
-        Detective.game.bot.sendMessage(
+        await Detective.game.bot.sendMessage(
             this.player.id,
             this.forecastRoleName(this.targetPlayer.role)
         )
         if (this.targetPlayer.role instanceof Wolf)
-            Detective.game.bot.sendMessage(
+            await Detective.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
             )

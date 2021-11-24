@@ -26,7 +26,7 @@ export class Thief extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (!this.targetPlayer.isAlive) {

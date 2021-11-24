@@ -12,11 +12,11 @@ export class WiseElder extends ForecasterBase {
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
     weight = () => 5;
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
-        ForecasterBase.game.bot.sendMessage(
+       await ForecasterBase.game.bot.sendMessage(
             this.player.id,
             `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}.`
         )

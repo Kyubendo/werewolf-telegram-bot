@@ -16,10 +16,10 @@ export class Sorcerer extends ForecasterBase {
 
     nightActionDone = false
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
-        Sorcerer.game.bot.sendMessage(
+       await Sorcerer.game.bot.sendMessage(
             this.player.id,
             roleName
                 ? `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это *${roleName}*!`
