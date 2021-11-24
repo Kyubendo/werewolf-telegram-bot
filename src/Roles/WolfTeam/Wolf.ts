@@ -38,7 +38,7 @@ export class Wolf extends RoleBase {
         gif: 'https://media.giphy.com/media/10arlAx4rI0xHO/giphy.gif'
     })
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {

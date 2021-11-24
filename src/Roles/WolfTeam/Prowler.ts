@@ -17,7 +17,7 @@ export class Prowler extends ForecasterBase {
 
     nightActionDone = false;
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
@@ -50,14 +50,14 @@ export class Prowler extends ForecasterBase {
         }
     }
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
         if (!this.showResult) {
             this.showResult = true;
             return;
         }
 
-        Prowler.game.bot.sendMessage(
+        await Prowler.game.bot.sendMessage(
             this.player.id,
             this.forecastRoleName(this.targetPlayer.role)
         )

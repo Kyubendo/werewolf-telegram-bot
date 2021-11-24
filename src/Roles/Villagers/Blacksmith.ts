@@ -56,7 +56,7 @@ export class Blacksmith extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (this.specialCondition.silverDust)
             Blacksmith.game.wolvesDeactivated = true;
     }

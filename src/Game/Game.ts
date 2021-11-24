@@ -80,6 +80,8 @@ export class Game {
 
         if (await this.runResolves()) return//fix
 
+        await this.runResults();
+
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
@@ -89,8 +91,6 @@ export class Game {
         }
 
         this.checkNightDeaths(nextStage)
-
-        this.runResults(); // check the position of runResults later
 
         this.stage = nextStage
 
@@ -168,13 +168,13 @@ export class Game {
         }
     }
 
-    private runResults = () => {
+    private runResults = async () => {
         for (const role of roleResolves(this.stage)) {
-            this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
-                .forEach(player => {
-                    player.role?.actionResult?.()
-                    if (player.guardianAngel) player.guardianAngel = undefined
-                })
+            const alivePlayers = this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+            for (const alivePlayer of alivePlayers) {
+                await alivePlayer.role?.actionResult?.()
+                if (alivePlayer.guardianAngel) alivePlayer.guardianAngel = undefined
+            }
         }
     }
 

@@ -36,8 +36,8 @@ export abstract class RoleBase {
     stealMessage?: () => string | false;
 
     readonly action?: () => void
-    readonly actionResolve?: () => void
-    readonly actionResult?: () => void
+    readonly actionResolve?: () => Promise<void>
+    readonly actionResult?: () => Promise<void>
     readonly handleChoice?: (choice?: string) => void
 
     targetPlayer?: Player

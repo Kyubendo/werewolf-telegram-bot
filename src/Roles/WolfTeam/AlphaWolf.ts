@@ -14,7 +14,7 @@ export class AlphaWolf extends Wolf {
         + this.showOtherWolfPlayers();
     weight = () => -13;
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {

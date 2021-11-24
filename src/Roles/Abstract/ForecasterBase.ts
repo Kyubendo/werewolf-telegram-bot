@@ -15,11 +15,11 @@ export abstract class ForecasterBase extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
-        ForecasterBase.game.bot.sendMessage(
+        await ForecasterBase.game.bot.sendMessage(
             this.player.id,
             `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
         )

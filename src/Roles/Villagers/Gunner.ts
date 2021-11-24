@@ -43,7 +43,7 @@ export class Gunner extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         this.targetPlayer.role.onKilled(this.player, 'shotByGunner');
