@@ -1,8 +1,7 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Wolf} from "../WolfTeam/Wolf";
-import {Traitor} from "./Traitor";
 import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
+import {Traitor, WildChild, Wolf} from "../index";
 
 export class Blacksmith extends RoleBase {
     roleName = 'Кузнец ⚒';
@@ -12,9 +11,9 @@ export class Blacksmith extends RoleBase {
         'чтобы предотвратить волчью атаку ровно на одну ночь. ' +
         'Днём ты можешь растолочь и распылить его по всей деревне. ' +
         'А в остальном ты простой селянин.'
-    weight = () => Blacksmith.game.players.filter(player => player.role instanceof Wolf)
+    weight = () => Blacksmith.game.players.find(p => p.role instanceof Wolf)
         ? 8
-        : Blacksmith.game.players.filter(player => player.role instanceof Traitor) // Or WildChild
+        : Blacksmith.game.players.find(p => p.role instanceof Traitor || p.role instanceof WildChild)
             ? 4
             : 3
 
