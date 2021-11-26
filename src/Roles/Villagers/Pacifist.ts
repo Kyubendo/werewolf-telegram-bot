@@ -16,6 +16,8 @@ export class Pacifist extends RoleBase {
         peace: undefined
     }
 
+    secondChoiceMsgId?: number;
+
     stealMessage = () => this.specialCondition.peace !== undefined
         && '\nОднако предыдущий игрок уже провёл демонстрацию. Не думаю, что селяни согласятся на ещё одну...';
 
@@ -52,7 +54,7 @@ export class Pacifist extends RoleBase {
                     ]
                 }
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.secondChoiceMsgId = msg.message_id)
     }
 
     handleChoice = (choice?: string) => {
@@ -87,13 +89,13 @@ export class Pacifist extends RoleBase {
     }
 
     choiceMsgEditText = () => {
-        if (Pacifist.game.stage === 'lynch')
-            Pacifist.game.lynch?.editSkipMessages();
+        // if (Pacifist.game.stage === 'lynch')
+        //     Pacifist.game.lynch?.editSkipMessages();
 
         return Pacifist.game.bot.editMessageText(
             `Выбор принят — ${this.specialCondition.peace ? 'Провести' : 'Пропустить'}.`,
             {
-                message_id: this.choiceMsgId,
+                message_id: this.secondChoiceMsgId,
                 chat_id: this.player.id,
             }
         )
