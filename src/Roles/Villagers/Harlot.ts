@@ -28,7 +28,7 @@ export class Harlot extends RoleBase {
                 reply_markup: generateInlineKeyboard(Harlot.game.players
                     .filter(player => player !== this.player && player.isAlive))
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     saved: boolean = true;

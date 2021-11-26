@@ -29,7 +29,7 @@ export class Doppelganger extends RoleBase {
                     false
                 )
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResolve = async () => {
@@ -41,7 +41,7 @@ export class Doppelganger extends RoleBase {
                 `так что высшие силы сделали выбор за тебя: ${highlightPlayer(this.targetPlayer)}.`,
                 {
                     chat_id: this.player.id,
-                    message_id: this.choiceMsgId
+                    message_id: this.actionMsgId
                 }
             )
         }

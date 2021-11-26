@@ -20,7 +20,7 @@ export class Necromancer extends RoleBase {
             {
                 reply_markup: generateInlineKeyboard(deadPlayers)
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResolve = async () => {

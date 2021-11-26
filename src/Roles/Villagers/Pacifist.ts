@@ -16,8 +16,6 @@ export class Pacifist extends RoleBase {
         peace: undefined
     }
 
-    secondChoiceMsgId?: number;
-
     stealMessage = () => this.specialCondition.peace !== undefined
         && '\nОднако предыдущий игрок уже провёл демонстрацию. Не думаю, что селяни согласятся на ещё одну...';
 
@@ -54,7 +52,7 @@ export class Pacifist extends RoleBase {
                     ]
                 }
             }
-        ).then(msg => this.secondChoiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     handleChoice = (choice?: string) => {
@@ -95,7 +93,7 @@ export class Pacifist extends RoleBase {
         return Pacifist.game.bot.editMessageText(
             `Выбор принят — ${this.specialCondition.peace ? 'Провести' : 'Пропустить'}.`,
             {
-                message_id: this.secondChoiceMsgId,
+                message_id: this.actionMsgId,
                 chat_id: this.player.id,
             }
         )

@@ -12,7 +12,7 @@ export abstract class ForecasterBase extends RoleBase {
                 reply_markup: generateInlineKeyboard(ForecasterBase.game.players
                     .filter(player => player !== this.player && player.isAlive))
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResult = async () => {

@@ -59,7 +59,7 @@ export class Arsonist extends RoleBase {
             this.player.id,
             'Что ты хочешь сделать?',
             {reply_markup: {inline_keyboard}}
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     prepareHouse = () => Arsonist.game.bot.sendMessage(
@@ -73,7 +73,7 @@ export class Arsonist extends RoleBase {
                 true,
             ),
         }
-    ).then(msg => this.choiceMsgId = msg.message_id)
+    ).then(msg => this.actionMsgId = msg.message_id)
 
 
     actionResolve = async () => {
@@ -109,7 +109,7 @@ export class Arsonist extends RoleBase {
         }
         selectedChoice && Arsonist.game.bot.editMessageText(
             `Выбор принят — *${selectedChoice}*`,
-            {message_id: this.choiceMsgId, chat_id: this.player.id,}
+            {message_id: this.actionMsgId, chat_id: this.player.id,}
         )
     }
 }

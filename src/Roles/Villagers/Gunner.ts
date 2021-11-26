@@ -40,7 +40,7 @@ export class Gunner extends RoleBase {
             {
                 reply_markup: generateInlineKeyboard(Gunner.game.players.filter(p => p !== this.player && p.isAlive))
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResolve = async () => {

@@ -58,7 +58,7 @@ export abstract class VotingBase {
                     )
                 }
             ).then(msg => {
-                if (player.role) player.role.choiceMsgId = msg.message_id
+                if (player.role) player.role.voteMsgId = msg.message_id
             })
         }
     }
@@ -80,7 +80,7 @@ export abstract class VotingBase {
         this.game.bot.editMessageText(
             `Выбор принят — ${target ? highlightPlayer(target) : 'Пропустить'}.`,
             {
-                message_id: voter.role.choiceMsgId,
+                message_id: voter.role.voteMsgId,
                 chat_id: voter.id,
             })
         this.handleVotingChoiceResult(voter, target)
@@ -100,7 +100,7 @@ export abstract class VotingBase {
             this.game.bot.editMessageReplyMarkup(
                 {inline_keyboard: []}, //custom message?
                 {
-                    message_id: voter.role?.choiceMsgId,
+                    message_id: voter.role?.voteMsgId,
                     chat_id: voter.id,
                 }
             ).catch(() => { // fix later
