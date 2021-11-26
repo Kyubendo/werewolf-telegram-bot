@@ -38,7 +38,6 @@ export abstract class VotingBase {
         if (this.game.stage !== this.voteStage) return;
 
         if (this instanceof Lynch && this.getActivePacifists().length) {
-            console.log('here')
             await this.game.setNextStage();
             return;
         }
