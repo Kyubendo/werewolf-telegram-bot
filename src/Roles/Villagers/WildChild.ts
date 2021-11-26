@@ -37,7 +37,7 @@ export class WildChild extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.specialCondition.roleModel?.role) {
             this.specialCondition.roleModel = randomElement(WildChild.game.players
                 .filter(player => player !== this.player && player.isAlive)) // player.isAlive probably redundant because of roleResolves order

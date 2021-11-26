@@ -23,7 +23,7 @@ export class Necromancer extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);

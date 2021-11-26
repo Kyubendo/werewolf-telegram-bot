@@ -26,7 +26,7 @@ export class Thief extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (!this.targetPlayer.isAlive) {
@@ -58,7 +58,7 @@ export class Thief extends RoleBase {
                 'Ты попытался украсть роль... ' +
                 `но даже лучший ${this.roleName} не в силах повторить такое искуство. ` +
                 `Ты понимаешь, что это *${this.targetPlayer.role}*, наследник легендарных Метаморфов, ` +
-                'и его роль украсть не удасться. По крайней мере пока...'
+                'и его роль украсть не удастся. По крайней мере пока...'
             )
         } else if (this.player.role) {
             this.player.role = this.targetPlayer.role

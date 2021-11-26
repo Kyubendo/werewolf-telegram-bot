@@ -28,7 +28,7 @@ export class JackOLantern extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer) return;
 
         if (this.targetPlayer.role instanceof Pumpkin) {

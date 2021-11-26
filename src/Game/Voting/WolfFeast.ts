@@ -39,7 +39,8 @@ export class WolfFeast extends VotingBase {
             return;
         }
 
-        const killerWolf = randomElement(this.getVoters()).role
+        const killerWolf = this.getVoters()
+            .find(v => v.role instanceof AlphaWolf)?.role ?? randomElement(this.getVoters()).role
         if (killerWolf) killerWolf.targetPlayer = randomElement(voteResults)
     }
 

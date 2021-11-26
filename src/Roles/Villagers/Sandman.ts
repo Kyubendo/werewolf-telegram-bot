@@ -8,7 +8,7 @@ export class Sandman extends RoleBase {
     roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Один раз за игру ты можешь использовать свою магию, чтобы заставить всех спать ` +
         `так крепко, что никто не сможет выполнить свои ночные действия.`
-    weight = () => 3;
+    weight = () => 6.5;
 
     specialCondition: specialConditionSandman = {
         sleep: undefined
@@ -47,7 +47,7 @@ export class Sandman extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.specialCondition.sleep) return
 
         Sandman.game.players.filter(player => player.isAlive).forEach(player => player.isFrozen = true);

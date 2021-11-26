@@ -32,7 +32,7 @@ export class Doppelganger extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) {
             this.targetPlayer = randomElement(Doppelganger.game.players
                 .filter(player => this.player !== player && player.isAlive))

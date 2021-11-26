@@ -7,12 +7,12 @@ import {
     Martyr,
     Monarch, Mayor,
     Necromancer,
-    Oracle, Pumpkin, Sandman,
+    Oracle, Prowler, Pumpkin, Sandman,
     Seer,
     SerialKiller, Sorcerer,
     Thief, WildChild,
     WiseElder,
-    Wolf, Pacifist
+    Wolf, Pacifist, Arsonist
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -43,9 +43,10 @@ const nightRoleResolves = [
     WildChild, Martyr, Doppelganger, // constant choices
     Cupid,
     JackOLantern,
-    Harlot, //Prowler
+    Harlot, Prowler,
     GuardianAngel,
     Necromancer,
+    Arsonist,
     SerialKiller,
     Wolf,
     Sorcerer, Seer, Oracle,

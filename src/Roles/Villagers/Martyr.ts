@@ -46,7 +46,7 @@ export class Martyr extends RoleBase {
         ).then(msg => this.choiceMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.specialCondition.protectedPlayer?.role) {
             this.specialCondition.protectedPlayer = randomElement(Martyr.game.players
                 .filter(p => p !== this.player && p.isAlive))
