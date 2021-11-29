@@ -116,8 +116,8 @@ export class Game {
     }
 
     private runResolves = async () => {
-        if (this.lynch?.handleVoteEnd()) return true
-        this.wolfFeast?.handleVoteEnd()
+        if (await this.lynch?.handleVoteEnd()) return true
+        await this.wolfFeast?.handleVoteEnd()
 
         for (const role of roleResolves(this.stage)) {
             for (const player of this.players.filter(p => p.isAlive && p.role instanceof role)) {
