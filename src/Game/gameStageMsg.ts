@@ -1,4 +1,5 @@
 import {Game} from "./Game";
+import {highlightPlayer} from "../Utils/highlightPlayer";
 
 export const gameStageMsg = (game: Game) => {
     switch (game.stage) {
@@ -11,13 +12,17 @@ export const gameStageMsg = (game: Game) => {
                 `День *№${game.dayCount}*`;
         case 'lynch':
             const activeMonarchs = game.lynch?.getActiveMonarchs();
-            const activePacifists = game.lynch?.checkActivePacifist();
-            return activePacifists && activePacifists ? `Так как ${activePacifists.role?.roleName} провел ` +
-                'демонстрацию во имя любви и мира, селяне решают никого не казнить.'
-                : activeMonarchs && activeMonarchs.length
-                    ? `${activeMonarchs[0].role?.roleName} раскрылся, так что он решит, кто умрёт сегодня!`
-                    : 'Все селяне пришли на городское собрание, чтобы сделать выбор, кого же будут сегодня казнить!' +
-                    `\n\nЕсть *${game.lynchDuration / 1000}* секунд, чтобы сделать выбор!`;
+            const activePacifist = game.lynch?.checkActivePacifist();
+            if (activePacifist)
+                return `Так как ${activePacifist.role?.roleName} провёл ` +
+                    'демонстрацию во имя любви и мира, селяне решают никого не казнить.';
+            else if (activeMonarchs?.length)
+                return `${activeMonarchs[0].role?.roleName} раскрылся, так что он решит, кто умрёт сегодня!\n` +
+                `${highlightPlayer(activeMonarchs[0])}, у тебя есть *${game.lynchDuration / 1000}* секунд.`;
+            else
+                return 'Все селяне пришли на городское собрание, чтобы сделать выбор, ' +
+                    'кого же будут сегодня казнить!\n\n' +
+                    `Есть *${game.lynchDuration / 1000}* секунд, чтобы сделать выбор!`;
         default:
             return 'gameStage default case'
     }

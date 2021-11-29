@@ -10,8 +10,6 @@ export class Pacifist extends RoleBase {
         'заставить всех остальных обратить внимание на свободу и любовь. Они не смогут казнить в этот день.'
     weight = () => 2;
 
-    nightActionDone = false;
-
     specialCondition: specialConditionPacifist = {
         peace: undefined
     }
@@ -56,7 +54,7 @@ export class Pacifist extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice !== 'skip') {
+        if (choice === 'demonstation') {
             this.specialCondition.peace = true;
             if (Pacifist.game.stage === 'day') {
                 Pacifist.game.bot.sendAnimation(
