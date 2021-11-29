@@ -41,7 +41,7 @@ export class Pacifist extends RoleBase {
                     inline_keyboard: [
                         [{
                             text: 'Провести',
-                            callback_data: JSON.stringify({type: 'role', choice: 'demonstration'})
+                            callback_data: JSON.stringify({type: 'role', choice: 'demo'})
                         }],
                         [{
                             text: 'Пропустить',
@@ -54,7 +54,7 @@ export class Pacifist extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice === 'demonstation') {
+        if (choice === 'demo') {
             this.specialCondition.peace = true;
             if (Pacifist.game.stage === 'day') {
                 Pacifist.game.bot.sendAnimation(
