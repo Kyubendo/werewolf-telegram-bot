@@ -28,7 +28,7 @@ export class Cupid extends RoleBase {
     action = () => {
         this.targetPlayer2 = undefined
         if (!this.specialCondition.loversBound) this.loveArrowChoice()
-        this.doneNightAction()
+        else this.doneNightAction()
     }
 
     loveArrowChoice = () => Cupid.game.bot.sendMessage(
