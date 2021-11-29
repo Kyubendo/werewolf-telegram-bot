@@ -23,9 +23,9 @@ export class Lynch extends VotingBase {
     checkActivePacifist = () => this.game.players
         .find(player => player.role instanceof Pacifist && player.role.specialCondition.peace && player.isAlive);
 
-    defineTarget = (voter: Player, target?: Player) => {
+    defineTarget = async (voter: Player, target?: Player) => {
         if (target && voter.role instanceof ClumsyGuy && Math.random() < .5) {
-            this.game.bot.sendMessage(
+            await this.game.bot.sendMessage(
                 voter.id,
                 'Кажется ты опять что-то напутала и отдала свой голос не за того...')
             return randomElement(this.game.players.filter(otherPlayer =>
@@ -45,29 +45,29 @@ export class Lynch extends VotingBase {
         await super.startVoting();
     }
 
-    handleVotingChoiceResult = () => {
-        this.game.bot.sendMessage(
+    handleVotingChoiceResult = async () => {
+        await this.game.bot.sendMessage(
             this.game.chatId,
             `${this.votedPlayers.length} из ${this.getVoters().length} игроков проголосовало.`
         )
-        if (this.votedPlayers.length === this.getVoters().length) this.game.setNextStage()
+        if (this.votedPlayers.length === this.getVoters().length) await this.game.setNextStage()
     }
 
     calculateVoteWeight = (voter: Player) => (voter.role instanceof Mayor
         && voter.role.specialCondition.comingOut !== undefined) ? 2 : 1;
 
-    handleVoteResult(voteResult: Player[]) {
+    async handleVoteResult(voteResult: Player[]) {
         if (this.checkActivePacifist()) return;
 
         if (voteResult.length === 1) {
             if (voteResult[0].role instanceof Suicide) {
-                this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
+                await this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
                 return true
             } else {
                 voteResult[0].role?.onKilled()
             }
         } else {
-            this.game.bot.sendMessage(this.game.chatId,
+            await this.game.bot.sendMessage(this.game.chatId,
                 'Не удалось придти к одному решению! Расстроенная толпа расходится по домам...')
         }
     }

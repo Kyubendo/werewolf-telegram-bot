@@ -28,7 +28,7 @@ export class WolfFeast extends VotingBase {
         }
     }
 
-    handleVoteResult = (voteResults: Player[]) => {
+    handleVoteResult = async (voteResults: Player[]) => {
         if (!voteResults.length) {
             if (this.getVoters().length > 1) {
                 this.getVoters().forEach(voter => this.game.bot.sendMessage(
@@ -44,7 +44,7 @@ export class WolfFeast extends VotingBase {
         if (killerWolf) killerWolf.targetPlayer = randomElement(voteResults)
     }
 
-    handleVotingChoiceResult = (voter: Player, target?: Player) => {
+    handleVotingChoiceResult = async (voter: Player, target?: Player) => {
         voter.role?.doneNightAction()
         this.getVoters().filter(player => player !== voter).forEach(player => this.game.bot.sendMessage(
             player.id,

@@ -81,35 +81,37 @@ export class Game {
         if (await this.runResolves()) return//fix
 
         await this.runResults();
+
         this.clearAngel()
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
         if (!process.env.ROLE_TEST && endGame) {
-            this.onGameEnd(endGame)
+            await this.onGameEnd(endGame)
             return
         }
 
-        this.checkNightDeaths(nextStage)
+        await this.checkNightDeaths(nextStage)
 
         this.stage = nextStage
 
         if (this.stage === 'day')
             this.dayCount++;
 
-        this.bot.sendMessage(this.chatId, gameStageMsg(this))
-            .then(() => this.bot.sendMessage(this.chatId, playerGameList(this.players),))
+        await this.bot.sendMessage(this.chatId, gameStageMsg(this))
+        await this.bot.sendMessage(this.chatId, playerGameList(this.players))
             .then(() => this.clearTargetPlayers())
             .then(() => this.runActions())
     }
 
-    onGameEnd = (endGame: { winners: Player[], type: Win }) => {
+    onGameEnd = async (endGame: { winners: Player[], type: Win }) => {
         setWinners(endGame.winners, this.players)
-        this.bot.sendAnimation(
+        await this.bot.sendAnimation(
             this.chatId,
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
-        ).then(() => this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame()))
+        )
+        await this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame())
         this.stageTimer?.stop()
     }
 
@@ -183,8 +185,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.actionMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
@@ -192,10 +194,10 @@ export class Game {
 
     clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
 
-    checkNightDeaths = (nextStage: GameStage) => {
+    checkNightDeaths = async (nextStage: GameStage) => {
         if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
         else if (nextStage === "day" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
-            this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
+            await this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
         }
     }
 }
