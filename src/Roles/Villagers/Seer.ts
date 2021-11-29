@@ -22,7 +22,7 @@ export class Seer extends ForecasterBase {
 
     nightActionDone = false
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         const apprenticeSeerPlayers = Seer.game.players
             .filter(player => player.role instanceof ApprenticeSeer && player.isAlive);
         if (apprenticeSeerPlayers.length) {
@@ -54,7 +54,7 @@ export class Seer extends ForecasterBase {
 
 
         if (killer?.role && !type) {
-            Seer.game.bot.sendMessage(
+            await Seer.game.bot.sendMessage(
                 Seer.game.chatId,
                 killer?.role instanceof SerialKiller
                     ? `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
@@ -64,7 +64,7 @@ export class Seer extends ForecasterBase {
                     `Всем известный *${this.roleName}* мертв! Покойся с миром ${highlightPlayer(this.player)}...`
             )
 
-            killer.role.killMessage && Seer.game.bot.sendAnimation(
+            killer.role.killMessage && await Seer.game.bot.sendAnimation(
                 this.player.id,
                 killer.role.killMessage().gif,
                 {

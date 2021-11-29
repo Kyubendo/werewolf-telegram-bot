@@ -17,17 +17,17 @@ export class Fool extends Seer {
         return `это *${this.seerSees(targetRole)}*!`;
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (killer?.role && !type) {
             this.player.isAlive = false;
-            Fool.game.bot.sendMessage(
+            await Fool.game.bot.sendMessage(
                 Fool.game.chatId,
                 'День начался с печальных новостей. Всем известный Провид... ' +
                 `Так, стоп! Это же никакой не Провидец! Он... *${this.roleName}*!  ` +
                 `Покойся не с миром, ${highlightPlayer(this.player)}...`,
             )
 
-            killer?.role?.killMessage && Fool.game.bot.sendAnimation(
+            killer?.role?.killMessage && await Fool.game.bot.sendAnimation(
                 this.player.id,
                 killer?.role?.killMessage().gif,
                 {

@@ -41,7 +41,7 @@ export class WildChild extends RoleBase {
         if (!this.specialCondition.roleModel?.role) {
             this.specialCondition.roleModel = randomElement(WildChild.game.players
                 .filter(player => player !== this.player && player.isAlive)) // player.isAlive probably redundant because of roleResolves order
-            WildChild.game.bot.editMessageText(
+            await WildChild.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
                 `за тебя — ${highlightPlayer(this.specialCondition.roleModel)}`,
                 {
@@ -55,14 +55,14 @@ export class WildChild extends RoleBase {
 
         const currentTargetHandleDeath = this.specialCondition.roleModel.role
             .handleDeath.bind(this.specialCondition.roleModel.role);
-        this.specialCondition.roleModel.role.handleDeath = (killer?: Player, type?: DeathType): boolean => {
-            currentTargetHandleDeath(killer, type);
+        this.specialCondition.roleModel.role.handleDeath = async (killer?: Player, type?: DeathType) => {
+            await currentTargetHandleDeath(killer, type);
 
             if (this.specialCondition.roleModel && !(this.player.role instanceof Wolf)) {
                 this.player.role = new Wolf(this.player, this.player.role);
 
                 if (this.player.role instanceof Wolf) {
-                    WildChild.game.bot.sendMessage(
+                    await WildChild.game.bot.sendMessage(
                         this.player.id,
                         `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
                         `Теперь ты ${this.player.role.roleName}! ` +
@@ -80,16 +80,16 @@ export class WildChild extends RoleBase {
         }
     }
 
-    handleDeath(killer?: Player, type?: DeathType) {
+    async handleDeath(killer?: Player, type?: DeathType) {
         if (killer?.role instanceof Wolf && !type) {
-            WildChild.game.bot.sendMessage(
+            await WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
                 'НОМНОМНОМНОМ! Прошлой ночью волк(и) ' +
                 `сьел(и) Дикого ребенка ${highlightPlayer(this.player)}, оставив лишь маленький скелетик. ` +
                 'Селяне поняли, насколько волк(и) безжалостны, раз так хладнокровно ' +
                 'убивают(ет) беззащитных детей.'
             )
-            WildChild.game.bot.sendAnimation(
+            await WildChild.game.bot.sendAnimation(
                 this.player.id,
                 killer.role.killMessage().gif,
                 {

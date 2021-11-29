@@ -37,17 +37,17 @@ export class Harlot extends RoleBase {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof Wolf || this.targetPlayer.role instanceof SerialKiller) {
-            this.onKilled(this.targetPlayer);
+            await this.onKilled(this.targetPlayer);
             return;
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.player.loveBind(this.targetPlayer);
             return;
         } else {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
-            this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
+            this.targetPlayer.role.handleDeath = async (killer?: Player, type?: DeathType) => {
                 if (this.targetPlayer) {
                     this.saved = true;
-                    this.onKilled(killer, 'harlotDeath')
+                    await this.onKilled(killer, 'harlotDeath')
                 }
 
                 return currentTargetHandleDeath(killer, type);
@@ -60,7 +60,7 @@ export class Harlot extends RoleBase {
     actionResult = async () => {
         if (!this.targetPlayer?.role || this.saved) return;
 
-       await Harlot.game.bot.sendAnimation(
+        await Harlot.game.bot.sendAnimation(
             this.player.id,
             'https://media.giphy.com/media/XuYxt55O5WHsOtd722/giphy.gif',
             {
@@ -68,7 +68,7 @@ export class Harlot extends RoleBase {
                     `не серийный убийца, потому что ночь была слишком хороша...`
             }
         )
-      await  Harlot.game.bot.sendAnimation(
+        await Harlot.game.bot.sendAnimation(
             this.targetPlayer.id,
             'https://media.giphy.com/media/Saavhnp9YYN7a/giphy.gif',
             // https://giphy.com/gifs/fallontonight-jimmy-fallon-tonight-show-babysitter-efUxm7LktwacWqDRyh
@@ -87,11 +87,11 @@ export class Harlot extends RoleBase {
         this.doneNightAction()
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (type === 'harlotDeath' && killer && this.targetPlayer) {
             const harlotPlayer = this.player;
             if (killer.role instanceof Wolf) {
-                RoleBase.game.bot.sendMessage(
+                await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
                     `${highlightPlayer(harlotPlayer)} проскользнула ` +
                     `в дом ${highlightPlayer(this.targetPlayer)}, ` +
@@ -101,7 +101,7 @@ export class Harlot extends RoleBase {
                     `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} мертва.`,
                 )
             } else if (killer.role instanceof SerialKiller) {
-                RoleBase.game.bot.sendMessage(
+                await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
                     `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} проникла в дом ` +
                     `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
@@ -110,7 +110,7 @@ export class Harlot extends RoleBase {
                     `прежде чем взять сердце к себе в коллекцию!`,
                 )
             } else if (killer.role instanceof Arsonist) {
-                RoleBase.game.bot.sendMessage(
+                await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
                     `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} пришла развлечься к ` +
                     `${highlightPlayer(this.player)}, но, видимо, ночь оказалось слишком горячей...` +
@@ -119,12 +119,12 @@ export class Harlot extends RoleBase {
             }
         } else if (killer?.role instanceof Wolf && !type) {
             if (this.targetPlayer?.role instanceof Wolf) {
-                Harlot.game.bot.sendMessage(
+                await Harlot.game.bot.sendMessage(
                     Harlot.game.chatId,
                     `${highlightPlayer(this.player)} проскользнула в не тот дом прошлой ночью!  ` +
                     'Останки распутной жительницы были найдены пригвожденными к дверям цверкви... Как жалко :(')
             } else {
-                this.targetPlayer && Harlot.game.bot.sendMessage(
+                this.targetPlayer && await Harlot.game.bot.sendMessage(
                     killer.id,
                     `Странно... ${highlightPlayer(this.player)} не была дома! ` +
                     `Нет ужина для тебя сегодня...`,

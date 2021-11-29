@@ -29,14 +29,14 @@ export class SerialKiller extends RoleBase {
         gif: 'https://media.giphy.com/media/xzW34nyNLcSUE/giphy.gif'
     })
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (killer?.role instanceof Wolf) {
-            SerialKiller.game.bot.sendMessage(
+            await SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
                 `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка! ` +
                 `*${killer.role.roleName}* ${highlightPlayer(killer)} погиб.`,
             )
-            SerialKiller.game.bot.sendMessage(
+            await SerialKiller.game.bot.sendMessage(
                 killer.id,
                 'Ты вышел на охоту, но сам оказался жертвой.'
                 + ' Жертвой, которую разрезали на сотню маленьких кусочков.',

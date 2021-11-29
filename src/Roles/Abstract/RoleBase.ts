@@ -51,9 +51,9 @@ export abstract class RoleBase {
 
     readonly originalHandleDeath = this.handleDeath;
 
-    readonly onKilled = (killer?: Player, type?: DeathType) => {
+    readonly onKilled = async (killer?: Player, type?: DeathType) => {
         if (!this.player.isAlive) return;
-        if (this.handleDeath(killer, type)) {
+        if (await this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
             this.movePlayer();
             this.killLover('loverDeath')
@@ -127,9 +127,9 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (type === 'loverDeath') {
-            killer?.role && RoleBase.game.bot.sendMessage(
+            killer?.role && await RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 `Бросив взгляд на мертвое тело ${highlightPlayer(killer)}, ` +
                 `${highlightPlayer(this.player)} падает на колени и рыдает. ` +
@@ -143,14 +143,14 @@ export abstract class RoleBase {
 
             // new message for players if their lover died
         } else if (type === 'lover_betrayal') {
-            RoleBase.game.bot.sendMessage(
+            await RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 'Жители деревни просыпаются на следующее утро и обнаруживают, ' +
                 `что ${highlightPlayer(this.player)} покончил(а) с собой прошлой ночью. ` +
                 'Возле остывающего тела лежит недописанное любовное письмо.'
             )
 
-            killer && RoleBase.game.bot.sendMessage(
+            killer && await RoleBase.game.bot.sendMessage(
                 killer.id,
                 'Поскольку ты влюбляешься в другого(ую), ' +
                 `${highlightPlayer(this.player)} должен(на) покинуть тебя. ` +
@@ -158,17 +158,17 @@ export abstract class RoleBase {
             )
         } else if (killer?.role) {
             if (type === 'shotByGunner')
-                killer.role.actionAnnouncement && RoleBase.game.bot.sendAnimation(
+                killer.role.actionAnnouncement && await RoleBase.game.bot.sendAnimation(
                     RoleBase.game.chatId,
                     killer.role.actionAnnouncement().gif, {caption: killer.role.actionAnnouncement().message}
                 )
             else if (killer.role.killMessage) {
-                RoleBase.game.bot.sendMessage(
+                await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
                     killer.role.killMessage().text.toChat(this.player)
                 );
 
-                RoleBase.game.bot.sendAnimation(
+                await RoleBase.game.bot.sendAnimation(
                     this.player.id,
                     killer.role.killMessage().gif,
                     {
@@ -177,7 +177,7 @@ export abstract class RoleBase {
                 );
             }
         } else if (!killer) {
-            RoleBase.game.bot.sendMessage(
+            await RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 `Жители отдали свои голоса в подозрениях и сомнениях... \n`
                 + `*${this.player.role?.roleName}* ${highlightPlayer(this.player)} мёртв!`

@@ -1,9 +1,6 @@
-import {Wolf} from "./Wolf";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Player} from "../../Player/Player";
-import {Beauty} from "../Villagers/Beauty";
-import {GuardianAngel} from "../Villagers/GuardianAngel";
-import {Cursed} from "../index";
+import {Beauty, Cursed, GuardianAngel, Wolf} from "../index";
+import {DeathType, Player} from "../../Game";
 
 export class AlphaWolf extends Wolf {
     roleName = 'Альфа-волк 🐺⚡';
@@ -28,12 +25,12 @@ export class AlphaWolf extends Wolf {
         }
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
-        this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
+        this.targetPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
             if (!this.targetPlayer
                 || Math.random() >= .25
                 || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer);
 
-            AlphaWolf.game.bot.sendMessage(
+            await AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Ты был(а) атакован(а) волками, но ${this.roleName} избрал тебя. ` +
                 'Вместо того, чтобы быть убитым(ой), ты был(а) заражен(а)... ' +
@@ -43,16 +40,16 @@ export class AlphaWolf extends Wolf {
             const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);
 
             wolfPlayers.forEach(player =>
-                    this.targetPlayer && AlphaWolf.game.bot.sendMessage(
-                        player.id,
-                        `Как только волками был(а) атакован(а) ${highlightPlayer(this.targetPlayer)}, ` +
-                        `${highlightPlayer(this.player)} остановил всех, будучи Альфа Волком. ` +
-                        `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
-                        `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
-                        'присоединиться к стае вместо того, ' +
-                        `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией. ` +
-                        'Он(а) станет волком завтра ночью.'
-                    )
+                this.targetPlayer && AlphaWolf.game.bot.sendMessage(
+                player.id,
+                `Как только волками был(а) атакован(а) ${highlightPlayer(this.targetPlayer)}, ` +
+                `${highlightPlayer(this.player)} остановил всех, будучи Альфа Волком. ` +
+                `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
+                `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
+                'присоединиться к стае вместо того, ' +
+                `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией. ` +
+                'Он(а) станет волком завтра ночью.'
+                )
             )
 
             this.targetPlayer.infected = true;
@@ -61,6 +58,6 @@ export class AlphaWolf extends Wolf {
         }
 
         this.targetPlayer.role?.onKilled(this.player);
-        
+
     }
 }
