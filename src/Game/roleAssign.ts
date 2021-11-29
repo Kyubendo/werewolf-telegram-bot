@@ -28,7 +28,7 @@ export const assignRoles = async (game: Game) => {
         Villager,
         ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, // Passive Villagers
 
-        Seer, Monarch, Mayor, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid, Pacifist,
+        Seer, Monarch, Mayor, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid, //Pacifist,
         WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 
         Suicide, Thief, Necromancer, Doppelganger// Other
@@ -36,7 +36,7 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
-        Pacifist,
+        Thief, Wolf,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 

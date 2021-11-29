@@ -17,7 +17,7 @@ export class Thief extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        
+
         Thief.game.bot.sendMessage(this.player.id,
             'Чью роль ты хочешь украсть?',
             {
@@ -30,7 +30,7 @@ export class Thief extends RoleBase {
         if (!this.targetPlayer?.role) return;
 
         if (!this.targetPlayer.isAlive) {
-            Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendMessage(
                 this.player.id,
                 `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он(а) уже труп!`
             )
@@ -40,20 +40,20 @@ export class Thief extends RoleBase {
         if (this.targetPlayer.role instanceof SerialKiller) {
             this.player.isAlive = false;
 
-            Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendMessage(
                 Thief.game.chatId,
                 `*${this.roleName}* — ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
             )
 
-            Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendMessage(
                 this.player.id,
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             this.player.loveBind(this.targetPlayer);
         } else if (this.targetPlayer.role instanceof Doppelganger) {
-            Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendMessage(
                 this.player.id,
                 'Ты попытался украсть роль... ' +
                 `но даже лучший ${this.roleName} не в силах повторить такое искуство. ` +
@@ -67,23 +67,21 @@ export class Thief extends RoleBase {
 
             const targetStealMessage: string | false | undefined = this.targetPlayer?.role?.stealMessage?.();
 
-            Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
-            ).then(() => {
-                (async () => targetStealMessage && await Thief.game.bot.sendMessage(
-                    this.player.id,
-                    targetStealMessage
-                ))().then(() => {
-                    if (this.targetPlayer)
-                        this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
-                })
-            })
+            )
 
+            targetStealMessage && await Thief.game.bot.sendMessage(
+                this.player.id,
+                targetStealMessage
+            )
+
+            if (this.targetPlayer) this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 
             if (this.player.role instanceof Mason) {
-                Thief.game.bot.sendMessage(
+                await Thief.game.bot.sendMessage(
                     this.player.id,
                     this.player.role.showOtherMasonPlayers()
                 )
@@ -97,7 +95,7 @@ export class Thief extends RoleBase {
                     }
                 )
             } else if (this.player.role instanceof Wolf) {
-                Thief.game.bot.sendMessage(
+                await Thief.game.bot.sendMessage(
                     this.player.id,
                     this.player.role.showOtherWolfPlayers()
                 )
@@ -112,7 +110,7 @@ export class Thief extends RoleBase {
                 })
             }
 
-            Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
                 `Укради роль у кого-нибудь.` // GIF
@@ -122,7 +120,6 @@ export class Thief extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, Thief.game.players);
-        this.choiceMsgEditText();
-        this.doneNightAction()
+        this.choiceMsgEditText().then(this.doneNightAction)
     }
 }
