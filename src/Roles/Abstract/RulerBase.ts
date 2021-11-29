@@ -29,7 +29,7 @@ export abstract class RulerBase extends RoleBase {
                     ]
                 }
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     handleChoice = (choice?: string) => {
@@ -50,7 +50,7 @@ export abstract class RulerBase extends RoleBase {
     choiceMsgEditText = () => RulerBase.game.bot.editMessageText(
         `Выбор принят — ${this.specialCondition.comingOut ? 'Раскрыться' : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

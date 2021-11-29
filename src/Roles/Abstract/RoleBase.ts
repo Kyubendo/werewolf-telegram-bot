@@ -41,7 +41,9 @@ export abstract class RoleBase {
     readonly handleChoice?: (choice?: string) => void
 
     targetPlayer?: Player
-    choiceMsgId?: number
+
+    actionMsgId?: number
+    voteMsgId?: number
 
     specialCondition?: specialConditionType;
 
@@ -190,7 +192,7 @@ export abstract class RoleBase {
             ? highlightPlayer(this.targetPlayer)
             : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

@@ -34,7 +34,7 @@ export class WildChild extends RoleBase {
                 reply_markup: generateInlineKeyboard(
                     WildChild.game.players.filter(player => player !== this.player && player.isAlive), false)
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResolve = async () => {
@@ -46,7 +46,7 @@ export class WildChild extends RoleBase {
                 `за тебя — ${highlightPlayer(this.specialCondition.roleModel)}`,
                 {
                     chat_id: this.player.id,
-                    message_id: this.choiceMsgId
+                    message_id: this.actionMsgId
                 }
             )
         }
@@ -113,7 +113,7 @@ export class WildChild extends RoleBase {
             ? highlightPlayer(this.specialCondition.roleModel)
             : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

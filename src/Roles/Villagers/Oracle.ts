@@ -18,7 +18,7 @@ export class Oracle extends ForecasterBase {
             && player.isAlive
             && player !== targetRole.player);
         const otherRole = randomElement(otherPlayers).role;
-        return `НЕ *${otherRole?.roleName}*`;
+        return `НЕ *${otherRole?.roleName}*!`;
     }
 
     handleChoice = (choice?: string) => {

@@ -25,7 +25,7 @@ export class GuardianAngel extends RoleBase {
                 reply_markup: generateInlineKeyboard(GuardianAngel.game.players
                     .filter(player => player !== this.player && player.isAlive))
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResolve = async () => {

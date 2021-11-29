@@ -43,7 +43,7 @@ export class Martyr extends RoleBase {
                     Martyr.game.players.filter(player => player !== this.player && player.isAlive), false
                 )
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResolve = async () => {
@@ -55,7 +55,7 @@ export class Martyr extends RoleBase {
                 `за тебя — ${highlightPlayer(this.specialCondition.protectedPlayer)}`,
                 {
                     chat_id: this.player.id,
-                    message_id: this.choiceMsgId
+                    message_id: this.actionMsgId
                 }
             )
         }
@@ -127,7 +127,7 @@ export class Martyr extends RoleBase {
             ? highlightPlayer(this.specialCondition.protectedPlayer)
             : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

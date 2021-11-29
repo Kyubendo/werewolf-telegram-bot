@@ -52,7 +52,7 @@ export class Blacksmith extends RoleBase {
                     ]
                 }
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
     actionResolve = async () => {
@@ -78,7 +78,7 @@ export class Blacksmith extends RoleBase {
     choiceMsgEditText = () => Blacksmith.game.bot.editMessageText(
         `Выбор принят — ${this.specialCondition.silverDust ? 'Распылить' : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )
