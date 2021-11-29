@@ -11,8 +11,8 @@ export const gameStageMsg = (game: Game) => {
                 `День *№${game.dayCount}*`;
         case 'lynch':
             const activeMonarchs = game.lynch?.getActiveMonarchs();
-            const activePacifists = game.lynch?.getActivePacifists();
-            return activePacifists && activePacifists.length ? `Так как ${activePacifists[0].role?.roleName} провел ` +
+            const activePacifists = game.lynch?.checkActivePacifist();
+            return activePacifists && activePacifists ? `Так как ${activePacifists.role?.roleName} провел ` +
                 'демонстрацию во имя любви и мира, селяне решают никого не казнить.'
                 : activeMonarchs && activeMonarchs.length
                     ? `${activeMonarchs[0].role?.roleName} раскрылся, так что он решит, кто умрёт сегодня!`

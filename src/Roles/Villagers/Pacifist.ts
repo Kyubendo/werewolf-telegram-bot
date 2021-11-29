@@ -47,7 +47,7 @@ export class Pacifist extends RoleBase {
                         }],
                         [{
                             text: 'Пропустить',
-                            callback_data: JSON.stringify({type: 'role', choice: 'notToday'})
+                            callback_data: JSON.stringify({type: 'role', choice: 'skip'})
                         }]
                     ]
                 }
@@ -56,7 +56,7 @@ export class Pacifist extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice === 'demonstration') {
+        if (choice !== 'skip') {
             this.specialCondition.peace = true;
             if (Pacifist.game.stage === 'day') {
                 Pacifist.game.bot.sendAnimation(
@@ -87,9 +87,6 @@ export class Pacifist extends RoleBase {
     }
 
     choiceMsgEditText = () => {
-        // if (Pacifist.game.stage === 'lynch')
-        //     Pacifist.game.lynch?.editSkipMessages();
-
         return Pacifist.game.bot.editMessageText(
             `Выбор принят — ${this.specialCondition.peace ? 'Провести' : 'Пропустить'}.`,
             {

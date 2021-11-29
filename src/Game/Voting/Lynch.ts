@@ -20,8 +20,8 @@ export class Lynch extends VotingBase {
     getActiveMonarchs = () => this.game.players
         .filter(player => player.role instanceof Monarch && player.role.specialCondition.comingOut && player.isAlive);
 
-    getActivePacifists = () => this.game.players
-        .filter(player => player.role instanceof Pacifist && player.role.specialCondition.peace && player.isAlive);
+    checkActivePacifist = () => this.game.players
+        .find(player => player.role instanceof Pacifist && player.role.specialCondition.peace && player.isAlive);
 
     defineTarget = (voter: Player, target?: Player) => {
         if (target && voter.role instanceof ClumsyGuy && Math.random() < .5) {
@@ -36,6 +36,15 @@ export class Lynch extends VotingBase {
         return target
     }
 
+    async startVoting() {
+        if (this.checkActivePacifist()) {
+            this.game.setNextStage();
+            return;
+        }
+
+        await super.startVoting();
+    }
+
     handleVotingChoiceResult = () => {
         this.game.bot.sendMessage(
             this.game.chatId,
@@ -48,7 +57,7 @@ export class Lynch extends VotingBase {
         && voter.role.specialCondition.comingOut !== undefined) ? 2 : 1;
 
     handleVoteResult(voteResult: Player[]) {
-        if (this.getActivePacifists().length) return;
+        if (this.checkActivePacifist()) return;
 
         if (voteResult.length === 1) {
             if (voteResult[0].role instanceof Suicide) {
