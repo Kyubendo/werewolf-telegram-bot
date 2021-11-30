@@ -85,12 +85,11 @@ export class Game {
         await this.runResults();
 
         this.clearAngel()
-        this.clearSelects()
-
         if (this.stageStopped) {
             this.stageStopped = false
             return
         }
+        this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
         if (!process.env.ROLE_TEST && endGame) {
