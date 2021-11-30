@@ -32,7 +32,7 @@ export class FallenAngel extends RoleBase {
                 `Однако, жители, собравшись, на утро ` +
                 `всё же обнаружили бездыханное тело ${highlightPlayer(deadPlayer)}. Кто же тогда его убил? ` +
                 `Ответ стал ясен, когда один из жителей указал на разбросанные рядом с трупом чёрные перья. ` +
-                `На этот раз атаковал ${this.roleName}! ${highlightPlayer(deadPlayer)} ` +
+                `На этот раз атаковал ${this.roleName}!\n${highlightPlayer(deadPlayer)} ` +
                 `был(а) *${deadPlayer.role?.roleName}*`,
             toTarget: `О нет! Тебя убил ${this.roleName}!`
         },
@@ -64,7 +64,7 @@ export class FallenAngel extends RoleBase {
                         ]
                     }
                 }
-            ).then(msg => this.choiceMsgId = msg.message_id)
+            ).then(msg => this.actionMsgId = msg.message_id)
         else {
             this.killOrProtect = 'kill';
             this.nextAction();
@@ -86,7 +86,7 @@ export class FallenAngel extends RoleBase {
                             )
                     )
                 }
-            ).then(msg => this.choiceMsgId = msg.message_id)
+            ).then(msg => this.actionMsgId = msg.message_id)
         } else {
             FallenAngel.game.bot.sendMessage(
                 this.player.id,
@@ -100,12 +100,11 @@ export class FallenAngel extends RoleBase {
                             )
                     )
                 }
-            ).then(msg => this.choiceMsgId = msg.message_id)
-            console.log(this.choiceMsgId)
+            ).then(msg => this.actionMsgId = msg.message_id)
         }
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (this.targetPlayer) {
             if (this.killOrProtect === 'kill') // kill
                 if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
@@ -120,9 +119,9 @@ export class FallenAngel extends RoleBase {
         }
     }
 
-    actionResult = () => {
+    actionResult = async () => {
         if (this.targetPlayer?.role && this.killOrProtect === 'protect' && !this.numberOfAttacks) {
-            GuardianAngel.game.bot.sendMessage(
+            await GuardianAngel.game.bot.sendMessage(
                 this.player.id,
                 `Ты защищал волка ${highlightPlayer(this.targetPlayer)} сегодня ночью, ` +
                 `но с ним ничего не случилось...`
@@ -147,9 +146,9 @@ export class FallenAngel extends RoleBase {
         }
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (type === 'wolfCameToSerialKiller') {
-            FallenAngel.game.bot.sendMessage(
+            await FallenAngel.game.bot.sendMessage(
                 FallenAngel.game.chatId,
                 `Ночью ангел ${highlightPlayer(this.player)} раз и навсегда пытался спасти от маньяка ` +
                 ` дерев... Стоп что?! Волков?! ` +
@@ -159,7 +158,7 @@ export class FallenAngel extends RoleBase {
                 'Неужто никто в этой деревне не сможет справиться с этим дьяволом во плоти... '
             )
 
-            FallenAngel.game.bot.sendMessage(
+            await FallenAngel.game.bot.sendMessage(
                 this.player.id,
                 'Ты вышел на охоту, но сам оказался жертвой, ведь ты наткнулся на сумасшедшего маньяка. '
                 + 'Перед тем как испробовать на тебе свою новую вилку, ' +
@@ -169,7 +168,7 @@ export class FallenAngel extends RoleBase {
             this.player.isAlive = false;
             return true;
         } else
-            return super.handleDeath(killer, type);
+            return await super.handleDeath(killer, type);
     }
 
     choiceMsgEditText = () => FallenAngel.game.bot.editMessageText(
@@ -179,7 +178,7 @@ export class FallenAngel extends RoleBase {
                 ? 'Защитить'
                 : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

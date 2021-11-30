@@ -21,6 +21,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     const villagersTeamPlayers = players.filter(p => villagers.find(v => p.role instanceof v))
     const alivePlayers = players.filter(p => p.isAlive)
     const aliveWolves = alivePlayers.filter(p => p.role instanceof Wolf)
+    const aliveWolfKillers = alivePlayers.filter(p => (p.role instanceof Wolf) || (p.role instanceof FallenAngel))
     const aliveEvilPlayer = alivePlayers.find(p => evil.find(e => p.role instanceof e))
     const aliveJackPlayers = alivePlayers.filter(player => player.role instanceof JackOLantern);
 
@@ -49,6 +50,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             if (aliveJackPlayers.length) return undefined;
 
             const wolf = players.find(p => p.role instanceof Wolf)
+            const fallenAngel = players.find(p => p.role instanceof FallenAngel)
             const serialKiller = players.find(p => p.role instanceof SerialKiller)
             const gunner = players.find(p => p.role instanceof Gunner)
             const arsonist = players.find(p => p.role instanceof Arsonist)
@@ -57,20 +59,23 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
             // if(puppetMaster) return puppetMaster
 
-            if (wolf && arsonist) return {winners: wolvesTeamPlayers, type: 'wolves'}
-            if ((wolf || arsonist) && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
-            if ((wolf || serialKiller || arsonist) && gunner) {
+            if ((wolf && arsonist) || (fallenAngel && arsonist))
+                return {winners: wolvesTeamPlayers, type: 'wolves'}
+            if ((wolf || arsonist || fallenAngel) && serialKiller)
+                return {winners: [serialKiller], type: 'serialKiller'}
+            if ((wolf || serialKiller || arsonist || fallenAngel) && gunner) {
                 if (stage === 'night') return {winners: villagersTeamPlayers, type: 'villagers'}
-                if (wolf) return {winners: wolvesTeamPlayers, type: 'wolves'}
+                if (wolf || fallenAngel) return {winners: wolvesTeamPlayers, type: 'wolves'}
                 if (serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
                 if (arsonist) return {winners: [arsonist], type: 'arsonist'}
             }
             // if(cowboy && serialKiller) return []
             // if(cowboy && wolf) return [Math.random()>.3 wolf:cowboy]
+            // what if cowboy and fallenAngel?
         }
     }
 
-    if (aliveWolves.length * 2 >= alivePlayers.length) {
+    if (aliveWolfKillers.length * 2 >= alivePlayers.length) {
         return {winners: wolvesTeamPlayers, type: 'wolves'}
     }
 

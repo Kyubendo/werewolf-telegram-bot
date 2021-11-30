@@ -4,7 +4,7 @@ import {
     AlphaWolf, ApprenticeSeer, Beauty,
     Beholder, Blacksmith,
     ClumsyGuy, Cupid,
-    Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, Lycan, Martyr, FallenAngel,
+    Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, Lycan, Martyr,
     Mason, Monarch, Mayor, Necromancer, Oracle, Princess, RoleBase, Sandman, Seer, Prowler,
     SerialKiller,
     Sorcerer, Suicide, Thief,
@@ -36,8 +36,8 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
-        FallenAngel, Villager,
-        ClumsyGuy, Villager, Villager,
+        //FallenAngel, Villager,
+        GuardianAngel, AlphaWolf, Villager, Villager,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
