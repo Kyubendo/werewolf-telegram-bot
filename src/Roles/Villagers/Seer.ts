@@ -16,13 +16,13 @@ import {Beholder} from "../index";
 
 export class Seer extends ForecasterBase {
     roleName = 'Провидец 👳';
-    roleIntroductionText = () => 'Ты Провидец 👳! ';
+    roleIntroductionText = () => 'Ты Провидец 👳!';
     startMessageText = () => `Каждую ночь ты можешь выбрать человека, чтобы "увидеть" его роль.`;
     weight = () => 6.5;
 
     nightActionDone = false
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         const apprenticeSeerPlayers = Seer.game.players
             .filter(player => player.role instanceof ApprenticeSeer && player.isAlive);
         if (apprenticeSeerPlayers.length) {
@@ -54,7 +54,7 @@ export class Seer extends ForecasterBase {
 
 
         if (killer?.role && !type) {
-            Seer.game.bot.sendMessage(
+            await Seer.game.bot.sendMessage(
                 Seer.game.chatId,
                 killer?.role instanceof SerialKiller
                     ? `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
@@ -64,7 +64,7 @@ export class Seer extends ForecasterBase {
                     `Всем известный *${this.roleName}* мертв! Покойся с миром ${highlightPlayer(this.player)}...`
             )
 
-            killer.role.killMessage && Seer.game.bot.sendAnimation(
+            killer.role.killMessage && await Seer.game.bot.sendAnimation(
                 this.player.id,
                 killer.role.killMessage().gif,
                 {
@@ -78,17 +78,17 @@ export class Seer extends ForecasterBase {
         return true;
     }
 
-    forecastRoleName = (targetRole: RoleBase) => {
-        if (targetRole instanceof Lycan)
-            return new Villager(this.player).roleName; // Seer sees Lycan as Villager
-        else if (targetRole instanceof Wolf || targetRole instanceof WoodMan)
-            return new Wolf(this.player).roleName; // Seer sees all wolves and WoodMan as Wolf
-        else if (targetRole instanceof Traitor)
+    seerSees = (role: RoleBase): string => {
+        if (role instanceof Lycan)
+            return new Villager(this.player).roleName;
+        else if (role instanceof Wolf || role instanceof WoodMan)
+            return new Wolf(this.player).roleName;
+        else if (role instanceof Traitor)
             return Math.random() >= 0.5 ? new Wolf(this.player).roleName : new Villager(this.player).roleName;
-        // Seer sees Traitor with random chance - 50% as Wolf and 50% as Villager
-
-        return `это *${targetRole.roleName}*!`;
+        else return role.roleName
     }
+
+    forecastRoleName = (targetRole: RoleBase) => `это *${this.seerSees(targetRole)}*!`
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, ForecasterBase.game.players)

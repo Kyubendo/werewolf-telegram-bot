@@ -9,7 +9,7 @@ import {specialConditionMartyr} from "../../Utils/specialConditionTypes";
 
 export class Martyr extends RoleBase {
     readonly roleName = 'Мученица 🕯';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => 'В начале игры ты выбираешь человека, ' +
         'за которого умрешь. Если этот человек умрет, ты умрешь за него, ' +
         'и этот человек выживет. Пока ты не умрешь, ты в команде селян, ' +
@@ -24,6 +24,9 @@ export class Martyr extends RoleBase {
         protectedPlayer: undefined
     }
     nightActionDone = false
+
+    stealMessage = () => !!this.specialCondition.protectedPlayer &&
+        `Ты умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`;
 
     action = () => {
         if (this.specialCondition.protectedPlayer?.role) {
@@ -40,36 +43,36 @@ export class Martyr extends RoleBase {
                     Martyr.game.players.filter(player => player !== this.player && player.isAlive), false
                 )
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.specialCondition.protectedPlayer?.role) {
             this.specialCondition.protectedPlayer = randomElement(Martyr.game.players
                 .filter(p => p !== this.player && p.isAlive))
-            Martyr.game.bot.editMessageText(
+            await Martyr.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
                 `за тебя — ${highlightPlayer(this.specialCondition.protectedPlayer)}`,
                 {
                     chat_id: this.player.id,
-                    message_id: this.choiceMsgId
+                    message_id: this.actionMsgId
                 }
             )
         }
         if (!this.specialCondition.protectedPlayer.role) return
-        this.specialCondition.protectedPlayer.role.handleDeath = (killer?: Player) => {
+        this.specialCondition.protectedPlayer.role.handleDeath = async (killer?: Player) => {
             if (!this.specialCondition.protectedPlayer) return false;
 
             this.protectedPlayerKiller = killer
-            this.onKilled(this.player)
+            await this.onKilled(this.player)
             this.diedForProtectedPlayer = true
-            Martyr.game.bot.sendMessage(
+            await Martyr.game.bot.sendMessage(
                 this.player.id,
                 `Как только ${highlightPlayer(this.specialCondition.protectedPlayer)} оказался(лась) на грани жизни и смерти, `
                 + `ты начинаешь молиться Древним Богам, чтобы они забрали тебя вместо него(нее). И они отвечают на `
                 + `твои молитвы. Твоя жизнь будет отдана в жертву, но ${highlightPlayer(this.specialCondition.protectedPlayer)} будет жить.`
             )
-            Martyr.game.bot.sendMessage(
+            await Martyr.game.bot.sendMessage(
                 this.specialCondition.protectedPlayer?.id,
                 `Ты проснулся(ась) в своем доме из-за того, что почувствовал(а) что-то... Ты помнишь, как `
                 + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы ${highlightPlayer(this.player)} навсегда `
@@ -80,7 +83,7 @@ export class Martyr extends RoleBase {
     }
 
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (killer === this.player && this.specialCondition.protectedPlayer && !type) {
 
             let deathMessage: string | undefined
@@ -116,8 +119,6 @@ export class Martyr extends RoleBase {
     handleChoice = (choice?: string) => {
         this.specialCondition.protectedPlayer = findPlayer(choice, Martyr.game.players);
         this.choiceMsgEditText();
-        if (this.specialCondition.protectedPlayer)
-            this.stealMessage = `\nТы умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`;
         this.doneNightAction();
     }
 
@@ -126,7 +127,7 @@ export class Martyr extends RoleBase {
             ? highlightPlayer(this.specialCondition.protectedPlayer)
             : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

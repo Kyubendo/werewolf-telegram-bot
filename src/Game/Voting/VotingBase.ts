@@ -17,15 +17,15 @@ export abstract class VotingBase {
 
     abstract getVoters(): Player[]
 
-    abstract handleVoteResult(voteResult: Player[]): boolean | void
+    abstract handleVoteResult(voteResult: Player[]): Promise<boolean | void>
 
-    abstract handleVotingChoiceResult(voter: Player, target?: Player): void
+    abstract handleVotingChoiceResult(voter: Player, target?: Player): Promise<void>
 
     abstract voteTargetCondition(otherPlayer: Player): boolean
 
-    defineTarget = (voter: Player, target?: Player) => target
+    defineTarget = async (voter: Player, target?: Player) => target
 
-    calculateVoteWeight = (target: Player) => 1
+    calculateVoteWeight = (voter: Player) => 1
 
     beforeVotingAction?: () => void
 
@@ -33,8 +33,9 @@ export abstract class VotingBase {
 
     votedPlayers: Player[] = []
 
-    startVoting = async () => {
+    async startVoting() {
         if (this.game.stage !== this.voteStage) return;
+
         await this.beforeVotingAction?.()
         for (const player of this.getVoters()) {
             await this.game.bot.sendMessage(
@@ -50,49 +51,49 @@ export abstract class VotingBase {
                     )
                 }
             ).then(msg => {
-                if (player.role) player.role.choiceMsgId = msg.message_id
+                if (player.role) player.role.voteMsgId = msg.message_id
             })
         }
     }
 
-    handleVotingChoice = (select: SelectType) => {
+    handleVotingChoice = async (select: SelectType) => {
         if (this.game.stage !== this.voteStage) return;
         const voter = findPlayer(select.from.id, this.game.players)
         if (!voter || !voter.role || !this.getVoters().includes(voter)) return;
         this.votedPlayers.push(voter)
         let target: Player | undefined;
         if (select.choice !== 'skip') {
-            target = this.defineTarget(voter, findPlayer(select.choice, this.game.players))
+            target = await this.defineTarget(voter, findPlayer(select.choice, this.game.players))
             if (target) {
                 const voteWeight = this.calculateVoteWeight(target)
                 this.votes[target.id] ? this.votes[target.id] += voteWeight : this.votes[target.id] = voteWeight
             }
         }
 
-        this.game.bot.editMessageText(
+        await this.game.bot.editMessageText(
             `Выбор принят — ${target ? highlightPlayer(target) : 'Пропустить'}.`,
             {
-                message_id: voter.role.choiceMsgId,
+                message_id: voter.role.voteMsgId,
                 chat_id: voter.id,
             })
-        this.handleVotingChoiceResult(voter, target)
+        await this.handleVotingChoiceResult(voter, target)
     }
 
-    handleVoteEnd = () => {
+    handleVoteEnd = async () => {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
-        if (this.handleVoteResult(this.voteResults())) return true
+        if (await this.handleVoteResult(this.voteResults())) return true
 
         this.votes = {}
         this.votedPlayers = []
     }
 
-    private editSkipMessages = () =>
+    editSkipMessages = () =>
         this.getVoters().filter(v => !this.votedPlayers.includes(v)).forEach(voter => {
             this.game.bot.editMessageReplyMarkup(
                 {inline_keyboard: []}, //custom message?
                 {
-                    message_id: voter.role?.choiceMsgId,
+                    message_id: voter.role?.voteMsgId,
                     chat_id: voter.id,
                 }
             ).catch(() => { // fix later

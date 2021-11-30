@@ -22,8 +22,13 @@ export class Cupid extends RoleBase {
 
     targets = () => Cupid.game.players.filter(player => player !== this.targetPlayer && player.isAlive)
 
+    stealMessage = () => this.specialCondition.loversBound
+        && 'Однако, ты видишь, что в колчане кончились любовные стрелы.'
+
     action = () => {
+        this.targetPlayer2 = undefined
         if (!this.specialCondition.loversBound) this.loveArrowChoice()
+        else this.doneNightAction()
     }
 
     loveArrowChoice = () => Cupid.game.bot.sendMessage(
@@ -32,14 +37,14 @@ export class Cupid extends RoleBase {
         {
             reply_markup: generateInlineKeyboard(this.targets(), false)
         }
-    ).then(msg => this.choiceMsgId = msg.message_id)
+    ).then(msg => this.actionMsgId = msg.message_id)
 
     handleChoice = (choice?: string) => {
         if (this.targetPlayer) {
             this.targetPlayer2 = findPlayer(choice, Cupid.game.players);
             this.targetPlayer2 && RoleBase.game.bot.editMessageText(
                 `Выбор принят — ${highlightPlayer(this.targetPlayer2)}.`,
-                {message_id: this.choiceMsgId, chat_id: this.player.id}
+                {message_id: this.actionMsgId, chat_id: this.player.id}
             ).then(this.doneNightAction)
         } else {
             this.targetPlayer = findPlayer(choice, Cupid.game.players)
@@ -48,8 +53,8 @@ export class Cupid extends RoleBase {
     }
 
     actionResolve = async () => {
+        if (this.specialCondition.loversBound) return
         this.specialCondition.loversBound = true
-        this.stealMessage = 'Однако, ты видишь, что в колчане кончались любовные стрелы.'
         if (!this.targetPlayer2) {
             if (!this.targetPlayer) this.targetPlayer = randomElement(this.targets())
             this.targetPlayer2 = randomElement(this.targets())
@@ -59,10 +64,10 @@ export class Cupid extends RoleBase {
                 + `теперь связаны любовью.`,
                 {
                     chat_id: this.player.id,
-                    message_id: this.choiceMsgId
+                    message_id: this.actionMsgId
                 }
             )
         }
-        this.targetPlayer?.loveBind(this.targetPlayer2)
+        await this.targetPlayer?.loveBind(this.targetPlayer2)
     }
 }

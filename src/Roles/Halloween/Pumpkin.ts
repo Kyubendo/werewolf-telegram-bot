@@ -9,7 +9,7 @@ export class Pumpkin extends RoleBase {
     startMessageText = () => 'Ты проиграл!';
     weight = () => 0;
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (Math.random() >= 0.25) {
             const specialCondition = this.player.role?.specialCondition;
             this.player.role = this.previousRole?.createThisRole(this.player, this.player.role);
@@ -32,7 +32,7 @@ export class Pumpkin extends RoleBase {
         }
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (!killer) {
             Pumpkin.game.bot.sendAnimation(
                 Pumpkin.game.chatId,

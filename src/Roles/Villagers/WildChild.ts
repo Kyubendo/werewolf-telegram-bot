@@ -10,7 +10,6 @@ import {RoleBase} from "../index";
 
 export class WildChild extends RoleBase {
     roleName = 'Дикий ребёнок 👶';
-    roleIntroductionText = () => `Ты ${this.roleName}! `
     startMessageText = () => 'Выбери любого игрока, чтобы он стал твоим "примером". Если он умрет, ты станешь волком!'
     weight = () => -1;
 
@@ -19,6 +18,9 @@ export class WildChild extends RoleBase {
     specialCondition: specialConditionWildChild = {
         roleModel: undefined
     }
+
+    stealMessage = () => !!this.specialCondition.roleModel
+        && `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`
 
     action = () => {
         if (this.specialCondition.roleModel?.role) {
@@ -32,19 +34,19 @@ export class WildChild extends RoleBase {
                 reply_markup: generateInlineKeyboard(
                     WildChild.game.players.filter(player => player !== this.player && player.isAlive), false)
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.specialCondition.roleModel?.role) {
             this.specialCondition.roleModel = randomElement(WildChild.game.players
                 .filter(player => player !== this.player && player.isAlive)) // player.isAlive probably redundant because of roleResolves order
-            WildChild.game.bot.editMessageText(
+            await WildChild.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
                 `за тебя — ${highlightPlayer(this.specialCondition.roleModel)}`,
                 {
                     chat_id: this.player.id,
-                    message_id: this.choiceMsgId
+                    message_id: this.actionMsgId
                 }
             )
         }
@@ -53,41 +55,41 @@ export class WildChild extends RoleBase {
 
         const currentTargetHandleDeath = this.specialCondition.roleModel.role
             .handleDeath.bind(this.specialCondition.roleModel.role);
-        this.specialCondition.roleModel.role.handleDeath = (killer?: Player, type?: DeathType): boolean => {
-            currentTargetHandleDeath(killer, type);
+        this.specialCondition.roleModel.role.handleDeath = async (killer?: Player, type?: DeathType) => {
+            await currentTargetHandleDeath(killer, type);
 
-            if (!this.specialCondition.roleModel || this.player.role instanceof Wolf) return false;
+            if (this.specialCondition.roleModel && !(this.player.role instanceof Wolf)) {
+                this.player.role = new Wolf(this.player, this.player.role);
 
-            this.player.role = new Wolf(this.player, this.player.role);
+                if (this.player.role instanceof Wolf) {
+                    await WildChild.game.bot.sendMessage(
+                        this.player.id,
+                        `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
+                        `Теперь ты ${this.player.role.roleName}! ` +
+                        this.player.role.showOtherWolfPlayers()
+                    )
 
-            if (this.player.role instanceof Wolf) {
-                WildChild.game.bot.sendMessage(
-                    this.player.id,
-                    `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
-                    `Теперь ты ${this.player.role.roleName}! ` +
-                    this.player.role.showOtherWolfPlayers()
-                )
-
-                this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
-                    player.id,
-                    `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
-                ))
+                    this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
+                        player.id,
+                        `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
+                    ))
+                }
             }
 
             return true;
         }
     }
 
-    handleDeath(killer?: Player, type?: DeathType) {
+    async handleDeath(killer?: Player, type?: DeathType) {
         if (killer?.role instanceof Wolf && !type) {
-            WildChild.game.bot.sendMessage(
+            await WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
                 'НОМНОМНОМНОМ! Прошлой ночью волк(и) ' +
                 `сьел(и) Дикого ребенка ${highlightPlayer(this.player)}, оставив лишь маленький скелетик. ` +
                 'Селяне поняли, насколько волк(и) безжалостны, раз так хладнокровно ' +
                 'убивают(ет) беззащитных детей.'
             )
-            WildChild.game.bot.sendAnimation(
+            await WildChild.game.bot.sendAnimation(
                 this.player.id,
                 killer.role.killMessage().gif,
                 {
@@ -102,8 +104,6 @@ export class WildChild extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.specialCondition.roleModel = findPlayer(choice, WildChild.game.players);
-        if (this.specialCondition.roleModel)
-            this.stealMessage = `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`;
         this.choiceMsgEditText();
         this.doneNightAction()
     }
@@ -113,7 +113,7 @@ export class WildChild extends RoleBase {
             ? highlightPlayer(this.specialCondition.roleModel)
             : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

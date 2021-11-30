@@ -1,36 +1,36 @@
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {Beauty, Cursed, GuardianAngel, Wolf} from "../index";
-import {Player} from "../../Game";
+import {DeathType, Player} from "../../Game";
 
 export class AlphaWolf extends Wolf {
-    roleName = 'Альфа-волк 🐺⚡';
-    roleIntroductionText = () => `Ты ${this.roleName} - источник всех бедствий! `
+    roleName = 'Альфа-волк 🐺⭐';
+    roleIntroductionText = () => `Ты ${this.roleName} - источник всех бедствий!`
     startMessageText = () => 'Твои укусы передают проклятие, обращающее человека в волка. ' +
         'По ночам ты можешь выбрать человека, а затем атаковать и убить его, но пока ты жив, ' +
         'твои жертвы имеют 25% шанса стать волком.'
         + this.showOtherWolfPlayers();
     weight = () => -13;
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
-            this.handleGuardianAngel(this.player);
+            await this.handleGuardianAngel(this.player);
             return;
         }
 
         if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
             return;
         }
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
-        this.targetPlayer.role.handleDeath = (killer?: Player): boolean => {
+        this.targetPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
             if (!this.targetPlayer
                 || Math.random() >= .99
                 || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer);
 
-            AlphaWolf.game.bot.sendMessage(
+            await AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Ты был(а) атакован(а) волками, но ${this.roleName} избрал тебя. ` +
                 'Вместо того, чтобы быть убитым(ой), ты был(а) заражен(а)... ' +
@@ -64,7 +64,6 @@ export class AlphaWolf extends Wolf {
             return false;
         }
 
-        this.targetPlayer.role?.onKilled(this.player);
-        this.targetPlayer = undefined
+        await this.targetPlayer.role?.onKilled(this.player);
     }
 }

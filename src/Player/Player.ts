@@ -19,6 +19,7 @@ export class Player {
     isFrozen: boolean = false;
     won: boolean = false;
     role?: RoleBase;
+    readyToArson = false;
 
     lover?: Player;
 
@@ -68,15 +69,15 @@ export class Player {
         this.infected = false
     }
 
-    readonly loveBind = (newLover: Player) => {
+    readonly loveBind = async (newLover: Player) => {
         if (!this.role) return;
-        this.role.killLover('loverBetrayal');
-        newLover.role?.killLover('loverBetrayal');
+        await this.role.killLover('loverBetrayal');
+        await newLover.role?.killLover('loverBetrayal');
 
         this.lover = newLover;
         newLover.lover = this;
 
-        this.role.loverMessage(this);
-        this.role.loverMessage(newLover);
+        await this.role.sendLoverMessage(this);
+        await this.role.sendLoverMessage(newLover);
     }
 }

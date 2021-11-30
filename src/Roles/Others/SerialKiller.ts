@@ -6,10 +6,10 @@ import {Beauty, GuardianAngel, Wolf, FallenAngel, RoleBase} from "../index";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
-    weight = () => -13.5; // change?
+    weight = () => -12.5;
 
     nightActionDone = false
 
@@ -18,7 +18,7 @@ export class SerialKiller extends RoleBase {
             toChat: (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
                 `но не тут-то было. Жители, собравшись, ` +
                 `обнаружили расчлененное тело, но, на удивление, печени не было ` +
-                `на месте... ${this.roleName} снова атаковал! ${highlightPlayer(deadPlayer)} ` +
+                `на месте...\n${this.roleName} снова атаковал!\n${highlightPlayer(deadPlayer)} ` +
                 `был(а) *${deadPlayer.role?.roleName}*`,
             toTarget: `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
                 'извлекает твои органы. Ты мертв(а).'
@@ -27,7 +27,7 @@ export class SerialKiller extends RoleBase {
     })
 
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (killer?.role instanceof Wolf || killer?.role instanceof FallenAngel) {
             killer.role.onKilled(this.player, 'wolfCameToSerialKiller');
             return false;
@@ -36,8 +36,6 @@ export class SerialKiller extends RoleBase {
     }
 
     action = () => {
-        this.targetPlayer = undefined
-
         SerialKiller.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь запихнуть пару-тройку ножей?',
@@ -46,19 +44,19 @@ export class SerialKiller extends RoleBase {
                     SerialKiller.game.players.filter(player => player !== this.player && player.isAlive)
                 )
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
-            this.handleGuardianAngel(this.player);
+            await this.handleGuardianAngel(this.player);
             return;
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
         else
-            this.targetPlayer.role?.onKilled(this.player);
+            await this.targetPlayer.role?.onKilled(this.player);
     }
 
     handleChoice = (choice?: string) => {

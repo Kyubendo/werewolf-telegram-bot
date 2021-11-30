@@ -16,7 +16,6 @@ export class GuardianAngel extends RoleBase {
     numberOfAttacks: number = 0;
 
     action = () => {
-        this.targetPlayer = undefined;
         this.numberOfAttacks = 0;
 
         GuardianAngel.game.bot.sendMessage(
@@ -26,28 +25,28 @@ export class GuardianAngel extends RoleBase {
                 reply_markup: generateInlineKeyboard(GuardianAngel.game.players
                     .filter(player => player !== this.player && player.isAlive))
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof SerialKiller
             || (this.targetPlayer.role instanceof Wolf
                 && Math.random() >= 0.5)) {
-            this.onKilled(this.targetPlayer, 'angelProtectedKiller');
+            await this.onKilled(this.targetPlayer, 'angelProtectedKiller');
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
         } else {
             this.targetPlayer.guardianAngel = this.player;
         }
     }
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
 
         if (!this.numberOfAttacks) {
-            GuardianAngel.game.bot.sendMessage(
+            await GuardianAngel.game.bot.sendMessage(
                 this.player.id,
                 `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а), ` +
                 'поэтому ничего не произошло особо...'
@@ -61,40 +60,26 @@ export class GuardianAngel extends RoleBase {
         this.doneNightAction()
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         this.player.isAlive = false;
 
         if (type === 'angelProtectedKiller') {
             if (killer?.role instanceof SerialKiller) {
-                GuardianAngel.game.bot.sendMessage(
+                await GuardianAngel.game.bot.sendMessage(
                     this.player.id,
                     'Ты попытался сохранить жизнь Серийному убийце, ' +
                     'а в ответ тебя случайно пырнули 69 раз вилкой! Ты умер...'
                 )
 
-                GuardianAngel.game.bot.sendMessage(
+                await GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
                     `Ночью *${this.roleName}* ${highlightPlayer(this.player)} пытался спасти деревню ` +
                     `от маньяка раз и навсегда, но маньяк отрезал ${highlightPlayer(this.player)} крылья! ` +
                     'Рядом с его телом была записка: "Я не нуждаюсь в твоей защите!"'
                 )
-            } else if (killer?.role instanceof Wolf) { // Если ангел попытался защитить волка
-                GuardianAngel.game.bot.sendMessage(
-                    this.player.id,
-                    'Твоя сила подвела тебя, ты неудачно защитил волка, и тебя съели!'
-                )
-
-                GuardianAngel.game.bot.sendMessage(
-                    GuardianAngel.game.chatId,
-                    `${highlightPlayer(this.player)} безнадёжно пытается защитить волка. ` +
-                    'Селу удаётся лишь увидеть белоснежные крылья с каплями крови, ' +
-                    'прибитые оторванными рёбрами к крыше церкви. Совершенно очевидно, ' +
-                    'что волки расценили ангела как божественный дар, бесплатное мясо, ' +
-                    'и не устояли забрать его в свои дома.'
-                )
             }
         } else if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
-            GuardianAngel.game.bot.sendAnimation(
+            await GuardianAngel.game.bot.sendAnimation(
                 this.player.id,
                 killer.role.killMessage().gif,
                 {
@@ -103,7 +88,7 @@ export class GuardianAngel extends RoleBase {
             )
 
             if (killer.role instanceof Wolf)
-                GuardianAngel.game.bot.sendMessage(
+                await GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
                     'Кровавый рассвет оросил нежным светом девственные, нежные руки ' +
                     'Ангела вашего Хранителя, прибитые гвоздями к кресту на куполе церкви. ' +
@@ -111,7 +96,7 @@ export class GuardianAngel extends RoleBase {
                     `воспарив в небеса таким садистским способом...`
                 )
             else
-                GuardianAngel.game.bot.sendMessage(
+                await GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
                     'Занятно: ангелы спасают других от убийц, а себя спасти не могут. ' +
                     `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`

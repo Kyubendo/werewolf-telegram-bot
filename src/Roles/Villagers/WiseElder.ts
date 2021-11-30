@@ -2,7 +2,6 @@ import {Gunner} from "./Gunner";
 import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../WolfTeam/Wolf";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {RoleBase} from "../Abstract/RoleBase";
 
 export class WiseElder extends ForecasterBase {
@@ -12,19 +11,9 @@ export class WiseElder extends ForecasterBase {
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
     weight = () => 5;
 
-    actionResult = () => {
-        if (!this.targetPlayer?.role) return;
-        let roleName = this.forecastRoleName(this.targetPlayer.role);
-
-        ForecasterBase.game.bot.sendMessage(
-            this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}.`
-        )
-    }
-
     forecastRoleName = (targetRole: RoleBase) => { // Arsonist, CultistHunter, FallenAngel, Hunter, BlackWolf?
         const killers = [Gunner, SerialKiller, Wolf];
-        return killers.find(player => targetRole instanceof player)
+        return killers.find(killer => targetRole instanceof killer)
             ? 'может убивать.'
             : 'совершенно безобидный человек и не желает никому причинять боль.';
     }

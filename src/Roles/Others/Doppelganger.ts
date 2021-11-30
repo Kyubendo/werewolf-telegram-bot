@@ -6,7 +6,7 @@ import {findPlayer} from "../../Game/findPlayer";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => 'Легенда гласит, что твои предки были Метаморфами и могли выбирать любую форму бытия, ' +
         'какую только пожелали... Ты унаследовал часть их способностей! Выбери игрока, когда он умрет, ' +
         'ты получишь его роль.'
@@ -29,10 +29,10 @@ export class Doppelganger extends RoleBase {
                     false
                 )
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) {
             this.targetPlayer = randomElement(Doppelganger.game.players
                 .filter(player => this.player !== player && player.isAlive))
@@ -41,7 +41,7 @@ export class Doppelganger extends RoleBase {
                 `так что высшие силы сделали выбор за тебя: ${highlightPlayer(this.targetPlayer)}.`,
                 {
                     chat_id: this.player.id,
-                    message_id: this.choiceMsgId
+                    message_id: this.actionMsgId
                 }
             )
         }
@@ -49,12 +49,12 @@ export class Doppelganger extends RoleBase {
         if (!this.targetPlayer.role) return;
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
-        this.targetPlayer.role.handleDeath = (killer, type) => {
+        this.targetPlayer.role.handleDeath = async (killer?, type?) => {
             if (!this.targetPlayer?.role) return false;
-            Doppelganger.game.bot.sendMessage(
+            await Doppelganger.game.bot.sendMessage(
                 this.player.id,
                 `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
-                this.targetPlayer.role.roleIntroductionText() + this.targetPlayer.role.startMessageText()
+                this.targetPlayer.role.roleIntroductionText() + ' ' + this.targetPlayer.role.startMessageText()
             )
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
             return currentTargetHandleDeath(killer, type);

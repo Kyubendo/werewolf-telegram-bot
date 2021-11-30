@@ -8,19 +8,19 @@ import {findPlayer} from "../../Game/findPlayer";
 
 export class Sorcerer extends ForecasterBase {
     roleName = 'Колдунья 🔮';
-    roleIntroductionText = () => `Ты ${this.roleName} `;
+    roleIntroductionText = () => `Ты ${this.roleName}`;
     startMessageText = () => `и обьединишься ты охотнее с детьми ночи, ` +
         'нежели с селянами. Ночью ты можешь использовать свою силу, чтобы найти членов стаи волков и их союзников, ' +
         'а также провидцев. Ты победишь лишь тогда, когда победят волки. ' +
         'Наслаждайся убийством несчастных сельских жителей.'
-    weight = () => -2;
+    weight = () => -3;
 
     nightActionDone = false
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
-        Sorcerer.game.bot.sendMessage(
+       await Sorcerer.game.bot.sendMessage(
             this.player.id,
             roleName
                 ? `Ты видишь, что ${highlightPlayer(this.targetPlayer)} это *${roleName}*!`

@@ -5,8 +5,6 @@ import {RoleBase} from "../index";
 
 export abstract class ForecasterBase extends RoleBase {
     action = () => {
-        this.targetPlayer = undefined
-
         ForecasterBase.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь посмотреть?',
@@ -14,14 +12,14 @@ export abstract class ForecasterBase extends RoleBase {
                 reply_markup: generateInlineKeyboard(ForecasterBase.game.players
                     .filter(player => player !== this.player && player.isAlive))
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResult = () => {
+    actionResult = async () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
-        ForecasterBase.game.bot.sendMessage(
+        await ForecasterBase.game.bot.sendMessage(
             this.player.id,
             `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
         )

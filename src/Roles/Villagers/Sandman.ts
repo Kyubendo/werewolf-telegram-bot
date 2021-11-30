@@ -5,14 +5,17 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Sandman extends RoleBase {
     roleName = 'Морфей 💤';
-    roleIntroductionText = () => `Ты ${this.roleName}. `
+    roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Один раз за игру ты можешь использовать свою магию, чтобы заставить всех спать ` +
         `так крепко, что никто не сможет выполнить свои ночные действия.`
-    weight = () => 3;
+    weight = () => 6.5;
 
     specialCondition: specialConditionSandman = {
         sleep: undefined
     }
+
+    stealMessage = () => this.specialCondition.sleep !== undefined
+        && '\nОднако ты чувствуешь, что твоей магии не хватит на ещё одно заклинание...'
 
     actionAnnouncement = () => ({
         message: 'Пока жители деревни обсуждают события прошедшей ночи, ' +
@@ -25,12 +28,10 @@ export class Sandman extends RoleBase {
     action = () => {
         if (this.specialCondition.sleep) {
             this.specialCondition.sleep = false;
-            this.stealMessage = '\nОднако ты чувствуешь, что твоей магии не хватит на ещё одно заклинание...';
             return;
         }
 
         if (this.specialCondition.sleep === false) return;
-
 
         Sandman.game.bot.sendMessage(
             this.player.id,
@@ -43,10 +44,10 @@ export class Sandman extends RoleBase {
                     ]
                 }
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.specialCondition.sleep) return
 
         Sandman.game.players.filter(player => player.isAlive).forEach(player => player.isFrozen = true);
@@ -70,7 +71,7 @@ export class Sandman extends RoleBase {
     choiceMsgEditText = () => Sandman.game.bot.editMessageText(
         `Выбор принят: ${this.specialCondition.sleep ? 'Использовать' : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

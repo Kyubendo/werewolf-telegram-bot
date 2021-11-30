@@ -1,21 +1,20 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Wolf} from "../WolfTeam/Wolf";
-import {Traitor} from "./Traitor";
 import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
+import {Traitor, WildChild, Wolf} from "../index";
 
 export class Blacksmith extends RoleBase {
     roleName = 'Кузнец ⚒';
-    roleIntroductionText = () => `Ты ${this.roleName} `;
+    roleIntroductionText = () => `Ты ${this.roleName}`;
     startMessageText = () => '- ремесленник по металлу этой деревни. ' +
         'Ты не умеешь кучи серебра, но у тебя его достаточно, ' +
         'чтобы предотвратить волчью атаку ровно на одну ночь. ' +
         'Днём ты можешь растолочь и распылить его по всей деревне. ' +
         'А в остальном ты простой селянин.'
-    weight = () => Blacksmith.game.players.filter(player => player.role instanceof Wolf)
-        ? 5
-        : Blacksmith.game.players.filter(player => player.role instanceof Traitor) // Or WildChild
-            ? 3.5
+    weight = () => Blacksmith.game.players.find(p => p.role instanceof Wolf)
+        ? 8
+        : Blacksmith.game.players.find(p => p.role instanceof Traitor || p.role instanceof WildChild)
+            ? 4
             : 3
 
     actionAnnouncement = () => ({
@@ -30,11 +29,13 @@ export class Blacksmith extends RoleBase {
         silverDust: undefined
     }
 
+    stealMessage = () => this.specialCondition.silverDust !== undefined
+        && '\nОднако ты видишь, что серебрянная пыль уже кончилась'
+
 
     action = () => {
         if (this.specialCondition.silverDust) {
             this.specialCondition.silverDust = false;
-            this.stealMessage = '\nОднако ты видишь, что серебрянная пыль уже кончилась';
             return;
         }
 
@@ -51,10 +52,10 @@ export class Blacksmith extends RoleBase {
                     ]
                 }
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (this.specialCondition.silverDust)
             Blacksmith.game.wolvesDeactivated = true;
     }
@@ -72,13 +73,12 @@ export class Blacksmith extends RoleBase {
             Blacksmith.game.chatId,
             this.actionAnnouncement().gif, {caption: this.actionAnnouncement().message}
         )
-        console.log('handleChoice ' + this.specialCondition.silverDust)
     }
 
     choiceMsgEditText = () => Blacksmith.game.bot.editMessageText(
         `Выбор принят — ${this.specialCondition.silverDust ? 'Распылить' : 'Пропустить'}.`,
         {
-            message_id: this.choiceMsgId,
+            message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
     )

@@ -1,22 +1,21 @@
-import {RoleBase} from "../Abstract/RoleBase";
 import {specialConditionPrincess} from "../../Utils/specialConditionTypes";
-import {Player} from "../../Player/Player";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Monarch} from "../index";
+import {Monarch, RoleBase} from "../index";
+import {DeathType, Player} from "../../Game";
 
 export class Princess extends RoleBase {
     roleName = 'Принцесса 💍';
-    roleIntroductionText = () => `Ты скрывающаяся ${this.roleName}, `
+    roleIntroductionText = () => `Ты скрывающаяся ${this.roleName},`
     startMessageText = () => 'сбежавшая от своей скучной, изнеженной жизни, чтобы провести день среди деревенщин. '
         + 'Если они попытаются казнить тебя, они совершат огромную ошибку, и никто не будет казнен.'
     weight = () => 2;
     specialCondition: specialConditionPrincess = {ringShowed: false}
 
-    handleDeath(killer?: Player): boolean {
+    async handleDeath(killer?: Player, deathType?: DeathType): Promise<boolean> {
         const monarchWill = Princess.game.players
             .find(p => p.role instanceof Monarch && p.role.specialCondition.comingOut)
         if (!killer && !this.specialCondition.ringShowed && !monarchWill) {
-            Princess.game.bot.sendAnimation(
+            await Princess.game.bot.sendAnimation(
                 Princess.game.chatId,
                 'https://media.giphy.com/media/RLVHPJJv7jY1q/giphy.gif',
                 {
@@ -28,6 +27,6 @@ export class Princess extends RoleBase {
             this.specialCondition.ringShowed = true;
             return false;
         }
-        return super.handleDeath(killer);
+        return super.handleDeath(killer, deathType);
     }
 }

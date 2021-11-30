@@ -14,7 +14,7 @@ export const join = (game: Game, select: SelectType) => {
     game.startGameTimer.extend(60_000)
     game.bot.sendMessage(game.chatId,
         `${highlightPlayer(newPlayer)} присоединился к игре! Время увеличено, `
-        + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры`,
+        + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры.`,
         {
             reply_markup: joinButton
         })

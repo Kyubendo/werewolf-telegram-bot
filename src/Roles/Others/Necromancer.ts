@@ -11,8 +11,6 @@ export class Necromancer extends RoleBase {
     nightActionDone = false
 
     action = () => {
-        this.targetPlayer = undefined;
-
         const deadPlayers = Necromancer.game.players
             .filter(player => !player.isAlive);
         if (!deadPlayers.length) return
@@ -22,10 +20,10 @@ export class Necromancer extends RoleBase {
             {
                 reply_markup: generateInlineKeyboard(deadPlayers)
             }
-        ).then(msg => this.choiceMsgId = msg.message_id)
+        ).then(msg => this.actionMsgId = msg.message_id)
     }
 
-    actionResolve = () => {
+    actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
         this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
