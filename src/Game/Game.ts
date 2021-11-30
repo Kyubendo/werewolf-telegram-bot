@@ -36,9 +36,9 @@ export class Game {
 
     wolvesDeactivated: boolean = false
 
-    lynchDuration = 60_000
-    dayDuration = 120_000
-    nightDuration = 60_000
+    lynchDuration = 6_000
+    dayDuration = 12_000
+    nightDuration = 6_000
 
     dayCount = 0;
 

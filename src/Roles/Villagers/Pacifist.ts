@@ -26,11 +26,6 @@ export class Pacifist extends RoleBase {
     })
 
     action = () => {
-        if (this.specialCondition.peace) {
-            this.specialCondition.peace = false;
-            return;
-        }
-
         if (this.specialCondition.peace === false) return;
 
         Pacifist.game.bot.sendMessage(
@@ -78,6 +73,7 @@ export class Pacifist extends RoleBase {
                     }
                 )
                 RoleBase.game.lynch?.editSkipMessages();
+                this.specialCondition.peace = false;
                 RoleBase.game.setNextStage();
             }
         }
