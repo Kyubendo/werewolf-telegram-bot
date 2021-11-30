@@ -20,8 +20,8 @@ export class Lynch extends VotingBase {
     getActiveMonarchs = () => this.game.players
         .filter(player => player.role instanceof Monarch && player.role.specialCondition.comingOut && player.isAlive);
 
-    checkActivePacifist = () => this.game.players
-        .find(player => player.role instanceof Pacifist && player.role.specialCondition.peace && player.isAlive);
+    getActivatedPacifists = () => this.game.players
+        .filter(player => player.role instanceof Pacifist && player.role.specialCondition.peace);
 
     defineTarget = async (voter: Player, target?: Player) => {
         if (target && voter.role instanceof ClumsyGuy && Math.random() < .5) {
@@ -37,7 +37,7 @@ export class Lynch extends VotingBase {
     }
 
     async startVoting() {
-        if (this.checkActivePacifist()) {
+        if (this.getActivatedPacifists().length) {
             this.game.setNextStage();
             return;
         }
@@ -57,7 +57,14 @@ export class Lynch extends VotingBase {
         && voter.role.specialCondition.comingOut !== undefined) ? 2 : 1;
 
     async handleVoteResult(voteResult: Player[]) {
-        if (this.checkActivePacifist()) return;
+        if (this.getActivatedPacifists().length) {
+            this.getActivatedPacifists()
+                .forEach(pacifist => {
+                    if (pacifist.role instanceof Pacifist)
+                        pacifist.role.specialCondition.peace = false; // So the dead Pacifist can still skip lynch
+                })
+            return;
+        }
 
         if (voteResult.length === 1) {
             if (voteResult[0].role instanceof Suicide) {
