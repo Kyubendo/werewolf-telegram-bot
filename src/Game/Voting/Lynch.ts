@@ -64,7 +64,7 @@ export class Lynch extends VotingBase {
                 await this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
                 return true
             } else {
-                voteResult[0].role?.onKilled()
+                await voteResult[0].role?.onKilled()
             }
         } else {
             await this.game.bot.sendMessage(this.game.chatId,

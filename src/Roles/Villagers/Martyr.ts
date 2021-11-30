@@ -50,7 +50,7 @@ export class Martyr extends RoleBase {
         if (!this.specialCondition.protectedPlayer?.role) {
             this.specialCondition.protectedPlayer = randomElement(Martyr.game.players
                 .filter(p => p !== this.player && p.isAlive))
-            Martyr.game.bot.editMessageText(
+            await Martyr.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
                 `за тебя — ${highlightPlayer(this.specialCondition.protectedPlayer)}`,
                 {
@@ -60,19 +60,19 @@ export class Martyr extends RoleBase {
             )
         }
         if (!this.specialCondition.protectedPlayer.role) return
-        this.specialCondition.protectedPlayer.role.handleDeath = (killer?: Player) => {
+        this.specialCondition.protectedPlayer.role.handleDeath = async (killer?: Player) => {
             if (!this.specialCondition.protectedPlayer) return false;
 
             this.protectedPlayerKiller = killer
-            this.onKilled(this.player)
+            await this.onKilled(this.player)
             this.diedForProtectedPlayer = true
-            Martyr.game.bot.sendMessage(
+            await Martyr.game.bot.sendMessage(
                 this.player.id,
                 `Как только ${highlightPlayer(this.specialCondition.protectedPlayer)} оказался(лась) на грани жизни и смерти, `
                 + `ты начинаешь молиться Древним Богам, чтобы они забрали тебя вместо него(нее). И они отвечают на `
                 + `твои молитвы. Твоя жизнь будет отдана в жертву, но ${highlightPlayer(this.specialCondition.protectedPlayer)} будет жить.`
             )
-            Martyr.game.bot.sendMessage(
+            await Martyr.game.bot.sendMessage(
                 this.specialCondition.protectedPlayer?.id,
                 `Ты проснулся(ась) в своем доме из-за того, что почувствовал(а) что-то... Ты помнишь, как `
                 + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы ${highlightPlayer(this.player)} навсегда `
@@ -83,7 +83,7 @@ export class Martyr extends RoleBase {
     }
 
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (killer === this.player && this.specialCondition.protectedPlayer && !type) {
 
             let deathMessage: string | undefined

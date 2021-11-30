@@ -32,14 +32,14 @@ export class JackOLantern extends RoleBase {
         if (!this.targetPlayer) return;
 
         if (this.targetPlayer.role instanceof Pumpkin) {
-            JackOLantern.game.bot.sendMessage(
+            await JackOLantern.game.bot.sendMessage(
                 this.player.id,
                 `Ты пришёл домой к ${highlightPlayer(this.targetPlayer)}, но видишь что он уже тыква! ` +
                 `Кто-то тебя опередил.`
             )
             return;
         } else if (this.targetPlayer.role instanceof Beauty) {
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
             return;
         }
 
@@ -48,7 +48,7 @@ export class JackOLantern extends RoleBase {
         this.targetPlayer.role.specialCondition = specialCondition;
 
 
-        JackOLantern.game.bot.sendAnimation(
+        await JackOLantern.game.bot.sendAnimation(
             this.targetPlayer.id,
             'https://media.giphy.com/media/12eLy0DOnVE6mA/giphy.gif',
             {
@@ -56,7 +56,7 @@ export class JackOLantern extends RoleBase {
             }
         )
 
-        JackOLantern.game.bot.sendMessage(
+        await JackOLantern.game.bot.sendMessage(
             this.player.id,
             `${highlightPlayer(this.targetPlayer)} успешно превращён в тыкву.`
         )

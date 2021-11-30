@@ -32,7 +32,7 @@ export class Pumpkin extends RoleBase {
         }
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (!killer) {
             Pumpkin.game.bot.sendAnimation(
                 Pumpkin.game.chatId,

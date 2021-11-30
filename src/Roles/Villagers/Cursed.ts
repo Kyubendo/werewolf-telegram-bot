@@ -12,7 +12,7 @@ export class Cursed extends RoleBase {
         return (wolvesAmount ? 1 - wolvesAmount : 1)
     }
 
-    handleDeath(killer?: Player, type?: DeathType) {
+    async handleDeath(killer?: Player, type?: DeathType) {
         if (killer?.role instanceof Wolf && !type) {
             Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
                 .forEach(player => Cursed.game.bot.sendMessage(
@@ -24,7 +24,7 @@ export class Cursed extends RoleBase {
             this.player.role = new Wolf(this.player, this.player.role);
 
             if (this.player.role instanceof Wolf)
-                Cursed.game.bot.sendMessage(this.player.id,
+                await Cursed.game.bot.sendMessage(this.player.id,
                     'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
                     + this.player.role.showOtherWolfPlayers()
                 );

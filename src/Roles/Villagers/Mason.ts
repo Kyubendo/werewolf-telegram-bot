@@ -28,15 +28,15 @@ export class Mason extends RoleBase {
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
     }
 
-    handleDeath(killer?: Player, type?: DeathType): boolean {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if (killer?.role && !type) {
-            Mason.game.bot.sendMessage(
+            await Mason.game.bot.sendMessage(
                 Mason.game.chatId,
                 `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
                 `камней, кровь разбрызгана повсюду. *${this.roleName}* мертв!`
             )
 
-            killer?.role?.killMessage && Mason.game.bot.sendAnimation(
+            killer?.role?.killMessage && await Mason.game.bot.sendAnimation(
                 this.player.id,
                 killer?.role?.killMessage().gif,
                 {

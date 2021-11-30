@@ -68,6 +68,6 @@ export class Cupid extends RoleBase {
                 }
             )
         }
-        this.targetPlayer?.loveBind(this.targetPlayer2)
+        await this.targetPlayer?.loveBind(this.targetPlayer2)
     }
 }

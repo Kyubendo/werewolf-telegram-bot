@@ -21,17 +21,17 @@ export class Prowler extends ForecasterBase {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.player.loveBind(this.targetPlayer.role.player);
+            await this.player.loveBind(this.targetPlayer.role.player);
             this.showResult = false;
             return;
         }
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
-        this.targetPlayer.role.handleDeath = (killer?: Player, type?: DeathType) => {
+        this.targetPlayer.role.handleDeath = async (killer?: Player, type?: DeathType) => {
             if (this.targetPlayer && !type && killer?.role instanceof Wolf) {
                 const wolves = killer.role.findOtherWolfPlayers();
                 wolves.unshift(killer)
-                RoleBase.game.bot.sendMessage(
+                await RoleBase.game.bot.sendMessage(
                     this.player.id,
                     wolves.length > 1
                         ? `Когда ты заглянула в окно к ${highlightPlayer(this.targetPlayer)}, ` +
