@@ -3,6 +3,7 @@ import {Player} from "../../Player/Player";
 import {DeathType} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {findPlayer} from "../../Game/findPlayer";
 
 export class Cowboy extends RoleBase {
     readonly roleName = 'Ковбой 🤠'
@@ -34,5 +35,12 @@ export class Cowboy extends RoleBase {
             }
         ).then(msg => this.actionMsgId = msg.message_id)
         return super.handleDeath(killer, type);
+    }
+
+    handleChoice = async (choice?: string) => {
+        const targetPLayer = findPlayer(choice, Cowboy.game.players)
+        await targetPLayer?.role?.onKilled(this.player)
+        await this.choiceMsgEditText();
+        Cowboy.game.setNextStage();
     }
 }
