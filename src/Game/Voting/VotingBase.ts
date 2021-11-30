@@ -82,7 +82,7 @@ export abstract class VotingBase {
     handleVoteEnd = async () => {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
-        if (await this.handleVoteResult(this.voteResults())) return true
+        await this.handleVoteResult(this.voteResults())
 
         this.votes = {}
         this.votedPlayers = []

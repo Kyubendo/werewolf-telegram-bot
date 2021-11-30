@@ -23,22 +23,29 @@ export class Cowboy extends RoleBase {
     })
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
-        Cowboy.game.stageTimer?.stop() // ZA WARUDO!!!
+        if (!await super.handleDeath(killer, type)) return false
+
+        Cowboy.game.stopStage()
+        console.log(Cowboy.game.players.filter(p => p.isAlive).length)
+        console.log(JSON.stringify(generateInlineKeyboard(Cowboy.game.players.filter(p => p.isAlive))))
 
         await Cowboy.game.bot.sendMessage(
             this.player.id,
             'В кого ты хочешь выстрелить?',
             {
                 reply_markup: generateInlineKeyboard(
-                    Cowboy.game.players.filter(player => player !== this.player && player.isAlive)
+                    Cowboy.game.players.filter(p => p.isAlive)
                 )
             }
         ).then(msg => this.actionMsgId = msg.message_id)
-        return super.handleDeath(killer, type);
+        console.log('hd')
+        return false;
     }
 
     handleChoice = async (choice?: string) => {
+        console.log(choice)
         const targetPLayer = findPlayer(choice, Cowboy.game.players)
+        console.log(targetPLayer?.role?.roleName)
         await targetPLayer?.role?.onKilled(this.player)
         await this.choiceMsgEditText();
         Cowboy.game.setNextStage();

@@ -51,6 +51,8 @@ export class Game {
     gameStartedTime?: number
     started = false
     canPinPlayers = true
+    private stageStopped = false
+    stopStage = () => this.stageStopped = true
 
     setNextStage = async () => {
         let stageDuration;
@@ -78,12 +80,17 @@ export class Game {
             : this.stageTimer = timer(this.setNextStage, stageDuration);
 
 
-        if (await this.runResolves()) return//fix
+        await this.runResolves()
 
         await this.runResults();
 
         this.clearAngel()
         this.clearSelects()
+
+        if (this.stageStopped) {
+            this.stageStopped = false
+            return
+        }
 
         const endGame = checkEndGame(this.players, this.stage)
         if (!process.env.ROLE_TEST && endGame) {
@@ -116,7 +123,7 @@ export class Game {
     }
 
     private runResolves = async () => {
-        if (await this.lynch?.handleVoteEnd()) return true
+        await this.lynch?.handleVoteEnd()
         await this.wolfFeast?.handleVoteEnd()
 
         for (const role of roleResolves(this.stage)) {
