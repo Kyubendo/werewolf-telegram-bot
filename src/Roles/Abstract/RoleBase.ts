@@ -51,7 +51,7 @@ export abstract class RoleBase {
 
     readonly originalHandleDeath = this.handleDeath;
 
-    readonly onKilled = async (killer?: Player, type?: DeathType) => {
+    readonly onKilled = async (killer?: Player, type?: DeathType): Promise<void> => {
         if (!this.player.isAlive) return;
         if (await this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
@@ -60,17 +60,17 @@ export abstract class RoleBase {
         }
     }
 
-    readonly killLover = (type: DeathType) => {
+    readonly killLover = async (type: DeathType) => {
         if (!this.player.lover) return
 
         if (type !== 'loverDeath')
             this.player.lover.lover = undefined;
 
-        this.player.lover.role?.onKilled(this.player, type);
+        await this.player.lover.role?.onKilled(this.player, type);
     }
 
-    readonly loverMessage = (newLover: Player) => {
-        newLover.lover && RoleBase.game.bot.sendAnimation(
+    readonly sendLoverMessage = async (newLover: Player) => {
+        newLover.lover && await RoleBase.game.bot.sendAnimation(
             newLover.id,
             'https://media.giphy.com/media/VgU9D8avczJWJi08dT/giphy.gif',
             {
@@ -81,19 +81,19 @@ export abstract class RoleBase {
         )
     }
 
-    readonly handleGuardianAngel = (killer: Player) => {
+    readonly handleGuardianAngel = async (killer: Player) => {
         const guardianAngelPlayer = killer.role?.targetPlayer?.guardianAngel;
         if (guardianAngelPlayer
             && guardianAngelPlayer.role instanceof GuardianAngel
             && killer.role?.targetPlayer) { // Дополнительная проверка нужна для доступа к полям GuardianAngel
-            RoleBase.game.bot.sendMessage(
+            await RoleBase.game.bot.sendMessage(
                 killer.id,
                 `Придя домой к ${highlightPlayer(killer.role.targetPlayer)}, ` +
                 `у дверей ты встретил ${guardianAngelPlayer.role.roleName}, ` +
                 'и тебя вежливо попросили свалить. Ты отказался, потому тебе надавали лещей и ты убежал.'
             )
 
-            RoleBase.game.bot.sendMessage(
+            await RoleBase.game.bot.sendMessage(
                 killer.role.targetPlayer.id,
                 `${guardianAngelPlayer.role.roleName} наблюдал за тобой этой ночью и защитил тебя от зла!`
             )
@@ -102,7 +102,7 @@ export abstract class RoleBase {
             if (guardianAngelPlayer.role.numberOfAttacks)
                 ending = ' Снова!'
 
-            RoleBase.game.bot.sendMessage(
+            await RoleBase.game.bot.sendMessage(
                 guardianAngelPlayer.id,
                 `С выбором ты угадал, на ` +
                 `${highlightPlayer(killer.role.targetPlayer)} действительно напали! Ты спас ему жизнь!`

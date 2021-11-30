@@ -64,12 +64,12 @@ export class SerialKiller extends RoleBase {
         if (!this.targetPlayer) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
-            this.handleGuardianAngel(this.player);
+            await this.handleGuardianAngel(this.player);
             return;
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player)
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
         else
-            this.targetPlayer.role?.onKilled(this.player);
+            await this.targetPlayer.role?.onKilled(this.player);
     }
 
     handleChoice = (choice?: string) => {

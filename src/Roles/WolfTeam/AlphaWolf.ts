@@ -15,12 +15,12 @@ export class AlphaWolf extends Wolf {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.guardianAngel?.role instanceof GuardianAngel) {
-            this.handleGuardianAngel(this.player);
+            await this.handleGuardianAngel(this.player);
             return;
         }
 
         if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
             return;
         }
 
@@ -40,16 +40,16 @@ export class AlphaWolf extends Wolf {
             const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);
 
             wolfPlayers.forEach(player =>
-                this.targetPlayer && AlphaWolf.game.bot.sendMessage(
-                player.id,
-                `Как только волками был(а) атакован(а) ${highlightPlayer(this.targetPlayer)}, ` +
-                `${highlightPlayer(this.player)} остановил всех, будучи Альфа Волком. ` +
-                `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
-                `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
-                'присоединиться к стае вместо того, ' +
-                `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией. ` +
-                'Он(а) станет волком завтра ночью.'
-                )
+                    this.targetPlayer && AlphaWolf.game.bot.sendMessage(
+                        player.id,
+                        `Как только волками был(а) атакован(а) ${highlightPlayer(this.targetPlayer)}, ` +
+                        `${highlightPlayer(this.player)} остановил всех, будучи Альфа Волком. ` +
+                        `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
+                        `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
+                        'присоединиться к стае вместо того, ' +
+                        `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией. ` +
+                        'Он(а) станет волком завтра ночью.'
+                    )
             )
 
             this.targetPlayer.infected = true;
@@ -57,7 +57,6 @@ export class AlphaWolf extends Wolf {
             return false;
         }
 
-        this.targetPlayer.role?.onKilled(this.player);
-
+        await this.targetPlayer.role?.onKilled(this.player);
     }
 }

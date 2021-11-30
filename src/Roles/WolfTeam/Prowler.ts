@@ -21,7 +21,7 @@ export class Prowler extends ForecasterBase {
         if (!this.targetPlayer?.role) return;
 
         if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.player.loveBind(this.targetPlayer.role.player);
+            await this.player.loveBind(this.targetPlayer.role.player);
             this.showResult = false;
             return;
         }

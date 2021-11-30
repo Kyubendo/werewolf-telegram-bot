@@ -38,15 +38,15 @@ export class Player {
         this.infected = false
     }
 
-    readonly loveBind = (newLover: Player) => {
+    readonly loveBind = async (newLover: Player) => {
         if (!this.role) return;
-        this.role.killLover('lover_betrayal');
-        newLover.role?.killLover('lover_betrayal');
+        await this.role.killLover('lover_betrayal');
+        await newLover.role?.killLover('lover_betrayal');
 
         this.lover = newLover;
         newLover.lover = this;
 
-        this.role.loverMessage(this);
-        this.role.loverMessage(newLover);
+        await this.role.sendLoverMessage(this);
+        await this.role.sendLoverMessage(newLover);
     }
 }

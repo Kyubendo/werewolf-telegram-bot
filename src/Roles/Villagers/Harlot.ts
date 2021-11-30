@@ -40,7 +40,7 @@ export class Harlot extends RoleBase {
             await this.onKilled(this.targetPlayer);
             return;
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
             return;
         } else {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);

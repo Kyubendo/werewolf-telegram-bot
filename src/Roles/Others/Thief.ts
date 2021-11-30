@@ -51,7 +51,7 @@ export class Thief extends RoleBase {
                 `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
             )
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
-            this.player.loveBind(this.targetPlayer);
+            await this.player.loveBind(this.targetPlayer);
         } else if (this.targetPlayer.role instanceof Doppelganger) {
             await Thief.game.bot.sendMessage(
                 this.player.id,
