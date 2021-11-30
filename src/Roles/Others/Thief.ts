@@ -2,7 +2,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "./SerialKiller";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty} from "../Villagers/Beauty";
 import {Doppelganger} from "./Doppelganger";
 import {Mason} from "../Villagers/Mason";
@@ -32,7 +32,7 @@ export class Thief extends RoleBase {
         if (!this.targetPlayer.isAlive) {
             await Thief.game.bot.sendMessage(
                 this.player.id,
-                `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он(а) уже труп!`
+                `Ты попытался украсть роль у ${playerLink(this.targetPlayer)}, но он(а) уже труп!`
             )
             return;
         }
@@ -42,7 +42,7 @@ export class Thief extends RoleBase {
 
             await Thief.game.bot.sendMessage(
                 Thief.game.chatId,
-                `*${this.roleName}* — ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
+                `*${this.roleName}* — ${playerLink(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
             )
 
@@ -69,7 +69,7 @@ export class Thief extends RoleBase {
 
             await Thief.game.bot.sendMessage(
                 this.player.id,
-                `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
+                `Успех! Ты украль роль у ${playerLink(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
             )
 
@@ -89,8 +89,8 @@ export class Thief extends RoleBase {
                 this.player.role.findOtherMasonPlayers().forEach(masonPlayer => {
                         this.targetPlayer && Thief.game.bot.sendMessage(
                             masonPlayer.id,
-                            `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
-                            `каменщиков вместо ${highlightPlayer(this.targetPlayer)}!`
+                            `Странно, ${playerLink(this.player)} пришёл на собрание ` +
+                            `каменщиков вместо ${playerLink(this.targetPlayer)}!`
                         )
                     }
                 )
@@ -103,9 +103,9 @@ export class Thief extends RoleBase {
                 this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => { // maybe add exception for the targetPlayer
                     this.targetPlayer && Thief.game.bot.sendMessage(
                         wolfPlayer.id,
-                        `Странно, ${highlightPlayer(this.targetPlayer)} решил стать веганом, ` +
-                        `а ${highlightPlayer(this.player)} протяжно выл в ночи и щёлкал зубами! ` +
-                        `${highlightPlayer(this.player)} теперь волк.`
+                        `Странно, ${playerLink(this.targetPlayer)} решил стать веганом, ` +
+                        `а ${playerLink(this.player)} протяжно выл в ночи и щёлкал зубами! ` +
+                        `${playerLink(this.player)} теперь волк.`
                     )
                 })
             }

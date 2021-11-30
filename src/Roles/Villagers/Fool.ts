@@ -1,6 +1,6 @@
 import {Seer} from "./Seer";
 import {Player} from "../../Player/Player";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {randomElement} from "../../Utils/randomElement";
 import {DeathType} from "../../Game";
 import {RoleBase} from "../Abstract/RoleBase";
@@ -24,7 +24,7 @@ export class Fool extends Seer {
                 Fool.game.chatId,
                 'День начался с печальных новостей. Всем известный Провид... ' +
                 `Так, стоп! Это же никакой не Провидец! Он... *${this.roleName}*!  ` +
-                `Покойся не с миром, ${highlightPlayer(this.player)}...`,
+                `Покойся не с миром, ${playerLink(this.player)}...`,
             )
 
             killer?.role?.killMessage && await Fool.game.bot.sendAnimation(

@@ -2,7 +2,7 @@ import {VotingBase} from "./VotingBase";
 import {GameStage} from "../Game";
 import {Player} from "../../Player/Player";
 import {AlphaWolf, Wolf} from "../../Roles";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {randomElement} from "../../Utils/randomElement";
 
 export class WolfFeast extends VotingBase {
@@ -50,9 +50,9 @@ export class WolfFeast extends VotingBase {
             player.id,
             target
                 ? target.role instanceof AlphaWolf
-                    ? target.role.roleName + ` ${highlightPlayer(voter)} облизывается на ${highlightPlayer(target)}.`
-                    : `${highlightPlayer(voter)} облизывается на ${highlightPlayer(target)}.`
-                : `${highlightPlayer(voter)} облизывается в ожидании решения.`
+                    ? target.role.roleName + ` ${playerLink(voter)} облизывается на ${playerLink(target)}.`
+                    : `${playerLink(voter)} облизывается на ${playerLink(target)}.`
+                : `${playerLink(voter)} облизывается в ожидании решения.`
         ))
     }
 

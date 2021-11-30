@@ -1,7 +1,7 @@
 import {Game, GameStage} from "../Game";
 import {Player} from "../../Player/Player";
 import {findPlayer} from "../findPlayer";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {generateInlineKeyboard} from "../playersButtons";
 import {SelectType} from "../commands/callbackHandle";
 
@@ -71,7 +71,7 @@ export abstract class VotingBase {
         }
 
         await this.game.bot.editMessageText(
-            `Выбор принят — ${target ? highlightPlayer(target) : 'Пропустить'}.`,
+            `Выбор принят — ${target ? playerLink(target) : 'Пропустить'}.`,
             {
                 message_id: voter.role.voteMsgId,
                 chat_id: voter.id,

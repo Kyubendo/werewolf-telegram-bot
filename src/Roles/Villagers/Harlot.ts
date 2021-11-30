@@ -3,7 +3,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
 import {DeathType} from "../../Game";
 import {Beauty} from "./Beauty";
 import {Arsonist, RoleBase} from "../index";
@@ -64,7 +64,7 @@ export class Harlot extends RoleBase {
             this.player.id,
             'https://media.giphy.com/media/XuYxt55O5WHsOtd722/giphy.gif',
             {
-                caption: `Ты сразу поняла, что ${highlightPlayer(this.targetPlayer)} не волк и ` +
+                caption: `Ты сразу поняла, что ${playerLink(this.targetPlayer)} не волк и ` +
                     `не серийный убийца, потому что ночь была слишком хороша...`
             }
         )
@@ -93,40 +93,40 @@ export class Harlot extends RoleBase {
             if (killer.role instanceof Wolf) {
                 await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
-                    `${highlightPlayer(harlotPlayer)} проскользнула ` +
-                    `в дом ${highlightPlayer(this.targetPlayer)}, ` +
+                    `${playerLink(harlotPlayer)} проскользнула ` +
+                    `в дом ${playerLink(this.targetPlayer)}, ` +
                     'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
-                    `пожирающего ${highlightPlayer(this.targetPlayer)}! ` +
-                    `Волк резко прыгает на ${highlightPlayer(harlotPlayer)}... ` +
-                    `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} мертва.`,
+                    `пожирающего ${playerLink(this.targetPlayer)}! ` +
+                    `Волк резко прыгает на ${playerLink(harlotPlayer)}... ` +
+                    `${playerLinkWithRole(harlotPlayer)} мертва.`,
                 )
             } else if (killer.role instanceof SerialKiller) {
                 await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
-                    `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} проникла в дом ` +
-                    `${highlightPlayer(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
-                    `${highlightPlayer(this.player)}! ` +
-                    `*${killer.role.roleName}* решил развлечься с ${highlightPlayer(harlotPlayer)}, ` +
+                    `${playerLinkWithRole(harlotPlayer)} проникла в дом ` +
+                    `${playerLink(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
+                    `${playerLink(this.player)}! ` +
+                    `*${killer.role.roleName}* решил развлечься с ${playerLink(harlotPlayer)}, ` +
                     `прежде чем взять сердце к себе в коллекцию!`,
                 )
             } else if (killer.role instanceof Arsonist) {
                 await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
-                    `*${harlotPlayer.role?.roleName}* ${highlightPlayer(harlotPlayer)} пришла развлечься к ` +
-                    `${highlightPlayer(this.player)}, но, видимо, ночь оказалось слишком горячей...` +
-                    `${highlightPlayer(harlotPlayer)} сгорела вместе с домом ${highlightPlayer(this.player)}!`
+                    `${playerLinkWithRole(harlotPlayer)} пришла развлечься к ` +
+                    `${playerLink(this.player)}, но, видимо, ночь оказалось слишком горячей...` +
+                    `${playerLink(harlotPlayer)} сгорела вместе с домом ${playerLink(this.player)}!`
                 )
             }
         } else if (killer?.role instanceof Wolf && !type) {
             if (this.targetPlayer?.role instanceof Wolf) {
                 await Harlot.game.bot.sendMessage(
                     Harlot.game.chatId,
-                    `${highlightPlayer(this.player)} проскользнула в не тот дом прошлой ночью!  ` +
+                    `${playerLink(this.player)} проскользнула в не тот дом прошлой ночью!  ` +
                     'Останки распутной жительницы были найдены пригвожденными к дверям цверкви... Как жалко :(')
             } else {
                 this.targetPlayer && await Harlot.game.bot.sendMessage(
                     killer.id,
-                    `Странно... ${highlightPlayer(this.player)} не была дома! ` +
+                    `Странно... ${playerLink(this.player)} не была дома! ` +
                     `Нет ужина для тебя сегодня...`,
                 )
                 return false;

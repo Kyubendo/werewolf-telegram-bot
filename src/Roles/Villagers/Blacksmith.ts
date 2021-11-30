@@ -1,5 +1,5 @@
 import {RoleBase} from "../Abstract/RoleBase";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
 import {Traitor, WildChild, Wolf} from "../index";
 
@@ -19,7 +19,7 @@ export class Blacksmith extends RoleBase {
 
     actionAnnouncement = () => ({
         message: 'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +
-            `как ${highlightPlayer(this.player)} блуждает вокруг и ` +
+            `как ${playerLink(this.player)} блуждает вокруг и ` +
             'разбрасывает серебрянную пыль повсюду на землю.  Сейчас, по крайней мере, ' +
             'деревня защищена от нападения волков.\n(Этой ночью волки дезактивированы)',
         gif: 'https://media.giphy.com/media/dUBR5zjuoZwBChZ1aC/giphy.gif'
