@@ -10,11 +10,11 @@ export class Wolf extends RoleBase {
         && otherPlayer.isAlive
     )
 
-    getAlliesMessage = (notify?: boolean): string => {
+    getAlliesMessage = async (notify?: boolean): Promise<string> => {
         const allies = this.findAllies();
 
         if (notify) {
-            let text = '';
+            let text;
             if (this.player.infected)
                 text = `Прошло уже 24 часа с тех пор как ${highlightPlayer(this.player)} был заражён укусом. ` +
                     (Math.random() < 0.9
@@ -41,12 +41,12 @@ export class Wolf extends RoleBase {
                 text = `В стае пополнение! ${highlightPlayer(this.player)} больше не выступает в цирке, ` +
                     'теперь он заодно с вами!'
 
-            allies.forEach(ally => {
-                Wolf.game.bot.sendMessage(
+            for (const ally of allies) {
+                await Wolf.game.bot.sendMessage(
                     ally.id,
                     text
                 )
-            })
+            }
         }
 
         if (!allies.length)
