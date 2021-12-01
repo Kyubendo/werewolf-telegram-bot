@@ -42,7 +42,7 @@ export class Game {
 
     dayCount = 0;
 
-    deadPlayersCount = 0
+    deadPlayersCount?: number
 
     stage: GameStage = undefined
     startGameTimer: Timer
@@ -197,8 +197,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.actionMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
