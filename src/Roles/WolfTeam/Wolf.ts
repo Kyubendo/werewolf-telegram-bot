@@ -21,7 +21,7 @@ export class Wolf extends RoleBase {
                         ? `Внезапно у ${highlightPlayer(this.player)} отрастают огромные волчьи клыки, ` +
                         `а сам он покрывается шерстью. Теперь он ${this.player.role?.roleName}!`
                         :
-                        `С опозданием в 5 секунд он всё же превратился в волка. ` +
+                        `С опозданием аж в 5 секунд он всё же превратился в волка. ` +
                         `И как разработчики могли такое допустить...`)
             else if (this.player.role?.previousRole instanceof Cursed)
                 text = `С детства над ${highlightPlayer(this.player)} издевалось всё село из-за того, ` +
