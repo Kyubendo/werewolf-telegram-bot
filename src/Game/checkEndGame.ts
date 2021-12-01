@@ -13,7 +13,7 @@ const villagers: Function[] = [
 ]
 
 const wolfTeam: Function[] = [Wolf, Sorcerer, Prowler]
-const nonWolfKillers: Function[] = [SerialKiller, Arsonist, JackOLantern]
+const nonWolfKillers: Function[] = [SerialKiller, Arsonist, JackOLantern, Cowboy]
 const evil: Function[] = [Wolf, ...nonWolfKillers]
 
 export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack' | 'arsonist'
@@ -61,12 +61,18 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
             if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller || arsonist) && gunner) {
-                if (stage === 'night') return {winners: villagersTeamPlayers, type: 'villagers'}
+                if (stage === 'night') {
+                    aliveEvilPlayer.isAlive = false
+                    return {winners: villagersTeamPlayers, type: 'villagers'} // custom gunner win
+                }
                 if (wolf) return {winners: wolvesTeamPlayers, type: 'wolves'}
                 if (serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
                 if (arsonist) return {winners: [arsonist], type: 'arsonist'}
             }
-            if (cowboy) return {winners: [], type: 'nobody'}
+            if (cowboy) {
+                alivePlayers.forEach(p => p.isAlive = false)
+                return {winners: [], type: 'nobody'} // custom cowboy lose
+            }
             if (arsonist) return undefined;
         }
     }
