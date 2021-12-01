@@ -66,7 +66,7 @@ export class WildChild extends RoleBase {
                         this.player.id,
                         `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
                         `Теперь ты ${this.player.role.roleName}! ` +
-                        this.player.role.showOtherWolfPlayers()
+                        this.player.role.stealMessage()
                     )
 
                     this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(

@@ -76,35 +76,11 @@ export class Thief extends RoleBase {
 
             if (this.targetPlayer) this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 
-            if (this.player.role instanceof Mason) {
-                await Thief.game.bot.sendMessage(
-                    this.player.id,
-                    this.player.role.showOtherMasonPlayers()
-                )
+            if (this.player.role instanceof Mason)
+                this.player.role.findOtherMasonPlayers().forEach(masonPlayer => masonPlayer.role?.newMemberNotification)
+            else if (this.player.role instanceof Wolf)
+                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.role?.newMemberNotification)
 
-                this.player.role.findOtherMasonPlayers().forEach(masonPlayer => {
-                        this.targetPlayer && Thief.game.bot.sendMessage(
-                            masonPlayer.id,
-                            `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
-                            `каменщиков вместо ${highlightPlayer(this.targetPlayer)}!`
-                        )
-                    }
-                )
-            } else if (this.player.role instanceof Wolf) {
-                await Thief.game.bot.sendMessage(
-                    this.player.id,
-                    this.player.role.showOtherWolfPlayers()
-                )
-
-                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => { // maybe add exception for the targetPlayer
-                    this.targetPlayer && Thief.game.bot.sendMessage(
-                        wolfPlayer.id,
-                        `Странно, ${highlightPlayer(this.targetPlayer)} решил стать веганом, ` +
-                        `а ${highlightPlayer(this.player)} протяжно выл в ночи и щёлкал зубами! ` +
-                        `${highlightPlayer(this.player)} теперь волк.`
-                    )
-                })
-            }
 
             await Thief.game.bot.sendMessage(
                 this.targetPlayer.id,

@@ -34,6 +34,7 @@ export abstract class RoleBase {
     }
 
     stealMessage?: () => string | false;
+    newMemberNotification?: (newMember: Player, oldMember?: Player) => void;
 
     readonly action?: () => void
     readonly actionResolve?: () => Promise<void>

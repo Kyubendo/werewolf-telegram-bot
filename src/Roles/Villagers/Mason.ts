@@ -10,7 +10,7 @@ export class Mason extends RoleBase {
         && otherPlayer.isAlive
     )
 
-    showOtherMasonPlayers = () => {
+    stealMessage = (): string => {
         const allies = this.findOtherMasonPlayers();
         if (!allies?.length) return ''
         return (allies?.length > 1
@@ -19,10 +19,21 @@ export class Mason extends RoleBase {
             + allies?.map(ally => highlightPlayer(ally)).join(', ')
     }
 
+    newMemberNotification = (newMember: Player, oldMember?: Player): void => {
+        Mason.game.bot.sendMessage(
+            this.player.id,
+            oldMember
+                ? `Странно, ${highlightPlayer(newMember)} пришёл на собрание ` +
+                `каменщиков вместо ${highlightPlayer(oldMember)}! ${highlightPlayer(oldMember)} уволен за прогул!`
+                : `${highlightPlayer(newMember)} пришёл на стройку по объявлению. ` +
+                `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика!`
+        )
+    }
+
     roleName = 'Каменщик 👷';
     roleIntroductionText = () => ''
     startMessageText = () => `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ` +
-        `ведь ты ${this.roleName}.` + this.showOtherMasonPlayers();
+        `ведь ты ${this.roleName}.` + this.stealMessage();
     weight = () => {
         const otherMasonsAmount = this.findOtherMasonPlayers().length;
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;

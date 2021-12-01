@@ -3,7 +3,8 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {findPlayer} from "../../Game/findPlayer";
-import {Arsonist} from "../index";
+import {Mason, Wolf} from "../index";
+import {rolesThatNeedStealMessage} from "../../Utils/teams";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
@@ -60,10 +61,16 @@ export class Doppelganger extends RoleBase {
 
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
 
-            this.player.role instanceof Arsonist && await RoleBase.game.bot.sendMessage(
-                this.player.id,
-                this.player.role.stealMessage()
-            )
+            await rolesThatNeedStealMessage.forEach(r => this.player.role instanceof r && Doppelganger.game.bot
+                .sendMessage(
+                    this.player.id,
+                    this.player.role.stealMessage()
+                ))
+
+            if (this.player.role instanceof Mason)
+                this.player.role.findOtherMasonPlayers().forEach(masonPlayer => masonPlayer.role?.newMemberNotification)
+            else if (this.player.role instanceof Wolf)
+                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.role?.newMemberNotification)
 
             return currentTargetHandleDeath(killer, type);
         }

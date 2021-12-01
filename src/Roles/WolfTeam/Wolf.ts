@@ -10,7 +10,7 @@ export class Wolf extends RoleBase {
         && otherPlayer.isAlive
     )
 
-    showOtherWolfPlayers(): string {
+    stealMessage = (): string => {
         const allies = this.findOtherWolfPlayers();
         if (!allies.length)
             return '\nНо ты один в стае, крепись.'
@@ -20,10 +20,22 @@ export class Wolf extends RoleBase {
         + allies?.map(ally => highlightPlayer(ally)).join(', ')}`
     }
 
+    newMemberNotification = (newMember: Player, oldMember?: Player): void => {
+        Wolf.game.bot.sendMessage(
+            this.player.id,
+            oldMember
+                ? `Странно, ${highlightPlayer(newMember)} решил стать веганом, ` +
+                `а ${highlightPlayer(oldMember)} протяжно выл в ночи и щёлкал зубами! ` +
+                `${highlightPlayer(newMember)} теперь полноценный член стаи.`
+                : `В стае пополнение! ${highlightPlayer(newMember)} больше не выступает в цирке, ` +
+                'теперь он заодно с вами!'
+        )
+    }
+
     roleName = 'Волк 🐺';
     roleIntroductionText = () => `Новый ${this.roleName} в селе!`;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
-        + this.showOtherWolfPlayers();
+        + this.stealMessage();
 
     weight = () => -10;
 
