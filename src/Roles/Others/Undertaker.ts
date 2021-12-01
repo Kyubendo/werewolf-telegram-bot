@@ -5,8 +5,9 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 
 export class Undertaker extends RoleBase {
     roleName = 'Гробовщик ⚰';
-    startMessageText = () => 'Ночью ты можешь выбрать роль мертвого для оставшейся части игры. ' +
-        `Но выбирай мудро, так как ты не можешь выиграть как ${this.roleName}.`
+    startMessageText = () => 'Тебе до смерти надоела твоя работа... ' +
+        'Ночью ты можешь забрать себе роль выбранного мертвеца и выиграть за его команду! Помни, что ты не можешь ' +
+        `выиграть как ${this.roleName}.`
     weight = () => 0;
 
     nightActionDone = false
