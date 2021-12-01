@@ -3,6 +3,7 @@ import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {findPlayer} from "../../Game/findPlayer";
+import {Arsonist} from "../index";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
@@ -56,7 +57,14 @@ export class Doppelganger extends RoleBase {
                 `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
                 this.targetPlayer.role.roleIntroductionText() + ' ' + this.targetPlayer.role.startMessageText()
             )
+
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
+
+            this.player.role instanceof Arsonist && await RoleBase.game.bot.sendMessage(
+                this.player.id,
+                this.player.role.stealMessage()
+            )
+
             return currentTargetHandleDeath(killer, type);
         }
     }

@@ -17,7 +17,6 @@ export class Thief extends RoleBase {
     nightActionDone = false
 
     action = () => {
-
         Thief.game.bot.sendMessage(this.player.id,
             'Чью роль ты хочешь украсть?',
             {
@@ -29,16 +28,13 @@ export class Thief extends RoleBase {
     actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
-        if (!this.targetPlayer.isAlive) {
+        if (!this.targetPlayer.isAlive)
             await Thief.game.bot.sendMessage(
                 this.player.id,
                 `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он(а) уже труп!`
             )
-            return;
-        }
-
-        if (this.targetPlayer.role instanceof SerialKiller) {
-            this.player.isAlive = false;
+        else if (this.targetPlayer.role instanceof SerialKiller) {
+            this.player.isAlive = false; // change later to thiefCameToSerialKiller Thief's handleDeath
 
             await Thief.game.bot.sendMessage(
                 Thief.game.chatId,
