@@ -36,7 +36,6 @@ export abstract class RoleBase {
     stealMessage?: () => string | false;
     findAllies?: () => Player[]
     getAlliesMessage?: (notify?: boolean) => string
-    newMemberNotification?: (newMember: Player, oldMember?: Player) => void;
 
     readonly action?: () => void
     readonly actionResolve?: () => Promise<void>
