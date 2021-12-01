@@ -1,10 +1,8 @@
-import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
 import {findPlayer} from "../../Game/findPlayer";
-import {Mason, Wolf} from "../index";
-import {rolesThatNeedStealMessage} from "../../Utils/teams";
+import {Arsonist, Beholder, RoleBase} from "../index";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
@@ -38,7 +36,7 @@ export class Doppelganger extends RoleBase {
         if (!this.targetPlayer?.role) {
             this.targetPlayer = randomElement(Doppelganger.game.players
                 .filter(player => this.player !== player && player.isAlive))
-            Doppelganger.game.bot.editMessageText(
+            await Doppelganger.game.bot.editMessageText(
                 `Ты не успел сделать выбор, ` +
                 `так что высшие силы сделали выбор за тебя: ${highlightPlayer(this.targetPlayer)}.`,
                 {
@@ -52,27 +50,29 @@ export class Doppelganger extends RoleBase {
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = async (killer?, type?) => {
-            if (!this.targetPlayer?.role) return false;
-            await Doppelganger.game.bot.sendMessage(
-                this.player.id,
-                `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
-                this.targetPlayer.role.roleIntroductionText() + ' ' + this.targetPlayer.role.startMessageText()
-            )
+            const handleDeathResult: Promise<boolean> = currentTargetHandleDeath(killer, type);
 
-            this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
+            if (this.targetPlayer?.role) {
+                this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
 
-            await rolesThatNeedStealMessage.forEach(r => this.player.role instanceof r && Doppelganger.game.bot
-                .sendMessage(
+                await Doppelganger.game.bot.sendMessage(
                     this.player.id,
-                    this.player.role.stealMessage()
-                ))
+                    `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n` +
+                    `Теперь ты ${this.player.role.roleName}!`
+                )
 
-            if (this.player.role instanceof Mason)
-                this.player.role.findOtherMasonPlayers().forEach(masonPlayer => masonPlayer.role?.newMemberNotification)
-            else if (this.player.role instanceof Wolf)
-                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.role?.newMemberNotification)
+                this.player.role.getAlliesMessage && await Doppelganger.game.bot.sendMessage(
+                    this.player.id,
+                    this.player.role.getAlliesMessage(true)
+                )
 
-            return currentTargetHandleDeath(killer, type);
+                if (this.player.role instanceof Arsonist || this.player.role instanceof Beholder)
+                    await Doppelganger.game.bot.sendMessage(
+                        this.player.id,
+                        this.player.role.stealMessage()
+                    )
+            }
+            return handleDeathResult;
         }
     }
 

@@ -26,14 +26,14 @@ export class Player {
 
     guardianAngel?: Player;
 
-    readonly transformInfected = () => {
+    readonly transformInfected = async () => {
         this.role = new Wolf(this, this.role);
 
-        RoleBase.game.bot.sendMessage(
+        await RoleBase.game.bot.sendMessage(
             this.id,
             'С наступлением ночи ты испытал(а) странное покалывание, ноющее чувство, пронзающее все тело, ' +
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
-            + (this.role instanceof Wolf && this.role.stealMessage()) // check this line later
+            + (this.role instanceof Wolf && this.role.getAlliesMessage(true)) // check this line later
         )
         this.infected = false
     }

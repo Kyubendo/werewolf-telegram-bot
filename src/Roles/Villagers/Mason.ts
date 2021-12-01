@@ -4,14 +4,23 @@ import {DeathType} from "../../Game";
 import {RoleBase} from "../index";
 
 export class Mason extends RoleBase {
-    findOtherMasonPlayers = () => Mason.game.players.filter(otherPlayer =>
+    findAllies = () => Mason.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Mason
         && otherPlayer !== this.player
         && otherPlayer.isAlive
     )
 
-    stealMessage = (): string => {
-        const allies = this.findOtherMasonPlayers();
+    getAlliesMessage = (notify?: boolean): string => {
+        const allies = this.findAllies();
+        if (notify) {
+            allies.forEach(ally => {
+                Mason.game.bot.sendMessage(
+                    ally.id,
+                    `${highlightPlayer(this.player)} пришёл на стройку по объявлению. ` +
+                    `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`
+                )
+            })
+        }
         if (!allies?.length) return ''
         return (allies?.length > 1
                 ? '\nКаменщики: '
@@ -19,23 +28,12 @@ export class Mason extends RoleBase {
             + allies?.map(ally => highlightPlayer(ally)).join(', ')
     }
 
-    newMemberNotification = (newMember: Player, oldMember?: Player): void => {
-        Mason.game.bot.sendMessage(
-            this.player.id,
-            oldMember
-                ? `Странно, ${highlightPlayer(newMember)} пришёл на собрание ` +
-                `каменщиков вместо ${highlightPlayer(oldMember)}! ${highlightPlayer(oldMember)} уволен за прогул!`
-                : `${highlightPlayer(newMember)} пришёл на стройку по объявлению. ` +
-                `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика!`
-        )
-    }
-
     roleName = 'Каменщик 👷';
     roleIntroductionText = () => ''
     startMessageText = () => `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ` +
-        `ведь ты ${this.roleName}.` + this.stealMessage();
+        `ведь ты ${this.roleName}.` + this.getAlliesMessage();
     weight = () => {
-        const otherMasonsAmount = this.findOtherMasonPlayers().length;
+        const otherMasonsAmount = this.findAllies().length;
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
     }
 

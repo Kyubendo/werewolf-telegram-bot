@@ -26,6 +26,7 @@ export class Arsonist extends RoleBase {
         },
         gif: 'https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif', // https://media.giphy.com/media/xUOwGpaKq5xjHNz8Bi/giphy.gif
     })
+
     stealMessage = () => {
         const preparedPlayers = Arsonist.game.players.filter(p => p.isAlive && p.readyToArson)
         return preparedPlayers.length

@@ -1,12 +1,7 @@
-import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {SerialKiller} from "./SerialKiller";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Beauty} from "../Villagers/Beauty";
-import {Doppelganger} from "./Doppelganger";
-import {Mason} from "../Villagers/Mason";
-import {Wolf} from "../WolfTeam/Wolf";
+import {Beauty, Doppelganger, RoleBase, SerialKiller} from "../index";
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
@@ -61,7 +56,15 @@ export class Thief extends RoleBase {
                 .createThisRole(this.player, this.player.role);
             this.player.role.specialCondition = this.targetPlayer.role.specialCondition;
 
-            const targetStealMessage: string | false | undefined = this.targetPlayer?.role?.stealMessage?.();
+            if (this.targetPlayer) this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
+
+            await Thief.game.bot.sendMessage(
+                this.targetPlayer.id,
+                `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
+                `Укради роль у кого-нибудь.` // GIF
+            )
+
+            const stealMessageText: string | false | undefined = this.player?.role?.stealMessage?.();
 
             await Thief.game.bot.sendMessage(
                 this.player.id,
@@ -69,23 +72,14 @@ export class Thief extends RoleBase {
                 `Теперь ты *${this.player.role?.roleName}*!`
             )
 
-            targetStealMessage && await Thief.game.bot.sendMessage(
+            stealMessageText && await Thief.game.bot.sendMessage(
                 this.player.id,
-                targetStealMessage
+                stealMessageText
             )
 
-            if (this.targetPlayer) this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
-
-            if (this.player.role instanceof Mason)
-                this.player.role.findOtherMasonPlayers().forEach(masonPlayer => masonPlayer.role?.newMemberNotification)
-            else if (this.player.role instanceof Wolf)
-                this.player.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.role?.newMemberNotification)
-
-
-            await Thief.game.bot.sendMessage(
-                this.targetPlayer.id,
-                `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
-                `Укради роль у кого-нибудь.` // GIF
+            this.player.role.getAlliesMessage && await Thief.game.bot.sendMessage(
+                this.player.id,
+                this.player.role.getAlliesMessage(true)
             )
         }
     }
