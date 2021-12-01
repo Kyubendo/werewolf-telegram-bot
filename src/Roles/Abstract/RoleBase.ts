@@ -187,9 +187,9 @@ export abstract class RoleBase {
         return true;
     }
 
-    choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
-        `Выбор принят — ${this.targetPlayer
-            ? playerLink(this.targetPlayer)
+    choiceMsgEditText = (targetPlayer = this.targetPlayer) => RoleBase.game.bot.editMessageText(
+        `Выбор принят — ${targetPlayer
+            ? playerLink(targetPlayer)
             : 'Пропустить'}.`,
         {
             message_id: this.actionMsgId,
