@@ -1,9 +1,8 @@
-import {DeathType} from "../../Game";
+import {DeathType, Player} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
-import {Player} from "../../Player/Player";
-import {Gunner, RoleBase, SerialKiller, Wolf} from "../index";
+import {Cowboy, Gunner, RoleBase, SerialKiller, Wolf} from "../index";
 import {randomElement} from "../../Utils/randomElement";
 import {specialConditionMartyr} from "../../Utils/specialConditionTypes";
 
@@ -99,10 +98,10 @@ export class Martyr extends RoleBase {
                 + `увидели, как ${playerLinkWithRole(this.protectedPlayerKiller)} все еще целится в голову `
                 + `${playerLink(this.specialCondition.protectedPlayer)}… Но промахивается и попадает в ${playerLink(this.player)}, в `
                 + `то время как ${playerLink(this.specialCondition.protectedPlayer)} стоит абсолютно невредим(а).`
-            // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `
-            //     + `второпях целится в ${highlightPlayer(this.specialCondition.protectedPlayer)} и стреляет в последний момент. Но попадает в `
-            //     + `${highlightPlayer(this.player)}, в то время как ${highlightPlayer(this.specialCondition.protectedPlayer)} стоит целый(ая) `
-            //     + `и невредимый(ая).`
+            else if (this.protectedPlayerKiller.role instanceof Cowboy) deathMessage = `${playerLinkWithRole(this.protectedPlayerKiller)} `
+                + `второпях целится в ${playerLink(this.specialCondition.protectedPlayer)} и стреляет в последний момент. Но попадает в `
+                + `${playerLink(this.player)}, в то время как ${playerLink(this.specialCondition.protectedPlayer)} стоит целый(ая) `
+                + `и невредимый(ая).`
 
             setTimeout(
                 (deathMessage) => deathMessage && Martyr.game.bot
