@@ -58,8 +58,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
             // if(puppetMaster) return puppetMaster
 
-            if (wolf && arsonist) return {winners: wolvesTeamPlayers, type: 'wolves'}
-            if ((wolf || arsonist) && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
+            if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller || arsonist) && gunner) {
                 if (stage === 'night') return {winners: villagersTeamPlayers, type: 'villagers'}
                 if (wolf) return {winners: wolvesTeamPlayers, type: 'wolves'}
@@ -68,6 +67,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             }
             // if(cowboy && serialKiller) return []
             // if(cowboy && wolf) return [Math.random()>.3 wolf:cowboy]
+            if (arsonist) return undefined;
         }
     }
 
