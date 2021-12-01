@@ -10,17 +10,17 @@ export class Mason extends RoleBase {
         && otherPlayer.isAlive
     )
 
-    getAlliesMessage = (notify?: boolean): string => {
+    getAlliesMessage = async (notify?: boolean): Promise<string> => {
         const allies = this.findAllies();
-        if (notify) {
-            allies.forEach(ally => {
-                Mason.game.bot.sendMessage(
+        if (notify)
+            for (const ally of allies)
+                await Mason.game.bot.sendMessage(
                     ally.id,
                     `${highlightPlayer(this.player)} пришёл на стройку по объявлению. ` +
                     `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`
                 )
-            })
-        }
+
+
         if (!allies?.length) return ''
         return (allies?.length > 1
                 ? '\nКаменщики: '
