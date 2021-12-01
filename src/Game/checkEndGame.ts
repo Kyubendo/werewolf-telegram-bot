@@ -35,7 +35,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     if (!aliveEvilPlayer) {
-        return {winners: villagersTeamPlayers, type: 'villagers'}
+        if (villagersTeamPlayers.find(p => p.isAlive)) return {winners: villagersTeamPlayers, type: 'villagers'}
+        else return {winners: [], type: 'nobody'}
     }
 
     alivePlayers.find(p => p.role instanceof Gunner && p.role.specialCondition.ammo) && nonWolfKillers.push(Gunner)
@@ -75,8 +76,15 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     if (alivePlayers.length < 3) {
-        if (aliveEvilPlayer.role instanceof SerialKiller) return {winners: [aliveEvilPlayer], type: 'serialKiller'}
-        else if (aliveEvilPlayer.role instanceof Arsonist) return {
+        const serialKillers = alivePlayers.filter(p => p.role instanceof SerialKiller)
+        if (serialKillers.length) {
+            if (serialKillers.length === 2) {
+                if (serialKillers.find(p => p.isFrozen)) return undefined
+                serialKillers.forEach(p => p.isAlive = false)
+                return {winners: [], type: 'nobody'}
+            }
+            return {winners: [aliveEvilPlayer], type: 'serialKiller'}
+        } else if (aliveEvilPlayer.role instanceof Arsonist) return {
             winners: players.filter(p => p.role instanceof Arsonist),
             type: 'arsonist'
         }
