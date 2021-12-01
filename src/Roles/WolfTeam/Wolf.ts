@@ -17,16 +17,22 @@ export class Wolf extends RoleBase {
             let text = '';
             if (this.player.infected)
                 text = `Прошло уже 24 часа с тех пор как ${highlightPlayer(this.player)} был заражён укусом. ` +
-                    (Math.random() > 0.9
+                    (Math.random() < 0.9
                         ? `Внезапно у ${highlightPlayer(this.player)} отрастают огромные волчьи клыки, ` +
                         `а сам он покрывается шерстью. Теперь он ${this.player.role?.roleName}!`
                         :
                         `С опозданием аж в 5 секунд он всё же превратился в волка. ` +
                         `И как разработчики могли такое допустить...`)
             else if (this.player.role?.previousRole instanceof Cursed)
-                text = `С детства над ${highlightPlayer(this.player)} издевалось всё село из-за того, ` +
+                text = (Math.random() < 0.9
+                    ? `До этого над ${highlightPlayer(this.player)} издевалось всё село из-за того, ` +
                     `что он ${this.player.role.previousRole.roleName}. ` +
                     `Теперь он над ними отыграется, потому что он теперь один из вас! Поздравляем нового волка.`
+                    : `С детства над ${highlightPlayer(this.player)} издевалась вся деревня из-за того, ` +
+                    `что в нём запечатан Девятихвостый ${this.player.role.roleName}. ` +
+                    `Как только его укусили, хвостатый сразу же вырвался на свободу! ` +
+                    `Но вы ему объяснили, что у вас все равны и отрезали ему 8 хвостов. ` +
+                    `Теперь он просто ${this.player.role.roleName}`)
             else if (this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer)
                 text = `Странно, ${highlightPlayer(this.player)} решил стать веганом, ` +
                     `а ${highlightPlayer(this.player.role.targetPlayer)} протяжно выл в ночи и щёлкал зубами! ` +
