@@ -35,7 +35,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     if (!aliveEvilPlayer) {
-        return {winners: villagersTeamPlayers, type: 'villagers'}
+        if (villagersTeamPlayers.find(p => p.isAlive)) return {winners: villagersTeamPlayers, type: 'villagers'}
+        else return {winners: [], type: 'nobody'}
     }
 
     alivePlayers.find(p => p.role instanceof Gunner && p.role.specialCondition.ammo) && nonWolfKillers.push(Gunner)
