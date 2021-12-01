@@ -2,14 +2,14 @@ import {Player} from "../Game";
 import {
     ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
     Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
-    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Sorcerer, Prowler, Arsonist, Pacifist,
+    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Sorcerer, Prowler, Arsonist, Pacifist, Cowboy,
 } from "../Roles";
 import {GameStage} from "./Game";
 
 const villagers: Function[] = [
     ApprenticeSeer, Beholder, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Mason, Mayor, Monarch, Oracle,
     Seer, Traitor, Villager, WiseElder, WoodMan, Martyr, Sandman, Blacksmith, WildChild, Beauty, Detective, Cupid,
-    Princess, Pacifist,
+    Princess, Pacifist, Cowboy
 ]
 
 const wolfTeam: Function[] = [Wolf, Sorcerer, Prowler]
@@ -53,7 +53,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             const serialKiller = players.find(p => p.role instanceof SerialKiller)
             const gunner = players.find(p => p.role instanceof Gunner)
             const arsonist = players.find(p => p.role instanceof Arsonist)
-            // const cowboy = players.filter(p => p.role instanceof Cowboy)
+            const cowboy = players.filter(p => p.role instanceof Cowboy)
             // const puppetMaster = players.filter(p => p.role instanceof PuppetMaster)
 
             // if(puppetMaster) return puppetMaster
@@ -65,8 +65,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
                 if (serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
                 if (arsonist) return {winners: [arsonist], type: 'arsonist'}
             }
-            // if(cowboy && serialKiller) return []
-            // if(cowboy && wolf) return [Math.random()>.3 wolf:cowboy]
+            if (cowboy) return {winners: [], type: 'nobody'}
             if (arsonist) return undefined;
         }
     }
