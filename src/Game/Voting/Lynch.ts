@@ -50,7 +50,7 @@ export class Lynch extends VotingBase {
             this.game.chatId,
             `${this.votedPlayers.length} из ${this.getVoters().length} игроков проголосовало.`
         )
-        if (this.votedPlayers.length === this.getVoters().length) await this.game.setNextStage()
+        if (this.votedPlayers.length === this.getVoters().length) this.game.setNextStage()
     }
 
     calculateVoteWeight = (voter: Player) => (voter.role instanceof Mayor
