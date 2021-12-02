@@ -10,21 +10,20 @@ export class Wolf extends RoleBase {
         && otherPlayer.isAlive
     )
 
-    getAlliesMessage = async (notify?: boolean): Promise<string> => {
+    sendAlliesMessage = async (notify: boolean = false): Promise<void> => {
         const allies = this.findAllies();
 
         if (notify) {
-            let text;
+            let notificationText;
             if (this.player.infected)
-                text = `Прошло уже 24 часа с тех пор как ${highlightPlayer(this.player)} был заражён укусом. ` +
-                    (Math.random() < 0.9
+                notificationText = `Прошло уже 24 часа с тех пор как ${highlightPlayer(this.player)} ` +
+                    `был заражён укусом. ` + (Math.random() < 0.9
                         ? `Внезапно у ${highlightPlayer(this.player)} отрастают огромные волчьи клыки, ` +
                         `а сам он покрывается шерстью. Теперь он ${this.player.role?.roleName}!`
-                        :
-                        `С опозданием аж в 5 секунд он всё же превратился в волка. ` +
+                        : `С опозданием аж в 5 секунд он всё же превратился в волка. ` +
                         `И как разработчики могли такое допустить...`)
             else if (this.player.role?.previousRole instanceof Cursed)
-                text = (Math.random() < 0.9
+                notificationText = (Math.random() < 0.9
                     ? `До этого над ${highlightPlayer(this.player)} издевалось всё село из-за того, ` +
                     `что он ${this.player.role.previousRole.roleName}. ` +
                     `Теперь он над ними отыграется, потому что он теперь один из вас! Поздравляем нового волка.`
@@ -34,33 +33,44 @@ export class Wolf extends RoleBase {
                     `Но вы ему объяснили, что у вас все равны и отрезали ему 8 хвостов. ` +
                     `Теперь он просто ${this.player.role.roleName}`)
             else if (this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer)
-                text = `Странно, ${highlightPlayer(this.player)} решил стать веганом, ` +
+                notificationText = `Странно, ${highlightPlayer(this.player)} решил стать веганом, ` +
                     `а ${highlightPlayer(this.player.role.targetPlayer)} протяжно выл в ночи и щёлкал зубами! ` +
                     `${highlightPlayer(this.player)} теперь полноценный член стаи.`
             else
-                text = `В стае пополнение! ${highlightPlayer(this.player)} больше не выступает в цирке, ` +
+                notificationText = `В стае пополнение! ${highlightPlayer(this.player)} больше не выступает в цирке, ` +
                     'теперь он заодно с вами!'
 
             for (const ally of allies) {
                 await Wolf.game.bot.sendMessage(
                     ally.id,
-                    text
+                    notificationText
                 )
             }
         }
 
+        let alliesInfoText: string = '\n'
+
         if (!allies.length)
-            return '\nНо ты один в стае, крепись.'
-        return `\n${(allies.length > 1
-            ? '\nДругие волки: '
-            : '\nТвой брат по волчьему делу — ')
-        + allies?.map(ally => highlightPlayer(ally)).join(', ')}`
+            alliesInfoText += 'Но ты один в стае, крепись.'
+        else {
+            if (allies.length === 1)
+                alliesInfoText += 'Твой брат по волчьему делу — '
+            else
+                alliesInfoText += 'Другие волки: '
+
+            alliesInfoText += allies?.map(ally => highlightPlayer(ally)).join(', ')
+        }
+
+        await Wolf.game.bot.sendMessage(
+            this.player.id,
+            alliesInfoText
+        )
     }
 
     roleName = 'Волк 🐺';
     roleIntroductionText = () => `Новый ${this.roleName} в селе!`;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
-        + this.getAlliesMessage();
+        + this.sendAlliesMessage();
 
     weight = () => -10;
 

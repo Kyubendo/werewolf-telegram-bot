@@ -61,9 +61,9 @@ export class Doppelganger extends RoleBase {
                     `Теперь ты ${this.player.role.roleName}!`
                 )
 
-                this.player.role.getAlliesMessage && await Doppelganger.game.bot.sendMessage(
+                this.player.role.sendAlliesMessage && await Doppelganger.game.bot.sendMessage(
                     this.player.id,
-                    await this.player.role.getAlliesMessage(true)
+                    await this.player.role.sendAlliesMessage(true)
                 )
 
                 if (this.player.role instanceof Arsonist || this.player.role instanceof Beholder)

@@ -36,7 +36,7 @@ export class Undertaker extends RoleBase {
         await Undertaker.game.bot.sendMessage(
             this.player.id,
             `Ты должен похоронить ${highlightPlayer(this.targetPlayer)}, ` +
-            `но когда ты видишь такой прекрасный труп ты не можешь задуматься, ` +
+            `но когда ты видишь такой прекрасный труп ты не можешь не задуматься, ` +
             `какую жизнь прожило это тело... жизнь, ` +
             `которой у тебя никогда не было, ведь ты без конца копал могилы в этом адском селе. ` +
             `У тебя просто не поднимается лопата его похоронить. ` +
@@ -44,9 +44,9 @@ export class Undertaker extends RoleBase {
             `В общем, теперь ты ${this.player.role.roleName}.`
         )
 
-        this.player.role.getAlliesMessage && await Undertaker.game.bot.sendMessage(
+        this.player.role.sendAlliesMessage && await Undertaker.game.bot.sendMessage(
             this.player.id,
-            await this.player.role.getAlliesMessage(true)
+            await this.player.role.sendAlliesMessage(true)
         )
 
         if (this.player.role instanceof Arsonist || this.player.role instanceof Beholder)

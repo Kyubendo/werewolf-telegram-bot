@@ -8,7 +8,7 @@ export class AlphaWolf extends Wolf {
     startMessageText = () => 'Твои укусы передают проклятие, обращающее человека в волка. ' +
         'По ночам ты можешь выбрать человека, а затем атаковать и убить его, но пока ты жив, ' +
         'твои жертвы имеют 25% шанса стать волком.'
-        + this.getAlliesMessage();
+        + this.sendAlliesMessage();
     weight = () => -13;
 
     actionResolve = async () => {
