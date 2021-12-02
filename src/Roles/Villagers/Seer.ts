@@ -5,7 +5,7 @@ import {RoleBase} from "../"
 import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Player} from "../../Player/Player";
 import {ApprenticeSeer} from "./ApprenticeSeer";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
@@ -31,7 +31,7 @@ export class Seer extends ForecasterBase {
                     apprenticeSeerPlayer.role = new Seer(apprenticeSeerPlayer, apprenticeSeerPlayer.role);
                     Seer.game.bot.sendMessage(
                         apprenticeSeerPlayer.id,
-                        `${highlightPlayer(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
+                        `${playerLink(this.player)} был ${apprenticeSeerPlayer.role.roleName}. ` +
                         `Ты занял его место по случаю его смерти.`
                     )
                 }
@@ -42,9 +42,9 @@ export class Seer extends ForecasterBase {
             beholderPlayers.forEach(beholderPlayer => {
                 Seer.game.bot.sendMessage(
                     beholderPlayer.id,
-                    `Провидец ${highlightPlayer(this.player)} мёртв. ` + (
+                    `Провидец ${playerLink(this.player)} мёртв. ` + (
                         apprenticeSeerPlayers.length === 1
-                            ? `На его место встал ${highlightPlayer(apprenticeSeerPlayers[0])}.`
+                            ? `На его место встал ${playerLink(apprenticeSeerPlayers[0])}.`
                             : 'Но не огорчайся, ведь теперь сразу несколько игроков стали провидцами: ' +
                             apprenticeSeerPlayers.join(', ')
                     )
@@ -57,11 +57,11 @@ export class Seer extends ForecasterBase {
             await Seer.game.bot.sendMessage(
                 Seer.game.chatId,
                 killer?.role instanceof SerialKiller
-                    ? `Селяне осматривают расчленённые останки ${highlightPlayer(this.player)} со множеством ` +
+                    ? `Селяне осматривают расчленённые останки ${playerLink(this.player)} со множеством ` +
                     'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
-                    `лучшие мозги. *${this.roleName}* ${highlightPlayer(this.player)} мертв.`
+                    `лучшие мозги. ${playerLink(this.player, true)} мертв.`
                     : 'День начался с печальных новостей... ' +
-                    `Всем известный *${this.roleName}* мертв! Покойся с миром ${highlightPlayer(this.player)}...`
+                    `Всем известный *${this.roleName}* мертв! Покойся с миром ${playerLink(this.player)}...`
             )
 
             killer.role.killMessage && await Seer.game.bot.sendAnimation(

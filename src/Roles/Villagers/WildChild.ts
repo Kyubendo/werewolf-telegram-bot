@@ -1,7 +1,7 @@
 import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
 import {findPlayer} from "../../Game/findPlayer";
@@ -20,7 +20,7 @@ export class WildChild extends RoleBase {
     }
 
     stealMessage = () => !!this.specialCondition.roleModel
-        && `\nТвой "пример" — ${highlightPlayer(this.specialCondition.roleModel)}.`
+        && `\nТвой "пример" — ${playerLink(this.specialCondition.roleModel)}.`
 
     action = () => {
         if (this.specialCondition.roleModel?.role) {
@@ -43,7 +43,7 @@ export class WildChild extends RoleBase {
                 .filter(player => player !== this.player && player.isAlive)) // player.isAlive probably redundant because of roleResolves order
             await WildChild.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
-                `за тебя — ${highlightPlayer(this.specialCondition.roleModel)}`,
+                `за тебя — ${playerLink(this.specialCondition.roleModel)}`,
                 {
                     chat_id: this.player.id,
                     message_id: this.actionMsgId
@@ -64,14 +64,14 @@ export class WildChild extends RoleBase {
                 if (this.player.role instanceof Wolf) {
                     await WildChild.game.bot.sendMessage(
                         this.player.id,
-                        `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
+                        `Твой "пример" ${playerLink(this.specialCondition.roleModel)} умер! ` +
                         `Теперь ты ${this.player.role.roleName}! ` +
                         this.player.role.showOtherWolfPlayers()
                     )
 
                     this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
                         player.id,
-                        `Пример игрока ${highlightPlayer(this.player)} умер! Теперь, он стал волком!`
+                        `Пример игрока ${playerLink(this.player)} умер! Теперь, он стал волком!`
                     ))
                 }
             }
@@ -85,7 +85,7 @@ export class WildChild extends RoleBase {
             await WildChild.game.bot.sendMessage(
                 WildChild.game.chatId,
                 'НОМНОМНОМНОМ! Прошлой ночью волк(и) ' +
-                `сьел(и) Дикого ребенка ${highlightPlayer(this.player)}, оставив лишь маленький скелетик. ` +
+                `сьел(и) Дикого ребенка ${playerLink(this.player)}, оставив лишь маленький скелетик. ` +
                 'Селяне поняли, насколько волк(и) безжалостны, раз так хладнокровно ' +
                 'убивают(ет) беззащитных детей.'
             )
@@ -110,7 +110,7 @@ export class WildChild extends RoleBase {
 
     choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
         `Выбор принят — ${this.specialCondition.roleModel
-            ? highlightPlayer(this.specialCondition.roleModel)
+            ? playerLink(this.specialCondition.roleModel)
             : 'Пропустить'}.`,
         {
             message_id: this.actionMsgId,

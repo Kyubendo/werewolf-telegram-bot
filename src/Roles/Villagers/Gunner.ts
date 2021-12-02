@@ -1,6 +1,6 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {RoleBase} from "../Abstract/RoleBase";
 import {specialConditionGunner} from "../../Utils/specialConditionTypes";
 
@@ -13,9 +13,9 @@ export class Gunner extends RoleBase {
 
     actionAnnouncement = () => ({
         message: this.targetPlayer ? 'Вдруг послышался выстрел!  Все село оборачивается, ' +
-            `чтобы увидеть стоящего ${highlightPlayer(this.player)} над ${highlightPlayer(this.targetPlayer)}, и ` +
-            'оружие все еще нацелено в голову... Мертв(а)! \n' +
-            `${highlightPlayer(this.targetPlayer)} был(а) *${this.targetPlayer.role?.roleName}*!` : 'ERROR! Gunner-19',
+            `чтобы увидеть стоящего ${playerLink(this.player)} над ${playerLink(this.targetPlayer)}, и ` +
+            'оружие все еще нацелено в голову...\n' +
+            `${playerLink(this.targetPlayer)} был(а) *${this.targetPlayer.role?.roleName}*!` : 'ERROR! Gunner-19',
         gif: 'https://media.giphy.com/media/reNAILRU3ab96/giphy.gif'
     })
 

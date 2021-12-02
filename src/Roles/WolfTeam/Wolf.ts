@@ -1,6 +1,6 @@
 import {Player} from "../../Game";
 import {DeathType} from "../../Game";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty, GuardianAngel, RoleBase, Traitor} from "../index";
 
 export class Wolf extends RoleBase {
@@ -17,7 +17,7 @@ export class Wolf extends RoleBase {
         return `\n${(allies.length > 1
             ? '\nДругие волки: '
             : 'Твой брат по волчьему делу — ')
-        + allies?.map(ally => highlightPlayer(ally)).join(', ')}`
+        + allies?.map(ally => playerLink(ally)).join(', ')}`
     }
 
     roleName = 'Волк 🐺';
@@ -31,8 +31,8 @@ export class Wolf extends RoleBase {
 
     killMessage = () => ({
         text: {
-            toChat: (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
-                `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`,
+            toChat: (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${playerLink(deadPlayer)} съели заживо!` +
+                `\n${playerLink(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`,
             toTarget: 'О нет! Ты съеден(а) волком!'
         },
         gif: 'https://media.giphy.com/media/10arlAx4rI0xHO/giphy.gif'

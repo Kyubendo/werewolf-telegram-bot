@@ -2,7 +2,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {Pumpkin} from "./Pumpkin";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty} from "../index";
 
 export class JackOLantern extends RoleBase {
@@ -34,7 +34,7 @@ export class JackOLantern extends RoleBase {
         if (this.targetPlayer.role instanceof Pumpkin) {
             await JackOLantern.game.bot.sendMessage(
                 this.player.id,
-                `Ты пришёл домой к ${highlightPlayer(this.targetPlayer)}, но видишь что он уже тыква! ` +
+                `Ты пришёл домой к ${playerLink(this.targetPlayer)}, но видишь что он уже тыква! ` +
                 `Кто-то тебя опередил.`
             )
             return;
@@ -58,7 +58,7 @@ export class JackOLantern extends RoleBase {
 
         await JackOLantern.game.bot.sendMessage(
             this.player.id,
-            `${highlightPlayer(this.targetPlayer)} успешно превращён в тыкву.`
+            `${playerLink(this.targetPlayer)} успешно превращён в тыкву.`
         )
     }
 
