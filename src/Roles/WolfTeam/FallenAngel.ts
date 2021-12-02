@@ -1,9 +1,8 @@
-import {DeathType, RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Beauty, GuardianAngel, Wolf} from "../index";
-import {Player} from "../../Game";
+import {Beauty, GuardianAngel, RoleBase, Wolf} from "../index";
+import {DeathType, Player} from "../../Game";
 
 type DecisionType = 'kill' | 'protect';
 
@@ -72,7 +71,6 @@ export class FallenAngel extends RoleBase {
     }
 
     nextAction = () => {
-        console.log(this.killOrProtect)
         if (this.killOrProtect === 'kill') {
             FallenAngel.game.bot.sendMessage(
                 this.player.id,
@@ -131,17 +129,12 @@ export class FallenAngel extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        console.log(1)
         if (choice === 'kill' || choice === 'protect') {
-            console.log(2)
             this.killOrProtect = choice;
             this.choiceMsgEditText().then(this.nextAction)
         } else {
-            console.log(3)
             this.targetPlayer = findPlayer(choice, FallenAngel.game.players);
-            console.log(4)
             super.choiceMsgEditText();
-            console.log(5)
             this.doneNightAction();
         }
     }

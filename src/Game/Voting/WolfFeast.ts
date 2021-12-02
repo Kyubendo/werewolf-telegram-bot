@@ -17,7 +17,8 @@ export class WolfFeast extends VotingBase {
     )
 
     voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive
-        && !(otherPlayer.role instanceof Wolf || otherPlayer.role instanceof FallenAngel)
+        && !(otherPlayer.role instanceof Wolf)
+        && !(otherPlayer.role instanceof FallenAngel)
 
     beforeVotingAction = async () => {
         if (this.getVoters().length <= 1) return
