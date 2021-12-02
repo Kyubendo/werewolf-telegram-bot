@@ -70,7 +70,6 @@ export class Wolf extends RoleBase {
     roleName = 'Волк 🐺';
     roleIntroductionText = () => `Новый ${this.roleName} в селе!`;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
-        + this.sendAlliesMessage();
 
     weight = () => -10;
 

@@ -35,7 +35,7 @@ export const assignRoles = async (game: Game) => {
     ]
 
     const testPool = [
-        Wolf,
+        Wolf, Wolf, Thief,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -79,5 +79,7 @@ export const assignRoles = async (game: Game) => {
             player.id,
             player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
         );
+
+        await player.role?.sendAlliesMessage?.();
     }
 }

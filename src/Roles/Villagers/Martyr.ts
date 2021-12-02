@@ -1,8 +1,7 @@
-import {DeathType} from "../../Game";
+import {DeathType, Player} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Player} from "../../Player/Player";
 import {Gunner, RoleBase, SerialKiller, Wolf} from "../index";
 import {randomElement} from "../../Utils/randomElement";
 import {specialConditionMartyr} from "../../Utils/specialConditionTypes";

@@ -52,7 +52,7 @@ export class Mason extends RoleBase {
     roleName = 'Каменщик 👷';
     roleIntroductionText = () => ''
     startMessageText = () => `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ` +
-        `ведь ты ${this.roleName}.` + this.sendAlliesMessage();
+        `ведь ты ${this.roleName}.`
     weight = () => {
         const otherMasonsAmount = this.findAllies().length;
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
