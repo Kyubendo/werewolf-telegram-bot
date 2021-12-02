@@ -1,5 +1,5 @@
 import {specialConditionPacifist} from "../../Utils/specialConditionTypes";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {RoleBase} from "../index";
 
 export class Pacifist extends RoleBase {
@@ -19,18 +19,13 @@ export class Pacifist extends RoleBase {
 
     actionAnnouncement = () => ({
         message: 'Пока все обсуждают, кого казнить следующим, ' +
-            `*${this.roleName}* ${highlightPlayer(this.player)} проводит ` +
+            `${playerLink(this.player, true)} проводит ` +
             'демонстрацию во имя добра и мира на улице. ' +
             'Все вспоминают, что любовь всегда побеждает зло. Селяне решают, что не будут казнить сегодня.',
         gif: 'https://media.giphy.com/media/HVweQ5FuSFZJe/giphy.gif'
     })
 
     action = () => {
-        if (this.specialCondition.peace) {
-            this.specialCondition.peace = false;
-            return;
-        }
-
         if (this.specialCondition.peace === false) return;
 
         Pacifist.game.bot.sendMessage(
@@ -54,34 +49,44 @@ export class Pacifist extends RoleBase {
     }
 
     handleChoice = (choice?: string) => {
-        if (choice === 'demo') {
-            this.specialCondition.peace = true;
-            if (Pacifist.game.stage === 'day') {
-                Pacifist.game.bot.sendAnimation(
-                    Pacifist.game.chatId,
-                    this.actionAnnouncement().gif,
-                    {
-                        caption: this.actionAnnouncement().message
-                    }
-                )
-            } else if (Pacifist.game.stage === 'lynch') {
-                Pacifist.game.bot.sendAnimation(
-                    Pacifist.game.chatId,
-                    this.actionAnnouncement().gif,
-                    {
-                        caption: 'Жители уже проводят вечернее голосование, ' +
-                            `но ${highlightPlayer(this.player)} не может больше сдерживать эмоций. ` +
-                            `Селяне наблюдают приверженность Пацифиста любви и миру. ` +
-                            'Любовь всегда побеждает войну, ' +
-                            'потому их голосование прекращено и решение о казни не будет исполнено.'
-
-                    }
-                )
-                RoleBase.game.lynch?.editSkipMessages();
-                RoleBase.game.setNextStage();
-            }
+        if (choice !== 'demo') {
+            this.choiceMsgEditText();
+            return;
         }
-        this.choiceMsgEditText();
+
+        this.specialCondition.peace = true;
+
+        if (Pacifist.game.stage === 'day') {
+            Pacifist.game.bot.sendAnimation(
+                Pacifist.game.chatId,
+                this.actionAnnouncement().gif,
+                {
+                    caption: this.actionAnnouncement().message
+                }
+            )
+
+            this.choiceMsgEditText();
+        } else if (Pacifist.game.stage === 'lynch') {
+            Pacifist.game.bot.sendAnimation(
+                Pacifist.game.chatId,
+                this.actionAnnouncement().gif,
+                {
+                    caption: 'Жители уже проводят вечернее голосование, ' +
+                        `но ${playerLink(this.player)} не может больше сдерживать эмоций. ` +
+                        `Селяне наблюдают приверженность Пацифиста любви и миру. ` +
+                        'Любовь всегда побеждает войну, ' +
+                        'потому их голосование прекращено и решение о казни не будет исполнено.'
+
+                }
+            )
+
+            this.choiceMsgEditText();
+
+            RoleBase.game.lynch?.editSkipMessages();
+
+            RoleBase.game.setNextStage();
+        }
+
     }
 
     choiceMsgEditText = () => {

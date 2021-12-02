@@ -1,6 +1,6 @@
 import {Player} from "../../Game";
 import {DeathType} from "../../Game";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty, FallenAngel, GuardianAngel, RoleBase, Traitor} from "../index";
 
 export class Wolf extends RoleBase {
@@ -23,13 +23,13 @@ export class Wolf extends RoleBase {
         return (otherWolfPlayers.length > 1
                 ? '\nДругие волки: '
                 : '\nТвой брат по волчьему делу — ')
-            + otherWolfPlayers?.map(ally => highlightPlayer(ally)).join(', ')
+            + otherWolfPlayers?.map(ally => playerLink(ally)).join(', ')
             + (!fallenAngelPlayers.length
                 ? ''
                 : fallenAngelPlayers.length > 1
                     ? '\nПадшие ангелы: '
                     : '\nПадший ангел — ')
-            + fallenAngelPlayers.map(fallenAngelPlayer => highlightPlayer(fallenAngelPlayer)).join(', ')
+            + fallenAngelPlayers.map(fallenAngelPlayer => playerLink(fallenAngelPlayer)).join(', ')
     }
 
     roleName = 'Волк 🐺';
@@ -43,8 +43,8 @@ export class Wolf extends RoleBase {
 
     killMessage = () => ({
         text: {
-            toChat: (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
-                `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`,
+            toChat: (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${playerLink(deadPlayer)} съели заживо!` +
+                `\n${playerLink(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`,
             toTarget: 'О нет! Ты съеден(а) волком!'
         },
         gif: 'https://media.giphy.com/media/10arlAx4rI0xHO/giphy.gif'
@@ -78,7 +78,7 @@ export class Wolf extends RoleBase {
         if (type === 'wolfCameToSerialKiller') {
             Wolf.game.bot.sendMessage(
                 Wolf.game.chatId,
-                `*${this.roleName}* ${highlightPlayer(this.player)} ` +
+                `*${this.roleName}* ${playerLink(this.player)} ` +
                 `попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!`,
             )
             Wolf.game.bot.sendMessage(

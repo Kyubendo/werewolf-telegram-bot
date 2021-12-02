@@ -1,8 +1,9 @@
 import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
+import {Arsonist} from "../index";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
@@ -38,7 +39,7 @@ export class Doppelganger extends RoleBase {
                 .filter(player => this.player !== player && player.isAlive))
             Doppelganger.game.bot.editMessageText(
                 `Ты не успел сделать выбор, ` +
-                `так что высшие силы сделали выбор за тебя: ${highlightPlayer(this.targetPlayer)}.`,
+                `так что высшие силы сделали выбор за тебя: ${playerLink(this.targetPlayer)}.`,
                 {
                     chat_id: this.player.id,
                     message_id: this.actionMsgId
@@ -53,10 +54,17 @@ export class Doppelganger extends RoleBase {
             if (!this.targetPlayer?.role) return false;
             await Doppelganger.game.bot.sendMessage(
                 this.player.id,
-                `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
+                `${playerLink(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
                 this.targetPlayer.role.roleIntroductionText() + ' ' + this.targetPlayer.role.startMessageText()
             )
+
             this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
+
+            this.player.role instanceof Arsonist && await RoleBase.game.bot.sendMessage(
+                this.player.id,
+                this.player.role.stealMessage()
+            )
+
             return currentTargetHandleDeath(killer, type);
         }
     }

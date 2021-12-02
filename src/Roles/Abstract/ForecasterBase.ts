@@ -1,5 +1,5 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
 import {RoleBase} from "../index";
 
@@ -21,7 +21,7 @@ export abstract class ForecasterBase extends RoleBase {
 
         await ForecasterBase.game.bot.sendMessage(
             this.player.id,
-            `Ты видишь, что ${highlightPlayer(this.targetPlayer)} ${roleName}`
+            `Ты видишь, что ${playerLink(this.targetPlayer)} ${roleName}`
         )
     }
 

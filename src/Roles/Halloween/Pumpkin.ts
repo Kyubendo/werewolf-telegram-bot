@@ -1,7 +1,7 @@
 import {Player} from "../../Game";
 import {RoleBase} from "../"
 import {DeathType} from "../../Game";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {JackOLantern} from "../index";
 
 export class Pumpkin extends RoleBase {
@@ -38,7 +38,7 @@ export class Pumpkin extends RoleBase {
                 Pumpkin.game.chatId,
                 'https://media.giphy.com/media/Z4Sek3StLGVO0/giphy.gif',
                 {
-                    caption: `Как только петля затягивается на шее ${highlightPlayer(this.player)}, ` +
+                    caption: `Как только петля затягивается на шее ${playerLink(this.player)}, ` +
                         `его голова падает на землю и вы видите, что это... ${this.roleName}! ` +
                         `Он поднимает её и ставит на место. ` +
                         `Под удивлённые взгляды наблюдающих он возвращается домой целый и невредимый.`

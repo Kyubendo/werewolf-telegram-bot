@@ -1,7 +1,7 @@
 import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {SerialKiller, Wolf, Beauty, RoleBase} from "../";
 import {Player} from "../../Game";
 
@@ -48,7 +48,7 @@ export class GuardianAngel extends RoleBase {
         if (!this.numberOfAttacks) {
             await GuardianAngel.game.bot.sendMessage(
                 this.player.id,
-                `${highlightPlayer(this.targetPlayer)} не был(а) атакован(а), ` +
+                `${playerLink(this.targetPlayer)} не был(а) атакован(а), ` +
                 'поэтому ничего не произошло особо...'
             )
         }
@@ -73,9 +73,23 @@ export class GuardianAngel extends RoleBase {
 
                 await GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
-                    `Ночью *${this.roleName}* ${highlightPlayer(this.player)} пытался спасти деревню ` +
-                    `от маньяка раз и навсегда, но маньяк отрезал ${highlightPlayer(this.player)} крылья! ` +
+                    `Ночью *${this.roleName}* ${playerLink(this.player)} пытался спасти деревню ` +
+                    `от маньяка раз и навсегда, но маньяк отрезал ${playerLink(this.player)} крылья! ` +
                     'Рядом с его телом была записка: "Я не нуждаюсь в твоей защите!"'
+                )
+            } else if (this.targetPlayer?.role instanceof Wolf) {
+                await GuardianAngel.game.bot.sendMessage(
+                    this.player.id,
+                    'Твоя сила подвела тебя, ты неудачно защитил волка, и тебя съели!'
+                )
+
+                await GuardianAngel.game.bot.sendMessage(
+                    GuardianAngel.game.chatId,
+                    `${playerLink(this.player)} безнадёжно пытается защитить волка. ` +
+                    'Селу удаётся лишь увидеть белоснежные крылья с каплями крови, ' +
+                    'прибитые оторванными рёбрами к крыше церкви. Совершенно очевидно, ' +
+                    'что волки расценили ангела как божественный дар, бесплатное мясо, ' +
+                    'и не устояли забрать его в свои дома.'
                 )
             }
         } else if (killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) {
@@ -92,14 +106,14 @@ export class GuardianAngel extends RoleBase {
                     GuardianAngel.game.chatId,
                     'Кровавый рассвет оросил нежным светом девственные, нежные руки ' +
                     'Ангела вашего Хранителя, прибитые гвоздями к кресту на куполе церкви. ' +
-                    `${highlightPlayer(this.player)} невинная жертва волчьей шутки, ` +
+                    `${playerLink(this.player)} невинная жертва волчьей шутки, ` +
                     `воспарив в небеса таким садистским способом...`
                 )
             else
                 await GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
                     'Занятно: ангелы спасают других от убийц, а себя спасти не могут. ' +
-                    `*${this.roleName}* — ${highlightPlayer(this.player)} мёртв.`
+                    `${playerLink(this.player, true)} мёртв.`
                 )
         } else
             return super.handleDeath(killer, type);

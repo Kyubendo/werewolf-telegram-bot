@@ -1,5 +1,5 @@
 import {Player} from "../../Player/Player";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {DeathType} from "../../Game";
 import {RoleBase} from "../index";
 
@@ -16,7 +16,7 @@ export class Mason extends RoleBase {
         return (allies?.length > 1
                 ? '\nКаменщики: '
                 : '\nТвой напарник на стройке — ')
-            + allies?.map(ally => highlightPlayer(ally)).join(', ')
+            + allies?.map(ally => playerLink(ally)).join(', ')
     }
 
     roleName = 'Каменщик 👷';
@@ -32,7 +32,7 @@ export class Mason extends RoleBase {
         if (killer?.role && !type) {
             await Mason.game.bot.sendMessage(
                 Mason.game.chatId,
-                `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
+                `Проснувшись, все находят тело ${playerLink(this.player)} под грудой ` +
                 `камней, кровь разбрызгана повсюду. *${this.roleName}* мертв!`
             )
 

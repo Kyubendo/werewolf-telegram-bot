@@ -42,7 +42,7 @@ export class Game {
 
     dayCount = 0;
 
-    deadPlayersCount = 0
+    deadPlayersCount?: number
 
     stage: GameStage = undefined
     startGameTimer: Timer
@@ -51,6 +51,9 @@ export class Game {
     gameStartedTime?: number
     started = false
     canPinPlayers = true
+    private stageStopped = false
+    stopStage = () => this.stageStopped = true
+
 
     setNextStage = async () => {
         let stageDuration;
@@ -77,12 +80,24 @@ export class Game {
             ? this.stageTimer.reset(stageDuration)
             : this.stageTimer = timer(this.setNextStage, stageDuration);
 
+        if (this.stageStopped) this.stageStopped = false
+        else await this.beforeStageChange()
 
-        if (await this.runResolves()) return//fix
+        if (this.stageStopped) return
 
+        this.stage = nextStage
+
+        await this.afterStageChange()
+    }
+
+    beforeStageChange = async () => {
+        await this.runResolves()
         await this.runResults();
 
         this.clearAngel()
+    }
+
+    afterStageChange = async () => {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
@@ -91,17 +106,14 @@ export class Game {
             return
         }
 
-        await this.checkNightDeaths(nextStage)
-
-        this.stage = nextStage
-
         if (this.stage === 'day')
             this.dayCount++;
+        await this.checkNightDeaths()
 
         await this.bot.sendMessage(this.chatId, gameStageMsg(this))
         await this.bot.sendMessage(this.chatId, playerGameList(this.players))
-            .then(() => this.clearTargetPlayers())
-            .then(() => this.runActions())
+        this.clearTargetPlayers()
+        this.runActions()
     }
 
     onGameEnd = async (endGame: { winners: Player[], type: Win }) => {
@@ -116,7 +128,7 @@ export class Game {
     }
 
     private runResolves = async () => {
-        if (await this.lynch?.handleVoteEnd()) return true
+        await this.lynch?.handleVoteEnd()
         await this.wolfFeast?.handleVoteEnd()
 
         for (const role of roleResolves(this.stage)) {
@@ -185,8 +197,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.actionMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
@@ -194,9 +206,9 @@ export class Game {
 
     clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
 
-    checkNightDeaths = async (nextStage: GameStage) => {
-        if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
-        else if (nextStage === "day" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
+    checkNightDeaths = async () => {
+        if (this.stage === "lynch") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
+        else if (this.stage === "night" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
             await this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
         }
     }

@@ -1,6 +1,6 @@
 import {Player} from "../../Player/Player";
 import {Game} from "../Game";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {SelectType} from "../commands/callbackHandle";
 import {startPlayerList} from "../../Utils/playerLists";
 import {msToMinutes} from "../../Utils/msToMinutes";
@@ -13,7 +13,7 @@ export const join = (game: Game, select: SelectType) => {
     game.addPlayer(newPlayer)
     game.startGameTimer.extend(60_000)
     game.bot.sendMessage(game.chatId,
-        `${highlightPlayer(newPlayer)} присоединился к игре! Время увеличено, `
+        `${playerLink(newPlayer)} присоединился к игре! Время увеличено, `
         + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры.`,
         {
             reply_markup: joinButton
@@ -27,7 +27,7 @@ export const join = (game: Game, select: SelectType) => {
             if (reason.response.statusCode === 403) {
                 game.bot.sendMessage(
                     game.chatId,
-                    `${highlightPlayer(newPlayer)}, чтобы я смог тебе писать, надо меня запустить.`,
+                    `${playerLink(newPlayer)}, чтобы я смог тебе писать, надо меня запустить.`,
                     {
                         reply_markup: {
                             inline_keyboard: [

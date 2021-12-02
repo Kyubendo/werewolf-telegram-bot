@@ -1,4 +1,4 @@
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty, Cursed, GuardianAngel, Wolf} from "../index";
 import {DeathType, Player} from "../../Game";
 
@@ -45,12 +45,12 @@ export class AlphaWolf extends Wolf {
             wolfPlayers.forEach(player =>
                     this.targetPlayer && AlphaWolf.game.bot.sendMessage(
                         player.id,
-                        `Как только волками был(а) атакован(а) ${highlightPlayer(this.targetPlayer)}, ` +
-                        `${highlightPlayer(this.player)} остановил всех, будучи Альфа Волком. ` +
-                        `*${this.roleName}* ${highlightPlayer(this.player)} рассказал стае, ` +
-                        `что ${highlightPlayer(this.targetPlayer)} должен(на) ` +
+                        `Как только волками был(а) атакован(а) ${playerLink(this.targetPlayer)}, ` +
+                        `${playerLink(this.player)} остановил всех. ` +
+                        `${playerLink(this.player, true)} рассказал стае, ` +
+                        `что ${playerLink(this.targetPlayer)} должен(на) ` +
                         'присоединиться к стае вместо того, ' +
-                        `чтобы умереть, и стая оставила ${highlightPlayer(this.targetPlayer)} с инфекцией.\n`
+                        `чтобы умереть, и стая оставила ${playerLink(this.targetPlayer)} с инфекцией.\n`
                         + (this.targetPlayer.role instanceof GuardianAngel)
                             ? 'Следующей ночью у вас появится союзник, которого сложно переоценить... ' +
                             'Он отбросит всё святое, чтобы вступить в волчьи ряды. ' +
