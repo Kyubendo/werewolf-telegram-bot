@@ -2,7 +2,7 @@ import {RoleBase} from "../index";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {Player} from "../../Player/Player";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 
 export class Arsonist extends RoleBase {
     roleName = 'Поджигатель 🔥';
@@ -20,7 +20,7 @@ export class Arsonist extends RoleBase {
     killMessage = () => ({
         text: {
             toChat: (deadPlayer: Player) => `Когда деревня просыпается, кто-то замечает, что дом `
-                + `${highlightPlayer(deadPlayer)} уже не тот, что был раньше! Вместо прекрасного светлого дома `
+                + `${playerLink(deadPlayer)} уже не тот, что был раньше! Вместо прекрасного светлого дома `
                 + `лежат только пепел и сажа.`,
             toTarget: 'Когда ты открываешь глаза, ты видишь только пламя сжигающее весь твой дом... Ты сгорел.',
         },
@@ -30,7 +30,7 @@ export class Arsonist extends RoleBase {
     stealMessage = () => {
         const preparedPlayers = Arsonist.game.players.filter(p => p.isAlive && p.readyToArson)
         return preparedPlayers.length
-            ? 'И дома этих игроков уже подготовлены: ' + preparedPlayers.map(p => highlightPlayer(p)).join(', ')
+            ? 'И дома этих игроков уже подготовлены: ' + preparedPlayers.map(p => playerLink(p)).join(', ')
             : 'Но ещё ни один дом не готов к поджогу.'
     }
 

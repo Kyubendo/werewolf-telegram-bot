@@ -2,7 +2,7 @@ import {RoleBase} from "../index";
 import {Player} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {specialConditionCupid} from "../../Utils/specialConditionTypes";
 import {randomElement} from "../../Utils/randomElement";
 
@@ -43,7 +43,7 @@ export class Cupid extends RoleBase {
         if (this.targetPlayer) {
             this.targetPlayer2 = findPlayer(choice, Cupid.game.players);
             this.targetPlayer2 && RoleBase.game.bot.editMessageText(
-                `Выбор принят — ${highlightPlayer(this.targetPlayer2)}.`,
+                `Выбор принят — ${playerLink(this.targetPlayer2)}.`,
                 {message_id: this.actionMsgId, chat_id: this.player.id}
             ).then(this.doneNightAction)
         } else {
@@ -60,7 +60,7 @@ export class Cupid extends RoleBase {
             this.targetPlayer2 = randomElement(this.targets())
             await Cupid.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор за тебя. `
-                + `${highlightPlayer(this.targetPlayer)} и ${highlightPlayer(this.targetPlayer2)} `
+                + `${playerLink(this.targetPlayer)} и ${playerLink(this.targetPlayer2)} `
                 + `теперь связаны любовью.`,
                 {
                     chat_id: this.player.id,

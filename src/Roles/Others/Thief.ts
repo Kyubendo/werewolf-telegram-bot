@@ -1,6 +1,6 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty, Doppelganger, RoleBase, SerialKiller} from "../index";
 
 export class Thief extends RoleBase {
@@ -26,14 +26,14 @@ export class Thief extends RoleBase {
         if (!this.targetPlayer.isAlive)
             await Thief.game.bot.sendMessage(
                 this.player.id,
-                `Ты попытался украсть роль у ${highlightPlayer(this.targetPlayer)}, но он(а) уже труп!`
+                `Ты попытался украсть роль у ${playerLink(this.targetPlayer)}, но он(а) уже труп!`
             )
         else if (this.targetPlayer.role instanceof SerialKiller) {
             this.player.isAlive = false; // change later to thiefCameToSerialKiller Thief's handleDeath
 
             await Thief.game.bot.sendMessage(
                 Thief.game.chatId,
-                `*${this.roleName}* — ${highlightPlayer(this.player)} решил испытать удачу и попытался ` +
+                `*${this.roleName}* — ${playerLink(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
             )
 
@@ -68,7 +68,7 @@ export class Thief extends RoleBase {
 
             await Thief.game.bot.sendMessage(
                 this.player.id,
-                `Успех! Ты украль роль у ${highlightPlayer(this.targetPlayer)}! ` +
+                `Успех! Ты украль роль у ${playerLink(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
             )
 

@@ -1,8 +1,8 @@
 import {DeathType, Player} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
-import {Gunner, RoleBase, SerialKiller, Wolf} from "../index";
+import {playerLink} from "../../Utils/playerLink";
+import {Cowboy, Gunner, RoleBase, SerialKiller, Wolf} from "../index";
 import {randomElement} from "../../Utils/randomElement";
 import {specialConditionMartyr} from "../../Utils/specialConditionTypes";
 
@@ -25,7 +25,7 @@ export class Martyr extends RoleBase {
     nightActionDone = false
 
     stealMessage = () => !!this.specialCondition.protectedPlayer &&
-        `Ты умрёшь за игрока ${highlightPlayer(this.specialCondition.protectedPlayer)}.`;
+        `Ты умрёшь за игрока ${playerLink(this.specialCondition.protectedPlayer)}.`;
 
     action = () => {
         if (this.specialCondition.protectedPlayer?.role) {
@@ -51,7 +51,7 @@ export class Martyr extends RoleBase {
                 .filter(p => p !== this.player && p.isAlive))
             await Martyr.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
-                `за тебя — ${highlightPlayer(this.specialCondition.protectedPlayer)}`,
+                `за тебя — ${playerLink(this.specialCondition.protectedPlayer)}`,
                 {
                     chat_id: this.player.id,
                     message_id: this.actionMsgId
@@ -67,14 +67,14 @@ export class Martyr extends RoleBase {
             this.diedForProtectedPlayer = true
             await Martyr.game.bot.sendMessage(
                 this.player.id,
-                `Как только ${highlightPlayer(this.specialCondition.protectedPlayer)} оказался(лась) на грани жизни и смерти, `
+                `Как только ${playerLink(this.specialCondition.protectedPlayer)} оказался(лась) на грани жизни и смерти, `
                 + `ты начинаешь молиться Древним Богам, чтобы они забрали тебя вместо него(нее). И они отвечают на `
-                + `твои молитвы. Твоя жизнь будет отдана в жертву, но ${highlightPlayer(this.specialCondition.protectedPlayer)} будет жить.`
+                + `твои молитвы. Твоя жизнь будет отдана в жертву, но ${playerLink(this.specialCondition.protectedPlayer)} будет жить.`
             )
             await Martyr.game.bot.sendMessage(
                 this.specialCondition.protectedPlayer?.id,
                 `Ты проснулся(ась) в своем доме из-за того, что почувствовал(а) что-то... Ты помнишь, как `
-                + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы ${highlightPlayer(this.player)} навсегда `
+                + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы ${playerLink(this.player)} навсегда `
                 + `отпечаталось у тебя в сознании. И ты знаешь, что она пожертвовала собой для того, чтобы ты жил(а).`
             )
             return false
@@ -86,22 +86,22 @@ export class Martyr extends RoleBase {
         if (killer === this.player && this.specialCondition.protectedPlayer && !type) {
 
             let deathMessage: string | undefined
-            if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${highlightPlayer(this.specialCondition.protectedPlayer)}, но внезапно яркая `
+            if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${playerLink(this.specialCondition.protectedPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
-                + `закончилось, они увидели мертвое тело ${highlightPlayer(this.player)} на виселице, в то время как `
-                + `${highlightPlayer(this.specialCondition.protectedPlayer)} стоит рядом как ни в чем не бывало.`
+                + `закончилось, они увидели мертвое тело ${playerLink(this.player)} на виселице, в то время как `
+                + `${playerLink(this.specialCondition.protectedPlayer)} стоит рядом как ни в чем не бывало.`
             else if (this.protectedPlayerKiller.role instanceof SerialKiller || this.protectedPlayerKiller.role instanceof Wolf) deathMessage = `Селяне собрались `
-                + `на следующее утро и увидели лежащее на площади тело Мученицы ${highlightPlayer(this.player)}. `
+                + `на следующее утро и увидели лежащее на площади тело Мученицы ${playerLink(this.player)}. `
                 + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью *${this.roleName}* умерла за `
                 + `другого человека.`
             else if (this.protectedPlayerKiller.role instanceof Gunner) deathMessage = `Вдруг раздался оглушительный выстрел, и все на площади `
-                + `увидели, как *${this.protectedPlayerKiller.role.roleName}* ${highlightPlayer(this.protectedPlayerKiller)} все еще целится в голову `
-                + `${highlightPlayer(this.specialCondition.protectedPlayer)}… Но промахивается и попадает в ${highlightPlayer(this.player)}, в `
-                + `то время как ${highlightPlayer(this.specialCondition.protectedPlayer)} стоит абсолютно невредим(а).`
-            // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `
-            //     + `второпях целится в ${highlightPlayer(this.specialCondition.protectedPlayer)} и стреляет в последний момент. Но попадает в `
-            //     + `${highlightPlayer(this.player)}, в то время как ${highlightPlayer(this.specialCondition.protectedPlayer)} стоит целый(ая) `
-            //     + `и невредимый(ая).`
+                + `увидели, как ${playerLink(this.protectedPlayerKiller, true)} все еще целится в голову `
+                + `${playerLink(this.specialCondition.protectedPlayer)}… Но промахивается и попадает в ${playerLink(this.player)}, в `
+                + `то время как ${playerLink(this.specialCondition.protectedPlayer)} стоит абсолютно невредим(а).`
+            else if (this.protectedPlayerKiller.role instanceof Cowboy) deathMessage = `${playerLink(this.protectedPlayerKiller, true)} `
+                + `второпях целится в ${playerLink(this.specialCondition.protectedPlayer)} и стреляет в последний момент. Но попадает в `
+                + `${playerLink(this.player)}, в то время как ${playerLink(this.specialCondition.protectedPlayer)} стоит целый(ая) `
+                + `и невредимый(ая).`
 
             setTimeout(
                 (deathMessage) => deathMessage && Martyr.game.bot
@@ -123,7 +123,7 @@ export class Martyr extends RoleBase {
 
     choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
         `Выбор принят — ${this.specialCondition.protectedPlayer
-            ? highlightPlayer(this.specialCondition.protectedPlayer)
+            ? playerLink(this.specialCondition.protectedPlayer)
             : 'Пропустить'}.`,
         {
             message_id: this.actionMsgId,

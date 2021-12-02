@@ -1,8 +1,4 @@
-import {Gunner} from "./Gunner";
-import {SerialKiller} from "../Others/SerialKiller";
-import {Wolf} from "../WolfTeam/Wolf";
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {RoleBase} from "../Abstract/RoleBase";
+import {Arsonist, Cowboy, ForecasterBase, Gunner, RoleBase, SerialKiller, Wolf} from "../";
 
 export class WiseElder extends ForecasterBase {
     roleName = "Мудрец 📚";
@@ -11,8 +7,8 @@ export class WiseElder extends ForecasterBase {
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
     weight = () => 5;
 
-    forecastRoleName = (targetRole: RoleBase) => { // Arsonist, CultistHunter, FallenAngel, Hunter, BlackWolf?
-        const killers = [Gunner, SerialKiller, Wolf];
+    forecastRoleName = (targetRole: RoleBase) => { // CultistHunter, FallenAngel, BlackWolf?
+        const killers = [Gunner, SerialKiller, Wolf, Arsonist, Cowboy]; // move to different file, unite with checkEndGame logic
         return killers.find(killer => targetRole instanceof killer)
             ? 'может убивать.'
             : 'совершенно безобидный человек и не желает никому причинять боль.';

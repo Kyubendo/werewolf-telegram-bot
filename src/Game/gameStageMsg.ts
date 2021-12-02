@@ -1,5 +1,5 @@
 import {Game} from "./Game";
-import {highlightPlayer} from "../Utils/highlightPlayer";
+import {playerLink} from "../Utils/playerLink";
 
 export const gameStageMsg = (game: Game) => {
     switch (game.stage) {
@@ -18,7 +18,7 @@ export const gameStageMsg = (game: Game) => {
                     'демонстрацию во имя любви и мира, селяне решают никого не казнить.';
             else if (activeMonarchs?.length)
                 return `${activeMonarchs[0].role?.roleName} раскрылся, так что он решит, кто умрёт сегодня!\n` +
-                `${highlightPlayer(activeMonarchs[0])}, у тебя есть *${game.lynchDuration / 1000}* секунд.`;
+                `${playerLink(activeMonarchs[0])}, у тебя есть *${game.lynchDuration / 1000}* секунд.`;
             else
                 return 'Все селяне пришли на городское собрание, чтобы сделать выбор, ' +
                     'кого же будут сегодня казнить!\n\n' +

@@ -50,7 +50,7 @@ export class Lynch extends VotingBase {
             this.game.chatId,
             `${this.votedPlayers.length} из ${this.getVoters().length} игроков проголосовало.`
         )
-        if (this.votedPlayers.length === this.getVoters().length) await this.game.setNextStage()
+        if (this.votedPlayers.length === this.getVoters().length) this.game.setNextStage()
     }
 
     calculateVoteWeight = (voter: Player) => (voter.role instanceof Mayor
@@ -69,7 +69,7 @@ export class Lynch extends VotingBase {
         if (voteResult.length === 1) {
             if (voteResult[0].role instanceof Suicide) {
                 await this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
-                return true
+                this.game.stopStage()
             } else {
                 await voteResult[0].role?.onKilled()
             }

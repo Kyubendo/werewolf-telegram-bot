@@ -1,5 +1,5 @@
 import {Player} from "../../Player/Player";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {DeathType} from "../../Game";
 import {RoleBase, SerialKiller, Wolf} from "../index";
 
@@ -17,10 +17,10 @@ export class Drunk extends RoleBase {
                 killer.role.findAllies().forEach(wolfPlayer => wolfPlayer.isFrozen = true);
                 killer.isFrozen = true;
                 text = `Один из мирных жителей утром обнаружил у себя в загоне со свиньями самого известного ` +
-                    `Пьяницу ${highlightPlayer(this.player)}, который, по словам следователей, ` +
+                    `Пьяницу ${playerLink(this.player)}, который, по словам следователей, ` +
                     `тусовался всю ночь со свиньями до последнего, а потом пришел волк и съел его!`;
             } else if (killer?.role instanceof SerialKiller) {
-                text = `Селяне надеялись выпить стакан-другой с Пьяницей ${highlightPlayer(this.player)}, но, зайдя ` +
+                text = `Селяне надеялись выпить стакан-другой с Пьяницей ${playerLink(this.player)}, но, зайдя ` +
                     `к нему домой, они увидели только сломанный нож и вырезанную печень.` +
                     `Он настолько посадил себе печень, что даже Серийный Убийца ею побрезговал.`;
             }

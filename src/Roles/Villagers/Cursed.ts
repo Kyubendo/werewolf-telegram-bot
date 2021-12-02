@@ -1,6 +1,6 @@
 import {Player} from "../../Player/Player";
 import {Wolf} from "../WolfTeam/Wolf";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {DeathType} from "../../Game";
 import {RoleBase} from "../"
 
@@ -17,7 +17,7 @@ export class Cursed extends RoleBase {
             Cursed.game.players.filter(player => player.role instanceof Wolf && player.isAlive)
                 .forEach(player => Cursed.game.bot.sendMessage(
                     player.id,
-                    `${highlightPlayer(this.player)} был(а) ${this.player.role?.roleName}, ` +
+                    `${playerLink(this.player)} был(а) ${this.player.role?.roleName}, ` +
                     `поэтому он(а) теперь один(на) из вас! Поздравляем нового волка.`
                 ));
 

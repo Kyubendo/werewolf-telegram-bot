@@ -1,6 +1,6 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
 import {Arsonist, Beholder, RoleBase} from "../index";
 
@@ -38,7 +38,7 @@ export class Doppelganger extends RoleBase {
                 .filter(player => this.player !== player && player.isAlive))
             await Doppelganger.game.bot.editMessageText(
                 `Ты не успел сделать выбор, ` +
-                `так что высшие силы сделали выбор за тебя: ${highlightPlayer(this.targetPlayer)}.`,
+                `так что высшие силы сделали выбор за тебя: ${playerLink(this.targetPlayer)}.`,
                 {
                     chat_id: this.player.id,
                     message_id: this.actionMsgId
@@ -57,7 +57,7 @@ export class Doppelganger extends RoleBase {
 
                 await Doppelganger.game.bot.sendMessage(
                     this.player.id,
-                    `${highlightPlayer(this.targetPlayer)} погиб, и ты трансформировался!\n` +
+                    `${playerLink(this.targetPlayer)} погиб, и ты трансформировался!\n` +
                     `Теперь ты ${this.player.role.roleName}!`
                 )
 

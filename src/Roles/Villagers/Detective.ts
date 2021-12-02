@@ -1,5 +1,5 @@
 import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {RoleBase} from "../Abstract/RoleBase";
 import {Wolf} from "../WolfTeam/Wolf";
 
@@ -20,12 +20,12 @@ export class Detective extends ForecasterBase {
         if (this.targetPlayer.role instanceof Wolf)
             await Detective.game.bot.sendMessage(
                 this.targetPlayer.id,
-                `Ты поймал что-то выискивающего ${highlightPlayer(this.player)}! Он ${this.roleName}!`
+                `Ты поймал что-то выискивающего ${playerLink(this.player)}! Он ${this.roleName}!`
             )
 
     }
 
     forecastRoleName = (targetRole: RoleBase) =>
-        `Твои выслеживания показали, что ${highlightPlayer(targetRole.player)} ` +
+        `Твои выслеживания показали, что ${playerLink(targetRole.player)} ` +
         `это *${targetRole.roleName}*.`
 }

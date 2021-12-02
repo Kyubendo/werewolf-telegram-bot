@@ -1,4 +1,4 @@
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {DeathType, Player} from "../../Game";
 import {RoleBase, Thief} from "../index";
 
@@ -15,11 +15,11 @@ export class Mason extends RoleBase {
         if (notify) {
             let notificationText;
             if (this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer)
-                notificationText = `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
-                    `каменщиков вместо ${highlightPlayer(this.player.role.targetPlayer)}! ` +
-                    `${highlightPlayer(this.player.role.targetPlayer)} уволен за прогул!`
+                notificationText = `Странно, ${playerLink(this.player)} пришёл на собрание ` +
+                    `каменщиков вместо ${playerLink(this.player.role.targetPlayer)}! ` +
+                    `${playerLink(this.player.role.targetPlayer)} уволен за прогул!`
             else
-                notificationText = `${highlightPlayer(this.player)} пришёл на стройку по объявлению. ` +
+                notificationText = `${playerLink(this.player)} пришёл на стройку по объявлению. ` +
                     `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`
 
             for (const ally of allies) {
@@ -40,7 +40,7 @@ export class Mason extends RoleBase {
             else
                 alliesInfoText += 'Каменщики: '
 
-            alliesInfoText += allies?.map(ally => highlightPlayer(ally)).join(', ')
+            alliesInfoText += allies?.map(ally => playerLink(ally)).join(', ')
         }
 
         await Mason.game.bot.sendMessage(
@@ -62,7 +62,7 @@ export class Mason extends RoleBase {
         if (killer?.role && !type) {
             await Mason.game.bot.sendMessage(
                 Mason.game.chatId,
-                `Проснувшись, все находят тело ${highlightPlayer(this.player)} под грудой ` +
+                `Проснувшись, все находят тело ${playerLink(this.player)} под грудой ` +
                 `камней, кровь разбрызгана повсюду. *${this.roleName}* мертв!`
             )
 

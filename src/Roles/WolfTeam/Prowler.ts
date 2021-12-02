@@ -1,4 +1,4 @@
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty, RoleBase, Wolf} from "../index";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {DeathType} from "../Abstract/RoleBase";
@@ -34,14 +34,14 @@ export class Prowler extends ForecasterBase {
                 await RoleBase.game.bot.sendMessage(
                     this.player.id,
                     wolves.length > 1
-                        ? `Когда ты заглянула в окно к ${highlightPlayer(this.targetPlayer)}, ` +
+                        ? `Когда ты заглянула в окно к ${playerLink(this.targetPlayer)}, ` +
                         `ты увидела, как стая волков пожирает беднягу. Ужасающее зрелище... ` +
-                        `Ужасающее для ${highlightPlayer(this.targetPlayer)}! ` +
+                        `Ужасающее для ${playerLink(this.targetPlayer)}! ` +
                         'А для тебя отличное, ведь ты запомнила лица всех волков! '
-                        + `\nВот они слева направо: ` + wolves?.map(wolf => highlightPlayer(wolf)).join(', ')
-                        : `Ты почти добралась до дома ${highlightPlayer(this.targetPlayer)}, ` +
+                        + `\nВот они слева направо: ` + wolves?.map(wolf => playerLink(wolf)).join(', ')
+                        : `Ты почти добралась до дома ${playerLink(this.targetPlayer)}, ` +
                         'как вдруг услышала ужасные вопли страха изнутри. Ты затаилась недалеко и увидела, ' +
-                        `как ${highlightPlayer(killer)}, выходит из дома в обличии волка. ` +
+                        `как ${playerLink(killer)}, выходит из дома в обличии волка. ` +
                         'Кажется, ты нашла своего союзника.'
                 )
                 this.showResult = false;
@@ -70,9 +70,9 @@ export class Prowler extends ForecasterBase {
     }
 
     forecastRoleName = (targetRole: RoleBase) => targetRole.targetPlayer
-        ? `Ты заглянула в окошко ${highlightPlayer(targetRole.player)} и увидела там свет. ` +
-        `Похоже, ${highlightPlayer(targetRole.player)} не спит этой ночью!`
+        ? `Ты заглянула в окошко ${playerLink(targetRole.player)} и увидела там свет. ` +
+        `Похоже, ${playerLink(targetRole.player)} не спит этой ночью!`
         : 'Ты не можешь увидеть ничего через окно, ' +
-        `потому что внутри дома ${highlightPlayer(targetRole.player)} не горит ни одна свеча. ` +
+        `потому что внутри дома ${playerLink(targetRole.player)} не горит ни одна свеча. ` +
         `Вероятно, он(а) спит.`
 }

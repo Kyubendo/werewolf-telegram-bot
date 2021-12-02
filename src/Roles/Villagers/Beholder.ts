@@ -1,11 +1,11 @@
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Fool, RoleBase, Seer} from "../index";
 
 export class Beholder extends RoleBase {
     roleName = 'Очевидец 👁';
     private seers = (): string[] => Beholder.game.players
         .filter(player => player.role instanceof Seer && !(player.role instanceof Fool))
-        .map(player => highlightPlayer(player))
+        .map(player => playerLink(player))
 
     stealMessage = () => this.seers().length === 0
             ? 'Провидца нет!'

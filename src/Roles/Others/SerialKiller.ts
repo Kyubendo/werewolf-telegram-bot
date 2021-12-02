@@ -1,7 +1,7 @@
 import {DeathType} from "../../Game";
 import {Player} from "../../Game";
 import {RoleBase} from "../"
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {Beauty, GuardianAngel, Wolf} from "../index";
@@ -18,11 +18,10 @@ export class SerialKiller extends RoleBase {
 
     killMessage = () => ({
         text: {
-            toChat: (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${highlightPlayer(deadPlayer)}, ` +
+            toChat: (deadPlayer: Player) => `Эта ночь казалась довольно тихой для ${playerLink(deadPlayer)}, ` +
                 `но не тут-то было. Жители, собравшись, ` +
                 `обнаружили расчлененное тело, но, на удивление, печени не было ` +
-                `на месте...\n${this.roleName} снова атаковал!\n${highlightPlayer(deadPlayer)} ` +
-                `был(а) *${deadPlayer.role?.roleName}*`,
+                `на месте...\n${this.roleName} снова атаковал!\n${playerLink(deadPlayer, true)} мёртв!`,
             toTarget: `Ты просыпаешься посреди ночи, слыша зловещий смех, когда ${this.roleName} ` +
                 'извлекает твои органы. Ты мертв(а).'
         },
@@ -34,7 +33,7 @@ export class SerialKiller extends RoleBase {
             await SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
                 `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка! ` +
-                `*${killer.role.roleName}* ${highlightPlayer(killer)} погиб.`,
+                `${playerLink(killer, true)} погиб.`,
             )
             await SerialKiller.game.bot.sendMessage(
                 killer.id,

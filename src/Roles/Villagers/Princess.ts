@@ -1,5 +1,5 @@
 import {specialConditionPrincess} from "../../Utils/specialConditionTypes";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Monarch, RoleBase} from "../index";
 import {DeathType, Player} from "../../Game";
 
@@ -19,7 +19,7 @@ export class Princess extends RoleBase {
                 Princess.game.chatId,
                 'https://media.giphy.com/media/RLVHPJJv7jY1q/giphy.gif',
                 {
-                    caption: `Как только селяне решили казнить ${highlightPlayer(this.player)}, она воскликнула `
+                    caption: `Как только селяне решили казнить ${playerLink(this.player)}, она воскликнула `
                         + `“Постойте! Я Принцесса! Это королевское кольцо, эта печать короля все подтверждают! `
                         + `Каждую ночь я в окружении слуг, так что я не могу быть злой!” `
                         + `Почувствовав себя глупо, смущенные жители разошлись спать.`

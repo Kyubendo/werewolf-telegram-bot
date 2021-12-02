@@ -1,6 +1,6 @@
 import {Player} from "../../Game";
 import {DeathType} from "../../Game";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty, Cursed, GuardianAngel, RoleBase, Thief, Traitor} from "../index";
 
 export class Wolf extends RoleBase {
@@ -16,28 +16,28 @@ export class Wolf extends RoleBase {
         if (notify) {
             let notificationText;
             if (this.player.infected)
-                notificationText = `Прошло уже 24 часа с тех пор как ${highlightPlayer(this.player)} ` +
+                notificationText = `Прошло уже 24 часа с тех пор как ${playerLink(this.player)} ` +
                     `был заражён укусом. ` + (Math.random() < 0.9
-                        ? `Внезапно у ${highlightPlayer(this.player)} отрастают огромные волчьи клыки, ` +
+                        ? `Внезапно у ${playerLink(this.player)} отрастают огромные волчьи клыки, ` +
                         `а сам он покрывается шерстью. Теперь он ${this.player.role?.roleName}!`
                         : `С опозданием аж в 5 секунд он всё же превратился в волка. ` +
                         `И как разработчики могли такое допустить...`)
             else if (this.player.role?.previousRole instanceof Cursed)
                 notificationText = (Math.random() < 0.9
-                    ? `До этого над ${highlightPlayer(this.player)} издевалось всё село из-за того, ` +
+                    ? `До этого над ${playerLink(this.player)} издевалось всё село из-за того, ` +
                     `что он ${this.player.role.previousRole.roleName}. ` +
                     `Теперь он над ними отыграется, потому что он теперь один из вас! Поздравляем нового волка.`
-                    : `С детства над ${highlightPlayer(this.player)} издевалась вся деревня из-за того, ` +
+                    : `С детства над ${playerLink(this.player)} издевалась вся деревня из-за того, ` +
                     `что в нём запечатан Девятихвостый ${this.player.role.roleName}. ` +
                     `Как только его укусили, хвостатый сразу же вырвался на свободу! ` +
                     `Но вы ему объяснили, что у вас все равны и отрезали ему 8 хвостов. ` +
                     `Теперь он просто ${this.player.role.roleName}`)
             else if (this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer)
-                notificationText = `Странно, ${highlightPlayer(this.player)} решил стать веганом, ` +
-                    `а ${highlightPlayer(this.player.role.targetPlayer)} протяжно выл в ночи и щёлкал зубами! ` +
-                    `${highlightPlayer(this.player)} теперь полноценный член стаи.`
+                notificationText = `Странно, ${playerLink(this.player)} решил стать веганом, ` +
+                    `а ${playerLink(this.player.role.targetPlayer)} протяжно выл в ночи и щёлкал зубами! ` +
+                    `${playerLink(this.player)} теперь полноценный член стаи.`
             else
-                notificationText = `В стае пополнение! ${highlightPlayer(this.player)} больше не выступает в цирке, ` +
+                notificationText = `В стае пополнение! ${playerLink(this.player)} больше не выступает в цирке, ` +
                     'теперь он заодно с вами!'
 
             for (const ally of allies) {
@@ -58,7 +58,7 @@ export class Wolf extends RoleBase {
             else
                 alliesInfoText += 'Другие волки: '
 
-            alliesInfoText += allies?.map(ally => highlightPlayer(ally)).join(', ')
+            alliesInfoText += allies?.map(ally => playerLink(ally)).join(', ')
         }
 
         await Wolf.game.bot.sendMessage(
@@ -77,8 +77,8 @@ export class Wolf extends RoleBase {
 
     killMessage = () => ({
         text: {
-            toChat: (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${highlightPlayer(deadPlayer)} съели заживо!` +
-                `\n${highlightPlayer(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`,
+            toChat: (deadPlayer: Player) => `НомномНОМномНОМНОМном... ${playerLink(deadPlayer)} съели заживо!` +
+                `\n${playerLink(deadPlayer)} был(а) *${deadPlayer.role?.roleName}*.`,
             toTarget: 'О нет! Ты съеден(а) волком!'
         },
         gif: 'https://media.giphy.com/media/10arlAx4rI0xHO/giphy.gif'
