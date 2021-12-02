@@ -9,7 +9,7 @@ export class Mason extends RoleBase {
         && otherPlayer.isAlive
     )
 
-    sendAlliesMessage = async (notify?: boolean): Promise<void> => {
+    sendAlliesMessage = async (notify: boolean = false): Promise<void> => {
         const allies = this.findAllies();
 
         if (notify) {
