@@ -59,8 +59,14 @@ export class Martyr extends RoleBase {
             )
         }
         if (!this.specialCondition.protectedPlayer.role) return
-        this.specialCondition.protectedPlayer.role.handleDeath = async (killer?: Player) => {
-            if (!this.specialCondition.protectedPlayer) return false;
+
+        const currentTargetHandleDeath = this.specialCondition.protectedPlayer.role
+            .handleDeath.bind(this.specialCondition.protectedPlayer.role);
+
+        this.specialCondition.protectedPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
+            if (!this.player.isAlive) return currentTargetHandleDeath(killer, deathType)
+
+            if (!this.specialCondition.protectedPlayer) return false; // should never be returned
 
             this.protectedPlayerKiller = killer
             await this.onKilled(this.player)
@@ -77,6 +83,7 @@ export class Martyr extends RoleBase {
                 + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы ${playerLink(this.player)} навсегда `
                 + `отпечаталось у тебя в сознании. И ты знаешь, что она пожертвовала собой для того, чтобы ты жил(а).`
             )
+            this.specialCondition.protectedPlayer.martyrSavedFrom = killer
             return false
         }
     }
@@ -110,7 +117,6 @@ export class Martyr extends RoleBase {
                 deathMessage
             )
             this.player.isAlive = false;
-            this.specialCondition.protectedPlayer.martyrSavedFrom = this.protectedPlayerKiller
             return true;
         }
         return super.handleDeath(killer, type);
