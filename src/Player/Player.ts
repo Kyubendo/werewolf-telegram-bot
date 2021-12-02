@@ -1,6 +1,6 @@
 import {User} from "node-telegram-bot-api";
 import {RoleBase, FallenAngel, GuardianAngel, Wolf} from "../Roles";
-import {highlightPlayer} from "../Utils/highlightPlayer";
+import {playerLink} from "../Utils/playerLink";
 
 export class Player {
     constructor(user: User) {
@@ -46,14 +46,14 @@ export class Player {
                         ? '\nВолк: '
                         : '\nОднако волков уже нет в живых...')
                 + wolfPlayers
-                    .map(ally => highlightPlayer(ally)).join(', ')
+                    .map(ally => playerLink(ally)).join(', ')
                 + (!otherFallenAngelPlayers.length
                     ? ''
                     : otherFallenAngelPlayers.length > 1
                         ? '\nТвои чернокрылые братья и сёстры: '
                         : '\nТвой чернокрылый брат — ')
                 + otherFallenAngelPlayers
-                    .map(otherFallenAngelPlayer => highlightPlayer(otherFallenAngelPlayer)).join(', ')
+                    .map(otherFallenAngelPlayer => playerLink(otherFallenAngelPlayer)).join(', ')
 
             text = this.role.startMessageText() + wolfText;
         } else {

@@ -28,7 +28,7 @@ export class AlphaWolf extends Wolf {
         this.targetPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
             if (!this.targetPlayer
                 || Math.random() >= .25
-                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer);
+                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer, deathType);
 
             await AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
@@ -51,11 +51,11 @@ export class AlphaWolf extends Wolf {
                         `что ${playerLink(this.targetPlayer)} должен(на) ` +
                         'присоединиться к стае вместо того, ' +
                         `чтобы умереть, и стая оставила ${playerLink(this.targetPlayer)} с инфекцией.\n`
-                        + (this.targetPlayer.role instanceof GuardianAngel)
+                        + ((this.targetPlayer.role instanceof GuardianAngel)
                             ? 'Следующей ночью у вас появится союзник, которого сложно переоценить... ' +
                             'Он отбросит всё святое, чтобы вступить в волчьи ряды. ' +
                             'Конечно же речь идёт о Падшем Ангеле!'
-                            : 'Он(а) станет волком завтра ночью.'
+                            : 'Он(а) станет волком завтра ночью.')
                     )
             )
 
