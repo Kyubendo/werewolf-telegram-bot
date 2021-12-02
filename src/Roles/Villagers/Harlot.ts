@@ -3,7 +3,7 @@ import {findPlayer} from "../../Game/findPlayer";
 import {SerialKiller} from "../Others/SerialKiller";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {DeathType} from "../../Game";
 import {Beauty} from "./Beauty";
 import {Arsonist, RoleBase} from "../index";
@@ -98,12 +98,12 @@ export class Harlot extends RoleBase {
                     'готовая чуть повеселиться и снять стресс. Но вместо этого она находит волка, ' +
                     `пожирающего ${playerLink(this.targetPlayer)}! ` +
                     `Волк резко прыгает на ${playerLink(harlotPlayer)}... ` +
-                    `${playerLinkWithRole(harlotPlayer)} мертва.`,
+                    `${playerLink(harlotPlayer, true)} мертва.`,
                 )
             } else if (killer.role instanceof SerialKiller) {
                 await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
-                    `${playerLinkWithRole(harlotPlayer)} проникла в дом ` +
+                    `${playerLink(harlotPlayer, true)} проникла в дом ` +
                     `${playerLink(this.player)}, но какой-то незнакомец уже потрошит внутренности ` +
                     `${playerLink(this.player)}! ` +
                     `*${killer.role.roleName}* решил развлечься с ${playerLink(harlotPlayer)}, ` +
@@ -112,7 +112,7 @@ export class Harlot extends RoleBase {
             } else if (killer.role instanceof Arsonist) {
                 await RoleBase.game.bot.sendMessage(
                     RoleBase.game.chatId,
-                    `${playerLinkWithRole(harlotPlayer)} пришла развлечься к ` +
+                    `${playerLink(harlotPlayer, true)} пришла развлечься к ` +
                     `${playerLink(this.player)}, но, видимо, ночь оказалось слишком горячей...` +
                     `${playerLink(harlotPlayer)} сгорела вместе с домом ${playerLink(this.player)}!`
                 )

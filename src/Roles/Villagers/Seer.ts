@@ -5,7 +5,7 @@ import {RoleBase} from "../"
 import {Wolf} from "../WolfTeam/Wolf";
 import {WoodMan} from "./WoodMan";
 import {Traitor} from "./Traitor";
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {Player} from "../../Player/Player";
 import {ApprenticeSeer} from "./ApprenticeSeer";
 import {ForecasterBase} from "../Abstract/ForecasterBase";
@@ -59,7 +59,7 @@ export class Seer extends ForecasterBase {
                 killer?.role instanceof SerialKiller
                     ? `Селяне осматривают расчленённые останки ${playerLink(this.player)} со множеством ` +
                     'колотых ран. Удивительно, но мозг был аккуратно вырезан, будто хотели сказать, что селяне потеряли ' +
-                    `лучшие мозги. ${playerLinkWithRole(this.player)} мертв.`
+                    `лучшие мозги. ${playerLink(this.player, true)} мертв.`
                     : 'День начался с печальных новостей... ' +
                     `Всем известный *${this.roleName}* мертв! Покойся с миром ${playerLink(this.player)}...`
             )

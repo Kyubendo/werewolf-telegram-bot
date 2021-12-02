@@ -1,7 +1,7 @@
 import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {Player} from "../../Player/Player";
 import {Gunner, RoleBase, SerialKiller, Wolf} from "../index";
 import {randomElement} from "../../Utils/randomElement";
@@ -96,7 +96,7 @@ export class Martyr extends RoleBase {
                 + `Вокруг нее были начертаны священные руны Древних Богов. Этой ночью *${this.roleName}* умерла за `
                 + `другого человека.`
             else if (this.protectedPlayerKiller.role instanceof Gunner) deathMessage = `Вдруг раздался оглушительный выстрел, и все на площади `
-                + `увидели, как ${playerLinkWithRole(this.protectedPlayerKiller)} все еще целится в голову `
+                + `увидели, как ${playerLink(this.protectedPlayerKiller, true)} все еще целится в голову `
                 + `${playerLink(this.specialCondition.protectedPlayer)}… Но промахивается и попадает в ${playerLink(this.player)}, в `
                 + `то время как ${playerLink(this.specialCondition.protectedPlayer)} стоит абсолютно невредим(а).`
             // else if (killer.role instanceof Cowboy) deathMessage = `${killer.role.roleName} ${highlightPlayer(killer)} `

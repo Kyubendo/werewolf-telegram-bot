@@ -1,4 +1,4 @@
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {Beauty, Cursed, GuardianAngel, Wolf} from "../index";
 import {DeathType, Player} from "../../Game";
 
@@ -44,7 +44,7 @@ export class AlphaWolf extends Wolf {
                         player.id,
                         `Как только волками был(а) атакован(а) ${playerLink(this.targetPlayer)}, ` +
                         `${playerLink(this.player)} остановил всех. ` +
-                        `${playerLinkWithRole(this.player)} рассказал стае, ` +
+                        `${playerLink(this.player, true)} рассказал стае, ` +
                         `что ${playerLink(this.targetPlayer)} должен(на) ` +
                         'присоединиться к стае вместо того, ' +
                         `чтобы умереть, и стая оставила ${playerLink(this.targetPlayer)} с инфекцией. ` +

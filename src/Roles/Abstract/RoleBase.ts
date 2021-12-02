@@ -1,6 +1,6 @@
 import {Game} from "../../Game";
 import {Player} from "../../Game";
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
@@ -180,7 +180,7 @@ export abstract class RoleBase {
             await RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 `Жители отдали свои голоса в подозрениях и сомнениях... \n`
-                + `${playerLinkWithRole(this.player)} мёртв!`
+                + `${playerLink(this.player, true)} мёртв!`
             )
         }
         this.player.isAlive = false;

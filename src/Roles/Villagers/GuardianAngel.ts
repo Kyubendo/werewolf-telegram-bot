@@ -1,7 +1,7 @@
 import {DeathType} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {SerialKiller, Wolf, Beauty, RoleBase} from "../";
 import {Player} from "../../Game";
 
@@ -111,7 +111,7 @@ export class GuardianAngel extends RoleBase {
                 await GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
                     'Занятно: ангелы спасают других от убийц, а себя спасти не могут. ' +
-                    `${playerLinkWithRole(this.player)} мёртв.`
+                    `${playerLink(this.player, true)} мёртв.`
                 )
         } else
             return super.handleDeath(killer, type);

@@ -2,14 +2,15 @@ import {RoleBase} from "../index";
 import {Player} from "../../Player/Player";
 import {DeathType} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
 import {timer, Timer} from "../../Utils/Timer";
 
 export class Cowboy extends RoleBase {
     readonly roleName = 'Ковбой 🤠'
 
-    startMessageText = () => 'Ты корова-мальчик.'
+    startMessageText = () => 'Ты никогда не расстаёшься со своим кольтом, и если ты умрешь, у тебя будет шанс ' +
+        'забрать кого-то с собой на тот свет.'
 
     weight = () => 4.5
     deathTimer?: Timer
@@ -17,7 +18,7 @@ export class Cowboy extends RoleBase {
         text: {
             toChat: (deadPlayer: Player) => `${playerLink(this.player)} истек большим количеством крови и уже `
                 + `лежит на земле умирая... Но успевает вытянуть оружие и выстрелить ${playerLink(deadPlayer)}, `
-                + `прямо в голову. ${playerLinkWithRole(deadPlayer)} умирает.`,
+                + `прямо в голову. ${playerLink(deadPlayer, true)} умирает.`,
             toTarget: 'Откуда ни возьмись, тебе в лоб влетает пуля.',
         },
         gif: 'https://media.giphy.com/media/3N2ML3tw4c4uc/giphy.gif', // https://media.giphy.com/media/7OXlwjJGmMjSI9Dfpn/giphy.gif

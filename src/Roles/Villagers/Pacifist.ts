@@ -1,5 +1,5 @@
 import {specialConditionPacifist} from "../../Utils/specialConditionTypes";
-import {playerLink, playerLinkWithRole} from "../../Utils/playerLink";
+import {playerLink} from "../../Utils/playerLink";
 import {RoleBase} from "../index";
 
 export class Pacifist extends RoleBase {
@@ -19,7 +19,7 @@ export class Pacifist extends RoleBase {
 
     actionAnnouncement = () => ({
         message: 'Пока все обсуждают, кого казнить следующим, ' +
-            `${playerLinkWithRole(this.player)} проводит ` +
+            `${playerLink(this.player, true)} проводит ` +
             'демонстрацию во имя добра и мира на улице. ' +
             'Все вспоминают, что любовь всегда побеждает зло. Селяне решают, что не будут казнить сегодня.',
         gif: 'https://media.giphy.com/media/HVweQ5FuSFZJe/giphy.gif'
