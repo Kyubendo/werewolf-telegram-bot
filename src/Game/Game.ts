@@ -187,7 +187,8 @@ export class Game {
 
     private runResults = async () => {
         for (const role of roleResolves(this.stage)) {
-            const alivePlayers = this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+            const alivePlayers = this.players
+                .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
             for (const alivePlayer of alivePlayers) {
                 await alivePlayer.role?.actionResult?.()
             }
