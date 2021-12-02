@@ -33,8 +33,9 @@ export class Player {
             this.id,
             'С наступлением ночи ты испытал(а) странное покалывание, ноющее чувство, пронзающее все тело, ' +
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
-            + (this.role instanceof Wolf && this.role.sendAlliesMessage(true)) // check this line later
         )
+
+        await this.role.sendAlliesMessage?.(true)
         this.infected = false
     }
 

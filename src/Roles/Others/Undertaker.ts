@@ -44,10 +44,7 @@ export class Undertaker extends RoleBase {
             `В общем, теперь ты ${this.player.role.roleName}.`
         )
 
-        this.player.role.sendAlliesMessage && await Undertaker.game.bot.sendMessage(
-            this.player.id,
-            await this.player.role.sendAlliesMessage(true)
-        )
+        await this.player.role.sendAlliesMessage?.(true);
 
         if (this.player.role instanceof Arsonist || this.player.role instanceof Beholder)
             await Undertaker.game.bot.sendMessage(

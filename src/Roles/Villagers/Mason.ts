@@ -9,28 +9,21 @@ export class Mason extends RoleBase {
         && otherPlayer.isAlive
     )
 
-    sendAlliesMessage = async (notify: boolean = false): Promise<void> => {
+    sendAlliesMessage = async (notify?: boolean): Promise<void> => {
         const allies = this.findAllies();
-        if (notify)
-            for (const ally of allies)
-                await Mason.game.bot.sendMessage(
-                    ally.id,
-                    `${highlightPlayer(this.player)} пришёл на стройку по объявлению. ` +
-                    `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`
-                )
 
         if (notify) {
             let notificationText;
             if (this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer)
-                notificationText = `Странно, ${highlightPlayer(this.player)} решил стать веганом, ` +
-                    `а ${highlightPlayer(this.player.role.targetPlayer)} протяжно выл в ночи и щёлкал зубами! ` +
-                    `${highlightPlayer(this.player)} теперь полноценный член стаи.`
+                notificationText = `Странно, ${highlightPlayer(this.player)} пришёл на собрание ` +
+                    `каменщиков вместо ${highlightPlayer(this.player.role.targetPlayer)}! ` +
+                    `${highlightPlayer(this.player.role.targetPlayer)} уволен за прогул!`
             else
-                notificationText = `В стае пополнение! ${highlightPlayer(this.player)} больше не выступает в цирке, ` +
-                    'теперь он заодно с вами!'
+                notificationText = `${highlightPlayer(this.player)} пришёл на стройку по объявлению. ` +
+                    `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`
 
             for (const ally of allies) {
-                await Wolf.game.bot.sendMessage(
+                await Mason.game.bot.sendMessage(
                     ally.id,
                     notificationText
                 )

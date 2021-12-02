@@ -65,9 +65,10 @@ export class WildChild extends RoleBase {
                     await WildChild.game.bot.sendMessage(
                         this.player.id,
                         `Твой "пример" ${highlightPlayer(this.specialCondition.roleModel)} умер! ` +
-                        `Теперь ты ${this.player.role.roleName}! ` +
-                        this.player.role.sendAlliesMessage(true)
+                        `Теперь ты ${this.player.role.roleName}!`
                     )
+
+                    await this.player.role.sendAlliesMessage?.(true)
 
                     this.player.role.findAllies().forEach(player => WildChild.game.bot.sendMessage(
                         player.id,

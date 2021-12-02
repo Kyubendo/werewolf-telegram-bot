@@ -77,10 +77,7 @@ export class Thief extends RoleBase {
                 stealMessageText
             )
 
-            this.player.role.sendAlliesMessage && await Thief.game.bot.sendMessage(
-                this.player.id,
-                await this.player.role.sendAlliesMessage(true)
-            )
+            await this.player.role.sendAlliesMessage?.(true);
         }
     }
 
