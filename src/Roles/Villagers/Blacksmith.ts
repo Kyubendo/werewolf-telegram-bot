@@ -34,11 +34,6 @@ export class Blacksmith extends RoleBase {
 
 
     action = () => {
-        if (this.specialCondition.silverDust) {
-            this.specialCondition.silverDust = false;
-            return;
-        }
-
         if (this.specialCondition.silverDust === false) return;
 
         Blacksmith.game.bot.sendMessage(
@@ -56,8 +51,10 @@ export class Blacksmith extends RoleBase {
     }
 
     actionResolve = async () => {
-        if (this.specialCondition.silverDust)
-            Blacksmith.game.wolvesDeactivated = true;
+        if (this.specialCondition.silverDust) {
+            Blacksmith.game.rolesDeactivated.push(Wolf);
+            this.specialCondition.silverDust = false;
+        }
     }
 
     handleChoice = (choice?: string) => {

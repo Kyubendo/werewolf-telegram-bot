@@ -1,6 +1,6 @@
-import {RoleBase} from "../Abstract/RoleBase";
 import {specialConditionSandman} from "../../Utils/specialConditionTypes";
 import {playerLink} from "../../Utils/playerLink";
+import {RoleBase} from "../index";
 
 
 export class Sandman extends RoleBase {
@@ -26,11 +26,6 @@ export class Sandman extends RoleBase {
     })
 
     action = () => {
-        if (this.specialCondition.sleep) {
-            this.specialCondition.sleep = false;
-            return;
-        }
-
         if (this.specialCondition.sleep === false) return;
 
         Sandman.game.bot.sendMessage(
@@ -48,9 +43,10 @@ export class Sandman extends RoleBase {
     }
 
     actionResolve = async () => {
-        if (!this.specialCondition.sleep) return
-
-        Sandman.game.players.filter(player => player.isAlive).forEach(player => player.isFrozen = true);
+        if (this.specialCondition.sleep) {
+            Sandman.game.rolesDeactivated.push(RoleBase)
+            this.specialCondition.sleep = false;
+        }
     }
 
     handleChoice = (choice?: string) => {

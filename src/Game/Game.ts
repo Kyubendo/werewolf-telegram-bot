@@ -7,7 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Doppelganger, Wolf} from "../Roles";
+import {Doppelganger, RoleBase} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 
@@ -34,7 +34,7 @@ export class Game {
     lynch?: Lynch
     wolfFeast?: WolfFeast
 
-    wolvesDeactivated: boolean = false
+    rolesDeactivated: Function[] = []
 
     lynchDuration = 60_000
     dayDuration = 120_000
@@ -153,26 +153,29 @@ export class Game {
                     if (p.role?.handleDeath) p.role.handleDeath = p.role.originalHandleDeath
                 })
 
-            if (this.stage === 'night') {
+            if (this.stage === 'night')
                 this.players.forEach(player => player.isAlive && player.infected && player.transformInfected())
 
-                if (this.wolvesDeactivated) {
-                    this.players
-                        .filter(player => player.role instanceof Wolf && player.isAlive)
-                        .forEach(wolfPlayer => wolfPlayer.isFrozen = true);
-                    this.wolvesDeactivated = false;
-                }
-
-                if (!this.players.find(p => p.isAlive && !p.isFrozen)) await this.setNextStage();
-
-                this.players.forEach(p => {
-                    if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
-                })
-            }
-
-            if (this.stage === 'day')
+            if (this.stage === 'day') {
+                this.rolesDeactivated = [];
                 this.players.forEach(player => player.isFrozen = false)
+            }
         }
+
+        if (this.stage !== 'day' && this.rolesDeactivated)
+            this.players
+                .filter(player => this.rolesDeactivated.find(deactivatedRole =>
+                    player.role instanceof deactivatedRole) && player.isAlive)
+                .forEach(deactivatedPlayer => deactivatedPlayer.isFrozen = true);
+
+        if (this.stage === 'night') {
+            if (!this.players.find(p => p.isAlive && !p.isFrozen)) await this.setNextStage();
+
+            this.players.forEach(p => {
+                if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
+            })
+        }
+
         await this.lynch?.startVoting()
         await this.wolfFeast?.startVoting()
         for (const role of roleResolves(this.stage)) {
@@ -197,8 +200,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.actionMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
@@ -207,9 +210,13 @@ export class Game {
     clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
 
     checkNightDeaths = async () => {
-        if (this.stage === "lynch") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
+        if (this.stage === "lynch")
+            this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
         else if (this.stage === "night" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
-            await this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
+            await this.bot.sendMessage(this.chatId,
+                this.rolesDeactivated.includes(RoleBase)
+                    ? 'Этой ночью все сладко спали, поэтому никто никого не убил!'
+                    : 'Подозрительно, но это правда — сегодня ночью никто не умер!')
         }
     }
 }

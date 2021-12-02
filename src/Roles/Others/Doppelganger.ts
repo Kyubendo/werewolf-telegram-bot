@@ -1,9 +1,8 @@
-import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
-import {Arsonist} from "../index";
+import {Arsonist, RoleBase} from "../index";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
