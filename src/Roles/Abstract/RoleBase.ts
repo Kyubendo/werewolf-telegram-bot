@@ -53,6 +53,7 @@ export abstract class RoleBase {
 
     readonly onKilled = async (killer?: Player, type?: DeathType): Promise<void> => {
         if (!this.player.isAlive) return;
+        if (this.player.martyrSavedFrom === killer) return
         if (await this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
             this.movePlayer();

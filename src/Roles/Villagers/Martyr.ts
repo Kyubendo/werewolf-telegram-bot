@@ -103,13 +103,14 @@ export class Martyr extends RoleBase {
                 + `${playerLink(this.player)}, в то время как ${playerLink(this.specialCondition.protectedPlayer)} стоит целый(ая) `
                 + `и невредимый(ая).`
 
-            setTimeout(
+            setTimeout( // wtf
                 (deathMessage) => deathMessage && Martyr.game.bot
                     .sendMessage(Martyr.game.chatId, deathMessage),
                 25,
                 deathMessage
             )
             this.player.isAlive = false;
+            this.specialCondition.protectedPlayer.martyrSavedFrom = this.protectedPlayerKiller
             return true;
         }
         return super.handleDeath(killer, type);

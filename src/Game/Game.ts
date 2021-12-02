@@ -94,7 +94,7 @@ export class Game {
         await this.runResolves()
         await this.runResults();
 
-        this.clearAngel()
+        this.clearSavers()
     }
 
     afterStageChange = async () => {
@@ -197,14 +197,17 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.actionMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
     }
 
-    clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
+    clearSavers = () => this.players.forEach(p => {
+        p.guardianAngel = undefined
+        p.martyrSavedFrom = undefined
+    })
 
     checkNightDeaths = async () => {
         if (this.stage === "lynch") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
