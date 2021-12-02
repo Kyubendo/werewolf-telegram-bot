@@ -1,4 +1,3 @@
-import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {Arsonist, Beholder, RoleBase} from "../index";
 import {highlightPlayer} from "../../Utils/highlightPlayer";
@@ -6,24 +5,33 @@ import {highlightPlayer} from "../../Utils/highlightPlayer";
 export class Undertaker extends RoleBase {
     roleName = 'Гробовщик ⚰';
     startMessageText = () => 'Тебе до смерти надоела твоя работа... ' +
-        'Ночью ты можешь забрать себе роль выбранного мертвеца и выиграть за его команду! Помни, что ты не можешь ' +
+        'Ночью ты можешь забрать себе роль одного из мертвецов и выиграть за его команду! Помни, что ты не можешь ' +
         `выиграть как ${this.roleName}.`
     weight = () => 0;
 
     nightActionDone = false
 
     action = () => {
-        const deadPlayers = Undertaker.game.players
-            .filter(player => !player.isAlive);
-        if (!deadPlayers.length) {
+        const deadPlayersRoles: RoleBase[] = Undertaker.game.players
+            .filter(player => !player.isAlive && player.role)
+            .map(p => p.role)
+            .filter((r): r is RoleBase => !!r)
+
+        if (!deadPlayersRoles.length) {
             this.doneNightAction();
             return;
         }
         Undertaker.game.bot.sendMessage(
             this.player.id,
-            'Чью роль ты хочешь взять?',
+            'Какую роль ты хочешь взять?',
             {
-                reply_markup: generateInlineKeyboard(deadPlayers)
+                reply_markup: {
+                    inline_keyboard: deadPlayersRoles
+                        .map(r => [{
+                            text: r.roleName,
+                            callback_data: JSON.stringify({type: 'role', choice: r.player.id})
+                        }])
+                }
             }
         ).then(msg => this.actionMsgId = msg.message_id)
     }
@@ -58,4 +66,14 @@ export class Undertaker extends RoleBase {
         this.choiceMsgEditText();
         this.doneNightAction()
     }
+
+    choiceMsgEditText = () => RoleBase.game.bot.editMessageText(
+        `Выбор принят — ${this.targetPlayer
+            ? this.targetPlayer.role?.roleName
+            : 'Пропустить'}.`,
+        {
+            message_id: this.actionMsgId,
+            chat_id: this.player.id,
+        }
+    )
 }
