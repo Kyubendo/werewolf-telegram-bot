@@ -1,10 +1,9 @@
 import {RoleBase} from "../index";
-import {Player} from "../../Player/Player";
-import {DeathType} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
 import {timer, Timer} from "../../Utils/Timer";
+import {DeathType, Player} from "../../Game";
 
 export class Cowboy extends RoleBase {
     readonly roleName = 'Ковбой 🤠'
