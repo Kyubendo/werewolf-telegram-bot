@@ -1,6 +1,7 @@
 import {
     Blacksmith,
     Detective, Doppelganger,
+    FallenAngel,
     GuardianAngel,
     Gunner, Cupid,
     Harlot, JackOLantern,
@@ -34,7 +35,6 @@ const dayRoleResolves = [
     Monarch, Mayor,
     Gunner,
     WiseElder, Detective,
-    Pacifist,
     Sandman, // pre-last because he freeze all other actions including Blacksmith's
     Blacksmith,
 ]
@@ -44,7 +44,7 @@ const nightRoleResolves = [
     Cupid,
     JackOLantern,
     Harlot, Prowler,
-    GuardianAngel,
+    GuardianAngel, FallenAngel,
     Necromancer,
     Arsonist,
     SerialKiller,

@@ -1,23 +1,35 @@
 import {Player} from "../../Game";
 import {DeathType} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
-import {Beauty, GuardianAngel, RoleBase, Traitor} from "../index";
+import {Beauty, FallenAngel, GuardianAngel, RoleBase, Traitor} from "../index";
 
 export class Wolf extends RoleBase {
     findOtherWolfPlayers = () => Wolf.game.players.filter(otherPlayer =>
-        otherPlayer.role instanceof Wolf
+        otherPlayer.isAlive
+        && otherPlayer.role instanceof Wolf
         && otherPlayer !== this.player
-        && otherPlayer.isAlive
     )
 
+    findFallenAngelPlayers = (exceptionPlayer?: Player) => Wolf.game.players.filter(player =>
+        player.isAlive
+        && player.role instanceof FallenAngel
+        && exceptionPlayer !== player)
+
     showOtherWolfPlayers(): string {
-        const allies = this.findOtherWolfPlayers();
-        if (!allies.length)
+        const otherWolfPlayers = this.findOtherWolfPlayers();
+        const fallenAngelPlayers = this.findFallenAngelPlayers();
+        if (!(otherWolfPlayers.length + fallenAngelPlayers.length))
             return '\nНо ты один в стае, крепись.'
-        return `\n${(allies.length > 1
-            ? '\nДругие волки: '
-            : 'Твой брат по волчьему делу — ')
-        + allies?.map(ally => playerLink(ally)).join(', ')}`
+        return (otherWolfPlayers.length > 1
+                ? '\nДругие волки: '
+                : '\nТвой брат по волчьему делу — ')
+            + otherWolfPlayers?.map(ally => playerLink(ally)).join(', ')
+            + (!fallenAngelPlayers.length
+                ? ''
+                : fallenAngelPlayers.length > 1
+                    ? '\nПадшие ангелы: '
+                    : '\nПадший ангел — ')
+            + fallenAngelPlayers.map(fallenAngelPlayer => playerLink(fallenAngelPlayer)).join(', ')
     }
 
     roleName = 'Волк 🐺';
@@ -61,6 +73,21 @@ export class Wolf extends RoleBase {
                 `Твое время настало, ты обрел новый облик, ${traitorPlayer.role.previousRole?.roleName}! ` +
                 `Теперь ты ${traitorPlayer.role.roleName}!`
             )
+        }
+
+        if (type === 'wolfCameToSerialKiller') {
+            Wolf.game.bot.sendMessage(
+                Wolf.game.chatId,
+                `*${this.roleName}* ${playerLink(this.player)} ` +
+                `попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка!`,
+            )
+            Wolf.game.bot.sendMessage(
+                this.player.id,
+                'Ты вышел на охоту, но сам оказался жертвой. '
+                + 'Жертвой, которую разрезали на сотню маленьких кусочков.',
+            )
+            this.player.isAlive = false;
+            return true;
         }
 
         return super.handleDeath(killer, type);

@@ -1,7 +1,7 @@
 import {VotingBase} from "./VotingBase";
 import {GameStage} from "../Game";
 import {Player} from "../../Player/Player";
-import {AlphaWolf, Wolf} from "../../Roles";
+import {AlphaWolf, FallenAngel, Wolf} from "../../Roles";
 import {playerLink} from "../../Utils/playerLink";
 import {randomElement} from "../../Utils/randomElement";
 
@@ -16,7 +16,9 @@ export class WolfFeast extends VotingBase {
             && player.role instanceof Wolf
     )
 
-    voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive && !(otherPlayer.role instanceof Wolf)
+    voteTargetCondition = (otherPlayer: Player) => otherPlayer.isAlive
+        && !(otherPlayer.role instanceof Wolf)
+        && !(otherPlayer.role instanceof FallenAngel)
 
     beforeVotingAction = async () => {
         if (this.getVoters().length <= 1) return

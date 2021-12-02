@@ -31,8 +31,10 @@ export class GuardianAngel extends RoleBase {
     actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
-        if (this.targetPlayer.role instanceof SerialKiller || (this.targetPlayer.role instanceof Wolf && Math.random() >= 0.5)) {
-            await this.onKilled(this.player);
+        if (this.targetPlayer.role instanceof SerialKiller
+            || (this.targetPlayer.role instanceof Wolf
+                && Math.random() >= 0.5)) {
+            await this.onKilled(this.targetPlayer, 'angelProtectedKiller');
         } else if (this.targetPlayer.role instanceof Beauty && this.targetPlayer.lover !== this.player) {
             await this.player.loveBind(this.targetPlayer);
         } else {
@@ -46,7 +48,7 @@ export class GuardianAngel extends RoleBase {
         if (!this.numberOfAttacks) {
             await GuardianAngel.game.bot.sendMessage(
                 this.player.id,
-                `${playerLink(this.targetPlayer)} не был(а) атакован(а),` +
+                `${playerLink(this.targetPlayer)} не был(а) атакован(а), ` +
                 'поэтому ничего не произошло особо...'
             )
         }
@@ -61,8 +63,8 @@ export class GuardianAngel extends RoleBase {
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         this.player.isAlive = false;
 
-        if (killer?.role instanceof GuardianAngel) { // Когда ангел "убил себя" (защитил зло)
-            if (this.targetPlayer?.role instanceof SerialKiller) { // Если ангел попытался защитить серийника
+        if (type === 'angelProtectedKiller') {
+            if (killer?.role instanceof SerialKiller) {
                 await GuardianAngel.game.bot.sendMessage(
                     this.player.id,
                     'Ты попытался сохранить жизнь Серийному убийце, ' +
@@ -71,11 +73,11 @@ export class GuardianAngel extends RoleBase {
 
                 await GuardianAngel.game.bot.sendMessage(
                     GuardianAngel.game.chatId,
-                    `Ночью *${this.roleName}* — ${playerLink(this.player)} пытался спасти деревню ` +
+                    `Ночью *${this.roleName}* ${playerLink(this.player)} пытался спасти деревню ` +
                     `от маньяка раз и навсегда, но маньяк отрезал ${playerLink(this.player)} крылья! ` +
                     'Рядом с его телом была записка: "Я не нуждаюсь в твоей защите!"'
                 )
-            } else if (this.targetPlayer?.role instanceof Wolf) { // Если ангел попытался защитить волка
+            } else if (this.targetPlayer?.role instanceof Wolf) {
                 await GuardianAngel.game.bot.sendMessage(
                     this.player.id,
                     'Твоя сила подвела тебя, ты неудачно защитил волка, и тебя съели!'

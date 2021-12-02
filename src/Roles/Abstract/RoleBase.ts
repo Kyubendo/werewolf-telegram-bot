@@ -2,9 +2,11 @@ import {Game} from "../../Game";
 import {Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Suicide} from "../index";
-import {specialConditionType} from "../../Utils/specialConditionTypes";
 
-export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner'; // Harlot
+export type DeathType = 'loverDeath' | 'loverBetrayal' | 'harlotCameToDead' | 'angelProtectedKiller'
+    | 'wolfCameToSerialKiller' | 'shotByGunner';
+
+import {specialConditionType} from "../../Utils/specialConditionTypes";
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
@@ -142,7 +144,7 @@ export abstract class RoleBase {
             )
 
             // new message for players if their lover died
-        } else if (type === 'lover_betrayal') {
+        } else if (type === 'loverBetrayal') {
             await RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
                 'Жители деревни просыпаются на следующее утро и обнаруживают, ' +
@@ -187,15 +189,17 @@ export abstract class RoleBase {
         return true;
     }
 
-    choiceMsgEditText = (targetPlayer = this.targetPlayer) => RoleBase.game.bot.editMessageText(
-        `Выбор принят — ${targetPlayer
-            ? playerLink(targetPlayer)
-            : 'Пропустить'}.`,
-        {
-            message_id: this.actionMsgId,
-            chat_id: this.player.id,
-        }
-    )
+    choiceMsgEditText (targetPlayer = this.targetPlayer) {
+        return RoleBase.game.bot.editMessageText(
+            `Выбор принят — ${targetPlayer
+                ? playerLink(targetPlayer)
+                : 'Пропустить'}.`,
+            {
+                message_id: this.actionMsgId,
+                chat_id: this.player.id,
+            }
+        )
+    }
 
     createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
         new (this.constructor as any)(player, previousRole);

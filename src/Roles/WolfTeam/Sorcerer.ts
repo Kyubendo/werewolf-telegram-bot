@@ -5,6 +5,7 @@ import {playerLink} from "../../Utils/playerLink";
 import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";
 
+
 export class Sorcerer extends ForecasterBase {
     roleName = 'Колдунья 🔮';
     roleIntroductionText = () => `Ты ${this.roleName}`;

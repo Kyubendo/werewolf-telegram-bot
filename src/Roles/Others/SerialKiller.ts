@@ -1,11 +1,8 @@
-import {DeathType} from "../../Game";
-import {Player} from "../../Game";
-import {RoleBase} from "../"
+import {DeathType, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Beauty, GuardianAngel, Wolf} from "../index";
-
+import {Beauty, GuardianAngel, Wolf, FallenAngel, RoleBase} from "../index";
 
 export class SerialKiller extends RoleBase {
     roleName = 'Серийный убийца 🔪';
@@ -28,23 +25,13 @@ export class SerialKiller extends RoleBase {
         gif: 'https://media.giphy.com/media/xzW34nyNLcSUE/giphy.gif'
     })
 
-    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
-        if (killer?.role instanceof Wolf) {
-            await SerialKiller.game.bot.sendMessage(
-                SerialKiller.game.chatId,
-                `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка! ` +
-                `${playerLink(killer, true)} погиб.`,
-            )
-            await SerialKiller.game.bot.sendMessage(
-                killer.id,
-                'Ты вышел на охоту, но сам оказался жертвой.'
-                + ' Жертвой, которую разрезали на сотню маленьких кусочков.',
-            )
 
-            killer.isAlive = false;
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
+        if (killer?.role instanceof Wolf || killer?.role instanceof FallenAngel) {
+            await killer.role.onKilled(this.player, 'wolfCameToSerialKiller');
             return false;
         } else
-            return super.handleDeath(killer, type);
+            return await super.handleDeath(killer, type);
     }
 
     action = () => {

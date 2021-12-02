@@ -47,7 +47,7 @@ export class Harlot extends RoleBase {
             this.targetPlayer.role.handleDeath = async (killer?: Player, type?: DeathType) => {
                 if (this.targetPlayer) {
                     this.saved = true;
-                    await this.onKilled(killer, 'harlotDeath')
+                    await this.onKilled(killer, 'harlotCameToDead')
                 }
 
                 return currentTargetHandleDeath(killer, type);
@@ -88,7 +88,7 @@ export class Harlot extends RoleBase {
     }
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
-        if (type === 'harlotDeath' && killer && this.targetPlayer) {
+        if (type === 'harlotCameToDead' && killer && this.targetPlayer) {
             const harlotPlayer = this.player;
             if (killer.role instanceof Wolf) {
                 await RoleBase.game.bot.sendMessage(

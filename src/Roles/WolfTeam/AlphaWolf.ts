@@ -3,7 +3,7 @@ import {Beauty, Cursed, GuardianAngel, Wolf} from "../index";
 import {DeathType, Player} from "../../Game";
 
 export class AlphaWolf extends Wolf {
-    roleName = 'Альфа-волк 🐺⭐️';
+    roleName = 'Альфа-волк 🐺⭐';
     roleIntroductionText = () => `Ты ${this.roleName} - источник всех бедствий!`
     startMessageText = () => 'Твои укусы передают проклятие, обращающее человека в волка. ' +
         'По ночам ты можешь выбрать человека, а затем атаковать и убить его, но пока ты жив, ' +
@@ -28,13 +28,16 @@ export class AlphaWolf extends Wolf {
         this.targetPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
             if (!this.targetPlayer
                 || Math.random() >= .25
-                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer);
+                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer, deathType);
 
             await AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Ты был(а) атакован(а) волками, но ${this.roleName} избрал тебя. ` +
                 'Вместо того, чтобы быть убитым(ой), ты был(а) заражен(а)... ' +
-                'И завтрашней ночью превратишься в волка!'
+                'И завтрашней ночью превратишься в' +
+                ((this.targetPlayer.role instanceof GuardianAngel)
+                    ? '... Падшего Ангела!'
+                    : ' волка!')
             )
 
             const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);
@@ -47,8 +50,12 @@ export class AlphaWolf extends Wolf {
                         `${playerLink(this.player, true)} рассказал стае, ` +
                         `что ${playerLink(this.targetPlayer)} должен(на) ` +
                         'присоединиться к стае вместо того, ' +
-                        `чтобы умереть, и стая оставила ${playerLink(this.targetPlayer)} с инфекцией. ` +
-                        'Он(а) станет волком завтра ночью.'
+                        `чтобы умереть, и стая оставила ${playerLink(this.targetPlayer)} с инфекцией.\n`
+                        + ((this.targetPlayer.role instanceof GuardianAngel)
+                            ? 'Следующей ночью у вас появится союзник, которого сложно переоценить... ' +
+                            'Он отбросит всё святое, чтобы вступить в волчьи ряды. ' +
+                            'Конечно же речь идёт о Падшем Ангеле!'
+                            : 'Он(а) станет волком завтра ночью.')
                     )
             )
 

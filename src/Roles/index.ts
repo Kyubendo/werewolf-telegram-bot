@@ -34,6 +34,7 @@ import {Lycan} from "./WolfTeam/Lycan";
 import {Sorcerer} from "./WolfTeam/Sorcerer";
 import {Prowler} from "./WolfTeam/Prowler";
 import {AlphaWolf} from "./WolfTeam/AlphaWolf";
+import {FallenAngel} from "./WolfTeam/FallenAngel";
 
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";
@@ -55,7 +56,7 @@ export {
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild, Monarch, Mayor,
     Cupid, Pacifist, Cowboy,
 
-    Wolf, Lycan, Sorcerer, AlphaWolf, Prowler,
+    Wolf, Lycan, Sorcerer, AlphaWolf, Prowler, FallenAngel,
 
     Suicide, Thief, Necromancer, SerialKiller, Doppelganger, JackOLantern, Arsonist,
 
