@@ -13,8 +13,9 @@ const villagers: Function[] = [
 ]
 
 const wolfTeam: Function[] = [Wolf, Sorcerer, Prowler]
-const nonWolfKillers: Function[] = [SerialKiller, Arsonist, JackOLantern, Cowboy]
-const evil: Function[] = [Wolf, ...nonWolfKillers]
+const nonWolfEvilKillers = [SerialKiller, Arsonist, JackOLantern]
+const goodKillers: Function[] = [Cowboy]
+const evil: Function[] = [Wolf, ...nonWolfEvilKillers]
 
 export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack' | 'arsonist'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
@@ -39,9 +40,9 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
         else return {winners: [], type: 'nobody'}
     }
 
-    alivePlayers.find(p => p.role instanceof Gunner && p.role.specialCondition.ammo) && nonWolfKillers.push(Gunner)
+    alivePlayers.find(p => p.role instanceof Gunner && p.role.specialCondition.ammo) && goodKillers.push(Gunner)
     const aliveUniqueKillers = [...new Set(alivePlayers
-        .filter(p => nonWolfKillers.find(k => p.role instanceof k))
+        .filter(p => nonWolfEvilKillers.find(k => p.role instanceof k) || goodKillers.find(k => p.role instanceof k))
         .map(p => p.role!.constructor))]
     aliveWolves.length && aliveUniqueKillers.push(Wolf)
 
