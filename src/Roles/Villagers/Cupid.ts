@@ -58,6 +58,7 @@ export class Cupid extends RoleBase {
         if (!this.targetPlayer2) {
             if (!this.targetPlayer) this.targetPlayer = randomElement(this.targets())
             this.targetPlayer2 = randomElement(this.targets())
+            if (!this.targetPlayer || !this.targetPlayer2) return
             await Cupid.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор за тебя. `
                 + `${playerLink(this.targetPlayer)} и ${playerLink(this.targetPlayer2)} `

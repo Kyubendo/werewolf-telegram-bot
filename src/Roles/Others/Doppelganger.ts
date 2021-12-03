@@ -37,7 +37,8 @@ export class Doppelganger extends RoleBase {
         if (!this.targetPlayer?.role) {
             this.targetPlayer = randomElement(Doppelganger.game.players
                 .filter(player => this.player !== player && player.isAlive))
-            Doppelganger.game.bot.editMessageText(
+            if (!this.targetPlayer) return
+            await Doppelganger.game.bot.editMessageText(
                 `Ты не успел сделать выбор, ` +
                 `так что высшие силы сделали выбор за тебя: ${playerLink(this.targetPlayer)}.`,
                 {
