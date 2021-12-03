@@ -77,9 +77,11 @@ export class Arsonist extends RoleBase {
 
 
     actionResolve = async () => {
-        if (this.burn) for (const p of Arsonist.game.players) p.readyToArson && await p.role?.onKilled(this.player);
-
-        else if (this.targetPlayer) this.targetPlayer.readyToArson = true
+        if (this.burn) {
+            for (const p of Arsonist.game.players.filter(p => p.readyToArson)) {
+                await p.role?.onKilled(this.player);
+            }
+        } else if (this.targetPlayer) this.targetPlayer.readyToArson = true
     }
 
     handleChoice = (choice?: string) => {
