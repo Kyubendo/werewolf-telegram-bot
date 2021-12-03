@@ -46,16 +46,15 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     aliveWolves.length && aliveUniqueKillers.push(Wolf)
 
     if (aliveUniqueKillers.length > 1) {
-        if (alivePlayers.length > 2) return undefined
-        else {
+        if (alivePlayers.length <= 2) {
             if (aliveJackPlayers.length) return undefined;
 
-            const wolf = players.find(p => p.role instanceof Wolf)
-            const serialKiller = players.find(p => p.role instanceof SerialKiller)
-            const gunner = players.find(p => p.role instanceof Gunner)
-            const arsonist = players.find(p => p.role instanceof Arsonist)
-            const cowboy = players.filter(p => p.role instanceof Cowboy)
-            // const puppetMaster = players.filter(p => p.role instanceof PuppetMaster)
+            const wolf = alivePlayers.find(p => p.role instanceof Wolf)
+            const serialKiller = alivePlayers.find(p => p.role instanceof SerialKiller)
+            const gunner = alivePlayers.find(p => p.role instanceof Gunner)
+            const arsonist = alivePlayers.find(p => p.role instanceof Arsonist)
+            const cowboy = alivePlayers.filter(p => p.role instanceof Cowboy)
+            // const puppetMaster = alivePlayers.filter(p => p.role instanceof PuppetMaster)
 
             // if(puppetMaster) return puppetMaster
 
@@ -74,6 +73,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
                 return {winners: [], type: 'nobody'} // custom cowboy lose
             }
             if (arsonist) return undefined;
+        } else {
+            return undefined
         }
     }
 
