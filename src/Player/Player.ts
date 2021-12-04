@@ -27,6 +27,8 @@ export class Player {
     guardianAngel?: Player;
 
     readonly transformInfected = () => {
+        this.infected = false
+        if (this.role instanceof Wolf) return;
         this.role = new Wolf(this, this.role);
 
         RoleBase.game.bot.sendMessage(
@@ -35,7 +37,6 @@ export class Player {
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
             + (this.role instanceof Wolf && this.role.showOtherWolfPlayers()) // check this line later
         )
-        this.infected = false
     }
 
     readonly loveBind = async (newLover: Player) => {
