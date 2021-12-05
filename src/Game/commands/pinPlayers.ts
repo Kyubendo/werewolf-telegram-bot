@@ -6,8 +6,13 @@ export const pinPlayers = (bot: TelegramBot, state: State) => {
         if (msg.chat.type === 'private' || msg.chat.type === 'channel')
             bot.sendMessage(msg.chat.id, 'Суперпин можно использовать только в групповом чате.')
         else if (!state.game)
-            bot.sendMessage(msg.chat.id, 'Суперпин можно использовать только во время стадии ' +
-                `подбора игроков. Воспользуйтесь командой /start_classic@${process.env.BOT_NAME}, чтобы начать игру.`)
+            bot.sendMessage(
+                msg.chat.id,
+                'Суперпин можно использовать только во время стадии ' +
+                `подбора игроков. Воспользуйтесь командой /start_classic@${process.env.BOT_NAME}, чтобы начать игру.`,
+                {
+                    parse_mode: 'HTML'
+                })
         else if (state.game.started)
             bot.sendMessage(state.game.chatId, 'Суперпин нельзя использовать после того, как игра началась.')
         else if (!state.game.canPinPlayers)
