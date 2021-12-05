@@ -1,6 +1,6 @@
 import {findPlayer} from "../../Game/findPlayer";
 import {Arsonist, Beholder, RoleBase} from "../index";
-import {highlightPlayer} from "../../Utils/highlightPlayer";
+import {playerLink} from "../../Utils/playerLink";
 
 export class Undertaker extends RoleBase {
     roleName = 'Гробовщик ⚰';
@@ -43,7 +43,7 @@ export class Undertaker extends RoleBase {
 
         await Undertaker.game.bot.sendMessage(
             this.player.id,
-            `Ты должен похоронить ${highlightPlayer(this.targetPlayer)}, ` +
+            `Ты должен похоронить ${playerLink(this.targetPlayer)}, ` +
             `но когда ты видишь такой прекрасный труп ты не можешь не задуматься, ` +
             `какую жизнь прожило это тело... жизнь, ` +
             `которой у тебя никогда не было, ведь ты без конца копал могилы в этом адском селе. ` +
