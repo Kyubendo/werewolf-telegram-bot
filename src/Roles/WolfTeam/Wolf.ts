@@ -51,7 +51,7 @@ export class Wolf extends RoleBase {
         let alliesInfoText: string = '\n'
 
         if (!allies.length)
-            alliesInfoText += 'Но ты один в стае, крепись.'
+            alliesInfoText += 'Ты один в стае, крепись.'
         else {
             if (allies.length === 1)
                 alliesInfoText += 'Твой брат по волчьему делу — '

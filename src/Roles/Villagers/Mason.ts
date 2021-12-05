@@ -33,7 +33,7 @@ export class Mason extends RoleBase {
         let alliesInfoText: string = '\n'
 
         if (!allies.length)
-            alliesInfoText += 'Но сегодня ты один на смене.'
+            alliesInfoText += 'Правда сегодня на смену ты пришёл один.'
         else {
             if (allies.length === 1)
                 alliesInfoText += 'Твой напарник на стройке — '
