@@ -41,6 +41,7 @@ export class WildChild extends RoleBase {
         if (!this.specialCondition.roleModel?.role) {
             this.specialCondition.roleModel = randomElement(WildChild.game.players
                 .filter(player => player !== this.player && player.isAlive)) // player.isAlive probably redundant because of roleResolves order
+            if (!this.specialCondition.roleModel) return
             await WildChild.game.bot.editMessageText(
                 `Ты не успел сделать выбор, так что высшие силы сделали выбор ` +
                 `за тебя — ${playerLink(this.specialCondition.roleModel)}`,

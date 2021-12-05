@@ -85,6 +85,8 @@ export class Game {
 
         if (this.stageStopped) return
 
+        await this.checkNightDeaths(nextStage)
+
         this.stage = nextStage
 
         await this.afterStageChange()
@@ -108,7 +110,6 @@ export class Game {
 
         if (this.stage === 'day')
             this.dayCount++;
-        await this.checkNightDeaths()
 
         await this.bot.sendMessage(this.chatId, gameStageMsg(this))
         await this.bot.sendMessage(this.chatId, playerGameList(this.players))
@@ -206,9 +207,9 @@ export class Game {
 
     clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
 
-    checkNightDeaths = async () => {
-        if (this.stage === "lynch") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
-        else if (this.stage === "night" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
+    checkNightDeaths = async (nextStage: GameStage) => {
+        if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
+        else if (nextStage === "day" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
             await this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
         }
     }

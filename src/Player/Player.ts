@@ -27,6 +27,8 @@ export class Player {
     guardianAngel?: Player;
 
     readonly transformInfected = async () => {
+        this.infected = false
+        if (this.role instanceof Wolf) return;
         this.role = new Wolf(this, this.role);
 
         await RoleBase.game.bot.sendMessage(

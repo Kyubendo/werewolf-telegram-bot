@@ -58,7 +58,7 @@ export abstract class RoleBase {
         if (await this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
             this.movePlayer();
-            this.killLover('loverDeath')
+            await this.killLover('loverDeath')
         }
     }
 
