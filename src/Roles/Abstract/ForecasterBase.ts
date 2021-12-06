@@ -16,7 +16,10 @@ export abstract class ForecasterBase extends RoleBase {
     }
 
     actionResult = async () => {
-        if (!this.targetPlayer?.role) return;
+        if (!this.targetPlayer?.role) {
+            setTimeout(() => console.log('ForecasterBase 20'), 1000 * 60 * 15)
+            return;
+        }
         let roleName = this.forecastRoleName(this.targetPlayer.role);
 
         await ForecasterBase.game.bot.sendMessage(
@@ -27,8 +30,9 @@ export abstract class ForecasterBase extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, ForecasterBase.game.players)
+        setTimeout(() => console.log(`${this.roleName} chose ${this.targetPlayer}`), 1000 * 60 * 15)
         this.choiceMsgEditText();
     }
 
-    abstract forecastRoleName:(targetRole: RoleBase) => string | undefined;
+    abstract forecastRoleName: (targetRole: RoleBase) => string | undefined;
 }
