@@ -45,12 +45,12 @@ export class Harlot extends RoleBase {
         } else {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
             this.targetPlayer.role.handleDeath = async (killer?: Player, type?: DeathType) => {
+                const deathResult = await currentTargetHandleDeath(killer, type)
                 if (this.targetPlayer) {
                     this.saved = true;
                     await this.onKilled(killer, 'harlotDeath')
                 }
-
-                return currentTargetHandleDeath(killer, type);
+                return deathResult;
             }
         }
 
