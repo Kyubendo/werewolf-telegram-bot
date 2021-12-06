@@ -11,8 +11,9 @@ export class Fool extends Seer {
 
     forecastRoleName = (targetRole: RoleBase) => {
         if (Math.random() >= 0.5) {
-            const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
-            targetRole = randomElement(otherPlayers)?.role ?? targetRole;
+            const wrongPlayers = Fool.game.players.filter(player => player.isAlive);
+            const wrongRoles = [...new Set(wrongPlayers)].map(player => player.role);
+            targetRole = randomElement(wrongRoles) ?? targetRole;
         }
         return `это *${this.seerSees(targetRole)}*!`;
     }
