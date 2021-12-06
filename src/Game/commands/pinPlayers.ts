@@ -11,7 +11,7 @@ export const pinPlayers = (bot: TelegramBot, state: State) => {
                 'Суперпин можно использовать только во время стадии ' +
                 `подбора игроков. Воспользуйтесь командой /start_classic@${process.env.BOT_NAME}, чтобы начать игру.`,
                 {
-                    parse_mode: 'HTML'
+                    parse_mode: undefined
                 })
         else if (state.game.started)
             bot.sendMessage(state.game.chatId, 'Суперпин нельзя использовать после того, как игра началась.')
