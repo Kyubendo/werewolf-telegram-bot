@@ -24,7 +24,7 @@ export const pinPlayers = (bot: TelegramBot, state: State) => {
                 .then(async chat => {
                     const names = chat.description?.split(/\s|\n/).filter(w => w.match(/^@/)) ?? []
                     for (const name of names) {
-                        if (!(await state.game?.players.map(p => p.username).includes(name.substring(1))))
+                        if (!(state.game?.players.map(p => p.username).includes(name.substring(1))))
                             await bot.sendMessage(chat.id, name, {parse_mode: undefined})
                     }
                 })
