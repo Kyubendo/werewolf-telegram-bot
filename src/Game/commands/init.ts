@@ -25,7 +25,10 @@ const messageAppend = (news.length
 
 export const initGame = (bot: TelegramBot, state: State) => {
     bot.onText(new RegExp(`\/start_classic@${process.env.BOT_NAME}`), msg => {
-        if (msg.chat.type === 'private' || msg.chat.type === 'channel') return;
+        if (msg.chat.type === 'private' || msg.chat.type === 'channel') {
+            bot.sendMessage(msg.chat.id, 'Игру можно начать только в групповом чате.')
+            return;
+        }
         if (!msg.from) return;
         if (state.game) {
             bot.sendMessage(
