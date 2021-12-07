@@ -12,7 +12,7 @@ export class SerialKiller extends RoleBase {
     roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Недавно сбежал из психушки и твоя цель убить всех... ` +
         `Каждую ночь ты можешь добавить по одному телу в свою коллекцию!`
-    weight = () => -12.5;
+    weight = () => -11;
 
     nightActionDone = false
 

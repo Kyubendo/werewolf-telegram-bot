@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import {State} from "../../Bot";
 
 export const pinPlayers = (bot: TelegramBot, state: State) => {
-    bot.onText(/\/pin_players/, msg => {
+    bot.onText(/\/superpin/, msg => {
         if (msg.chat.type === 'private' || msg.chat.type === 'channel')
             bot.sendMessage(msg.chat.id, 'Суперпин можно использовать только в групповом чате.')
         else if (!state.game)
