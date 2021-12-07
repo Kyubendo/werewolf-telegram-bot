@@ -36,7 +36,7 @@ forceStart(bot, state)
 nextStage(bot, state)
 hardReset(bot, state)
 pinPlayers(bot,state)
-deleteGroupchat(bot)
+deleteGroupchat(bot, state)
 
 const app = express();
 app.use(bodyParser.json());

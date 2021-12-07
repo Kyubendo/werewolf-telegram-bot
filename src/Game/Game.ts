@@ -51,7 +51,10 @@ export class Game {
     gameStartedTime?: number
     started = false
     canPinPlayers = true
-    canDeleteGroupchat = true
+
+    bannedPlayer?: Player
+    chatDeleted?: boolean = false
+
     private stageStopped = false
     stopStage = () => this.stageStopped = true
 
