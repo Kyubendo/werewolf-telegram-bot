@@ -12,7 +12,7 @@ export class WolfFeast extends VotingBase {
 
     getVoters = () => this.game.players.filter(
         player => player.isAlive
-            && !player.isFrozen
+            && !player.daysLeftToUnfreeze
             && player.role instanceof Wolf
     )
 

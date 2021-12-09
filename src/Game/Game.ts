@@ -160,32 +160,33 @@ export class Game {
                 if (this.wolvesDeactivated) {
                     this.players
                         .filter(player => player.role instanceof Wolf && player.isAlive)
-                        .forEach(wolfPlayer => wolfPlayer.isFrozen = true);
+                        .forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 1);
                     this.wolvesDeactivated = false;
                 }
 
-                if (!this.players.find(p => p.isAlive && !p.isFrozen)) await this.setNextStage();
+                if (!this.players.find(p => p.isAlive && !p.daysLeftToUnfreeze)) await this.setNextStage();
 
                 this.players.forEach(p => {
                     if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
                 })
             }
 
-            if (this.stage === 'day')
-                this.players.forEach(player => player.isFrozen = false)
+            this.stage === 'day' && this.players
+                .forEach(player => player.daysLeftToUnfreeze > 0 && player.daysLeftToUnfreeze--)
         }
         await this.lynch?.startVoting()
         await this.wolfFeast?.startVoting()
         for (const role of roleResolves(this.stage)) {
             this.players
-                .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+                .filter(player => player.isAlive && !player.daysLeftToUnfreeze && player.role instanceof role)
                 .forEach(player => player.role?.action?.())
         }
     }
 
     private runResults = async () => {
         for (const role of roleResolves(this.stage)) {
-            const alivePlayers = this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+            const alivePlayers = this.players
+                .filter(player => player.isAlive && !player.daysLeftToUnfreeze && player.role instanceof role)
             for (const alivePlayer of alivePlayers) {
                 await alivePlayer.role?.actionResult?.()
             }
@@ -198,8 +199,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.actionMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )

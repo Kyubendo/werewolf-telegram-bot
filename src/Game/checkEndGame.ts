@@ -87,7 +87,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
         const serialKillers = alivePlayers.filter(p => p.role instanceof SerialKiller)
         if (serialKillers.length) {
             if (serialKillers.length === 2) {
-                if (serialKillers.find(p => p.isFrozen)) return undefined
+                if (serialKillers.find(p => p.daysLeftToUnfreeze)) return undefined
                 serialKillers.forEach(p => p.isAlive = false)
                 return {winners: [], type: 'nobody'}
             }
