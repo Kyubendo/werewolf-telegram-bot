@@ -63,7 +63,7 @@ export class Harlot extends RoleBase {
         await Harlot.game.bot.sendAnimation(
             this.player.id,
             (Math.random() < 0.5
-                ? 'https://media.giphy.com/media/XuYxt55O5WHsOtd722/giphy.gif'
+                ? 'https://media.giphy.com/media/E5V24uzV2nOfS46R51/giphy.gif'
                 : 'https://media.giphy.com/media/QSzTAwITkM0FO/giphy.gif'),
             {
                 caption: `Ты сразу поняла, что ${playerLink(this.targetPlayer)} не волк и ` +
@@ -78,6 +78,7 @@ export class Harlot extends RoleBase {
             // https://media.giphy.com/media/Saavhnp9YYN7a/giphy.gif
             // https://giphy.com/gifs/fallontonight-jimmy-fallon-tonight-show-babysitter-efUxm7LktwacWqDRyh
             // https://giphy.com/gifs/lloyd-saddle-BycHXN5xIY6e4
+            // https://24.media.tumblr.com/tumblr_lt16e0nJM91qg39ewo1_500.gif
             // https://giphy.com/gifs/disney-toy-story-9Jp68LHctc8Qo
             {
                 caption: 'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +
