@@ -12,6 +12,7 @@ import express from "express";
 import * as bodyParser from "body-parser";
 import {hardReset} from "./Game/commands/hardReset";
 import {pinPlayers} from "./Game/commands/pinPlayers";
+import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -35,6 +36,7 @@ forceStart(bot, state)
 nextStage(bot, state)
 hardReset(bot, state)
 pinPlayers(bot,state)
+deleteGroupchat(bot, state)
 
 const app = express();
 app.use(bodyParser.json());
