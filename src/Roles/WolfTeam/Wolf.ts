@@ -71,7 +71,7 @@ export class Wolf extends RoleBase {
     roleIntroductionText = () => `Новый ${this.roleName} в селе!`;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
 
-    weight = () => -10;
+    weight = () => -9;
 
     nightActionDone = false
 

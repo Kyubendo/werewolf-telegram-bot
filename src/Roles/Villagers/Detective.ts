@@ -11,8 +11,10 @@ export class Detective extends ForecasterBase {
     weight = () => 7;
 
     actionResult = async () => {
-        if (!this.targetPlayer?.role) return;
-
+        if (!this.targetPlayer?.role) {
+            setTimeout(() => console.log('Detective 15'), 1000 * 60 * 15)
+            return;
+        }
         await Detective.game.bot.sendMessage(
             this.player.id,
             this.forecastRoleName(this.targetPlayer.role)
