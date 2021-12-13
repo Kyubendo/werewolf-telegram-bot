@@ -25,7 +25,7 @@ export class Wolf extends RoleBase {
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
         + this.showOtherWolfPlayers();
 
-    weight = () => -10;
+    weight = () => -9;
 
     nightActionDone = false
 

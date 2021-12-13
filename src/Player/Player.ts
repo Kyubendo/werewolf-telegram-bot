@@ -8,14 +8,14 @@ export class Player {
         this.username = user.username
 
         this.isAlive = true
-        this.isFrozen = false
+        this.daysLeftToUnfreeze = 0
     }
 
     readonly id: number;
     readonly name: string;
     readonly username?: string;
     isAlive: boolean = true;
-    isFrozen: boolean = false;
+    daysLeftToUnfreeze: number = 0;
     won: boolean = false;
     role?: RoleBase;
     readyToArson = false;

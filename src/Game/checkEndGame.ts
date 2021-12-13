@@ -87,7 +87,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
         const serialKillers = alivePlayers.filter(p => p.role instanceof SerialKiller)
         if (serialKillers.length) {
             if (serialKillers.length === 2) {
-                if (serialKillers.find(p => p.isFrozen)) return undefined
+                if (serialKillers.find(p => p.daysLeftToUnfreeze)) return undefined
                 serialKillers.forEach(p => p.isAlive = false)
                 return {winners: [], type: 'nobody'}
             }
@@ -106,10 +106,9 @@ export const setWinners = (winners: Player[], players: Player[]) => {
     winners.forEach(w => w.won = true)
     const lovers = players.map(player => player.lover);
     for (const lover of lovers) if (lover?.won && lover.lover) lover.lover.won = true;
+
     const sacrificedMartyrs = players.map(p => p.role).filter(r => (r instanceof Martyr) && r.diedForProtectedPlayer)
     for (const sm of sacrificedMartyrs) {
-        if (sm) sm.player.won =
-            sm instanceof Martyr
-            && !!winners.find(p => p === sm.specialCondition.protectedPlayer)
+        if (sm instanceof Martyr) sm.player.won = !!sm.specialCondition.protectedPlayer?.won
     }
 }

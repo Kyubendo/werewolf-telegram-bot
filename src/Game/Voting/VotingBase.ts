@@ -65,7 +65,7 @@ export abstract class VotingBase {
         if (select.choice !== 'skip') {
             target = await this.defineTarget(voter, findPlayer(select.choice, this.game.players))
             if (target) {
-                const voteWeight = this.calculateVoteWeight(target)
+                const voteWeight = this.calculateVoteWeight(voter)
                 this.votes[target.id] ? this.votes[target.id] += voteWeight : this.votes[target.id] = voteWeight
             }
         }

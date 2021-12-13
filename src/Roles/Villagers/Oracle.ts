@@ -14,10 +14,11 @@ export class Oracle extends ForecasterBase {
     nightActionDone = false
 
     forecastRoleName = (targetRole: RoleBase) => {
-        const otherPlayers = Oracle.game.players.filter(player => player !== this.player
-            && player.isAlive
-            && player !== targetRole.player);
-        const otherRole = randomElement(otherPlayers)?.role;
+        const otherRoles = Oracle.game.players
+            .filter(p => p.isAlive && p !== this.player)
+            .map(p => p.role)
+            .filter(r => r?.constructor !== targetRole.constructor);
+        const otherRole = randomElement([...new Set(otherRoles)]);
         return otherRole ? `НЕ *${otherRole?.roleName}*!` : 'это ты сам...';
     }
 

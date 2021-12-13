@@ -9,7 +9,7 @@ export class AlphaWolf extends Wolf {
         'По ночам ты можешь выбрать человека, а затем атаковать и убить его, но пока ты жив, ' +
         'твои жертвы имеют 25% шанса стать волком.'
         + this.showOtherWolfPlayers();
-    weight = () => -13;
+    weight = () => -12;
 
     actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
