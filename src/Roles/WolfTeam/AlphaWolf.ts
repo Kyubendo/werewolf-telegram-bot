@@ -36,9 +36,7 @@ export class AlphaWolf extends Wolf {
                 'И завтрашней ночью превратишься в волка!'
             )
 
-            const wolfPlayers = AlphaWolf.game.players.filter(player => player.role instanceof Wolf);
-
-            wolfPlayers.forEach(player =>
+            AlphaWolf.game.players.filter(player => player.role instanceof Wolf && player.isAlive).forEach(player =>
                     this.targetPlayer && AlphaWolf.game.bot.sendMessage(
                         player.id,
                         `Как только волками был(а) атакован(а) ${playerLink(this.targetPlayer)}, ` +

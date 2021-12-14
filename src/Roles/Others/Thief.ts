@@ -58,10 +58,13 @@ export class Thief extends RoleBase {
 
             if (this.targetPlayer) this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
 
-            await Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendAnimation(
                 this.targetPlayer.id,
-                `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
-                `Укради роль у кого-нибудь.` // GIF
+                'https://media.giphy.com/media/5cdenDXni65aM/giphy.gif',
+                {
+                    caption:`Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
+                        `Укради роль у кого-нибудь.`
+                }
             )
 
             const stealMessageText: string | false | undefined = this.player?.role?.stealMessage?.();
