@@ -61,7 +61,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
             if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller || arsonist) && gunner) {
-                if (stage === 'night') {
+                if (stage === 'day') {
                     aliveEvilPlayer.isAlive = false
                     return {winners: villagersTeamPlayers, type: 'villagers'} // custom gunner win
                 }
