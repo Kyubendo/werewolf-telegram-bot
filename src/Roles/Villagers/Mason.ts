@@ -1,30 +1,60 @@
-import {Player} from "../../Player/Player";
 import {playerLink} from "../../Utils/playerLink";
-import {DeathType} from "../../Game";
-import {RoleBase} from "../index";
+import {DeathType, Player} from "../../Game";
+import {RoleBase, Thief} from "../index";
 
 export class Mason extends RoleBase {
-    findOtherMasonPlayers = () => Mason.game.players.filter(otherPlayer =>
+    findAllies = () => Mason.game.players.filter(otherPlayer =>
         otherPlayer.role instanceof Mason
         && otherPlayer !== this.player
         && otherPlayer.isAlive
     )
 
-    showOtherMasonPlayers = () => {
-        const allies = this.findOtherMasonPlayers();
-        if (!allies?.length) return ''
-        return (allies?.length > 1
-                ? '\nКаменщики: '
-                : '\nТвой напарник на стройке — ')
-            + allies?.map(ally => playerLink(ally)).join(', ')
+    sendAlliesMessage = async (notify: boolean = false): Promise<void> => {
+        const allies = this.findAllies();
+
+        if (notify) {
+            let notificationText;
+            if (this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer)
+                notificationText = `Странно, ${playerLink(this.player)} пришёл на собрание ` +
+                    `каменщиков вместо ${playerLink(this.player.role.targetPlayer)}! ` +
+                    `${playerLink(this.player.role.targetPlayer)} уволен за прогул!`
+            else
+                notificationText = `${playerLink(this.player)} пришёл на стройку по объявлению. ` +
+                    `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`
+
+            for (const ally of allies) {
+                await Mason.game.bot.sendMessage(
+                    ally.id,
+                    notificationText
+                )
+            }
+        }
+
+        let alliesInfoText: string = '\n'
+
+        if (!allies.length)
+            alliesInfoText += 'Правда сегодня на смену ты пришёл один.'
+        else {
+            if (allies.length === 1)
+                alliesInfoText += 'Твой напарник на стройке — '
+            else
+                alliesInfoText += 'Каменщики: '
+
+            alliesInfoText += allies?.map(ally => playerLink(ally)).join(', ')
+        }
+
+        await Mason.game.bot.sendMessage(
+            this.player.id,
+            alliesInfoText
+        )
     }
 
     roleName = 'Каменщик 👷';
     roleIntroductionText = () => ''
     startMessageText = () => `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ` +
-        `ведь ты ${this.roleName}.` + this.showOtherMasonPlayers();
+        `ведь ты ${this.roleName}.`
     weight = () => {
-        const otherMasonsAmount = this.findOtherMasonPlayers().length;
+        const otherMasonsAmount = this.findAllies().length;
         return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
     }
 

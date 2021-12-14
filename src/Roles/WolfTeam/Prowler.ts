@@ -29,7 +29,7 @@ export class Prowler extends ForecasterBase {
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = async (killer?: Player, type?: DeathType) => {
             if (this.targetPlayer && !type && killer?.role instanceof Wolf) {
-                const wolves = killer.role.findOtherWolfPlayers();
+                const wolves = killer.role.findAllies();
                 wolves.unshift(killer)
                 await RoleBase.game.bot.sendMessage(
                     this.player.id,

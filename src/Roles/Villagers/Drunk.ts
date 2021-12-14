@@ -14,7 +14,7 @@ export class Drunk extends RoleBase {
         if ((killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) && !type) {
             let text: string = killer.role.killMessage().text.toChat(this.player);
             if (killer?.role instanceof Wolf) {
-                killer.role.findOtherWolfPlayers().forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 2);
+                killer.role.findAllies().forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 2);
                 killer.daysLeftToUnfreeze = 2;
                 text = `Один из мирных жителей утром обнаружил у себя в загоне со свиньями самого известного ` +
                     `Пьяницу ${playerLink(this.player)}, который, по словам следователей, ` +
