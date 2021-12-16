@@ -14,7 +14,6 @@ export const joinButton = {
 }
 
 const news = [
-    'Добавлен режим игры Хаос!',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
@@ -35,6 +34,7 @@ const gameModeName = (gameMode: GameMode) => {
 export const initGame = (bot: TelegramBot, state: State) => {
     bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), (msg, match) => {
         const gameMode = match?.[1]
+        if (gameMode === 'chaos') return; // remove to play chaos
         if (!validGameMode(gameMode)) return
 
         if (msg.chat.type === 'private' || msg.chat.type === 'channel') {
