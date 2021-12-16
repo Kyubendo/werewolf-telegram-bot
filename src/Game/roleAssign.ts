@@ -65,7 +65,9 @@ export const assignRoles = async (game: Game) => {
             arrayShuffle(rolePool)
 
             const currentRoles = players.map((player, i) => player.role = new rolePool[i](player))
-            const weight = Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
+            const weight = game.mode === 'chaos'
+                ? 0
+                : Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
             const currentEvilCount = currentRoles.filter(r => evilPool.find(e => r instanceof e)).length
 
             balanced = currentEvilCount <= players.length / 2 - 1
