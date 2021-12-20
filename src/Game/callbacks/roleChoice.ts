@@ -1,5 +1,5 @@
 import {findPlayer} from "../findPlayer";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {SelectType} from "../commands/callbackHandle";
 
 export const roleChoice = (select:SelectType, players: Player[]) => { // async?

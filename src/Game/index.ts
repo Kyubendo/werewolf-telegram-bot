@@ -1,5 +1,5 @@
 import {Player} from "../Player/Player";
-import {Game} from "./Game";
+import {Game, GameStage, GameMode, GameModeList} from "./Game";
 import {DeathType} from "../Roles/Abstract/RoleBase";
 
-export {Player,Game, DeathType}
+export {Player, Game, DeathType, GameStage, GameMode, GameModeList}

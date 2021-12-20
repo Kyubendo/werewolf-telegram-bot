@@ -1,7 +1,7 @@
 import {RoleBase} from "../index";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 
 export class Arsonist extends RoleBase {

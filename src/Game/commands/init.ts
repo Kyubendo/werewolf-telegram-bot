@@ -1,6 +1,5 @@
 import TelegramBot from "node-telegram-bot-api";
-import {Game, GameMode} from "../Game";
-import {Player} from "../../Player/Player";
+import {Player, Game, GameMode} from "../../Game";
 import {State} from "../../Bot";
 import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
