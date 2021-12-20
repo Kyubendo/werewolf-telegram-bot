@@ -191,8 +191,7 @@ export class Game {
 
     private runResults = async () => {
         for (const role of roleResolves(this.stage)) {
-            const alivePlayers = this.players
-                .filter(player => player.isAlive && !player.daysLeftToUnfreeze && player.role instanceof role)
+            const alivePlayers = this.players.filter(p => p.isAlive && !p.daysLeftToUnfreeze && p.role instanceof role)
             for (const alivePlayer of alivePlayers) {
                 await alivePlayer.role?.actionResult?.()
             }
@@ -205,8 +204,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.actionMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
