@@ -1,4 +1,4 @@
-import {Seer, Fool, ApprenticeSeer,RoleBase,ForecasterBase} from "../index";
+import {Seer, Fool, ApprenticeSeer, RoleBase, ForecasterBase} from "../index";
 import {playerLink} from "../../Utils/playerLink";
 import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";
@@ -17,7 +17,7 @@ export class Sorcerer extends ForecasterBase {
     actionResult = async () => {
         if (!this.targetPlayer?.role) return;
         let roleName = this.forecastRoleName(this.targetPlayer.role);
-       await Sorcerer.game.bot.sendMessage(
+        await Sorcerer.game.bot.sendMessage(
             this.player.id,
             roleName
                 ? `Ты видишь, что ${playerLink(this.targetPlayer)} это *${roleName}*!`
