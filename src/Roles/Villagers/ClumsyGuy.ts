@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase} from "../";
 
 export class ClumsyGuy extends RoleBase {
     roleName = 'Недотёпа 🤕';

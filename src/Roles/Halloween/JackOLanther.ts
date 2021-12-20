@@ -1,9 +1,7 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {Pumpkin, RoleBase, Beauty} from "../";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Pumpkin} from "./Pumpkin";
 import {playerLink} from "../../Utils/playerLink";
-import {Beauty} from "../index";
 
 export class JackOLantern extends RoleBase {
     roleName = 'Jack-O-Lantern 🎃🔥';

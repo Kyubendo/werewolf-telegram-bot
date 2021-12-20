@@ -1,6 +1,6 @@
 import {VotingBase} from "./VotingBase";
 import {GameStage} from "../Game";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {AlphaWolf, Wolf} from "../../Roles";
 import {playerLink} from "../../Utils/playerLink";
 import {randomElement} from "../../Utils/randomElement";

@@ -1,7 +1,5 @@
-import {ForecasterBase} from "../Abstract/ForecasterBase";
 import {playerLink} from "../../Utils/playerLink";
-import {RoleBase} from "../Abstract/RoleBase";
-import {Wolf} from "../WolfTeam/Wolf";
+import {ForecasterBase, RoleBase, Wolf} from "../";
 
 export class Detective extends ForecasterBase {
     roleName = 'Детектив 🕵️';

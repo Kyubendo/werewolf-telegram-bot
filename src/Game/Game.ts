@@ -12,10 +12,12 @@ import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
+export const GameModeList = ['classic', 'chaos'] as const
+export type GameMode = typeof GameModeList[number]
 
 export class Game {
     constructor(
-        readonly mode: 'classic',
+        readonly mode: GameMode,
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,

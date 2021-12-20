@@ -1,8 +1,6 @@
-import {Player} from "../../Player/Player";
-import {Wolf} from "../WolfTeam/Wolf";
 import {playerLink} from "../../Utils/playerLink";
-import {DeathType} from "../../Game";
-import {RoleBase} from "../"
+import {DeathType, Player} from "../../Game";
+import {RoleBase, Wolf} from "../"
 
 export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';
@@ -26,8 +24,10 @@ export class Cursed extends RoleBase {
             if (this.player.role instanceof Wolf)
                 await Cursed.game.bot.sendMessage(this.player.id,
                     'Тебя попытался убить волк! НО ты Проклятый, поэтому теперь ты один из них...' // GIF
-                    + this.player.role.showOtherWolfPlayers()
                 );
+
+            await this.player.role.sendAlliesMessage?.(true)
+
             return false;
         } else {
             return super.handleDeath(killer, type);

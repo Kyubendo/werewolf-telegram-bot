@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase"; // Add Cultist Hunter, Cultist, Black Wolf?
+import {RoleBase} from "../"; // Add Cultist Hunter, Cultist, Black Wolf?
 
 export class Beauty extends RoleBase {
     roleName = 'Красавица 💅';

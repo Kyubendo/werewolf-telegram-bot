@@ -1,9 +1,8 @@
-import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
-import {Arsonist} from "../index";
+import {Arsonist, Beholder, RoleBase} from "../index";
 
 export class Doppelganger extends RoleBase {
     roleName = 'Двойник 🎭';
@@ -52,21 +51,26 @@ export class Doppelganger extends RoleBase {
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = async (killer?, type?) => {
-            if (!this.targetPlayer?.role) return false;
-            await Doppelganger.game.bot.sendMessage(
-                this.player.id,
-                `${playerLink(this.targetPlayer)} погиб, и ты трансформировался!\n\n` +
-                this.targetPlayer.role.roleIntroductionText() + ' ' + this.targetPlayer.role.startMessageText()
-            )
+            const handleDeathResult = await currentTargetHandleDeath(killer, type);
 
-            this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
+            if (this.targetPlayer?.role) {
+                this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
 
-            this.player.role instanceof Arsonist && await RoleBase.game.bot.sendMessage(
-                this.player.id,
-                this.player.role.stealMessage()
-            )
+                await Doppelganger.game.bot.sendMessage(
+                    this.player.id,
+                    `${playerLink(this.targetPlayer)} погиб, и ты трансформировался!\n` +
+                    `Теперь ты ${this.player.role.roleName}!`
+                )
 
-            return currentTargetHandleDeath(killer, type);
+                await this.player.role.sendAlliesMessage?.(true);
+
+                if (this.player.role instanceof Arsonist || this.player.role instanceof Beholder)
+                    await Doppelganger.game.bot.sendMessage(
+                        this.player.id,
+                        this.player.role.stealMessage()
+                    )
+            }
+            return handleDeathResult;
         }
     }
 

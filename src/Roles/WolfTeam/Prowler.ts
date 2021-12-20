@@ -1,8 +1,6 @@
 import {playerLink} from "../../Utils/playerLink";
-import {Beauty, RoleBase, Wolf} from "../index";
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {DeathType} from "../Abstract/RoleBase";
-import {Player} from "../../Player/Player";
+import {Beauty, RoleBase, Wolf,ForecasterBase} from "../index";
+import {DeathType,Player} from "../../Game";
 import {findPlayer} from "../../Game/findPlayer";
 
 export class Prowler extends ForecasterBase {
@@ -29,7 +27,7 @@ export class Prowler extends ForecasterBase {
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = async (killer?: Player, type?: DeathType) => {
             if (this.targetPlayer && !type && killer?.role instanceof Wolf) {
-                const wolves = killer.role.findOtherWolfPlayers();
+                const wolves = killer.role.findAllies();
                 wolves.unshift(killer)
                 await RoleBase.game.bot.sendMessage(
                     this.player.id,

@@ -1,5 +1,4 @@
-import {Game} from "../../Game";
-import {Player} from "../../Game";
+import {Game,Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
@@ -34,6 +33,8 @@ export abstract class RoleBase {
     }
 
     stealMessage?: () => string | false;
+    findAllies?: () => Player[]
+    sendAlliesMessage?: (notify?: boolean) => Promise<void>
 
     readonly action?: () => void
     readonly actionResolve?: () => Promise<void>

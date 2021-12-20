@@ -1,7 +1,7 @@
 import {RoleBase} from "../index";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 
 export class Arsonist extends RoleBase {
@@ -26,6 +26,7 @@ export class Arsonist extends RoleBase {
         },
         gif: 'https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif', // https://media.giphy.com/media/xUOwGpaKq5xjHNz8Bi/giphy.gif
     })
+
     stealMessage = () => {
         const preparedPlayers = Arsonist.game.players.filter(p => p.isAlive && p.readyToArson)
         return preparedPlayers.length

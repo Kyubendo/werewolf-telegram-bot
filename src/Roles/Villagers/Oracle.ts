@@ -1,5 +1,4 @@
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase, ForecasterBase} from "../"
 import {randomElement} from "../../Utils/randomElement";
 import {findPlayer} from "../../Game/findPlayer";
 

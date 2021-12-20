@@ -1,12 +1,10 @@
-import {DeathType} from "../../Game";
+import {DeathType, Player} from "../../Game";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {randomElement} from "../../Utils/randomElement";
 import {playerLink} from "../../Utils/playerLink";
-import {Player} from "../../Player/Player";
-import {Wolf} from "../WolfTeam/Wolf";
 import {findPlayer} from "../../Game/findPlayer";
 import {specialConditionWildChild} from "../../Utils/specialConditionTypes";
-import {RoleBase} from "../index";
+import {RoleBase, Wolf} from "../index";
 
 export class WildChild extends RoleBase {
     roleName = 'Дикий ребёнок 👶';
@@ -62,15 +60,17 @@ export class WildChild extends RoleBase {
             if (this.specialCondition.roleModel && !(this.player.role instanceof Wolf)) {
                 this.player.role = new Wolf(this.player, this.player.role);
 
-                if (this.player.role instanceof Wolf) {
+                if (!(this.player.role instanceof Wolf)) {
+                } else {
                     await WildChild.game.bot.sendMessage(
                         this.player.id,
                         `Твой "пример" ${playerLink(this.specialCondition.roleModel)} умер! ` +
-                        `Теперь ты ${this.player.role.roleName}! ` +
-                        this.player.role.showOtherWolfPlayers()
+                        `Теперь ты ${this.player.role.roleName}!`
                     )
 
-                    this.player.role.findOtherWolfPlayers().forEach(player => WildChild.game.bot.sendMessage(
+                    await this.player.role.sendAlliesMessage?.(true)
+
+                    this.player.role.findAllies().forEach(player => WildChild.game.bot.sendMessage(
                         player.id,
                         `Пример игрока ${playerLink(this.player)} умер! Теперь, он стал волком!`
                     ))

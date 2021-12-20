@@ -1,5 +1,4 @@
-import {Game, GameStage} from "../Game";
-import {Player} from "../../Player/Player";
+import {Player,Game, GameStage,} from "../../Game";
 import {findPlayer} from "../findPlayer";
 import {playerLink} from "../../Utils/playerLink";
 import {generateInlineKeyboard} from "../playersButtons";
