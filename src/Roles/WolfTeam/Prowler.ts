@@ -1,8 +1,6 @@
 import {playerLink} from "../../Utils/playerLink";
-import {Beauty, RoleBase, Wolf} from "../index";
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {DeathType} from "../Abstract/RoleBase";
-import {Player} from "../../Player/Player";
+import {Beauty, RoleBase, Wolf,ForecasterBase} from "../index";
+import {DeathType,Player} from "../../Game";
 import {findPlayer} from "../../Game/findPlayer";
 
 export class Prowler extends ForecasterBase {

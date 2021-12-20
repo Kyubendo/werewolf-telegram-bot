@@ -1,5 +1,5 @@
-import {Wolf} from "./Wolf";
-import {Seer} from "../Villagers/Seer";
+import {Seer, Wolf} from "../";
+
 
 export class Lycan extends Wolf {
     roleName = 'Ликан 🐺🌝';

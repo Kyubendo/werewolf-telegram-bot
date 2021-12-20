@@ -1,5 +1,4 @@
-import {Player} from "../../Game";
-import {DeathType} from "../../Game";
+import {DeathType, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {Beauty, Cursed, GuardianAngel, RoleBase, Thief, Traitor} from "../index";
 

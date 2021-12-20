@@ -1,8 +1,6 @@
-import {Player} from "../../Game";
-import {RoleBase} from "../"
-import {DeathType} from "../../Game";
+import {Player, DeathType} from "../../Game";
+import {RoleBase, JackOLantern} from "../"
 import {playerLink} from "../../Utils/playerLink";
-import {JackOLantern} from "../index";
 
 export class Pumpkin extends RoleBase {
     roleName = 'Тыква 🎃';

@@ -1,6 +1,4 @@
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {RoleBase} from "../Abstract/RoleBase";
-import {Seer, Fool, ApprenticeSeer} from "../index";
+import {Seer, Fool, ApprenticeSeer,RoleBase,ForecasterBase} from "../index";
 import {playerLink} from "../../Utils/playerLink";
 import {wolfTeam} from "../../Utils/teams";
 import {findPlayer} from "../../Game/findPlayer";

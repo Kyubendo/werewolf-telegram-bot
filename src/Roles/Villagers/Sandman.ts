@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase} from "../index";
 import {specialConditionSandman} from "../../Utils/specialConditionTypes";
 import {playerLink} from "../../Utils/playerLink";
 
