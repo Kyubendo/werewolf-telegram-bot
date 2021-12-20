@@ -46,6 +46,8 @@ import {Cupid} from "./Villagers/Cupid";
 import {Princess} from "./Villagers/Princess";
 import {Arsonist} from "./Others/Arsonist";
 
+import {wolfTeam} from "../Utils/teams"; // move
+
 export {
     RoleBase, ForecasterBase, RulerBase,
 
@@ -60,4 +62,6 @@ export {
     Suicide, Thief, Undertaker, SerialKiller, Doppelganger, JackOLantern, Arsonist,
 
     Pumpkin,
+
+    wolfTeam
 }
