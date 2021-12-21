@@ -7,7 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Doppelganger, Wolf} from "../Roles";
+import {Doppelganger, Martyr, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 
@@ -102,7 +102,7 @@ export class Game {
         await this.runResolves()
         await this.runResults();
 
-        this.clearAngel()
+        this.clearSavers()
     }
 
     afterStageChange = async () => {
@@ -204,14 +204,17 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.actionMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
     }
 
-    clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
+    clearSavers = () => this.players.forEach(p => {
+        p.guardianAngel = undefined
+        if (p.role instanceof Martyr) p.role.protectedPlayerKiller = undefined
+    })
 
     checkNightDeaths = async (nextStage: GameStage) => {
         if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
