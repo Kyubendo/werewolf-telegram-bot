@@ -1,4 +1,4 @@
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {Game} from "../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {SelectType} from "../commands/callbackHandle";

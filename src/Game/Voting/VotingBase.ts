@@ -1,5 +1,4 @@
-import {Game, GameStage} from "../Game";
-import {Player} from "../../Player/Player";
+import {Player,Game, GameStage,} from "../../Game";
 import {findPlayer} from "../findPlayer";
 import {playerLink} from "../../Utils/playerLink";
 import {generateInlineKeyboard} from "../playersButtons";
@@ -65,7 +64,7 @@ export abstract class VotingBase {
         if (select.choice !== 'skip') {
             target = await this.defineTarget(voter, findPlayer(select.choice, this.game.players))
             if (target) {
-                const voteWeight = this.calculateVoteWeight(target)
+                const voteWeight = this.calculateVoteWeight(voter)
                 this.votes[target.id] ? this.votes[target.id] += voteWeight : this.votes[target.id] = voteWeight
             }
         }

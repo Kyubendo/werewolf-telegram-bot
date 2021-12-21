@@ -1,5 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
-import {Seer} from "./Seer";
+import {RoleBase, Seer} from "../";
 
 export class WoodMan extends RoleBase {
     roleName = 'Лесник 🧔‍♂‍🌚';

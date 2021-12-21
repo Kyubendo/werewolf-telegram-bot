@@ -12,10 +12,12 @@ import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
+export const GameModeList = ['classic', 'chaos'] as const
+export type GameMode = typeof GameModeList[number]
 
 export class Game {
     constructor(
-        readonly mode: 'classic',
+        readonly mode: GameMode,
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,
@@ -51,6 +53,10 @@ export class Game {
     gameStartedTime?: number
     started = false
     canPinPlayers = true
+
+    bannedPlayer?: Player
+    chatDeleted?: boolean = false
+
     private stageStopped = false
     stopStage = () => this.stageStopped = true
 
@@ -85,6 +91,8 @@ export class Game {
 
         if (this.stageStopped) return
 
+        await this.checkNightDeaths(nextStage)
+
         this.stage = nextStage
 
         await this.afterStageChange()
@@ -108,7 +116,6 @@ export class Game {
 
         if (this.stage === 'day')
             this.dayCount++;
-        await this.checkNightDeaths()
 
         await this.bot.sendMessage(this.chatId, gameStageMsg(this))
         await this.bot.sendMessage(this.chatId, playerGameList(this.players))
@@ -159,32 +166,32 @@ export class Game {
                 if (this.wolvesDeactivated) {
                     this.players
                         .filter(player => player.role instanceof Wolf && player.isAlive)
-                        .forEach(wolfPlayer => wolfPlayer.isFrozen = true);
+                        .forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 1);
                     this.wolvesDeactivated = false;
                 }
 
-                if (!this.players.find(p => p.isAlive && !p.isFrozen)) await this.setNextStage();
+                if (!this.players.find(p => p.isAlive && !p.daysLeftToUnfreeze)) await this.setNextStage();
 
                 this.players.forEach(p => {
                     if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
                 })
             }
 
-            if (this.stage === 'day')
-                this.players.forEach(player => player.isFrozen = false)
+            this.stage === 'day' && this.players
+                .forEach(player => player.daysLeftToUnfreeze > 0 && player.daysLeftToUnfreeze--)
         }
         await this.lynch?.startVoting()
         await this.wolfFeast?.startVoting()
         for (const role of roleResolves(this.stage)) {
             this.players
-                .filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+                .filter(player => player.isAlive && !player.daysLeftToUnfreeze && player.role instanceof role)
                 .forEach(player => player.role?.action?.())
         }
     }
 
     private runResults = async () => {
         for (const role of roleResolves(this.stage)) {
-            const alivePlayers = this.players.filter(player => player.isAlive && !player.isFrozen && player.role instanceof role)
+            const alivePlayers = this.players.filter(p => p.isAlive && !p.daysLeftToUnfreeze && p.role instanceof role)
             for (const alivePlayer of alivePlayers) {
                 await alivePlayer.role?.actionResult?.()
             }
@@ -209,9 +216,9 @@ export class Game {
         if (p.role instanceof Martyr) p.role.protectedPlayerKiller = undefined
     })
 
-    checkNightDeaths = async () => {
-        if (this.stage === "lynch") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
-        else if (this.stage === "night" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
+    checkNightDeaths = async (nextStage: GameStage) => {
+        if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
+        else if (nextStage === "day" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
             await this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
         }
     }

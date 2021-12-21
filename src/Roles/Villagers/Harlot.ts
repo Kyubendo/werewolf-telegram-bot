@@ -1,12 +1,8 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {SerialKiller} from "../Others/SerialKiller";
-import {Wolf} from "../WolfTeam/Wolf";
-import {Player} from "../../Player/Player";
+import {DeathType, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
-import {DeathType} from "../../Game";
-import {Beauty} from "./Beauty";
-import {Arsonist, RoleBase} from "../index";
+import {Arsonist, Beauty, RoleBase, SerialKiller, Wolf} from "../index";
 
 export class Harlot extends RoleBase {
     roleName = "Блудница 💋";
@@ -45,12 +41,12 @@ export class Harlot extends RoleBase {
         } else {
             const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role);
             this.targetPlayer.role.handleDeath = async (killer?: Player, type?: DeathType) => {
+                const deathResult = await currentTargetHandleDeath(killer, type)
                 if (this.targetPlayer) {
                     this.saved = true;
                     await this.onKilled(killer, 'harlotDeath')
                 }
-
-                return currentTargetHandleDeath(killer, type);
+                return deathResult;
             }
         }
 
@@ -62,7 +58,9 @@ export class Harlot extends RoleBase {
 
         await Harlot.game.bot.sendAnimation(
             this.player.id,
-            'https://media.giphy.com/media/XuYxt55O5WHsOtd722/giphy.gif',
+            (Math.random() < 0.5
+                ? 'https://media.giphy.com/media/E5V24uzV2nOfS46R51/giphy.gif'
+                : 'https://media.giphy.com/media/QSzTAwITkM0FO/giphy.gif'),
             {
                 caption: `Ты сразу поняла, что ${playerLink(this.targetPlayer)} не волк и ` +
                     `не серийный убийца, потому что ночь была слишком хороша...`
@@ -70,9 +68,13 @@ export class Harlot extends RoleBase {
         )
         await Harlot.game.bot.sendAnimation(
             this.targetPlayer.id,
-            'https://media.giphy.com/media/Saavhnp9YYN7a/giphy.gif',
+            (Math.random() < 0.5
+                ? 'https://media.giphy.com/media/12xiOA46vEYGl2/giphy.gif'
+                : 'https://media.giphy.com/media/Saavhnp9YYN7a/giphy.gif'),
+            // https://media.giphy.com/media/Saavhnp9YYN7a/giphy.gif
             // https://giphy.com/gifs/fallontonight-jimmy-fallon-tonight-show-babysitter-efUxm7LktwacWqDRyh
             // https://giphy.com/gifs/lloyd-saddle-BycHXN5xIY6e4
+            // https://24.media.tumblr.com/tumblr_lt16e0nJM91qg39ewo1_500.gif
             // https://giphy.com/gifs/disney-toy-story-9Jp68LHctc8Qo
             {
                 caption: 'Было темно, поэтому ты ничего не помнишь, но этой ночью кто-то оседлал тебя... ' +

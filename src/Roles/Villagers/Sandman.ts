@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase} from "../index";
 import {specialConditionSandman} from "../../Utils/specialConditionTypes";
 import {playerLink} from "../../Utils/playerLink";
 
@@ -8,7 +8,7 @@ export class Sandman extends RoleBase {
     roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Один раз за игру ты можешь использовать свою магию, чтобы заставить всех спать ` +
         `так крепко, что никто не сможет выполнить свои ночные действия.`
-    weight = () => 6.5;
+    weight = () => 8;
 
     specialCondition: specialConditionSandman = {
         sleep: undefined
@@ -50,7 +50,7 @@ export class Sandman extends RoleBase {
     actionResolve = async () => {
         if (!this.specialCondition.sleep) return
 
-        Sandman.game.players.filter(player => player.isAlive).forEach(player => player.isFrozen = true);
+        Sandman.game.players.filter(player => player.isAlive).forEach(player => player.daysLeftToUnfreeze = 1);
     }
 
     handleChoice = (choice?: string) => {

@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase} from "../";
 
 export class Villager extends RoleBase {
     roleName = 'Селянин 👱';

@@ -1,18 +1,20 @@
-import {Seer} from "./Seer";
-import {Player} from "../../Player/Player";
 import {playerLink} from "../../Utils/playerLink";
 import {randomElement} from "../../Utils/randomElement";
-import {DeathType} from "../../Game";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, Player} from "../../Game";
+import {RoleBase, Seer} from "../";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
-    weight = () => 4;
+    weight = () => 4.5;
 
     forecastRoleName = (targetRole: RoleBase) => {
-        if (Math.random() >= 0.5) {
-            const otherPlayers = Fool.game.players.filter(player => player !== this.player && player.isAlive);
-            targetRole = randomElement(otherPlayers).role ?? targetRole;
+        if (Math.random() <= .5) {
+            const wrongPlayers = Fool.game.players
+                .filter(player => player.role?.constructor !== targetRole.constructor
+                    && player.isAlive
+                    && player !== this.player);
+            const wrongRoles = [...new Set(wrongPlayers.map(player => player.role))];
+            targetRole = randomElement(wrongRoles) ?? targetRole;
         }
         return `это *${this.seerSees(targetRole)}*!`;
     }

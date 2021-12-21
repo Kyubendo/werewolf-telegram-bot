@@ -5,7 +5,7 @@ import {
     Beholder, Blacksmith,
     ClumsyGuy, Cupid,
     Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, Lycan, Martyr,
-    Mason, Monarch, Mayor, Necromancer, Oracle, Princess, RoleBase, Sandman, Seer, Prowler,
+    Mason, Monarch, Mayor, Undertaker, Oracle, Princess, RoleBase, Sandman, Seer, Prowler,
     SerialKiller,
     Sorcerer, Suicide, Thief,
     Traitor,
@@ -26,17 +26,16 @@ export const assignRoles = async (game: Game) => {
     const evilPool = [...killersPool, Sorcerer, Prowler]
     const villagersPool = [
         Villager,
-        ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, // Passive Villagers
+        ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, Cowboy,// Passive Villagers
 
         Seer, Monarch, Mayor, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid, Pacifist,
         WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 
-        Suicide, Thief, Necromancer, Doppelganger// Other
+        Suicide, Thief, Undertaker, Doppelganger// Other
     ]
 
 
     const testPool = [
-        Harlot, Martyr, SerialKiller, Wolf,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -66,7 +65,9 @@ export const assignRoles = async (game: Game) => {
             arrayShuffle(rolePool)
 
             const currentRoles = players.map((player, i) => player.role = new rolePool[i](player))
-            const weight = Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
+            const weight = game.mode === 'chaos'
+                ? 0
+                : Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
             const currentEvilCount = currentRoles.filter(r => evilPool.find(e => r instanceof e)).length
 
             balanced = currentEvilCount <= players.length / 2 - 1
@@ -80,5 +81,7 @@ export const assignRoles = async (game: Game) => {
             player.id,
             player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
         );
+
+        await player.role?.sendAlliesMessage?.();
     }
 }

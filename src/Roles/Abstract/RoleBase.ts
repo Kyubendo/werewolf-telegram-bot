@@ -1,5 +1,4 @@
-import {Game} from "../../Game";
-import {Player} from "../../Game";
+import {Game,Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Martyr, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
@@ -34,6 +33,8 @@ export abstract class RoleBase {
     }
 
     stealMessage?: () => string | false;
+    findAllies?: () => Player[]
+    sendAlliesMessage?: (notify?: boolean) => Promise<void>
 
     readonly action?: () => void
     readonly actionResolve?: () => Promise<void>
@@ -60,7 +61,7 @@ export abstract class RoleBase {
         if (await this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
             this.movePlayer();
-            this.killLover('loverDeath')
+            await this.killLover('loverDeath')
         }
     }
 
@@ -121,7 +122,7 @@ export abstract class RoleBase {
         if (RoleBase.game.stage === 'night') {
             this.nightActionDone = true;
             if (!RoleBase.game.players
-                .find(p => p.isAlive && p.role?.nightActionDone === false && !p.isFrozen))
+                .find(p => p.isAlive && p.role?.nightActionDone === false && !p.daysLeftToUnfreeze))
                 RoleBase.game.setNextStage()
         }
     }

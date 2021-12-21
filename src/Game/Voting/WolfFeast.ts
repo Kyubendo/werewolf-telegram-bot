@@ -1,6 +1,6 @@
 import {VotingBase} from "./VotingBase";
 import {GameStage} from "../Game";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {AlphaWolf, Wolf} from "../../Roles";
 import {playerLink} from "../../Utils/playerLink";
 import {randomElement} from "../../Utils/randomElement";
@@ -12,7 +12,7 @@ export class WolfFeast extends VotingBase {
 
     getVoters = () => this.game.players.filter(
         player => player.isAlive
-            && !player.isFrozen
+            && !player.daysLeftToUnfreeze
             && player.role instanceof Wolf
     )
 
@@ -40,7 +40,7 @@ export class WolfFeast extends VotingBase {
         }
 
         const killerWolf = this.getVoters()
-            .find(v => v.role instanceof AlphaWolf)?.role ?? randomElement(this.getVoters()).role
+            .find(v => v.role instanceof AlphaWolf)?.role ?? randomElement(this.getVoters())?.role
         if (killerWolf) killerWolf.targetPlayer = randomElement(voteResults)
     }
 
@@ -50,8 +50,8 @@ export class WolfFeast extends VotingBase {
             player.id,
             target
                 ? target.role instanceof AlphaWolf
-                    ? target.role.roleName + ` ${playerLink(voter)} облизывается на ${playerLink(target)}.`
-                    : `${playerLink(voter)} облизывается на ${playerLink(target)}.`
+                ? target.role.roleName + ` ${playerLink(voter)} облизывается на ${playerLink(target)}.`
+                : `${playerLink(voter)} облизывается на ${playerLink(target)}.`
                 : `${playerLink(voter)} облизывается в ожидании решения.`
         ))
     }

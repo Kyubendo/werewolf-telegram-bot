@@ -1,4 +1,4 @@
-import {Player} from "../Player/Player";
+import {Player} from "../Game";
 
 export type specialConditionGunner = { ammo: number }
 export type specialConditionRuler = { comingOut?: boolean }

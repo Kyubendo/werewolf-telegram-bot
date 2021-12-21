@@ -8,7 +8,6 @@ export class AlphaWolf extends Wolf {
     startMessageText = () => 'Твои укусы передают проклятие, обращающее человека в волка. ' +
         'По ночам ты можешь выбрать человека, а затем атаковать и убить его, но пока ты жив, ' +
         'твои жертвы имеют 25% шанса стать волком.'
-        + this.showOtherWolfPlayers();
     weight = () => -13;
 
     actionResolve = async () => {
@@ -28,7 +27,7 @@ export class AlphaWolf extends Wolf {
         this.targetPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
             if (!this.targetPlayer
                 || Math.random() >= .25
-                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer);
+                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer, deathType);
 
             await AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,

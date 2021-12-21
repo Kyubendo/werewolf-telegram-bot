@@ -1,4 +1,4 @@
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase} from "../";
 import {playerLink} from "../../Utils/playerLink";
 import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
 import {Traitor, WildChild, Wolf} from "../index";

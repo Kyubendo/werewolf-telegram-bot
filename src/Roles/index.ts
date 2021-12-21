@@ -38,13 +38,15 @@ import {AlphaWolf} from "./WolfTeam/AlphaWolf";
 import {Suicide} from "./Others/Suicide";
 import {Thief} from "./Others/Thief";
 import {Doppelganger} from "./Others/Doppelganger";
-import {Necromancer} from "./Others/Necromancer";
+import {Undertaker} from "./Others/Undertaker";
 import {SerialKiller} from "./Others/SerialKiller";
 import {JackOLantern} from "./Halloween/JackOLanther";
 import {Pumpkin} from "./Halloween/Pumpkin";
 import {Cupid} from "./Villagers/Cupid";
 import {Princess} from "./Villagers/Princess";
 import {Arsonist} from "./Others/Arsonist";
+
+import {wolfTeam} from "../Utils/teams"; // move
 
 export {
     RoleBase, ForecasterBase, RulerBase,
@@ -57,7 +59,9 @@ export {
 
     Wolf, Lycan, Sorcerer, AlphaWolf, Prowler,
 
-    Suicide, Thief, Necromancer, SerialKiller, Doppelganger, JackOLantern, Arsonist,
+    Suicide, Thief, Undertaker, SerialKiller, Doppelganger, JackOLantern, Arsonist,
 
     Pumpkin,
+
+    wolfTeam
 }

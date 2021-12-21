@@ -1,5 +1,4 @@
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase, ForecasterBase} from "../"
 import {randomElement} from "../../Utils/randomElement";
 import {findPlayer} from "../../Game/findPlayer";
 
@@ -9,16 +8,17 @@ export class Oracle extends ForecasterBase {
     startMessageText = () => `Каждую ночь ты можешь ` +
         'выбрать игрока и узнать кем он НЕ является. Обрати внимание: тебе скажут роль кого-то другого в игре, ' +
         'кто всё ещё жив.';
-    weight = () => 4;
+    weight = () => 5;
 
     nightActionDone = false
 
     forecastRoleName = (targetRole: RoleBase) => {
-        const otherPlayers = Oracle.game.players.filter(player => player !== this.player
-            && player.isAlive
-            && player !== targetRole.player);
-        const otherRole = randomElement(otherPlayers).role;
-        return `НЕ *${otherRole?.roleName}*!`;
+        const otherRoles = Oracle.game.players
+            .filter(p => p.isAlive && p !== this.player)
+            .map(p => p.role)
+            .filter(r => r?.constructor !== targetRole.constructor);
+        const otherRole = randomElement([...new Set(otherRoles)]);
+        return otherRole ? `НЕ *${otherRole?.roleName}*!` : 'это ты сам...';
     }
 
     handleChoice = (choice?: string) => {

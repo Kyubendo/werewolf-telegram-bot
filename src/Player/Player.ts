@@ -8,14 +8,14 @@ export class Player {
         this.username = user.username
 
         this.isAlive = true
-        this.isFrozen = false
+        this.daysLeftToUnfreeze = 0
     }
 
     readonly id: number;
     readonly name: string;
     readonly username?: string;
     isAlive: boolean = true;
-    isFrozen: boolean = false;
+    daysLeftToUnfreeze: number = 0;
     won: boolean = false;
     role?: RoleBase;
     readyToArson = false;
@@ -26,15 +26,18 @@ export class Player {
 
     guardianAngel?: Player;
 
-    readonly transformInfected = () => {
+    readonly transformInfected = async () => {
+        this.infected = false
+        if (this.role instanceof Wolf) return;
         this.role = new Wolf(this, this.role);
 
-        RoleBase.game.bot.sendMessage(
+        await RoleBase.game.bot.sendMessage(
             this.id,
             'С наступлением ночи ты испытал(а) странное покалывание, ноющее чувство, пронзающее все тело, ' +
             'ты стремительно трансформировался(ась)... Теперь ты Волк!\n'
-            + (this.role instanceof Wolf && this.role.showOtherWolfPlayers()) // check this line later
         )
+
+        await this.role.sendAlliesMessage?.(true)
         this.infected = false
     }
 
