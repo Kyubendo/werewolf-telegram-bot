@@ -83,7 +83,6 @@ export class Martyr extends RoleBase {
                 + `умирал(а), но что-то или кто-то спас тебя. Имя Мученицы ${playerLink(this.player)} навсегда `
                 + `отпечаталось у тебя в сознании. И ты знаешь, что она пожертвовала собой для того, чтобы ты жил(а).`
             )
-            this.specialCondition.protectedPlayer.martyrSavedFrom = killer
             return false
         }
     }

@@ -7,7 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Doppelganger, Wolf} from "../Roles";
+import {Doppelganger, Martyr, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 
@@ -206,7 +206,7 @@ export class Game {
 
     clearSavers = () => this.players.forEach(p => {
         p.guardianAngel = undefined
-        p.martyrSavedFrom = undefined
+        if (p.role instanceof Martyr) p.role.protectedPlayerKiller = undefined
     })
 
     checkNightDeaths = async () => {

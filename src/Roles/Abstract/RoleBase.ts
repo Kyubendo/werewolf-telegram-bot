@@ -1,7 +1,7 @@
 import {Game} from "../../Game";
 import {Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
-import {GuardianAngel, Suicide} from "../index";
+import {GuardianAngel, Martyr, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner'; // Harlot
@@ -53,7 +53,10 @@ export abstract class RoleBase {
 
     readonly onKilled = async (killer?: Player, type?: DeathType): Promise<void> => {
         if (!this.player.isAlive) return;
-        if (this.player.martyrSavedFrom === killer) return
+        if (RoleBase.game.players.find(p =>
+            p.role instanceof Martyr
+            && p.role.specialCondition.protectedPlayer === this.player
+            && p.role.protectedPlayerKiller === killer)) return
         if (await this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
             this.movePlayer();
