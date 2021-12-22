@@ -1,17 +1,11 @@
 import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 
 @Entity()
-export class User {
+export class Game {
 
     @PrimaryGeneratedColumn()
     id!: number;
 
     @Column()
-    name!: string;
-
-    @Column()
-    username!: string;
-
-    @Column()
-    rating!: number;
+    duration!: number;
 }

@@ -22,11 +22,13 @@ config({path: __dirname + '/./../.env'})
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {User} from "./entity/User";
+import {Wolf} from "./Roles";
 
 createConnection().then(async connection => {
     const user = new User();
     user.name = "test";
     user.username = "@test";
+    user.rating = 1200;
     await connection.manager.save(user);
     const users = await connection.manager.find(User);
     console.log(users);
