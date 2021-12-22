@@ -7,7 +7,7 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Doppelganger, Wolf} from "../Roles";
+import {Doppelganger, Martyr, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 
@@ -102,7 +102,7 @@ export class Game {
         await this.runResolves()
         await this.runResults();
 
-        this.clearAngel()
+        this.clearSavers()
     }
 
     afterStageChange = async () => {
@@ -191,8 +191,7 @@ export class Game {
 
     private runResults = async () => {
         for (const role of roleResolves(this.stage)) {
-            const alivePlayers = this.players
-                .filter(player => player.isAlive && !player.daysLeftToUnfreeze && player.role instanceof role)
+            const alivePlayers = this.players.filter(p => p.isAlive && !p.daysLeftToUnfreeze && p.role instanceof role)
             for (const alivePlayer of alivePlayers) {
                 await alivePlayer.role?.actionResult?.()
             }
@@ -212,7 +211,10 @@ export class Game {
         )
     }
 
-    clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
+    clearSavers = () => this.players.forEach(p => {
+        p.guardianAngel = undefined
+        if (p.role instanceof Martyr) p.role.protectedPlayerKiller = undefined
+    })
 
     checkNightDeaths = async (nextStage: GameStage) => {
         if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length

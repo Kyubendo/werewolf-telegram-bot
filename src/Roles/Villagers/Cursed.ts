@@ -7,7 +7,7 @@ export class Cursed extends RoleBase {
     startMessageText = () => 'Сейчас ты обычный смертный, но если волки выберут тебя съесть, ты станешь одним из них.';
     weight = () => {
         const wolvesAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;
-        return (wolvesAmount ? 1 - wolvesAmount : 1)
+        return (wolvesAmount ? 1 - wolvesAmount * 2 : 1)
     }
 
     async handleDeath(killer?: Player, type?: DeathType) {

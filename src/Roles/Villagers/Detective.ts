@@ -6,9 +6,10 @@ export class Detective extends ForecasterBase {
     roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => 'Ты можешь выбрать игрока днем, чтобы узнать его роль. ' +
         'Но волк узнает, кто ты, если ты выберешь его!'
-    weight = () => 7;
+    weight = () => 7.5;
 
     actionResult = async () => {
+        setTimeout(() => console.log('Detective 12'), 1000 * 60 * 15)
         if (!this.targetPlayer?.role) {
             setTimeout(() => console.log('Detective 15'), 1000 * 60 * 15)
             return;

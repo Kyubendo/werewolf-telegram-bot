@@ -5,7 +5,7 @@ export class WiseElder extends ForecasterBase {
     startMessageText = () => `На своем долгом жизненном ` +
         'пути ты повстречал очень много разных людей, плохих и хороших. С этими знаниями тебе хватит лишь взгляда, ' +
         'чтобы определить, может другой человек убивать или нет. Проверить ты можешь только один раз за день.'
-    weight = () => 5;
+    weight = () => 5.5;
 
     forecastRoleName = (targetRole: RoleBase) => { // CultistHunter, FallenAngel, BlackWolf?
         const killers = [Gunner, SerialKiller, Wolf, Arsonist, Cowboy]; // move to different file, unite with checkEndGame logic

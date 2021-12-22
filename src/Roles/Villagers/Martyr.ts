@@ -60,8 +60,14 @@ export class Martyr extends RoleBase {
             )
         }
         if (!this.specialCondition.protectedPlayer.role) return
-        this.specialCondition.protectedPlayer.role.handleDeath = async (killer?: Player) => {
-            if (!this.specialCondition.protectedPlayer) return false;
+
+        const currentTargetHandleDeath = this.specialCondition.protectedPlayer.role
+            .handleDeath.bind(this.specialCondition.protectedPlayer.role);
+
+        this.specialCondition.protectedPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
+            if (!this.player.isAlive) return currentTargetHandleDeath(killer, deathType)
+
+            if (!this.specialCondition.protectedPlayer) return false; // should never be returned
 
             this.protectedPlayerKiller = killer
             await this.onKilled(this.player)
@@ -104,7 +110,7 @@ export class Martyr extends RoleBase {
                 + `${playerLink(this.player)}, в то время как ${playerLink(this.specialCondition.protectedPlayer)} стоит целый(ая) `
                 + `и невредимый(ая).`
 
-            setTimeout(
+            setTimeout( // wtf
                 (deathMessage) => deathMessage && Martyr.game.bot
                     .sendMessage(Martyr.game.chatId, deathMessage),
                 25,

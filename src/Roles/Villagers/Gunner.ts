@@ -9,7 +9,7 @@ export class Gunner extends RoleBase {
     roleIntroductionText = () => `${this.roleName} выходит на охоту!`
     startMessageText = () => 'У тебя есть две серебрянных пули, чтобы убить кого-то днем. ' +
         'Но имей ввиду, все услышат твой выстрел...';
-    weight = () => 6;
+    weight = () => 6.5;
 
     actionAnnouncement = () => ({
         message: this.targetPlayer ? 'Вдруг послышался выстрел!  Все село оборачивается, ' +
