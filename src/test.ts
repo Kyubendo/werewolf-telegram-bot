@@ -22,8 +22,6 @@ config({path: __dirname + '/./../.env'})
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {User} from "./entity/User";
-import {Wolf} from "./Roles";
-
 import {getConnectionOptions, ConnectionOptions} from 'typeorm';
 import dotenv from 'dotenv';
 
@@ -38,14 +36,13 @@ const getOptions = async () => {
         extra: {
             ssl: true,
         },
-        entities: ['src/entity/*.*'],
+        entities: ["src/entity/**/*.ts"],
     };
     if (process.env.DATABASE_URL) {
         Object.assign(connectionOptions, {url: process.env.DATABASE_URL});
     } else {
         connectionOptions = await getConnectionOptions();
     }
-
     return connectionOptions;
 };
 
