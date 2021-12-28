@@ -24,12 +24,43 @@ import {createConnection} from "typeorm";
 import {User} from "./entity/User";
 import {Wolf} from "./Roles";
 
-createConnection().then(async connection => {
-    const user = new User();
-    user.name = "test";
-    user.username = "@test";
-    user.rating = 1200;
-    await connection.manager.save(user);
-    const users = await connection.manager.find(User);
-    console.log(users);
-}).catch(error => console.log(error));
+import {getConnectionOptions, ConnectionOptions} from 'typeorm';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const getOptions = async () => {
+    let connectionOptions: ConnectionOptions;
+    connectionOptions = {
+        type: 'postgres',
+        synchronize: true,
+        logging: false,
+        extra: {
+            ssl: true,
+        },
+        entities: ['src/entity/*.*'],
+    };
+    if (process.env.DATABASE_URL) {
+        Object.assign(connectionOptions, {url: process.env.DATABASE_URL});
+    } else {
+        connectionOptions = await getConnectionOptions();
+    }
+
+    return connectionOptions;
+};
+
+
+
+(async () => {
+    const connection = createConnection(await getOptions()).then(async connection => {
+        const user = new User();
+        user.name = "test";
+        user.username = "@test";
+        user.rating = 1200;
+        await connection.manager.save(user);
+        const users = await connection.manager.find(User);
+        console.log(users);
+    }).catch(error => console.log(error));
+})()
+
+
