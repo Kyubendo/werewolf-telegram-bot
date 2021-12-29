@@ -52,7 +52,6 @@ export const initGame = (bot: TelegramBot, state: State, connection: Connection)
             return;
         }
         const onEnd = async () => {
-            await state.game?.db.close()
             delete state.game
         }
         const initPlayer = new Player(msg.from)

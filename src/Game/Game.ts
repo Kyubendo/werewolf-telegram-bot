@@ -12,6 +12,9 @@ import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 import {Connection} from "typeorm";
 import {User} from "../entity/User";
+import {saveGame} from "./saveGame";
+import {applyRating} from "./applyRating";
+import {playerToUser} from "../Utils/playerToUser";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 export const GameModeList = ['classic', 'chaos'] as const
@@ -112,7 +115,7 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if (!process.env.ROLE_TEST && endGame) {
+        if (endGame) {
             await this.onGameEnd(endGame)
             return
         }
@@ -133,6 +136,8 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         )
+        await saveGame(this, endGame.type)
+        await applyRating(this)
         await this.bot.sendMessage(this.chatId, endPlayerList(this.players))
         await this.deleteGame()
         this.stageTimer?.stop()
@@ -209,10 +214,7 @@ export class Game {
     }
 
     saveNewPlayer = async (player: Player) => {
-        const existentUser = await this.db.getRepository(User)
-            .createQueryBuilder('user')
-            .where('user.id = :id', {id: player.id})
-            .getOne()
+        const existentUser = await playerToUser(this.db, player.id)
         if (!existentUser) {
             const user = new User()
             user.id = player.id

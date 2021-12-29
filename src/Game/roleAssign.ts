@@ -1,4 +1,3 @@
-import {Game} from "./Game";
 import {arrayShuffle} from "../Utils/arrayShuffle";
 import {
     AlphaWolf, ApprenticeSeer, Beauty,
@@ -13,6 +12,7 @@ import {
     WoodMan, Pacifist, Arsonist, Cowboy
     // JackOLantern
 } from "../Roles";
+import {Game} from "./Game";
 
 export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
@@ -36,6 +36,7 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
+        Wolf, Seer, Monarch, WildChild,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 

@@ -18,9 +18,9 @@ export class Player {
     @ManyToOne(() => Role)
     finalRole!: Role;
 
-    @ManyToOne(() => User)
-    loverUser!: User;
+    @ManyToOne(() => User, {nullable: true})
+    loverUser!: User | null;
 
     @Column()
-    win!: boolean;
+    won!: boolean;
 }
