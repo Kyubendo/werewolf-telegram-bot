@@ -9,6 +9,7 @@ export type specialConditionMartyr = { protectedPlayer?: Player }
 export type specialConditionCupid = { loversBound: boolean }
 export type specialConditionPrincess = { ringShowed: boolean }
 export type specialConditionPacifist = { peace?: boolean }
+export type specialConditionSnowman = { snowballs: number }
 export type specialConditionType = specialConditionGunner | specialConditionBlacksmith | specialConditionMartyr |
     specialConditionWildChild | specialConditionRuler | specialConditionSandman | specialConditionCupid |
-    specialConditionPrincess | specialConditionPacifist
+    specialConditionPrincess | specialConditionPacifist | specialConditionSnowman
