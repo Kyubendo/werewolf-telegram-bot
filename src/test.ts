@@ -47,17 +47,15 @@ const getOptions = async () => {
 };
 
 
-
 (async () => {
-    const connection = createConnection(await getOptions()).then(async connection => {
-        const user = new User();
-        user.name = "test";
-        user.username = "@test";
-        user.rating = 1200;
-        await connection.manager.save(user);
-        const users = await connection.manager.find(User);
-        console.log(users);
-    }).catch(error => console.log(error));
+    const connection = await createConnection(await getOptions())
+    const user = new User();
+    user.name = "test";
+    user.username = "@test";
+    user.rating = 1200;
+    await connection.manager.save(user);
+    const users = await connection.manager.find(User);
+    console.log(users);
 })()
 
 

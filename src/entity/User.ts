@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {Player} from "./Player";
 
 @Entity()
 export class User {
@@ -14,4 +15,7 @@ export class User {
 
     @Column()
     rating!: number;
+
+    @OneToMany(() => Player, player => player.user)
+    players!: Player[];
 }

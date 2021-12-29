@@ -1,14 +1,26 @@
-import {Entity, Column, PrimaryColumn} from "typeorm";
+import {Entity, Column, ManyToOne} from "typeorm";
+import {User} from "./User";
+import {Game} from "./Game";
+import {Role} from "./Role";
 
 @Entity()
 export class Player {
 
-    @PrimaryColumn()
-    userId!: number;
+    @ManyToOne(() => User, user => user.players, {primary: true})
+    user!: User;
 
-    @PrimaryColumn()
-    gameId!: number;
+    @ManyToOne(() => Game, game => game.players, {primary: true})
+    game!: Game;
+
+    @ManyToOne(() => Role)
+    initialRole!: Role;
+
+    @ManyToOne(() => Role)
+    finalRole!: Role;
+
+    @ManyToOne(() => User)
+    loverUser!: User;
 
     @Column()
-    roleId!: number;
+    win!: boolean;
 }
