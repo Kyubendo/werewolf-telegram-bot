@@ -15,6 +15,7 @@ import {User} from "../entity/User";
 import {saveGame} from "./saveGame";
 import {applyRating} from "./applyRating";
 import {playerToUser} from "../Utils/playerToUser";
+import {UserChat} from "../entity/UserChat";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 export const GameModeList = ['classic', 'chaos'] as const
@@ -211,11 +212,12 @@ export class Game {
         this.players.push(player)
 
         await this.saveNewPlayer(player)
+
     }
 
     saveNewPlayer = async (player: Player) => {
-        const existentUser = await playerToUser(this.db, player.id)
-        if (!existentUser) {
+        const existingUser = await playerToUser(this.db, player.id)
+        if (!existingUser) {
             const user = new User()
             user.id = player.id
             user.username = player.username ?? null
@@ -223,6 +225,14 @@ export class Game {
             user.rating = 1200
             await this.db.manager.save(user)
         }
+    }
+
+    addPlayerToChat = async (player: Player) => {
+        const existingUserChat = this.db.getRepository(UserChat).createQueryBuilder('userChat')
+
+
+        const userChat = new UserChat()
+
     }
 
     clearSelects = () => {
