@@ -14,6 +14,8 @@ import * as bodyParser from "body-parser";
 import {hardReset} from "./Game/commands/hardReset";
 import {pinPlayers} from "./Game/commands/pinPlayers";
 import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
+import {Connection} from "typeorm";
+import {connect} from "./Database/connect";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -27,17 +29,21 @@ if (process.env.NODE_ENV === 'production') {
     bot = new TgBot(botToken, {polling: true});
 }
 
-export type State = { game?: Game, } // fix maybe
-let state: State = {}
+export type State = { game?: Game, db: Connection }
 
-initGame(bot, state)
+connect().then(connection => {
+    let state: State = {db: connection}
 
-callbackHandle(bot, state)
-forceStart(bot, state)
-nextStage(bot, state)
-hardReset(bot, state)
-pinPlayers(bot,state)
-deleteGroupchat(bot, state)
+    initGame(bot, state, connection)
+
+    callbackHandle(bot, state)
+    forceStart(bot, state)
+    nextStage(bot, state)
+    hardReset(bot, state)
+    pinPlayers(bot, state)
+    deleteGroupchat(bot, state)
+})
+
 
 const app = express();
 app.use(bodyParser.json());

@@ -6,19 +6,19 @@ import {startPlayerList} from "../../Utils/playerLists";
 import {msToMinutes} from "../../Utils/msToMinutes";
 import {joinButton} from "../commands/init";
 
-export const join = (game: Game, select: SelectType) => {
+export const join = async (game: Game, select: SelectType) => {
     if (game.stage) return;
     const newPlayer = new Player(select.from)
     if (game.players.map(e => e.id).includes(newPlayer.id)) return;
-    game.addPlayer(newPlayer)
+    await game.addPlayer(newPlayer)
     game.startGameTimer.extend(60_000)
-    game.bot.sendMessage(game.chatId,
+    await game.bot.sendMessage(game.chatId,
         `${playerLink(newPlayer)} присоединился к игре! Время увеличено, `
         + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры.`,
         {
             reply_markup: joinButton
         })
-    game.bot.editMessageText(startPlayerList(game.players), {
+    await game.bot.editMessageText(startPlayerList(game.players), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,
     })

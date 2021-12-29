@@ -4,7 +4,7 @@ services:
     build:
       context: .
     env_file: ./.env
-    command: npm test
+    command: npm start
     volumes:
       - .:/app/
       - /app/node_modules

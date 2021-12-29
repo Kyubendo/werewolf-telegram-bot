@@ -10,6 +10,8 @@ import {checkEndGame, setWinners, Win} from "./checkEndGame";
 import {Doppelganger, Martyr, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
+import {Connection} from "typeorm";
+import {User} from "../entity/User";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 export const GameModeList = ['classic', 'chaos'] as const
@@ -23,6 +25,7 @@ export class Game {
         readonly chatId: number,
         readonly deleteGame: () => void,
         public playerCountMsgId: number,
+        public db: Connection, // remove from game maybe
     ) {
         this.startGameTimer = timer(() => {
             if (this.stage) return
@@ -130,7 +133,8 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         )
-        await this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame())
+        await this.bot.sendMessage(this.chatId, endPlayerList(this.players))
+        await this.deleteGame()
         this.stageTimer?.stop()
     }
 
@@ -198,8 +202,25 @@ export class Game {
         }
     }
 
-    addPlayer = (player: Player) => {
+    addPlayer = async (player: Player) => {
         this.players.push(player)
+
+        await this.saveNewPlayer(player)
+    }
+
+    saveNewPlayer = async (player: Player) => {
+        const existentUser = await this.db.getRepository(User)
+            .createQueryBuilder('user')
+            .where('user.id = :id', {id: player.id})
+            .getOne()
+        if (!existentUser) {
+            const user = new User()
+            user.id = player.id
+            user.username = player.username ?? null
+            user.name = player.name
+            user.rating = 1200
+            await this.db.manager.save(user)
+        }
     }
 
     clearSelects = () => {
