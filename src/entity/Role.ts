@@ -13,7 +13,7 @@ export class Role extends BaseEntity {
 
     static async getFromObject(roleObj: RoleBase) {
         let role = await this.findOne({name: roleObj.constructor.name})
-        if (!role) this.create({name: roleObj.constructor.name})
+        if (!role) role = await this.create({name: roleObj.constructor.name}).save()
         return role
     }
 }
