@@ -1,6 +1,6 @@
 import {GameStage} from "../Game";
 import {Mayor, ClumsyGuy, Monarch, Pumpkin, Suicide, Pacifist} from "../../Roles";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {VotingBase} from "./VotingBase";
 import {randomElement} from "../../Utils/randomElement";
 

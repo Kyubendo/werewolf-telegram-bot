@@ -54,7 +54,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             const serialKiller = alivePlayers.find(p => p.role instanceof SerialKiller)
             const gunner = alivePlayers.find(p => p.role instanceof Gunner)
             const arsonist = alivePlayers.find(p => p.role instanceof Arsonist)
-            const cowboy = alivePlayers.filter(p => p.role instanceof Cowboy)
+            const cowboy = alivePlayers.find(p => p.role instanceof Cowboy)
             // const puppetMaster = alivePlayers.filter(p => p.role instanceof PuppetMaster)
 
             // if(puppetMaster) return puppetMaster

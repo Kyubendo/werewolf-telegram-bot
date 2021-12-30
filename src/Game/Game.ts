@@ -7,15 +7,21 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Doppelganger, Wolf} from "../Roles";
+import {Doppelganger, Martyr, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
+import {User} from "../entity/User";
+import {saveGame} from "./saveGame";
+import {applyRating} from "./applyRating";
+import {UserChat} from "../entity/UserChat";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
+export const GameModeList = ['classic', 'chaos'] as const
+export type GameMode = typeof GameModeList[number]
 
 export class Game {
     constructor(
-        readonly mode: 'classic',
+        readonly mode: GameMode,
         readonly bot: TelegramBot,
         readonly players: Player[],
         readonly chatId: number,
@@ -100,7 +106,7 @@ export class Game {
         await this.runResolves()
         await this.runResults();
 
-        this.clearAngel()
+        this.clearSavers()
     }
 
     afterStageChange = async () => {
@@ -128,7 +134,10 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         )
-        await this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame())
+        await saveGame(this, endGame.type)
+        await applyRating(this)
+        await this.bot.sendMessage(this.chatId, endPlayerList(this.players))
+        this.deleteGame()
         this.stageTimer?.stop()
     }
 
@@ -189,16 +198,30 @@ export class Game {
 
     private runResults = async () => {
         for (const role of roleResolves(this.stage)) {
-            const alivePlayers = this.players
-                .filter(player => player.isAlive && !player.daysLeftToUnfreeze && player.role instanceof role)
+            const alivePlayers = this.players.filter(p => p.isAlive && !p.daysLeftToUnfreeze && p.role instanceof role)
             for (const alivePlayer of alivePlayers) {
                 await alivePlayer.role?.actionResult?.()
             }
         }
     }
 
-    addPlayer = (player: Player) => {
+    addPlayer = async (player: Player) => {
         this.players.push(player)
+        await this.savePlayer(player)
+    }
+
+    savePlayer = async (player: Player) => {
+        let user = await User.findOne(player.id)
+        if (!user) {
+            user = await User.create({
+                id: player.id,
+                username: player.username ?? null,
+                name: player.name,
+                rating: 1200,
+            }).save()
+        }
+        if (await UserChat.findOne({chatId: this.chatId, user})) return
+        await UserChat.create({user, chatId: this.chatId}).save()
     }
 
     clearSelects = () => {
@@ -210,7 +233,10 @@ export class Game {
         )
     }
 
-    clearAngel = () => this.players.forEach(p => p.guardianAngel = undefined)
+    clearSavers = () => this.players.forEach(p => {
+        p.guardianAngel = undefined
+        if (p.role instanceof Martyr) p.role.protectedPlayerKiller = undefined
+    })
 
     checkNightDeaths = async (nextStage: GameStage) => {
         if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length

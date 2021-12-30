@@ -1,9 +1,10 @@
 import {config} from "dotenv";
 
 config({path: __dirname + '/./../.env'})
+import "reflect-metadata";
 import TelegramBot from "node-telegram-bot-api";
 import {Game} from "./Game";
-import {initGame} from "./Game/commands/init";
+import {startGame} from "./Game/commands/startGame";
 import {callbackHandle} from "./Game/commands/callbackHandle";
 import {forceStart} from "./Game/commands/forceStart";
 import {nextStage} from "./Game/commands/nextStage";
@@ -13,6 +14,7 @@ import * as bodyParser from "body-parser";
 import {hardReset} from "./Game/commands/hardReset";
 import {pinPlayers} from "./Game/commands/pinPlayers";
 import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
+import {connect} from "./Database/connect";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -26,17 +28,21 @@ if (process.env.NODE_ENV === 'production') {
     bot = new TgBot(botToken, {polling: true});
 }
 
-export type State = { game?: Game, } // fix maybe
-let state: State = {}
+export type State = { game?: Game, }
 
-initGame(bot, state)
 
-callbackHandle(bot, state)
-forceStart(bot, state)
-nextStage(bot, state)
-hardReset(bot, state)
-pinPlayers(bot,state)
-deleteGroupchat(bot, state)
+connect().then(() => {
+    let state: State = {}
+
+    startGame(bot, state)
+    callbackHandle(bot, state)
+    forceStart(bot, state)
+    nextStage(bot, state)
+    hardReset(bot, state)
+    pinPlayers(bot, state)
+    deleteGroupchat(bot, state)
+})
+
 
 const app = express();
 app.use(bodyParser.json());

@@ -1,7 +1,7 @@
 import {RoleBase} from "../index";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 
 export class Arsonist extends RoleBase {
@@ -13,7 +13,7 @@ export class Arsonist extends RoleBase {
         : 'Ты можешь нарисовать волшебную картину и незаметно оставить её в доме одного из жителей. Магия этой '
         + 'картины может превратить весь дом в горстку пепла. Если хотя бы в одном доме висит картина, ты можешь '
         + 'использовать свою магию, чтобы поджечь все дома с картинами, сжигая жителей внутри.'
-    weight = () => -7
+    weight = () => -6
 
     nightActionDone = false
 

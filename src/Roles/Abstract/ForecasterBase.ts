@@ -30,7 +30,8 @@ export abstract class ForecasterBase extends RoleBase {
 
     handleChoice = (choice?: string) => {
         this.targetPlayer = findPlayer(choice, ForecasterBase.game.players)
-        setTimeout(() => console.log(`${this.roleName} chose ${this.targetPlayer}`), 1000 * 60 * 15)
+        const roleLog = this.targetPlayer?.role?.roleName
+        setTimeout((role) => console.log(`${this.roleName} chose ${role}`), 1000 * 60 * 15, roleLog)
         this.choiceMsgEditText();
     }
 

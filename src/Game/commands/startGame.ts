@@ -1,10 +1,10 @@
 import TelegramBot from "node-telegram-bot-api";
-import {Game} from "../Game";
-import {Player} from "../../Player/Player";
+import {Player, Game, GameMode} from "../../Game";
 import {State} from "../../Bot";
 import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
+import {validGameMode} from "../../Utils/validGameMode";
 
 export const joinButton = {
     inline_keyboard: [
@@ -13,8 +13,7 @@ export const joinButton = {
 }
 
 const news = [
-    'Гробовщик пришел на замену Некроманта.',
-    'Пьяница 🍺 снова с нами.',
+    'Теперь за вами следят. 👀',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
@@ -23,8 +22,20 @@ const messageAppend = (news.length
         : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
-export const initGame = (bot: TelegramBot, state: State) => {
-    bot.onText(new RegExp(`\/start_classic@${process.env.BOT_NAME}`), msg => {
+const gameModeName = (gameMode: GameMode) => {
+    switch (gameMode) {
+        case "chaos":
+            return 'хаосная'
+        case "classic":
+            return 'классическая'
+    }
+}
+
+export const startGame = (bot: TelegramBot, state: State,) => {
+    bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), async (msg, match) => {
+        const gameMode = match?.[1]
+        if (!validGameMode(gameMode)) return
+
         if (msg.chat.type === 'private' || msg.chat.type === 'channel') {
             bot.sendMessage(msg.chat.id, 'Игру можно начать только в групповом чате.')
             return;
@@ -42,8 +53,10 @@ export const initGame = (bot: TelegramBot, state: State) => {
         const onEnd = () => {
             delete state.game
         }
+        const initPlayer = new Player(msg.from)
+        state.game = new Game(gameMode, bot, [initPlayer], msg.chat.id, onEnd, 0)
+        await state.game.savePlayer(initPlayer)
 
-        state.game = new Game('classic', bot, [new Player(msg.from)], msg.chat.id, onEnd, 0)
         state.game.lynch = new Lynch(state.game)
         state.game.wolfFeast = new WolfFeast(state.game)
 
@@ -51,7 +64,7 @@ export const initGame = (bot: TelegramBot, state: State) => {
             msg.chat.id,
             'https://media.giphy.com/media/ZLdy2L5W62WGs/giphy.gif',
             {
-                caption: `Новая игра начата игроком ${msg.from?.first_name +
+                caption: `Новая *${gameModeName(gameMode)}* игра начата игроком ${msg.from?.first_name +
                     (msg.from.last_name ? ' ' + msg.from.last_name : '')}!\nУ тебя есть десять минут, чтобы` +
                     ` присоединиться и быть съеденным(ой)!${messageAppend}`,
                 reply_markup: joinButton,
@@ -61,6 +74,5 @@ export const initGame = (bot: TelegramBot, state: State) => {
                 msg.chat.id,
                 startPlayerList(state.game.players),
             ).then(msg => state.game!.playerCountMsgId = msg.message_id))
-
     })
 }

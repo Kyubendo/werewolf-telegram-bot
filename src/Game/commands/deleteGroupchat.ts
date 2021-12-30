@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import {State} from "../../Bot";
 import {timer} from "../../Utils/Timer";
 import {playerLink} from "../../Utils/playerLink";
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 
 export const deleteGroupchat = (bot: TelegramBot, state: State) => {
     bot.onText(/\/delete_groupchat/, msg => {

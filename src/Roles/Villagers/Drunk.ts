@@ -1,4 +1,4 @@
-import {Player} from "../../Player/Player";
+import {Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {DeathType} from "../../Game";
 import {RoleBase, SerialKiller, Wolf} from "../index";

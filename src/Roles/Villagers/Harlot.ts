@@ -1,12 +1,8 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
-import {SerialKiller} from "../Others/SerialKiller";
-import {Wolf} from "../WolfTeam/Wolf";
-import {Player} from "../../Player/Player";
+import {DeathType, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
-import {DeathType} from "../../Game";
-import {Beauty} from "./Beauty";
-import {Arsonist, RoleBase} from "../index";
+import {Arsonist, Beauty, RoleBase, SerialKiller, Wolf} from "../index";
 
 export class Harlot extends RoleBase {
     roleName = "Блудница 💋";

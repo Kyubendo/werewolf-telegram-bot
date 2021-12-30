@@ -1,13 +1,11 @@
-import {Seer} from "./Seer";
-import {Player} from "../../Player/Player";
 import {playerLink} from "../../Utils/playerLink";
 import {randomElement} from "../../Utils/randomElement";
-import {DeathType} from "../../Game";
-import {RoleBase} from "../Abstract/RoleBase";
+import {DeathType, Player} from "../../Game";
+import {RoleBase, Seer} from "../";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
-    weight = () => 4;
+    weight = () => 4.5;
 
     forecastRoleName = (targetRole: RoleBase) => {
         if (Math.random() <= .5) {

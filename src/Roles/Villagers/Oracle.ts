@@ -1,5 +1,4 @@
-import {ForecasterBase} from "../Abstract/ForecasterBase";
-import {RoleBase} from "../Abstract/RoleBase";
+import {RoleBase, ForecasterBase} from "../"
 import {randomElement} from "../../Utils/randomElement";
 import {findPlayer} from "../../Game/findPlayer";
 
@@ -9,7 +8,7 @@ export class Oracle extends ForecasterBase {
     startMessageText = () => `Каждую ночь ты можешь ` +
         'выбрать игрока и узнать кем он НЕ является. Обрати внимание: тебе скажут роль кого-то другого в игре, ' +
         'кто всё ещё жив.';
-    weight = () => 4;
+    weight = () => 5;
 
     nightActionDone = false
 
