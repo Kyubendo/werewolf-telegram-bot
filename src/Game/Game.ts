@@ -134,8 +134,10 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         )
-        await saveGame(this, endGame.type)
-        await applyRating(this)
+        if (this.mode === 'classic') {
+            await saveGame(this, endGame.type)
+            await applyRating(this)
+        }
         await this.bot.sendMessage(this.chatId, endPlayerList(this.players))
         this.deleteGame()
         this.stageTimer?.stop()
@@ -226,8 +228,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-                {inline_keyboard: []},
-                {message_id: p.role.actionMsgId, chat_id: p.id}
+            {inline_keyboard: []},
+            {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
