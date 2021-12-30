@@ -28,6 +28,7 @@ import {Blacksmith} from "./Villagers/Blacksmith";
 import {WildChild} from "./Villagers/WildChild";
 import {Pacifist} from "./Villagers/Pacifist";
 import {Cowboy} from "./Villagers/Cowboy";
+import {Snowman} from "./Villagers/Snowman";
 
 import {Wolf} from "./WolfTeam/Wolf";
 import {Lycan} from "./WolfTeam/Lycan";
@@ -53,7 +54,7 @@ export {
     Beauty, Princess,
 
     Gunner, GuardianAngel, Oracle, WiseElder, Martyr, Harlot, Detective, Sandman, Blacksmith, WildChild, Monarch, Mayor,
-    Cupid, Pacifist, Cowboy,
+    Cupid, Pacifist, Cowboy, Snowman,
 
     Wolf, Lycan, Sorcerer, AlphaWolf, Prowler,
 
