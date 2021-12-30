@@ -50,7 +50,7 @@ export const startGame = (bot: TelegramBot, state: State,) => {
                 })
             return;
         }
-        const onEnd = async () => {
+        const onEnd = () => {
             delete state.game
         }
         const initPlayer = new Player(msg.from)

@@ -113,7 +113,7 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if (endGame) {
+        if (!process.env.ROLE_TEST && endGame) {
             await this.onGameEnd(endGame)
             return
         }
@@ -137,7 +137,7 @@ export class Game {
         await saveGame(this, endGame.type)
         await applyRating(this)
         await this.bot.sendMessage(this.chatId, endPlayerList(this.players))
-        await this.deleteGame()
+        this.deleteGame()
         this.stageTimer?.stop()
     }
 
