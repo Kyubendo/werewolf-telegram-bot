@@ -68,7 +68,7 @@ export class Snowman extends RoleBase {
                 killer.role.findAllies().forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 2);
                 killer.daysLeftToUnfreeze = 2;
                 text = `На утро мирные жители обнаруживает покусаного снеговика... ` +
-                    `Волк останул нетронутой только морковку!`;
+                    `Волк оставил нетронутой нетронутой только морковку!`;
             } else if (killer?.role instanceof SerialKiller) {
                 text = `На утро мирные жители замечают некоторые косметические изменения в дизайне снеговика. ` +
                 `У него из груди торчит нож, а на земле режит нарезаная морковка. `;
