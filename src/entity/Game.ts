@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity, CreateDateColumn} from "typeorm";
 import {Win} from "../Game/checkEndGame";
 import {Player} from "./Player";
 
@@ -16,4 +16,7 @@ export class Game extends BaseEntity{
 
     @OneToMany(() => Player, player => player.game)
     players!: Player[];
+
+    @CreateDateColumn()
+    savedAt!: Date;
 }

@@ -8,7 +8,7 @@ import {Role} from "../entity/Role";
 export const saveGame = async (endedGame: GameClass.Game, winner: Win) => {
     const game = await Game.create({
         winner,
-        duration: endedGame.gameStartedTime ? (new Date).getTime() - endedGame.gameStartedTime : 0
+        duration: endedGame.gameStartedTime ? (new Date).getTime() - endedGame.gameStartedTime : 0,
     }).save()
 
     for (const p of endedGame.players) {
