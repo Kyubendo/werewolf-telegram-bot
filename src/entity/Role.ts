@@ -11,7 +11,9 @@ export class Role extends BaseEntity {
     @Column()
     name!: string;
 
-    static getFromObject(role: RoleBase) {
-        return this.findOne({name: role.constructor.name})
+    static async getFromObject(roleObj: RoleBase) {
+        let role = await this.findOne({name: roleObj.constructor.name})
+        if (!role) this.create({name: roleObj.constructor.name})
+        return role
     }
 }
