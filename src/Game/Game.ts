@@ -10,6 +10,10 @@ import {checkEndGame, setWinners, Win} from "./checkEndGame";
 import {Doppelganger, Martyr, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
+import {User} from "../entity/User";
+import {saveGame} from "./saveGame";
+import {applyRating} from "./applyRating";
+import {UserChat} from "../entity/UserChat";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 export const GameModeList = ['classic', 'chaos'] as const
@@ -130,7 +134,10 @@ export class Game {
             endGameMessage[endGame.type].gif,
             {caption: endGameMessage[endGame.type].text}
         )
-        await this.bot.sendMessage(this.chatId, endPlayerList(this.players)).then(() => this.deleteGame())
+        await saveGame(this, endGame.type)
+        await applyRating(this)
+        await this.bot.sendMessage(this.chatId, endPlayerList(this.players))
+        this.deleteGame()
         this.stageTimer?.stop()
     }
 
@@ -198,8 +205,23 @@ export class Game {
         }
     }
 
-    addPlayer = (player: Player) => {
+    addPlayer = async (player: Player) => {
         this.players.push(player)
+        await this.savePlayer(player)
+    }
+
+    savePlayer = async (player: Player) => {
+        let user = await User.findOne(player.id)
+        if (!user) {
+            user = await User.create({
+                id: player.id,
+                username: player.username ?? null,
+                name: player.name,
+                rating: 1200,
+            }).save()
+        }
+        if (await UserChat.findOne({chatId: this.chatId, user})) return
+        await UserChat.create({user, chatId: this.chatId}).save()
     }
 
     clearSelects = () => {

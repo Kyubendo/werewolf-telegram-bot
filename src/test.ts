@@ -18,3 +18,6 @@ for (let i = 0; i < 10; i++) {
     assignRoles(game)
     console.log(game.players.map(p => p.role?.roleName))
 }
+
+
+

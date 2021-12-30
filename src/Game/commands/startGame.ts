@@ -31,8 +31,8 @@ const gameModeName = (gameMode: GameMode) => {
     }
 }
 
-export const initGame = (bot: TelegramBot, state: State) => {
-    bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), (msg, match) => {
+export const startGame = (bot: TelegramBot, state: State,) => {
+    bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), async (msg, match) => {
         const gameMode = match?.[1]
         if (!validGameMode(gameMode)) return
 
@@ -53,8 +53,10 @@ export const initGame = (bot: TelegramBot, state: State) => {
         const onEnd = () => {
             delete state.game
         }
+        const initPlayer = new Player(msg.from)
+        state.game = new Game(gameMode, bot, [initPlayer], msg.chat.id, onEnd, 0)
+        await state.game.savePlayer(initPlayer)
 
-        state.game = new Game(gameMode, bot, [new Player(msg.from)], msg.chat.id, onEnd, 0)
         state.game.lynch = new Lynch(state.game)
         state.game.wolfFeast = new WolfFeast(state.game)
 
