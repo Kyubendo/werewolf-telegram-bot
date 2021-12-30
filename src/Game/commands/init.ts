@@ -5,7 +5,6 @@ import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
 import {validGameMode} from "../../Utils/validGameMode";
-import {Connection} from "typeorm";
 
 export const joinButton = {
     inline_keyboard: [
@@ -32,7 +31,7 @@ const gameModeName = (gameMode: GameMode) => {
     }
 }
 
-export const initGame = (bot: TelegramBot, state: State, connection: Connection) => {
+export const initGame = (bot: TelegramBot, state: State,) => {
     bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), async (msg, match) => {
         const gameMode = match?.[1]
         if (!validGameMode(gameMode)) return
@@ -55,8 +54,8 @@ export const initGame = (bot: TelegramBot, state: State, connection: Connection)
             delete state.game
         }
         const initPlayer = new Player(msg.from)
-        state.game = new Game(gameMode, bot, [initPlayer], msg.chat.id, onEnd, 0, connection)
-        await state.game.saveNewPlayer(initPlayer)
+        state.game = new Game(gameMode, bot, [initPlayer], msg.chat.id, onEnd, 0)
+        await state.game.savePlayer(initPlayer)
 
         state.game.lynch = new Lynch(state.game)
         state.game.wolfFeast = new WolfFeast(state.game)

@@ -10,11 +10,9 @@ import {checkEndGame, setWinners, Win} from "./checkEndGame";
 import {Doppelganger, Martyr, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
-import {Connection} from "typeorm";
 import {User} from "../entity/User";
 import {saveGame} from "./saveGame";
 import {applyRating} from "./applyRating";
-import {playerToUser} from "../Utils/playerToUser";
 import {UserChat} from "../entity/UserChat";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
@@ -29,7 +27,6 @@ export class Game {
         readonly chatId: number,
         readonly deleteGame: () => void,
         public playerCountMsgId: number,
-        public db: Connection, // remove from game maybe
     ) {
         this.startGameTimer = timer(() => {
             if (this.stage) return
@@ -210,29 +207,21 @@ export class Game {
 
     addPlayer = async (player: Player) => {
         this.players.push(player)
-
-        await this.saveNewPlayer(player)
-
+        await this.savePlayer(player)
     }
 
-    saveNewPlayer = async (player: Player) => {
-        const existingUser = await playerToUser(this.db, player.id)
-        if (!existingUser) {
-            const user = new User()
-            user.id = player.id
-            user.username = player.username ?? null
-            user.name = player.name
-            user.rating = 1200
-            await this.db.manager.save(user)
+    savePlayer = async (player: Player) => {
+        let user = await User.findOne(player.id)
+        if (!user) {
+            user = await User.create({
+                id: player.id,
+                username: player.username ?? null,
+                name: player.name,
+                rating: 1200,
+            }).save()
         }
-    }
-
-    addPlayerToChat = async (player: Player) => {
-        const existingUserChat = this.db.getRepository(UserChat).createQueryBuilder('userChat')
-
-
-        const userChat = new UserChat()
-
+        if (await UserChat.findOne({chatId: this.chatId, user})) return
+        await UserChat.create({user, chatId: this.chatId}).save()
     }
 
     clearSelects = () => {

@@ -1,9 +1,9 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity} from "typeorm";
 import {Win} from "../Game/checkEndGame";
 import {Player} from "./Player";
 
 @Entity()
-export class Game {
+export class Game extends BaseEntity{
 
     @PrimaryGeneratedColumn()
     id!: number;

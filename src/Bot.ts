@@ -14,7 +14,7 @@ import * as bodyParser from "body-parser";
 import {hardReset} from "./Game/commands/hardReset";
 import {pinPlayers} from "./Game/commands/pinPlayers";
 import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
-import {Connection} from "typeorm";
+import {BaseEntity} from "typeorm";
 import {connect} from "./Database/connect";
 
 const botToken = process.env.BOT_TOKEN!
@@ -29,12 +29,14 @@ if (process.env.NODE_ENV === 'production') {
     bot = new TgBot(botToken, {polling: true});
 }
 
-export type State = { game?: Game, db: Connection }
+export type State = { game?: Game, }
+
 
 connect().then(connection => {
-    let state: State = {db: connection}
+    BaseEntity.useConnection(connection)
+    let state: State = {}
 
-    initGame(bot, state, connection)
+    initGame(bot, state)
 
     callbackHandle(bot, state)
     forceStart(bot, state)

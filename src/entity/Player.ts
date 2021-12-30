@@ -1,10 +1,10 @@
-import {Entity, Column, ManyToOne} from "typeorm";
+import {Entity, Column, ManyToOne, BaseEntity} from "typeorm";
 import {User} from "./User";
 import {Game} from "./Game";
 import {Role} from "./Role";
 
 @Entity()
-export class Player {
+export class Player extends BaseEntity{
 
     @ManyToOne(() => User, user => user.players, {primary: true})
     user!: User;
