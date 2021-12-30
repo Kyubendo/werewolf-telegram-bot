@@ -7,6 +7,6 @@ export class UserChat extends BaseEntity{
     @ManyToOne(() => User, undefined, {primary: true})
     user!: User;
 
-    @PrimaryColumn()
+    @PrimaryColumn({type: 'bigint'})
     chatId!: number;
 }
