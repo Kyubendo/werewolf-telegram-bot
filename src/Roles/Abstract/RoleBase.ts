@@ -3,7 +3,7 @@ import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Martyr, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
 
-export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner'; // Harlot
+export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner' | 'runOutOfSnow'; // Harlot
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {

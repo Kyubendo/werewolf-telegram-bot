@@ -17,7 +17,7 @@ export class Snowman extends RoleBase {
 
     actionAnnouncement = () => ({
         message: this.targetPlayer
-            ? 'Все жители, получив праздничные открытки, собрались на площади. Селяни образовали круг вокруг ' +
+            ? 'Все жители, получив праздничные открытки, собрались на площади. Селяни образовали полукруг вокруг ' +
             `подозрительного снеговика — ${playerLink(this.player)}. ` +
             'Вдруг снеговик начинает разрывать свою снежную плоть и лепить ' +
             'из неё оружие, от которого у людей и волков кровь стынет в жилах (не считая снежного волка). ' +
@@ -54,6 +54,10 @@ export class Snowman extends RoleBase {
         this.targetPlayer.daysLeftToUnfreeze = 1;
 
         this.specialCondition.snowballs--;
+
+        if (!this.specialCondition.snowballs)
+            this.handleDeath(this.player, 'runOutOfSnow')
+
     }
 
     handleChoice = (choice?: string) => {
@@ -85,6 +89,21 @@ export class Snowman extends RoleBase {
                 {
                     caption: killer.role.killMessage().text.toTarget
                 }
+            )
+
+            this.player.isAlive = false;
+            return true;
+        } else if (type === 'runOutOfSnow') {
+            await Snowman.game.bot.sendMessage(
+                Snowman.game.chatId,
+                `${playerLink(this.player, true)} буквально отдал всего себя ради победы селян, ` +
+                `метая снежки куда попало. ` +
+                `Теперь от него осталась только лужица...`
+            )
+
+            await Snowman.game.bot.sendMessage(
+                this.player.id,
+                `Только что ты бросил свой последний снежок и от тебя больше ничего не осталось... Ты мёртв!`
             )
 
             this.player.isAlive = false;
