@@ -1,26 +1,49 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
-import {getConnectionOptions, ConnectionOptions} from 'typeorm';
+import {createConnection, ConnectionOptions} from "typeorm";
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const getOptions = async () => {
+const getOptions = () => {
     let connectionOptions: ConnectionOptions;
     connectionOptions = {
         type: 'postgres',
         synchronize: true,
         logging: false,
-        extra: {
-            ssl: true,
-        },
-        entities: ["src/entity/**/*.ts"],
+        entities: [
+            "src/entity/**/*.ts"
+        ],
+        migrations: [
+            "src/migration/**/*.ts"
+        ],
+        subscribers: [
+            "src/subscriber/**/*.ts"
+        ],
+        cli: {
+            "entitiesDir": "src/entity",
+            "migrationsDir": "src/migration",
+            "subscribersDir": "src/subscriber"
+        }
     };
     if (process.env.DATABASE_URL) {
-        Object.assign(connectionOptions, {url: process.env.DATABASE_URL});
+        Object.assign(connectionOptions, {
+            url: process.env.DATABASE_URL,
+            extra: {
+                ssl: {
+                    rejectUnauthorized: false
+                },
+            },
+        });
     } else {
-        connectionOptions = await getConnectionOptions();
+        Object.assign(connectionOptions, {
+            host: "werewolf-postgres",
+            port: 5432,
+            username: "postgres",
+            password: "",
+            database: "werewolf",
+        })
     }
     return connectionOptions;
 };
-export const connect = async () => createConnection(await getOptions())
+
+export const connect = () => createConnection(getOptions())

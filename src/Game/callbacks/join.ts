@@ -4,7 +4,7 @@ import {playerLink} from "../../Utils/playerLink";
 import {SelectType} from "../commands/callbackHandle";
 import {startPlayerList} from "../../Utils/playerLists";
 import {msToMinutes} from "../../Utils/msToMinutes";
-import {joinButton} from "../commands/init";
+import {joinButton} from "../commands/startGame";
 
 export const join = async (game: Game, select: SelectType) => {
     if (game.stage) return;

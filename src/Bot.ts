@@ -4,7 +4,7 @@ config({path: __dirname + '/./../.env'})
 import "reflect-metadata";
 import TelegramBot from "node-telegram-bot-api";
 import {Game} from "./Game";
-import {initGame} from "./Game/commands/init";
+import {startGame} from "./Game/commands/startGame";
 import {callbackHandle} from "./Game/commands/callbackHandle";
 import {forceStart} from "./Game/commands/forceStart";
 import {nextStage} from "./Game/commands/nextStage";
@@ -14,7 +14,6 @@ import * as bodyParser from "body-parser";
 import {hardReset} from "./Game/commands/hardReset";
 import {pinPlayers} from "./Game/commands/pinPlayers";
 import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
-import {BaseEntity} from "typeorm";
 import {connect} from "./Database/connect";
 
 const botToken = process.env.BOT_TOKEN!
@@ -32,12 +31,10 @@ if (process.env.NODE_ENV === 'production') {
 export type State = { game?: Game, }
 
 
-connect().then(connection => {
-    BaseEntity.useConnection(connection)
+connect().then(() => {
     let state: State = {}
 
-    initGame(bot, state)
-
+    startGame(bot, state)
     callbackHandle(bot, state)
     forceStart(bot, state)
     nextStage(bot, state)
