@@ -177,7 +177,9 @@ export class Game {
                     this.wolvesDeactivated = false;
                 }
 
-                if (!this.players.find(p => p.isAlive && !p.daysLeftToUnfreeze)) await this.setNextStage();
+                if (!this.players.find(p => p.isAlive
+                    && !p.daysLeftToUnfreeze
+                    && p.role?.nightActionDone !== undefined)) this.setNextStage();
 
                 this.players.forEach(p => {
                     if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false

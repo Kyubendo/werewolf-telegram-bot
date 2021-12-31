@@ -33,9 +33,9 @@ const dayRoleResolves = [
     WildChild, Martyr, Doppelganger, // constant choices
     Monarch, Mayor,
     Gunner,
-    Snowman,
     WiseElder, Detective,
     Pacifist,
+    Snowman,
     Sandman, // pre-last because he freeze all other actions including Blacksmith's
     Blacksmith,
 ]

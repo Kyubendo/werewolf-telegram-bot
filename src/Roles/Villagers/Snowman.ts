@@ -13,22 +13,22 @@ export class Snowman extends RoleBase {
         'Ты можешь воспользоваться частями своего тела, ' +
         'чтобы слепить снежок и заморозить непонравившихся тебе жителей! ' +
         'Учти, что после третьего броска от тебя ничего не останется и ты умрёшь...';
-    weight = () => Snowman.game.players.find(player => player.role instanceof Wolf) ? 8.8 : 5.5;
+    weight = () => Snowman.game.players.find(player => player.role instanceof Wolf) ? 8 : 6.5;
 
     actionAnnouncement = () => ({
         message: this.targetPlayer
-            ? 'Все жители, получив праздничные открытки, собрались на площади. Селяни образовали полукруг вокруг ' +
+            ? 'Все жители, получив праздничные открытки, собрались на площади. Селяни образовали полукруг напротив ' +
             `подозрительного снеговика — ${playerLink(this.player)}. ` +
             'Вдруг снеговик начинает разрывать свою снежную плоть и лепить ' +
             'из неё оружие, от которого у людей и волков кровь стынет в жилах (не считая снежного волка). ' +
             `${playerLink(this.player)} размахивается и кидает снежок в первого попавшегося! ` +
             `${playerLink(this.targetPlayer)} теперь заморожен!`
             : 'ERROR! Snowman-19',
-         gif: 'https://media.giphy.com/media/SceEMK2IAePGU/giphy.gif'
-     })
+        gif: 'https://media.giphy.com/media/SceEMK2IAePGU/giphy.gif'
+    })
 
     specialCondition: specialConditionSnowman = {
-        snowballs: 3
+        snowballs: 1
     }
 
     stealMessage = () => this.specialCondition.snowballs === 1
@@ -37,7 +37,7 @@ export class Snowman extends RoleBase {
             'и целься аккуратно.')
 
     action = () => {
-        if (!this.specialCondition.snowballs || !this.targetPlayer) return;
+        if (!this.specialCondition.snowballs) return;
 
         Snowman.game.bot.sendMessage(
             this.player.id,
@@ -51,13 +51,17 @@ export class Snowman extends RoleBase {
     actionResolve = async () => {
         if (!this.targetPlayer?.role) return;
 
+        await Snowman.game.bot.sendAnimation(
+            Snowman.game.chatId,
+            this.actionAnnouncement().gif,
+            {
+                caption: this.actionAnnouncement().message
+            }
+        )
         this.targetPlayer.daysLeftToUnfreeze = 1;
-
         this.specialCondition.snowballs--;
-
         if (!this.specialCondition.snowballs)
-            this.handleDeath(this.player, 'runOutOfSnow')
-
+            await this.onKilled(this.player, 'runOutOfSnow')
     }
 
     handleChoice = (choice?: string) => {
@@ -72,10 +76,11 @@ export class Snowman extends RoleBase {
                 killer.role.findAllies().forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 2);
                 killer.daysLeftToUnfreeze = 2;
                 text = `На утро мирные жители обнаруживает покусаного снеговика... ` +
-                    `Волк оставил нетронутой нетронутой только морковку!`;
+                    `Волк оставил нетронутой только морковку! ` +
+                    `После такого ужина волк будет всю следующую ночь отогреваться.`;
             } else if (killer?.role instanceof SerialKiller) {
                 text = `На утро мирные жители замечают некоторые косметические изменения в дизайне снеговика. ` +
-                `У него из груди торчит нож, а на земле режит нарезаная морковка. `;
+                    `У него из груди торчит нож, а на земле лежит нарезанная морковка. `;
             }
 
             await Snowman.game.bot.sendMessage(

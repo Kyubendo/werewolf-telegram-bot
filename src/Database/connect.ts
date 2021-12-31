@@ -36,7 +36,7 @@ const getOptions = () => {
         });
     } else {
         Object.assign(connectionOptions, {
-            host: "werewolf-postgres",
+            host: "localhost",
             port: 5432,
             username: "postgres",
             password: "",
