@@ -9,7 +9,7 @@ import {
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
-    WoodMan, Pacifist, Arsonist, Cowboy
+    WoodMan, Pacifist, Arsonist, Cowboy, Snowman
     // JackOLantern
 } from "../Roles";
 import {Game} from "./Game";
@@ -29,14 +29,14 @@ export const assignRoles = async (game: Game) => {
         ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, Cowboy,// Passive Villagers
 
         Seer, Monarch, Mayor, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid, Pacifist,
-        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
+        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr, Snowman,// Active Villagers
 
         Suicide, Thief, Undertaker, Doppelganger// Other
     ]
 
 
     const testPool = [
-        Wolf, WildChild, Cupid,
+        Snowman, Arsonist, SerialKiller,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 

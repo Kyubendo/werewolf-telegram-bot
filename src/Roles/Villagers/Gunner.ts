@@ -33,7 +33,6 @@ export class Gunner extends RoleBase {
     action = () => {
         if (!this.specialCondition.ammo) return;
 
-
         Gunner.game.bot.sendMessage(
             this.player.id,
             'Кого ты хочешь пристрелить сегодня?',

@@ -12,7 +12,7 @@ import {
     SerialKiller, Sorcerer,
     Thief, WildChild,
     WiseElder,
-    Wolf, Pacifist, Arsonist
+    Wolf, Pacifist, Arsonist, Snowman
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -35,6 +35,7 @@ const dayRoleResolves = [
     Gunner,
     WiseElder, Detective,
     Pacifist,
+    Snowman,
     Sandman, // pre-last because he freeze all other actions including Blacksmith's
     Blacksmith,
 ]
