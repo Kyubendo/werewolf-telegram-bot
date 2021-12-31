@@ -36,7 +36,7 @@ const getOptions = () => {
         });
     } else {
         Object.assign(connectionOptions, {
-            host: "localhost",
+            host: process.env.NO_DOCKER ? "localhost" : 'werewolf-postgres',
             port: 5432,
             username: "postgres",
             password: "",

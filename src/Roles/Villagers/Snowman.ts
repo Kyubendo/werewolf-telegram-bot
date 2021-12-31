@@ -13,7 +13,7 @@ export class Snowman extends RoleBase {
         'Ты можешь воспользоваться частями своего тела, ' +
         'чтобы слепить снежок и заморозить непонравившихся тебе жителей! ' +
         'Учти, что после третьего броска от тебя ничего не останется и ты умрёшь...';
-    weight = () => Snowman.game.players.find(player => player.role instanceof Wolf) ? 8 : 6.5;
+    weight = () => Snowman.game.players.find(player => player.role instanceof Wolf) ? 9 : 8.5;
 
     actionAnnouncement = () => ({
         message: this.targetPlayer
@@ -28,7 +28,7 @@ export class Snowman extends RoleBase {
     })
 
     specialCondition: specialConditionSnowman = {
-        snowballs: 1
+        snowballs: 3
     }
 
     stealMessage = () => this.specialCondition.snowballs === 1
