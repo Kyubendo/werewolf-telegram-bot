@@ -5,5 +5,5 @@ export class Suicide extends RoleBase {
     roleIntroductionText = () => ''
     startMessageText = () => `Кажется, тебе надоело жить... Добейся своей казни, и ты выиграешь, ` +
         `ведь ты ${this.roleName}...`;
-    weight = () => -4;
+    weight = () => Suicide.game.players.length / -2;
 }

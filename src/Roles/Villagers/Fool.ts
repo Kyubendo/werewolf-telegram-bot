@@ -5,7 +5,7 @@ import {RoleBase, Seer} from "../";
 
 export class Fool extends Seer {
     roleName = 'Дурак 🃏';
-    weight = () => 4.5;
+    weight = () => 5;
 
     forecastRoleName = (targetRole: RoleBase) => {
         if (Math.random() <= .5) {

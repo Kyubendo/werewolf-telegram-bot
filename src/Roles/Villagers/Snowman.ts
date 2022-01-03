@@ -13,7 +13,12 @@ export class Snowman extends RoleBase {
         'Ты можешь воспользоваться частями своего тела, ' +
         'чтобы слепить снежок и заморозить непонравившихся тебе жителей! ' +
         'Учти, что после третьего броска от тебя ничего не останется и ты умрёшь...';
-    weight = () => Snowman.game.players.find(player => player.role instanceof Wolf) ? 9 : 8.5;
+    weight = () => {
+        const wolfCount = Snowman.game.players.filter(player => player.role instanceof Wolf).length
+        return wolfCount
+            ? (wolfCount === 1 ? 9.5 : 8)
+            : 6.5;
+    }
 
     actionAnnouncement = () => ({
         message: this.targetPlayer

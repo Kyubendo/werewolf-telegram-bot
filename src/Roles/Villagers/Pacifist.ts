@@ -8,7 +8,7 @@ export class Pacifist extends RoleBase {
     startMessageText = () => 'несущий мир и добро (хотя бы на один день). ' +
         'Один раз за игру ты можешь провести демонстрацию и ' +
         'заставить всех остальных обратить внимание на свободу и любовь. Они не смогут казнить в этот день.'
-    weight = () => 2.5;
+    weight = () => 3;
 
     specialCondition: specialConditionPacifist = {
         peace: undefined
