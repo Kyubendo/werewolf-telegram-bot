@@ -14,8 +14,8 @@ export class Blacksmith extends RoleBase {
     weight = () => Blacksmith.game.players.find(p => p.role instanceof Wolf)
         ? 8
         : Blacksmith.game.players.find(p => p.role instanceof Traitor || p.role instanceof WildChild)
-            ? 4
-            : 3
+            ? 4.5
+            : 3.5
 
     actionAnnouncement = () => ({
         message: 'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +

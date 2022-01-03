@@ -9,7 +9,7 @@ import {RoleBase, Wolf} from "../index";
 export class WildChild extends RoleBase {
     roleName = 'Дикий ребёнок 👶';
     startMessageText = () => 'Выбери любого игрока, чтобы он стал твоим "примером". Если он умрет, ты станешь волком!'
-    weight = () => -1;
+    weight = () => -1.5;
 
     nightActionDone = false
 

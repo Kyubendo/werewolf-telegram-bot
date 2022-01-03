@@ -23,7 +23,7 @@ export class Wolf extends RoleBase {
                         `И как разработчики могли такое допустить...`)
             else if (this.player.role?.previousRole instanceof Cursed)
                 notificationText = (Math.random() < 0.9
-                    ? `До этого над ${playerLink(this.player)} издевалось всё село из-за того, ` +
+                    ? `До эытого над ${playerLink(this.player)} издевалось всё село из-за того, ` +
                     `что он ${this.player.role.previousRole.roleName}. ` +
                     `Теперь он над ними отыграется, потому что он теперь один из вас! Поздравляем нового волка.`
                     : `С детства над ${playerLink(this.player)} издевалась вся деревня из-за того, ` +
@@ -70,7 +70,7 @@ export class Wolf extends RoleBase {
     roleIntroductionText = () => `Новый ${this.roleName} в селе!`;
     startMessageText = () => `Молодец, добился успеха! Убивай каждую ночь селян и добейся победы!`
 
-    weight = () => -9;
+    weight = () => -8;
 
     nightActionDone = false
 
