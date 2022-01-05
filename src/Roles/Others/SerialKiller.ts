@@ -29,7 +29,7 @@ export class SerialKiller extends RoleBase {
     })
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
-        if (killer?.role instanceof Wolf) {
+        if (killer?.role instanceof Wolf && !type) {
             await SerialKiller.game.bot.sendMessage(
                 SerialKiller.game.chatId,
                 `Волк попытался хорошо полакомиться этой ночью, но встретил сумасшедшего маньяка! ` +
