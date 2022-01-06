@@ -49,31 +49,35 @@ export class Thief extends RoleBase {
                 .createThisRole(this.player, this.player.role);
             this.player.role.specialCondition = this.targetPlayer.role.specialCondition;
 
-            if (this.targetPlayer.role instanceof Cowboy) {
-                await Thief.game.bot.sendMessage(
-                    this.targetPlayer.id,
-                    `Посреди ночи, в попытке украсть твоё сомбреро, к тебе вломился ворюга. ` +
-                    `Но ты был готов к такой ситуации и умело связал взломщика своим лассо. ` +
-                    `Пока ты думал, что сделать со связанным грабилем, ` +
-                    `он украл твоё лассо! Теперь он ${this.roleName}.`
-                )
-                this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
-            }
+            this.targetPlayer.role instanceof Cowboy && await Thief.game.bot.sendMessage(
+                this.targetPlayer.id,
+                `Посреди ночи, в попытке украсть твоё сомбреро, к тебе вломился ворюга. ` +
+                `Но ты был готов к такой ситуации и умело связал взломщика своим лассо. ` +
+                `Пока ты думал, что сделать со связанным грабилем, ` +
+                `он украл твоё лассо! Теперь он ${this.roleName}.`
+            )
+
+            this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
+
             await Thief.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
                 `Укради роль у кого-нибудь.` // GIF
             )
+
             const stealMessageText: string | false | undefined = this.player?.role?.stealMessage?.();
+
             await Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${playerLink(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
             )
+
             stealMessageText && await Thief.game.bot.sendMessage(
                 this.player.id,
                 stealMessageText
             )
+
             await this.player.role.sendAlliesMessage?.(true);
         }
     }
