@@ -52,34 +52,28 @@ export class Thief extends RoleBase {
             if (this.targetPlayer.role instanceof Cowboy) {
                 await Thief.game.bot.sendMessage(
                     this.targetPlayer.id,
-                    `Посреди ночи к тебе вломился ворюга, пытаюшийся украсть твоё сомбреро. ` +
-                    `Но ты ждал этого момента и умело связал взломщика своим лассо. ` +
+                    `Посреди ночи, в попытке украсть твоё сомбреро, к тебе вломился ворюга. ` +
+                    `Но ты был готов к такой ситуации и умело связал взломщика своим лассо. ` +
                     `Пока ты думал, что сделать со связанным грабилем, ` +
-                    `он украл твоё лассо! Теперь он ${this.roleName}.`// GIF
+                    `он украл твоё лассо! Теперь он ${this.roleName}.`
                 )
-
                 this.targetPlayer.role = new Thief(this.targetPlayer, this.targetPlayer.role);
             }
-
             await Thief.game.bot.sendMessage(
                 this.targetPlayer.id,
                 `Что-то пропало! Ах да! Твоя роль! Теперь у тебя нет роли, и ты сам стал вором. ` +
                 `Укради роль у кого-нибудь.` // GIF
             )
-
             const stealMessageText: string | false | undefined = this.player?.role?.stealMessage?.();
-
             await Thief.game.bot.sendMessage(
                 this.player.id,
                 `Успех! Ты украль роль у ${playerLink(this.targetPlayer)}! ` +
                 `Теперь ты *${this.player.role?.roleName}*!`
             )
-
             stealMessageText && await Thief.game.bot.sendMessage(
                 this.player.id,
                 stealMessageText
             )
-
             await this.player.role.sendAlliesMessage?.(true);
         }
     }
@@ -98,11 +92,13 @@ export class Thief extends RoleBase {
                 `отобрать у ковбоя его кольт. Но реакция наездника дала о себе знать. ` +
                 `Теперь у вора дыра между глаз.`,
             )
-
-            await Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendAnimation(
                 this.player.id,
-                'Ты попытался украсть роль у ковбоя, но всё, ' +
-                'на что ковбой сегодня расщедрился — это куля в лоб. Ты мёртв.',
+                'https://media.giphy.com/media/hMwTGsex6CxOhCjnmf/giphy.gif',
+                {
+                    caption: 'Ты попытался украсть роль у ковбоя, но всё, ' +
+                        'на что ковбой сегодня расщедрился — это куля в лоб. Ты мёртв.'
+                }
             )
         } else if (type === 'thiefCameToSerialKiller') {
             this.player.isAlive = false;
@@ -111,10 +107,12 @@ export class Thief extends RoleBase {
                 `*${this.roleName}* — ${playerLink(this.player)} решил испытать удачу и попытался ` +
                 `отобрать у серийного убийцы ножи. Плохая идея, тот оказался очень нервным и жадным.`,
             )
-
-            await Thief.game.bot.sendMessage(
+            await Thief.game.bot.sendAnimation(
                 this.player.id,
-                `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`,
+                'https://media.giphy.com/media/MdHPWgbGDsroZ7BHk6/giphy.gif',
+                {
+                    caption: `Ты попытался украсть роль… но не у серийного убийцы же красть! Ты мёртв!`
+                }
             )
         }
         return super.handleDeath(killer, type);
