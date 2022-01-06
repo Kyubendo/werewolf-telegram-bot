@@ -14,12 +14,13 @@ export const topPlayers = (bot: TelegramBot) => {
             ])
             .innerJoin('u.players', 'p')
             .innerJoin(UserChat, 'uc', 'uc.userId = u.id')
-            .andWhere('uc.chatId=:chatId', {chatId: msg.from.id})
+            .andWhere('uc.chatId = :chatId', {chatId: msg.from.id})
             .having('count(p.userId) > 9')
             .groupBy('name')
             .orderBy('winrate', 'DESC')
             .getRawMany()
 
+        console.log(msg.from.id)
         console.log(await User.createQueryBuilder('u')
             .select([
                 'u.name "name"',
@@ -28,7 +29,7 @@ export const topPlayers = (bot: TelegramBot) => {
             ])
             .innerJoin('u.players', 'p')
             .innerJoin(UserChat, 'uc', 'uc.userId = u.id')
-            .andWhere('uc.chatId=:chatId', {chatId: msg.from.id})
+            .andWhere('uc.chatId= :chatId', {chatId: msg.from.id})
             .having('count(p.userId) > 9')
             .groupBy('name')
             .orderBy('winrate', 'DESC')
