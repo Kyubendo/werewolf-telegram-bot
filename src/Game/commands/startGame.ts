@@ -13,14 +13,14 @@ export const joinButton = {
 }
 
 const news = [
+    'Добвлен топ игроков (/top_players).',
     'Добавлена новогодняя роль! ❄️',
-    'Теперь за вами следят. 👀',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
 const messageAppend = (news.length
-        ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
-        : '')
+    ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
+    : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
 const gameModeName = (gameMode: GameMode) => {
