@@ -52,6 +52,7 @@ export const startGame = (bot: TelegramBot, state: State,) => {
             return;
         }
         const onEnd = () => {
+            state.game?.stageTimer?.stop()
             delete state.game
         }
         const initPlayer = new Player(msg.from)
