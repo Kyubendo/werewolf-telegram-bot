@@ -1,9 +1,9 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {playerLink} from "../../Utils/playerLink";
-import {Beauty, Cowboy, Doppelganger, RoleBase, SerialKiller} from "../index";
-import {DeathType} from "../Abstract/RoleBase";
-import {Player} from "../../Player/Player";
+import {Beauty, Cowboy, Doppelganger, RoleBase, SerialKiller} from "..";
+import {DeathType, Player} from "../../Game";
+
 
 export class Thief extends RoleBase {
     roleName = "Вор 😈";
