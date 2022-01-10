@@ -15,6 +15,8 @@ import {hardReset} from "./Game/commands/hardReset";
 import {pinPlayers} from "./Game/commands/pinPlayers";
 import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
 import {connect} from "./Database/connect";
+import {roleList} from "./Game/commands/roleList";
+import {aboutRoles} from "./Game/commands/aboutRoles";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -41,6 +43,8 @@ connect().then(() => {
     hardReset(bot, state)
     pinPlayers(bot, state)
     deleteGroupchat(bot, state)
+    roleList(bot)
+    aboutRoles(bot)
 })
 
 
