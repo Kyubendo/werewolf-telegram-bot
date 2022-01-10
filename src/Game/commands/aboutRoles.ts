@@ -10,7 +10,9 @@ export const aboutRoles = (bot: TelegramBot,) => {
         const roleInfo = `*${role.roleName}\n*`
             + `🏋 *Вес️:* ${role.weight}\n`
             + `👥 *Команда:* ${role.team ?? 'Нет команды'}\n`
-            + (role.winCondition ? `🏆 __*Побеждает, если*__ ${role.winCondition}.` : `*Всегда проигрывает.*`) + '\n'
+            + '🏆 ' + (role.winCondition
+                ? `__*Побеждает, если*__ ${role.winCondition}.`
+                : `__*Всегда проигрывает.*__`) + '\n'
             + (role.dayAction ? `🏙 *Дневное действие:* ${role.dayAction}\n` : '')
             + (role.nightAction ? `🌃 *Ночное действие:* ${role.nightAction}\n` : '')
             + (role.notes ? '🗒 *Примечания:*\n' + role.notes?.map(n => `\t\t — _${n}_`).join('\n') : '')
