@@ -122,6 +122,7 @@ export class Game {
             this.dayCount++;
 
         await this.bot.sendMessage(this.chatId, gameStageMsg(this))
+        console.log(playerGameList(this.players))
         await this.bot.sendMessage(this.chatId, playerGameList(this.players))
         this.clearTargetPlayers()
         this.runActions()
