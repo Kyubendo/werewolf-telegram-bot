@@ -5,6 +5,7 @@ import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
 import {validGameMode} from "../../Utils/validGameMode";
+import {unSilentPlayer} from "../../Utils/managePermissions";
 
 export const joinButton = {
     inline_keyboard: [
@@ -53,6 +54,8 @@ export const startGame = (bot: TelegramBot, state: State,) => {
         }
         const onEnd = () => {
             state.game?.stageTimer?.stop()
+            state.game?.players
+                .forEach(p => state.game?.chatId && unSilentPlayer(state.game.chatId, String(p.id), bot))
             delete state.game
         }
         const initPlayer = new Player(msg.from)

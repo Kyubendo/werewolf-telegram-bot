@@ -36,7 +36,7 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
-        Snowman, Arsonist, SerialKiller,
+        Villager, SerialKiller,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -47,7 +47,9 @@ export const assignRoles = async (game: Game) => {
             arrayShuffle(availableKillers)
 
             let rolePool = [...villagersPool]
-            const evilCount = Math.floor((players.length - 4) / 2) + +(Math.random() >= .5)
+            let evilCount = Math.floor((players.length - 1) / 4)
+            if (players.length > 6 && Math.random() >= .5) ++evilCount
+
             const evils = [...Array(evilCount)].map(() => availableKillers.pop())
             evils.find(e => wolves.find(w => w === e)) && rolePool.push(...wolfNeededRoles)
 
