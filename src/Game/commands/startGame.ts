@@ -20,8 +20,8 @@ const news = [
 ]
 
 const messageAppend = (news.length
-        ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
-        : '')
+    ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
+    : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
 const gameModeName = (gameMode: GameMode) => {
@@ -52,10 +52,14 @@ export const startGame = (bot: TelegramBot, state: State,) => {
                 })
             return;
         }
-        const onEnd = () => {
+        const onEnd = async () => {
             state.game?.stageTimer?.stop()
-            state.game?.players
-                .forEach(p => state.game?.chatId && unSilentPlayer(state.game.chatId, String(p.id), bot))
+
+            if (state.game?.chatId) {
+                for (const p of state.game?.players || []) {
+                    await unSilentPlayer(state.game.chatId, String(p.id), bot)
+                }
+            }
             delete state.game
         }
         const initPlayer = new Player(msg.from)
