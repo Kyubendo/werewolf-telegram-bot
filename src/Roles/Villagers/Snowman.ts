@@ -6,7 +6,6 @@ import {playerLink} from "../../Utils/playerLink";
 import {Wolf} from "../WolfTeam/Wolf";
 import {Player} from "../../Player/Player";
 import {SerialKiller} from "../Others/SerialKiller";
-import {Arsonist} from "../Others/Arsonist";
 
 export class Snowman extends RoleBase {
     roleName = 'Снеговик ☃';
