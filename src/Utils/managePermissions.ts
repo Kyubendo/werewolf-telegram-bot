@@ -9,7 +9,7 @@ export const silentPlayer = (chatId: number | string, playerId: string, bot: Tel
         can_add_web_page_previews: false,
         can_invite_users: false,
         can_pin_messages: false,
-    })
+    }).catch(()=>{})
 }
 export const unSilentPlayer = (chatId: number | string, playerId: string, bot: TelegramBot) => {
     bot.restrictChatMember(chatId, playerId, {
@@ -20,6 +20,6 @@ export const unSilentPlayer = (chatId: number | string, playerId: string, bot: T
         can_add_web_page_previews: true,
         can_invite_users: true,
         can_pin_messages: true,
-    })
+    }).catch(()=>{})
 }
 
