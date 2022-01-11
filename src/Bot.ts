@@ -15,6 +15,8 @@ import {hardReset} from "./Game/commands/hardReset";
 import {pinPlayers} from "./Game/commands/pinPlayers";
 import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
 import {connect} from "./Database/connect";
+import {roleList} from "./Game/commands/roleList";
+import {aboutRoles} from "./Game/commands/aboutRoles";
 import {topPlayers} from "./Game/commands/topPlayers";
 
 const botToken = process.env.BOT_TOKEN!
@@ -43,6 +45,8 @@ connect().then(() => {
     pinPlayers(bot, state)
     deleteGroupchat(bot, state)
     topPlayers(bot)
+    roleList(bot)
+    aboutRoles(bot)
 })
 
 

@@ -67,7 +67,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
                 }
                 if (wolf) return {winners: wolvesTeamPlayers, type: 'wolves'}
                 if (serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
-                if (arsonist) return {winners: [arsonist], type: 'arsonist'}
+                if (arsonist) return {winners: players.filter(p => p.role instanceof Arsonist), type: 'arsonist'}
             }
             if (cowboy) {
                 alivePlayers.forEach(p => p.isAlive = false)
