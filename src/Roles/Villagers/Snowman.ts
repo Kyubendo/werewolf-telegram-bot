@@ -15,11 +15,9 @@ export class Snowman extends RoleBase {
         'чтобы слепить снежок и заморозить непонравившихся тебе жителей! ' +
         'Учти, что после третьего броска от тебя ничего не останется и ты умрёшь...';
     weight = () => {
-        const killers = [Wolf, SerialKiller, Arsonist]
-        const killersCount = Snowman.game.players
-            .filter(player => killers.find(killer => player.role instanceof killer)).length
-        return killersCount
-            ? (killersCount === 1 ? 9.5 : 8)
+        const wolfCount = Snowman.game.players.filter(player => player.role instanceof Wolf).length
+        return wolfCount
+            ? (wolfCount === 1 ? 9.5 : 8)
             : 6.5;
     }
 
