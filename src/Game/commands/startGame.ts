@@ -64,7 +64,7 @@ export const startGame = (bot: TelegramBot, state: State,) => {
 
         bot.sendAnimation(
             msg.chat.id,
-            'https://media.giphy.com/media/ZLdy2L5W62WGs/giphy.gif',
+            'https://media.giphy.com/media/SirUFDS5F83Go/giphy.gif',
             {
                 caption: `Новая *${gameModeName(gameMode)}* игра начата игроком ${msg.from?.first_name +
                     (msg.from.last_name ? ' ' + msg.from.last_name : '')}!\nУ тебя есть десять минут, чтобы` +
