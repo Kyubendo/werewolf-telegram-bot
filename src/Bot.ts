@@ -19,6 +19,7 @@ import {roleList} from "./Game/commands/roleList";
 import {aboutRoles} from "./Game/commands/aboutRoles";
 import {topPlayers} from "./Game/commands/topPlayers";
 import {initPolyfills} from "./Utils/initPolyfills";
+import {autoDelete} from "./Game/autoDelete";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -49,6 +50,7 @@ connect().then(() => {
     topPlayers(bot)
     roleList(bot)
     aboutRoles(bot)
+    autoDelete(bot, state)
 })
 
 
