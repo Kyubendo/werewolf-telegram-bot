@@ -13,14 +13,14 @@ export const joinButton = {
 }
 
 const news = [
-    'Добавлен топ игроков.',
-    'Добавлена новогодняя роль! ❄️',
+    'Добавлена подробная информация о каждой роли (/role\\_list)',
+    'Добавлен топ игроков (/top\\_players).',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
 const messageAppend = (news.length
-    ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
-    : '')
+        ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
+        : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
 const gameModeName = (gameMode: GameMode) => {
@@ -64,7 +64,7 @@ export const startGame = (bot: TelegramBot, state: State,) => {
 
         bot.sendAnimation(
             msg.chat.id,
-            'https://media.giphy.com/media/ZLdy2L5W62WGs/giphy.gif',
+            'https://media.giphy.com/media/SirUFDS5F83Go/giphy.gif',
             {
                 caption: `Новая *${gameModeName(gameMode)}* игра начата игроком ${msg.from?.first_name +
                     (msg.from.last_name ? ' ' + msg.from.last_name : '')}!\nУ тебя есть десять минут, чтобы` +

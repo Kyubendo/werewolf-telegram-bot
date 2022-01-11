@@ -18,6 +18,7 @@ import {connect} from "./Database/connect";
 import {roleList} from "./Game/commands/roleList";
 import {aboutRoles} from "./Game/commands/aboutRoles";
 import {topPlayers} from "./Game/commands/topPlayers";
+import {initPolyfills} from "./Utils/initPolyfills";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 
 export type State = { game?: Game, }
 
+initPolyfills()
 
 connect().then(() => {
     let state: State = {}
