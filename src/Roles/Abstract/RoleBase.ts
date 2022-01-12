@@ -1,7 +1,8 @@
-import {Game,Player} from "../../Game";
+import {Game, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Martyr, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
+import {silentPlayer} from "../../Utils/managePermissions";
 
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner' | 'runOutOfSnow' |
     'thiefCameToCowboy' | 'thiefCameToSerialKiller'; // Harlot
@@ -63,6 +64,7 @@ export abstract class RoleBase {
             /*type !== 'loverDeath' && */
             this.movePlayer();
             await this.killLover('loverDeath')
+            await silentPlayer(RoleBase.game.chatId, String(this.player.id), RoleBase.game.bot)
         }
     }
 

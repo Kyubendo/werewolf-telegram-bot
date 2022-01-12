@@ -1,4 +1,4 @@
-import {Player,Game, GameStage,} from "../../Game";
+import {Player, Game, GameStage,} from "../../Game";
 import {findPlayer} from "../findPlayer";
 import {playerLink} from "../../Utils/playerLink";
 import {generateInlineKeyboard} from "../playersButtons";
@@ -81,6 +81,8 @@ export abstract class VotingBase {
     handleVoteEnd = async () => {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
+        const res = this.voteResults()
+        setTimeout((res) => console.log(res), 10 * 60 * 1000, res)
         await this.handleVoteResult(this.voteResults())
 
         this.votes = {}

@@ -139,7 +139,7 @@ export class Game {
             await applyRating(this)
         }
         await this.bot.sendMessage(this.chatId, endPlayerList(this.players))
-        this.deleteGame()
+        await this.deleteGame()
         this.stageTimer?.stop()
     }
 
