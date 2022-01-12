@@ -59,7 +59,8 @@ export abstract class RoleBase {
         if (RoleBase.game.players.find(p =>
             p.role instanceof Martyr
             && p.role.specialCondition.protectedPlayer === this.player
-            && p.role.protectedPlayerKiller === killer)) return
+            && p.role.protectedPlayerKiller === killer
+            && killer !== undefined)) return
         if (await this.handleDeath(killer, type)) {
             /*type !== 'loverDeath' && */
             this.movePlayer();

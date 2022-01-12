@@ -74,9 +74,11 @@ export class Martyr extends RoleBase {
             this.diedForProtectedPlayer = true
             await Martyr.game.bot.sendMessage(
                 this.player.id,
-                `Как только ${playerLink(this.specialCondition.protectedPlayer)} оказался(лась) на грани жизни и смерти, `
+                `Как только ${playerLink(this.specialCondition.protectedPlayer)} ` +
+                `оказался(лась) на грани жизни и смерти, `
                 + `ты начинаешь молиться Древним Богам, чтобы они забрали тебя вместо него(нее). И они отвечают на `
-                + `твои молитвы. Твоя жизнь будет отдана в жертву, но ${playerLink(this.specialCondition.protectedPlayer)} будет жить.`
+                + `твои молитвы. Твоя жизнь будет отдана в жертву, ` +
+                `но ${playerLink(this.specialCondition.protectedPlayer)} будет жить.`
             )
             await Martyr.game.bot.sendMessage(
                 this.specialCondition.protectedPlayer?.id,
@@ -88,9 +90,8 @@ export class Martyr extends RoleBase {
         }
     }
 
-
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
-        if (killer === this.player && this.specialCondition.protectedPlayer) {
+        if (killer === this.player && this.specialCondition.protectedPlayer && !type) {
             let deathMessage: string | undefined
             if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${playerLink(this.specialCondition.protectedPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
