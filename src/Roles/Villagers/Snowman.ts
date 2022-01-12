@@ -80,12 +80,12 @@ export class Snowman extends RoleBase {
             if (killer?.role instanceof Wolf) {
                 killer.role.findAllies().forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 2);
                 killer.daysLeftToUnfreeze = 2;
-                text = `На утро мирные жители обнаруживает покусаного снеговика... ` +
+                text = `На утро мирные жители обнаруживает покусаного ${playerLink(this.player, true)}... ` +
                     `Волк оставил нетронутой только морковку! ` +
                     `После такого ужина волк будет всю следующую ночь отогреваться.`;
             } else if (killer?.role instanceof SerialKiller) {
                 text = `На утро мирные жители замечают некоторые косметические изменения в дизайне снеговика. ` +
-                    `У него из груди торчит нож, а на земле лежит нарезанная морковка. `;
+                    `У ${playerLink(this.player)} из груди торчит нож, а на земле лежит нарезанная морковка. `;
             }
 
             await Snowman.game.bot.sendMessage(
