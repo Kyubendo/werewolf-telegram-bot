@@ -90,8 +90,7 @@ export class Martyr extends RoleBase {
 
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
-        if (killer === this.player && this.specialCondition.protectedPlayer && !type) {
-
+        if (killer === this.player && this.specialCondition.protectedPlayer) {
             let deathMessage: string | undefined
             if (!this.protectedPlayerKiller) deathMessage = `Жители решили казнить ${playerLink(this.specialCondition.protectedPlayer)}, но внезапно яркая `
                 + `вспышка света озарила площадь. Она была настолько ослепительна, что жители закрыли глаза. Когда все `
