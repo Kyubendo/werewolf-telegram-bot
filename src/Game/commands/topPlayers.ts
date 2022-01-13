@@ -15,14 +15,13 @@ export const topPlayers = (bot: TelegramBot) => {
             .innerJoin('u.players', 'p')
             .innerJoin(UserChat, 'uc', 'uc.userId = u.id')
             .andWhere('uc.chatId = :chatId', {chatId: msg.chat.id})
-            .having('count(p.userId) > 0')
+            .having('count(p.userId) > 9')
             .groupBy('name')
             .orderBy('winrate', 'DESC')
             .addOrderBy('count', 'DESC')
             .getRawMany()
 
         if (!playersList.length) return
-
 
         bot.sendMessage(
             msg.chat.id,
