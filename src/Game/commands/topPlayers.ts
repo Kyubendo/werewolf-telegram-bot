@@ -21,7 +21,7 @@ export const topPlayers = (bot: TelegramBot) => {
             .addOrderBy('count', 'DESC')
             .getRawMany()
 
-        if (!playersList.length) return
+        if (!playersList.length) return;
 
         bot.sendMessage(
             msg.chat.id,
