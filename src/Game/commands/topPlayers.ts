@@ -9,7 +9,7 @@ export const topPlayers = (bot: TelegramBot) => {
         const playersList = await User.createQueryBuilder('u')
             .select([
                 'u.name "name"',
-                'sum(p.won::int) * 100 / count(p."userId") winrate',
+                'sum(p.won::int) * 100.0 / count(p."userId") winrate',
                 'count(p.userId) count',
             ])
             .innerJoin('u.players', 'p')
@@ -18,15 +18,14 @@ export const topPlayers = (bot: TelegramBot) => {
             .having('count(p.userId) > 9')
             .groupBy('name')
             .orderBy('winrate', 'DESC')
+            .addOrderBy('count', 'DESC')
             .getRawMany()
 
-        if (!playersList.length) {
-            return
-        }
+        if (!playersList.length) return;
 
         bot.sendMessage(
             msg.chat.id,
-            playersList.map((p, i) => `${i + 1}. *${p.name}* — _${p.winrate}%_ (игр: ${p.count})`)
+            playersList.map((p, i) => `${i + 1}. *${p.name}* — _${Math.floor(p.winrate)}%_ (игр: ${p.count})`)
                 .join('\n')
         )
     })
