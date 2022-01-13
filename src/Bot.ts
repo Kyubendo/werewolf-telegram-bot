@@ -12,13 +12,13 @@ import {TgBot} from "./TgBot";
 import express from "express";
 import * as bodyParser from "body-parser";
 import {hardReset} from "./Game/commands/hardReset";
-import {pinPlayers} from "./Game/commands/pinPlayers";
 import {deleteGroupchat} from "./Game/commands/deleteGroupchat";
 import {connect} from "./Database/connect";
 import {roleList} from "./Game/commands/roleList";
 import {aboutRoles} from "./Game/commands/aboutRoles";
 import {topPlayers} from "./Game/commands/topPlayers";
 import {initPolyfills} from "./Utils/initPolyfills";
+import {notify} from "./Game/commands/notify";
 
 const botToken = process.env.BOT_TOKEN!
 const herokuUrl = process.env.HEROKU_URL!
@@ -44,7 +44,7 @@ connect().then(() => {
     forceStart(bot, state)
     nextStage(bot, state)
     hardReset(bot, state)
-    pinPlayers(bot, state)
+    notify(bot, state)
     deleteGroupchat(bot, state)
     topPlayers(bot)
     roleList(bot)

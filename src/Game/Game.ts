@@ -56,7 +56,7 @@ export class Game {
 
     gameStartedTime?: number
     started = false
-    canPinPlayers = true
+    canNotifyPlayers = true
 
     bannedPlayer?: Player
     chatDeleted?: boolean = false
