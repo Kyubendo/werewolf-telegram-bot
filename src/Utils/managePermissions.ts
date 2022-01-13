@@ -1,6 +1,6 @@
 import TelegramBot from "node-telegram-bot-api";
 
-export const  silentPlayer = async (chatId: number | string, playerId: string, bot: TelegramBot) => {
+export const silentPlayer = async (chatId: number | string, playerId: string, bot: TelegramBot) => {
     await bot.restrictChatMember(chatId, playerId, {
         can_send_messages: false,
         can_send_media_messages: false,
@@ -9,7 +9,8 @@ export const  silentPlayer = async (chatId: number | string, playerId: string, b
         can_add_web_page_previews: false,
         can_invite_users: false,
         can_pin_messages: false,
-    }).catch(()=>{})
+    }).catch(() => {
+    })
 }
 export const unSilentPlayer = async (chatId: number | string, playerId: string, bot: TelegramBot) => {
     await bot.restrictChatMember(chatId, playerId, {
@@ -20,6 +21,7 @@ export const unSilentPlayer = async (chatId: number | string, playerId: string, 
         can_add_web_page_previews: true,
         can_invite_users: true,
         can_pin_messages: true,
-    }).catch(()=>{})
+    }).catch(() => {
+    })
 }
 

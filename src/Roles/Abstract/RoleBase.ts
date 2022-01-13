@@ -65,7 +65,7 @@ export abstract class RoleBase {
             /*type !== 'loverDeath' && */
             this.movePlayer();
             await this.killLover('loverDeath')
-            await silentPlayer(RoleBase.game.chatId, String(this.player.id), RoleBase.game.bot)
+            // await silentPlayer(RoleBase.game.chatId, String(this.player.id), RoleBase.game.bot)
         }
     }
 

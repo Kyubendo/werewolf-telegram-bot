@@ -14,14 +14,13 @@ export const joinButton = {
 }
 
 const news = [
-    'Теперь мёртвые не могут писать в чат.',
     'Добавлена подробная информация о каждой роли (/role\\_list)',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
 const messageAppend = (news.length
-    ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
-    : '')
+        ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
+        : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
 const gameModeName = (gameMode: GameMode) => {
@@ -55,11 +54,11 @@ export const startGame = (bot: TelegramBot, state: State,) => {
         const onEnd = async () => {
             state.game?.stageTimer?.stop()
 
-            if (state.game?.chatId) {
-                for (const p of state.game?.players || []) {
-                    await unSilentPlayer(state.game.chatId, String(p.id), bot)
-                }
-            }
+            // if (state.game?.chatId) {
+            //     for (const p of state.game?.players || []) {
+            //         await unSilentPlayer(state.game.chatId, String(p.id), bot)
+            //     }
+            // }
             delete state.game
         }
         const initPlayer = new Player(msg.from)
