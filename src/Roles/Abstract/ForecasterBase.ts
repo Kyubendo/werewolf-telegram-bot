@@ -16,8 +16,12 @@ export abstract class ForecasterBase extends RoleBase {
     }
 
     actionResult = async () => {
-        if (!this.targetPlayer?.role) {
-            setTimeout(() => console.log('ForecasterBase 20'), 1000 * 60 * 15)
+        if (!this.targetPlayer) {
+            setTimeout(() => console.log('No targetPlayer ForecasterBase 20'), 1000 * 60 * 15)
+            return;
+        }
+        if (!this.targetPlayer.role) {
+            setTimeout(() => console.log('No targetPlayer.role ForecasterBase 24'), 1000 * 60 * 15)
             return;
         }
         let roleName = this.forecastRoleName(this.targetPlayer.role);

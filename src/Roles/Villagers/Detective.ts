@@ -10,8 +10,12 @@ export class Detective extends ForecasterBase {
 
     actionResult = async () => {
         setTimeout(() => console.log('Detective 12'), 1000 * 60 * 15)
-        if (!this.targetPlayer?.role) {
-            setTimeout(() => console.log('Detective 15'), 1000 * 60 * 15)
+        if (!this.targetPlayer) {
+            setTimeout(() => console.log('No targetPlayer Detective 14'), 1000 * 60 * 15)
+            return;
+        }
+        if (!this.targetPlayer.role) {
+            setTimeout(() => console.log('No targetPlayer.role Detective 15'), 1000 * 60 * 15)
             return;
         }
         await Detective.game.bot.sendMessage(

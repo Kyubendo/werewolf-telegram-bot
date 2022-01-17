@@ -82,7 +82,7 @@ export abstract class VotingBase {
         if (this.game.stage !== this.voteStage) return;
         this.editSkipMessages()
         const res = this.voteResults()
-        setTimeout((res) => console.log(res), 10 * 60 * 1000, res)
+        setTimeout((res) => console.log(res.map(p => p.name)), 10 * 60 * 1000, res)
         await this.handleVoteResult(this.voteResults())
 
         this.votes = {}
