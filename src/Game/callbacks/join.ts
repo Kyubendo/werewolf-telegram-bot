@@ -4,7 +4,7 @@ import {playerLink} from "../../Utils/playerLink";
 import {SelectType} from "../commands/callbackHandle";
 import {startPlayerList} from "../../Utils/playerLists";
 import {msToMinutes} from "../../Utils/msToMinutes";
-import {joinButton} from "../commands/startGame";
+import {joinButton, leaveButton} from "../commands/startGame";
 
 export const join = async (game: Game, select: SelectType) => {
     if (game.stage) return;
@@ -22,7 +22,10 @@ export const join = async (game: Game, select: SelectType) => {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,
     })
-    game.bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!')
+    await game.bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!',
+        {
+            reply_markup: leaveButton,
+        })
         .catch(reason => {
             if (reason.response.statusCode === 403) {
                 game.bot.sendMessage(
@@ -39,3 +42,5 @@ export const join = async (game: Game, select: SelectType) => {
             }
         })
 }
+
+// export const

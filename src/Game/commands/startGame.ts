@@ -9,7 +9,13 @@ import {unSilentPlayer} from "../../Utils/managePermissions";
 
 export const joinButton = {
     inline_keyboard: [
-        [{text: 'Присоединиться', callback_data: JSON.stringify({type: 'join'}),}]
+        [{text: 'Присоединиться', callback_data: JSON.stringify({type: 'join'})}]
+    ]
+}
+
+export const leaveButton = {
+    inline_keyboard: [
+        [{text: 'Выйти', callback_data: JSON.stringify({type: 'leave'})}]
     ]
 }
 
@@ -33,7 +39,8 @@ const gameModeName = (gameMode: GameMode) => {
 }
 
 export const startGame = (bot: TelegramBot, state: State,) => {
-    bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), async (msg, match) => {
+    bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`),
+        async (msg, match) => {
         const gameMode = match?.[1]
         if (!validGameMode(gameMode)) return
 
