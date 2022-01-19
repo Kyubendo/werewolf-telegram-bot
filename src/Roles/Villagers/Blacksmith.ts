@@ -12,7 +12,7 @@ export class Blacksmith extends RoleBase {
         'Днём ты можешь растолочь и распылить его по всей деревне. ' +
         'А в остальном ты простой селянин.'
     weight = () => Blacksmith.game.players.find(p => p.role instanceof Wolf)
-        ? 8
+        ? 9
         : Blacksmith.game.players.find(p => p.role instanceof Traitor || p.role instanceof WildChild)
             ? 4.5
             : 3.5
