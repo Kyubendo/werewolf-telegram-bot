@@ -13,7 +13,7 @@ export const join = async (game: Game, select: SelectType) => {
     await game.addPlayer(newPlayer)
     game.startGameTimer.extend(60_000)
     await game.bot.sendMessage(game.chatId,
-        `${playerLink(newPlayer)} присоединился к игре! Время увеличено, `
+        `${playerLink(newPlayer)} теперь в игре! Время увеличено, `
         + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры.`,
         {
             reply_markup: joinButton
