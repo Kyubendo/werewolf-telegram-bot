@@ -20,6 +20,12 @@ export class User extends BaseEntity {
     @OneToMany(() => Player, player => player.user)
     players!: Player[];
 
+    // @Column({default: false})
+    // enabledBot!: number;
+    //
+    // @Column({default: false})
+    // notify!: number;
+
     static getFromPlayer(player: GameBase.Player) {
         return this.findOne(player.id)
     }

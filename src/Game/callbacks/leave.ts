@@ -2,8 +2,7 @@ import {SelectType} from "../commands/callbackHandle";
 import {Game} from "../Game";
 import {findPlayer} from "../findPlayer";
 import {playerLink} from "../../Utils/playerLink";
-import {msToMinutes} from "../../Utils/msToMinutes";
-import {joinButton, leaveButton} from "../commands/startGame";
+import {joinButton} from "../commands/startGame";
 import {startPlayerList} from "../../Utils/playerLists";
 import {checkEndGame} from "../checkEndGame";
 
@@ -26,10 +25,10 @@ export const leave = async (game: Game, select: SelectType) => {
             message_id: game.playerCountMsgId,
             chat_id: game.chatId,
         })
-    } else {
+    } else if (!leavingPlayer.hasLeft) {
         await game.bot.sendMessage(game.chatId,
-            `${playerLink(leavingPlayer)} надоело всё происходящее в селе и он убежал сломя голову! ` +
-            `*${leavingPlayer.role?.roleName}* проиграл.`)
+            `*${leavingPlayer.role?.roleName}* надоело всё происходящее в селе и он(а) убежал(а) сломя голову!\n` +
+            `${playerLink(leavingPlayer)} проиграл(а).`)
         await game.bot.sendMessage(leavingPlayer.id, 'Тебе удалось сбежать из села! Кстати, ты проиграл!');
         leavingPlayer.hasLeft = true;
         const endGame = checkEndGame(game.players, game.stage)
