@@ -8,7 +8,7 @@ const getOptions = () => {
     let connectionOptions: ConnectionOptions;
     connectionOptions = {
         type: 'postgres',
-        synchronize: true,
+        synchronize: false,
         logging: false,
         entities: [
             "src/entity/**/*.ts"
@@ -19,11 +19,12 @@ const getOptions = () => {
         subscribers: [
             "src/subscriber/**/*.ts"
         ],
+        migrationsRun: true,
         cli: {
             "entitiesDir": "src/entity",
             "migrationsDir": "src/migration",
             "subscribersDir": "src/subscriber"
-        }
+        },
     };
     if (process.env.DATABASE_URL) {
         Object.assign(connectionOptions, {

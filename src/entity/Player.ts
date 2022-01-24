@@ -4,12 +4,12 @@ import {Game} from "./Game";
 import {Role} from "./Role";
 
 @Entity()
-export class Player extends BaseEntity{
+export class Player extends BaseEntity {
 
     @ManyToOne(() => User, user => user.players, {primary: true})
     user!: User;
 
-    @ManyToOne(() => Game, game => game.players, {primary: true})
+    @ManyToOne(() => Game, game => game.players, {primary: true, onDelete: 'CASCADE'})
     game!: Game;
 
     @ManyToOne(() => Role)
