@@ -1,6 +1,6 @@
 import {playerLink} from "../../Utils/playerLink";
 import {DeathType, Player} from "../../Game";
-import {RoleBase, Thief} from "../index";
+import {RoleBase, RoleWeights, Thief} from "../index";
 
 export class Mason extends RoleBase {
     findAllies = () => Mason.game.players.filter(otherPlayer =>
@@ -53,9 +53,16 @@ export class Mason extends RoleBase {
     roleIntroductionText = () => ''
     startMessageText = () => `Тебе ничего не остается делать, кроме как идти и пахать на стройке, ` +
         `ведь ты ${this.roleName}.`
-    weight = () => {
+    weight = (w: RoleWeights) => {
         const otherMasonsAmount = this.findAllies().length;
-        return (otherMasonsAmount ? 3 : 1) + otherMasonsAmount;
+        if (otherMasonsAmount) {
+            this.activeWeight = 'conditionWeight'
+            this.activeWeightCoefficient = 'coefficient'
+            this.weightCoefficientVariable = otherMasonsAmount
+            return (w.condition ?? w.base) + otherMasonsAmount * (w.coefficient ?? 1);
+        } else {
+            return w.base;
+        }
     }
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {

@@ -1,6 +1,6 @@
 module.exports = {
     type: 'postgres',
-    synchronize: true,
+    synchronize: false,
     logging: false,
     entities: [
         "src/entity/**/*.ts"

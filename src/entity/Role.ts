@@ -11,6 +11,19 @@ export class Role extends BaseEntity {
     @Column()
     name!: string;
 
+    @Column({type: 'float'})
+    baseWeight!: number;
+
+    @Column({nullable: true, type: 'float'})
+    conditionWeight!: number | null;
+
+    @Column({nullable: true, type: 'float'})
+    conditionWeight2!: number | null;
+
+    @Column({nullable: true, type: 'float'})
+    coefficient!: number | null;
+
+
     static async getFromObject(roleObj: RoleBase) {
         let role = await this.findOne({name: roleObj.constructor.name})
         if (!role) role = await this.create({name: roleObj.constructor.name}).save()

@@ -7,6 +7,17 @@ import {silentPlayer} from "../../Utils/managePermissions";
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner' | 'runOutOfSnow' |
     'thiefCameToCowboy' | 'thiefCameToSerialKiller'; // Harlot
 
+export type Weight = 'baseWeight' | 'conditionWeight' | 'conditionWeight2'
+export type WeightCoefficient = 'coefficient' | ' coefficient2'
+
+export type RoleWeights = {
+    base: number,
+    condition?: number,
+    condition2?: number,
+    coefficient?: number,
+    coefficient2?: number,
+}
+
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
         this.previousRole = previousRole;
@@ -15,9 +26,13 @@ export abstract class RoleBase {
     static game: Game
 
     abstract readonly roleName: string
-    abstract readonly weight: () => number
+    abstract readonly weight: (weights: RoleWeights) => number
     readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
     abstract readonly startMessageText: () => string
+
+    activeWeight: Weight = 'baseWeight';
+    activeWeightCoefficient?: WeightCoefficient = undefined;
+    weightCoefficientVariable?: number = undefined;
 
     readonly previousRole?: RoleBase;
 

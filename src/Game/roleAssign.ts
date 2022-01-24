@@ -13,10 +13,14 @@ import {
     // JackOLantern
 } from "../Roles";
 import {Game} from "./Game";
+import {Role} from "../entity/Role";
 
 export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
     const players = game.players
+
+    const roleWeights = await Role.find()
+
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
         ...wolves, SerialKiller, Arsonist,

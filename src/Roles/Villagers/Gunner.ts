@@ -1,7 +1,7 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {playerLink} from "../../Utils/playerLink";
-import {RoleBase} from "../";
+import {RoleBase, RoleWeights} from "../";
 import {specialConditionGunner} from "../../Utils/specialConditionTypes";
 
 export class Gunner extends RoleBase {
@@ -9,7 +9,7 @@ export class Gunner extends RoleBase {
     roleIntroductionText = () => `${this.roleName} выходит на охоту!`
     startMessageText = () => 'У тебя есть две серебрянных пули, чтобы убить кого-то днем. ' +
         'Но имей ввиду, все услышат твой выстрел...';
-    weight = () => 7;
+    weight = (w: RoleWeights) => w.base;
 
     actionAnnouncement = () => ({
         message: this.targetPlayer ? 'Вдруг послышался выстрел!  Все село оборачивается, ' +
