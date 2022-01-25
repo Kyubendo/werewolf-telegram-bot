@@ -25,8 +25,8 @@ const messageAppend = (news.length
 
 const gameModeName = (gameMode: GameMode) => {
     switch (gameMode) {
-        case "chaos":
-            return 'хаосная'
+        // case "chaos":
+        //     return 'хаосная'
         case "classic":
             return 'классическая'
     }

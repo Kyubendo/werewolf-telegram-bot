@@ -55,14 +55,14 @@ export class Mason extends RoleBase {
         `ведь ты ${this.roleName}.`
     weight = (w: RoleWeights) => {
         const otherMasonsAmount = this.findAllies().length;
-        if (otherMasonsAmount) {
-            this.activeWeight = 'conditionWeight'
-            this.activeWeightCoefficient = 'coefficient'
-            this.weightCoefficientVariable = otherMasonsAmount
-            return (w.condition ?? w.base) + otherMasonsAmount * (w.coefficient ?? 1);
-        } else {
-            return w.base;
+        this.activeWeight = otherMasonsAmount ? 'conditionWeight' : 'baseWeight'
+        const activeWeight = w[this.activeWeight]
+        const coefficient = this.activeWeightCoefficient !== undefined ? w[this.activeWeightCoefficient] : null
+        this.weightCoefficientVariable = otherMasonsAmount;
+        if (activeWeight === null || coefficient === null) {
+            throw 'ERR Mason 64'
         }
+        return activeWeight + otherMasonsAmount * coefficient;
     }
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {

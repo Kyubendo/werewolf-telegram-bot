@@ -15,12 +15,8 @@ export class Beholder extends RoleBase {
 
     startMessageText = () => `Ты знаешь, кто настоящий провидец, а не дурак... В общем это ` +
         'твоя единственная функция.\n' + this.stealMessage();
-    weight = (w: RoleWeights) => {
-        if (this.seers().length) {
-            this.activeWeight = 'conditionWeight';
-            return w.condition ?? w.base;
-        } else {
-            return w.base;
-        }
+    weight = (weights: RoleWeights) => {
+        this.activeWeight = this.seers().length ? 'conditionWeight' : 'baseWeight';
+        return weights[this.activeWeight];
     }
 }

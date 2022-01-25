@@ -8,14 +8,13 @@ export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotB
     'thiefCameToCowboy' | 'thiefCameToSerialKiller'; // Harlot
 
 export type Weight = 'baseWeight' | 'conditionWeight' | 'conditionWeight2'
-export type WeightCoefficient = 'coefficient' | ' coefficient2'
+export type WeightCoefficient = 'weightCoefficient'
 
 export type RoleWeights = {
-    base: number,
-    condition?: number,
-    condition2?: number,
-    coefficient?: number,
-    coefficient2?: number,
+    baseWeight: number,
+    conditionWeight: number | null,
+    conditionWeight2: number | null,
+    weightCoefficient: number | null,
 }
 
 export abstract class RoleBase {
@@ -26,10 +25,10 @@ export abstract class RoleBase {
     static game: Game
 
     abstract readonly roleName: string
-    abstract readonly weight: (weights: RoleWeights) => number
     readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
     abstract readonly startMessageText: () => string
 
+    weight: (weights: RoleWeights) => number | null = (w) => w.baseWeight;
     activeWeight: Weight = 'baseWeight';
     activeWeightCoefficient?: WeightCoefficient = undefined;
     weightCoefficientVariable?: number = undefined;

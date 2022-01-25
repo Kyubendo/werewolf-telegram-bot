@@ -8,7 +8,7 @@ export class Role extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
+    @Column({unique: true})
     name!: string;
 
     @Column({type: 'float'})
@@ -21,7 +21,7 @@ export class Role extends BaseEntity {
     conditionWeight2!: number | null;
 
     @Column({nullable: true, type: 'float'})
-    coefficient!: number | null;
+    weightCoefficient!: number | null;
 
 
     static async getFromObject(roleObj: RoleBase) {
