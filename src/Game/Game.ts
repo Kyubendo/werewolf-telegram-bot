@@ -215,7 +215,7 @@ export class Game {
     }
 
     removePlayer = async (player: Player) => {
-        if (this.stage) {} // Save to DB that player has left
+        if (this.stage) return;
         const index = this.players.indexOf(player, 0);
         if (index > -1)
             this.players.splice(index, 1);
