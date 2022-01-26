@@ -15,6 +15,7 @@ import {saveGame} from "./saveGame";
 import {applyRating} from "./applyRating";
 import {UserChat} from "../entity/UserChat";
 import {balanceWeights} from "./balanceWeights";
+import {getInitialRole} from "../Utils/getInitialRole";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
 export const GameModeList = ['classic', /*'chaos'*/] as const
@@ -114,7 +115,7 @@ export class Game {
         this.clearSelects()
 
         const endGame = checkEndGame(this.players, this.stage)
-        if (!process.env.ROLE_TEST && endGame) {
+        if (/*!process.env.ROLE_TEST &&*/ endGame) {
             await this.onGameEnd(endGame)
             return
         }
@@ -137,7 +138,10 @@ export class Game {
         )
         if (this.mode === 'classic') {
             await saveGame(this, endGame.type)
-            await balanceWeights(this.players.map(p => p.role).filter((r): r is RoleBase => !!r), endGame.type === 'villagers')
+            await balanceWeights(
+                this.players.map(p => p.role && getInitialRole(p.role)).filter((r): r is RoleBase => !!r),
+                endGame.type === 'villagers'
+            )
             await applyRating(this)
         }
         await this.bot.sendMessage(this.chatId, endPlayerList(this.players))

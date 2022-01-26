@@ -27,7 +27,6 @@ export const assignRoles = async (game: Game) => {
         conditionWeight2: r.conditionWeight2,
         weightCoefficient: r.weightCoefficient,
     })
-    console.log(roleWeights)
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
         ...wolves, SerialKiller, Arsonist,
@@ -47,7 +46,7 @@ export const assignRoles = async (game: Game) => {
 
 
     const testPool = [
-        Beholder, Gunner,
+        Wolf, Gunner,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -73,7 +72,7 @@ export const assignRoles = async (game: Game) => {
                 && Math.random() < 1 / villagersPool.length
             ) rolePool.unshift(ApprenticeSeer)
 
-            evils.forEach(e => e && rolePool.unshift(e))
+            evils.forEach(e => e && rolePool.unshift(e as any)) // remove "as any" after changing all weights
 
             rolePool = rolePool.slice(0, players.length)
             arrayShuffle(rolePool)
