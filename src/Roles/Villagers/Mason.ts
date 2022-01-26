@@ -48,11 +48,14 @@ export class Mason extends RoleBase {
         `ведь ты ${this.roleName}.`
     weight = (w: RoleWeights) => {
         const otherMasonsAmount = this.findAllies().length;
+
         this.activeWeight = otherMasonsAmount ? 'conditionWeight' : 'baseWeight'
         const activeWeight = w[this.activeWeight]
+
         this.activeWeightCoefficient = 'weightCoefficient'
         const coefficient = w[this.activeWeightCoefficient]
         this.weightCoefficientVariable = otherMasonsAmount;
+
         if (activeWeight === null || coefficient === null) throw 'ERR Mason 64';
 
         return activeWeight + otherMasonsAmount * coefficient;
