@@ -25,7 +25,7 @@ export const topPlayers = (bot: TelegramBot) => {
 
         bot.sendMessage(
             msg.chat.id,
-            playersList.map((p, i) => `${i + 1}. *${p.name}* — _${Math.floor(p.winrate)}%_ (игр: ${p.count})`)
+            playersList.map((p, i) => `${i + 1}. *${p.name}* — _${Math.floor(p.winrate * 10) / 10}%_ (игр: ${p.count})`)
                 .join('\n')
         )
     })
