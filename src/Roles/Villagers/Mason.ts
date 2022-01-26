@@ -13,15 +13,12 @@ export class Mason extends RoleBase {
         const allies = this.findAllies();
 
         if (notify) {
-            let notificationText;
-            if (this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer)
-                notificationText = `Странно, ${playerLink(this.player)} пришёл на собрание ` +
-                    `каменщиков вместо ${playerLink(this.player.role.targetPlayer)}! ` +
-                    `${playerLink(this.player.role.targetPlayer)} уволен за прогул!`
-            else
-                notificationText = `${playerLink(this.player)} пришёл на стройку по объявлению. ` +
-                    `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`
-
+            const notificationText = this.player.role?.previousRole instanceof Thief && this.player.role.targetPlayer
+                ? `Странно, ${playerLink(this.player)} пришёл на собрание ` +
+                `каменщиков вместо ${playerLink(this.player.role.targetPlayer)}! ` +
+                `${playerLink(this.player.role.targetPlayer)} уволен за прогул!`
+                : `${playerLink(this.player)} пришёл на стройку по объявлению. ` +
+                `Да, опыта у него нет... но он закончил аж 8 классов! Встречайте нового камещика 🎉!`;
             for (const ally of allies) {
                 await Mason.game.bot.sendMessage(
                     ally.id,
@@ -35,11 +32,7 @@ export class Mason extends RoleBase {
         if (!allies.length)
             alliesInfoText += 'Правда сегодня на смену ты пришёл один.'
         else {
-            if (allies.length === 1)
-                alliesInfoText += 'Твой напарник на стройке — '
-            else
-                alliesInfoText += 'Каменщики: '
-
+            alliesInfoText += allies.length === 1 ? 'Твой напарник на стройке — ' : 'Каменщики: ';
             alliesInfoText += allies?.map(ally => playerLink(ally)).join(', ')
         }
 
@@ -57,11 +50,11 @@ export class Mason extends RoleBase {
         const otherMasonsAmount = this.findAllies().length;
         this.activeWeight = otherMasonsAmount ? 'conditionWeight' : 'baseWeight'
         const activeWeight = w[this.activeWeight]
-        const coefficient = this.activeWeightCoefficient !== undefined ? w[this.activeWeightCoefficient] : null
+        this.activeWeightCoefficient = 'weightCoefficient'
+        const coefficient = w[this.activeWeightCoefficient]
         this.weightCoefficientVariable = otherMasonsAmount;
-        if (activeWeight === null || coefficient === null) {
-            throw 'ERR Mason 64'
-        }
+        if (activeWeight === null || coefficient === null) throw 'ERR Mason 64';
+
         return activeWeight + otherMasonsAmount * coefficient;
     }
 

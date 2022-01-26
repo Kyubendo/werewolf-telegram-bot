@@ -44,9 +44,8 @@ export const assignRoles = async (game: Game) => {
         Suicide, Thief, Undertaker, Doppelganger// Other
     ]
 
-
     const testPool = [
-        Wolf, Gunner,
+        Mason, Mason, Mason, Beholder, Beholder,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -78,23 +77,22 @@ export const assignRoles = async (game: Game) => {
             arrayShuffle(rolePool)
 
             const currentRoles = players.map((player, i) => player.role = new rolePool[i](player))
-            const weight = Math.abs(currentRoles.reduce((acc, curRole: RoleBase) => {
+            const weight = currentRoles.reduce((acc, curRole: RoleBase) => {
                 const weight = curRole.weight(roleWeights[curRole.constructor.name]);
                 if (weight === null) {
-                    throw `ERR: roleAssign 87, ${curRole.constructor.name}`;
+                    throw `roleAssign 87, ${curRole.constructor.name}`;
                 }
                 return acc + weight
-            }, 0))
+            }, 0)
             const currentEvilCount = currentRoles.filter(r => evilPool.find(e => r instanceof e)).length
 
             balanced = currentEvilCount <= players.length / 2 - 1
-                && weight <= players.length / 3
+                && Math.abs(weight) <= players.length / 4.5
 
         } while (!balanced)
     } else players.map((player, i) => player.role = new testPool[i](player))
 
     for (const player of players) {
-        console.log(player.role?.weight(roleWeights[player.role.constructor.name]))
         player.role && await game.bot.sendMessage(
             player.id,
             player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
