@@ -65,17 +65,10 @@ export class Lynch extends VotingBase {
                 })
             return;
         }
-
-        if (voteResult.length === 1) {
-            if (voteResult[0].role instanceof Suicide) {
-                await this.game.onGameEnd({winners: [voteResult[0]], type: 'suicide'})
-                this.game.stopStage()
-            } else {
-                await voteResult[0].role?.onKilled()
-            }
-        } else {
-            await this.game.bot.sendMessage(this.game.chatId,
-                'Не удалось придти к одному решению! Расстроенная толпа расходится по домам...')
-        }
+        if (voteResult.length === 1) await voteResult[0].role?.onKilled();
+        else await this.game.bot.sendMessage(
+            this.game.chatId,
+            'Не удалось придти к одному решению! Расстроенная толпа расходится по домам...'
+        )
     }
 }
