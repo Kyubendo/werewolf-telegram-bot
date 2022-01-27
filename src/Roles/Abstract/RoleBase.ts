@@ -2,7 +2,6 @@ import {Game, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Martyr, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
-import {silentPlayer} from "../../Utils/managePermissions";
 
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner' | 'runOutOfSnow' |
     'thiefCameToCowboy' | 'thiefCameToSerialKiller'; // Harlot
@@ -136,7 +135,7 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> { // refactor
         if (type === 'loverDeath') {
             killer?.role && await RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
@@ -165,6 +164,8 @@ export abstract class RoleBase {
                 `${playerLink(this.player)} должен(на) покинуть тебя. ` +
                 'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
             )
+        } else if (type === 'thiefCameToCowboy' || type === 'thiefCameToSerialKiller') {
+
         } else if (killer?.role) {
             if (type === 'shotByGunner')
                 killer.role.actionAnnouncement && await RoleBase.game.bot.sendAnimation(
