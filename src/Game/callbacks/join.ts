@@ -11,19 +11,19 @@ export const join = async (game: Game, select: SelectType) => {
     const newPlayer = new Player(select.from)
     if (game.players.map(e => e.id).includes(newPlayer.id)) return;
     await game.addPlayer(newPlayer)
-    //game.startGameTimer.extend(60_000)
+    game.startGameTimer.extend(60_000)
     await game.bot.sendMessage(game.chatId,
         `${playerLink(newPlayer)} теперь в игре! `
         + `Осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры.`,
         {
             reply_markup: joinButton
         })
-    // await game.bot.sendMessage(game.chatId,
-    //     `${playerLink(newPlayer)} присоединился к игре! Время увеличено, `
-    //     + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры.`,
-    //     {
-    //         reply_markup: joinButton
-    //     })
+    await game.bot.sendMessage(game.chatId,
+        `${playerLink(newPlayer)} присоединился к игре! Время увеличено, `
+        + `осталось *${msToMinutes(game.startGameTimer.getRemainingTime())}* до начала игры.`,
+        {
+            reply_markup: joinButton
+        })
     await game.bot.editMessageText(startPlayerList(game.players), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,

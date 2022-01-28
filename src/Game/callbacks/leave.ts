@@ -36,5 +36,16 @@ export const leave = async (game: Game, select: SelectType) => {
             await game.onGameEnd(endGame)
             return
         }
+        const leaveStringArr = [`При попытке сбежать из села ${playerLink(leavingPlayer)}` +
+        `наткнулся(лась) на невидимый барьер. ` +
+        `Он(а) понял(а), что пока конфликт не закончится, покинуть это место не удасться...`,
+            `${playerLink(leavingPlayer)} попытался(лась) убежать из села, но спустя несколько часов блужданий понял(а), ` +
+            `что ходит кругами. Так просто покинуть это заколдованное место не выйдет...`,
+            `${playerLink(leavingPlayer)}, администратор *Kyubendo* отклонил ваш запрос покинуть игру. ` +
+            `Придётся мучаться дальше.`]
+        await game.bot.sendMessage(game.chatId,
+            leaveStringArr[Math.floor(Math.random() * leaveStringArr.length)])
+
+
     }
 }
