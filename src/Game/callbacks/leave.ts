@@ -4,7 +4,6 @@ import {findPlayer} from "../findPlayer";
 import {playerLink} from "../../Utils/playerLink";
 import {joinButton} from "../commands/startGame";
 import {startPlayerList} from "../../Utils/playerLists";
-import {checkEndGame} from "../checkEndGame";
 
 export const leave = async (game: Game, select: SelectType) => {
     const leavingPlayer = findPlayer(select.from.id, game.players)
@@ -26,16 +25,6 @@ export const leave = async (game: Game, select: SelectType) => {
             chat_id: game.chatId,
         })
     } else if (!leavingPlayer.hasLeft) {
-        await game.bot.sendMessage(game.chatId,
-            `*${leavingPlayer.role?.roleName}* надоело всё происходящее в селе и он(а) убежал(а) сломя голову!\n` +
-            `${playerLink(leavingPlayer)} проиграл(а).`)
-        await game.bot.sendMessage(leavingPlayer.id, 'Тебе удалось сбежать из села! Кстати, ты проиграл!');
-        leavingPlayer.hasLeft = true;
-        const endGame = checkEndGame(game.players, game.stage)
-        if (!process.env.ROLE_TEST && endGame) {
-            await game.onGameEnd(endGame)
-            return
-        }
         const leaveStringArr = [`При попытке сбежать из села ${playerLink(leavingPlayer)}` +
         `наткнулся(лась) на невидимый барьер. ` +
         `Он(а) понял(а), что пока конфликт не закончится, покинуть это место не удасться...`,
@@ -45,7 +34,5 @@ export const leave = async (game: Game, select: SelectType) => {
             `Придётся мучаться дальше.`]
         await game.bot.sendMessage(game.chatId,
             leaveStringArr[Math.floor(Math.random() * leaveStringArr.length)])
-
-
     }
 }
