@@ -279,7 +279,7 @@ export class SetDefaultRoleWeights1643036084713 implements MigrationInterface {
             where name = 'SerialKiller';
 
             update role
-            set "baseWeight"        = 1,
+            set "baseWeight"        = 0,
                 "weightCoefficient" = -0.5
             where name = 'Suicide';
 
