@@ -39,7 +39,7 @@ export const assignRoles = async (game: Game) => {
         ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, Cowboy,// Passive Villagers
 
         Seer, Monarch, Mayor, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid, Pacifist,
-        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr, Snowman,// Active Villagers
+        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 
         Suicide, Thief, Undertaker, Doppelganger// Other
     ]
