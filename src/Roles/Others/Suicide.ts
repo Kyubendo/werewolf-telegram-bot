@@ -17,7 +17,7 @@ export class Suicide extends RoleBase {
 
         if (coefficient === null) throw 'ERROR Others/Suicide 16'
 
-        return coefficient * playersAmount;
+        return playersAmount / coefficient;
     }
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
