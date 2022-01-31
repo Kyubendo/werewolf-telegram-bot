@@ -26,8 +26,6 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     const aliveEvilPlayer = alivePlayers.find(p => evil.find(e => p.role instanceof e))
     const aliveJackPlayers = alivePlayers.filter(player => player.role instanceof JackOLantern);
 
-    const infected = players.find(p => p.infected)
-
     if (alivePlayers.length === 2 && alivePlayers[0].lover === alivePlayers[1]) {
         return {winners: alivePlayers.filter(player => player.lover), type: 'lovers'}
     }
@@ -38,7 +36,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     if (!aliveEvilPlayer) {
-        if (!infected && villagersTeamPlayers.find(p => p.isAlive)) return {
+        if (villagersTeamPlayers.find(p => p.isAlive)) return {
             winners: villagersTeamPlayers,
             type: 'villagers'
         }
@@ -66,7 +64,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
 
             if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller || arsonist) && gunner) {
-                if (stage === 'day' && !infected) {
+                if (stage === 'day') {
                     aliveEvilPlayer.isAlive = false
                     return {winners: villagersTeamPlayers, type: 'villagers'} // custom gunner win
                 }
