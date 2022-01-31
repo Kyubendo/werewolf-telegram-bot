@@ -2,8 +2,6 @@ import {RoleBase} from "../index";
 import {specialConditionRuler} from "../../Utils/specialConditionTypes";
 
 export abstract class RulerBase extends RoleBase {
-    weight = () => 4.5;
-
     specialCondition: specialConditionRuler = {
         comingOut: undefined
     }

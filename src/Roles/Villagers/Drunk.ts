@@ -1,14 +1,18 @@
 import {Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {DeathType} from "../../Game";
-import {RoleBase, SerialKiller, Wolf} from "../index";
+import {RoleBase, RoleWeights, SerialKiller, Wolf} from "../index";
 
 export class Drunk extends RoleBase {
     roleName = 'Пьяница 🍺';
     startMessageText = () => `Ищи себе собутыльников, тебе все равно ничего не осталось делать... ` +
         `Однако, если тебя вдруг кто-то съест, он нехило опьянеет`;
-    weight = () => Drunk.game.players.find(player => player.role instanceof Wolf) ? 3 : 1;
-
+    weight = (w: RoleWeights) => {
+        this.activeWeight = Drunk.game.players.find(player => player.role instanceof Wolf)
+            ? 'conditionWeight'
+            : 'baseWeight';
+        return w[this.activeWeight];
+    }
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
         if ((killer?.role instanceof Wolf || killer?.role instanceof SerialKiller) && !type) {

@@ -6,6 +6,16 @@ import {specialConditionType} from "../../Utils/specialConditionTypes";
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner' | 'runOutOfSnow' |
     'thiefCameToCowboy' | 'thiefCameToSerialKiller'; // Harlot
 
+export type Weight = 'baseWeight' | 'conditionWeight' | 'conditionWeight2'
+export type WeightCoefficient = 'weightCoefficient'
+
+export type RoleWeights = {
+    baseWeight: number,
+    conditionWeight: number | null,
+    conditionWeight2: number | null,
+    weightCoefficient: number | null,
+}
+
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
         this.previousRole = previousRole;
@@ -14,9 +24,13 @@ export abstract class RoleBase {
     static game: Game
 
     abstract readonly roleName: string
-    abstract readonly weight: () => number
     readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
     abstract readonly startMessageText: () => string
+
+    weight: (weights: RoleWeights) => number | null = (w) => w.baseWeight;
+    activeWeight: Weight = 'baseWeight';
+    activeWeightCoefficient?: WeightCoefficient = undefined;
+    weightCoefficientVariable?: number = undefined;
 
     readonly previousRole?: RoleBase;
 

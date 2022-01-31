@@ -1,13 +1,25 @@
 import {playerLink} from "../../Utils/playerLink";
 import {DeathType, Player} from "../../Game";
-import {RoleBase, Wolf} from "../"
+import {RoleBase, RoleWeights, Wolf} from "../"
 
 export class Cursed extends RoleBase {
     roleName = 'Проклятый 😾';
     startMessageText = () => 'Сейчас ты обычный смертный, но если волки выберут тебя съесть, ты станешь одним из них.';
-    weight = () => {
+    weight = (w: RoleWeights) => {
         const wolvesAmount = Cursed.game.players.filter(player => player.role instanceof Wolf).length;
-        return (wolvesAmount ? 1 - wolvesAmount * 2 : 1)
+        this.activeWeight = wolvesAmount ? 'conditionWeight' : 'baseWeight';
+        const activeWeight = w[this.activeWeight];
+
+        this.activeWeightCoefficient = 'weightCoefficient';
+        const activeWeightCoefficient = w[this.activeWeightCoefficient];
+        this.weightCoefficientVariable = wolvesAmount;
+
+        if (activeWeight === null || activeWeightCoefficient === null) throw 'ERR Cursed 17';
+
+        if (wolvesAmount)
+            return activeWeight - activeWeightCoefficient * wolvesAmount;
+        else
+            return activeWeight;
     }
 
     async handleDeath(killer?: Player, type?: DeathType) {

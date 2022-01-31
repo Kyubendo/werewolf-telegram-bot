@@ -9,14 +9,24 @@ import {
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
-    WoodMan, Pacifist, Arsonist, Cowboy, Snowman
+    WoodMan, Pacifist, Arsonist, Cowboy, Snowman, RoleWeights
     // JackOLantern
 } from "../Roles";
 import {Game} from "./Game";
+import {Role} from "../entity/Role";
 
 export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
     const players = game.players
+
+    const roleWeights: { [name: string]: RoleWeights } = {}
+    const rolesData = await Role.find()
+    rolesData.forEach(r => roleWeights[r.name] = {
+        baseWeight: r.baseWeight,
+        conditionWeight: r.conditionWeight,
+        conditionWeight2: r.conditionWeight2,
+        weightCoefficient: r.weightCoefficient,
+    })
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
         ...wolves, SerialKiller, Arsonist,
@@ -29,14 +39,13 @@ export const assignRoles = async (game: Game) => {
         ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, Cowboy,// Passive Villagers
 
         Seer, Monarch, Mayor, Fool, Harlot, Oracle, Gunner, GuardianAngel, Cupid, Pacifist,
-        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr, Snowman,// Active Villagers
+        WiseElder, Sandman, Blacksmith, WildChild, Detective, Martyr,// Active Villagers
 
         Suicide, Thief, Undertaker, Doppelganger// Other
     ]
 
-
     const testPool = [
-        Martyr,
+        SerialKiller, Fool, Beholder,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -68,18 +77,23 @@ export const assignRoles = async (game: Game) => {
             arrayShuffle(rolePool)
 
             const currentRoles = players.map((player, i) => player.role = new rolePool[i](player))
-            const weight = game.mode === 'chaos'
-                ? 0
-                : Math.abs(currentRoles.reduce((a, c) => a + c.weight(), 0))
+            const weight = currentRoles.reduce((acc, curRole: RoleBase) => {
+                const weight = curRole.weight(roleWeights[curRole.constructor.name]);
+                if (weight === null) {
+                    throw `roleAssign 87, ${curRole.constructor.name}`;
+                }
+                return acc + weight
+            }, 0)
             const currentEvilCount = currentRoles.filter(r => evilPool.find(e => r instanceof e)).length
 
             balanced = currentEvilCount <= players.length / 2 - 1
-                && weight <= players.length / 3
+                && Math.abs(weight) <= players.length / 4.5
 
         } while (!balanced)
     } else players.map((player, i) => player.role = new testPool[i](player))
 
     for (const player of players) {
+        player.role?.weight(roleWeights[player.role.constructor.name])
         player.role && await game.bot.sendMessage(
             player.id,
             player.role.roleIntroductionText() + ' ' + player.role.startMessageText()

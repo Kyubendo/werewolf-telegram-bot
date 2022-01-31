@@ -14,7 +14,9 @@ export const joinButton = {
 }
 
 const news = [
-    'Добавлена подробная информация о каждой роли (/role\\_list)',
+    'Введена система 🌀SmartBalance🌀!',
+    'Удалён режим хаоса.',
+    'Снеговик ⛄️ растаял.',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
@@ -25,8 +27,8 @@ const messageAppend = (news.length
 
 const gameModeName = (gameMode: GameMode) => {
     switch (gameMode) {
-        case "chaos":
-            return 'хаосная'
+        // case "chaos":
+        //     return 'хаосная'
         case "classic":
             return 'классическая'
     }
