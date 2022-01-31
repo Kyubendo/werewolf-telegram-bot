@@ -142,6 +142,154 @@ export class SetDefaultRoleWeights1643036084713 implements MigrationInterface {
             update role
             set "baseWeight" = 7
             where name = 'Gunner';
+
+            update role
+            set "baseWeight" = 5.5
+            where name = 'Beholder';
+
+            update role
+            set "baseWeight" = -0.5
+            where name = 'Beauty';
+
+            update role
+            set "baseWeight"       = 3.5,
+                "conditionWeight"  = 8,
+                "conditionWeight2" = 4.5
+            where name = 'Blacksmith';
+
+            update role
+            set "baseWeight" = -1
+            where name = 'ClumsyGuy';
+
+            update role
+            set "baseWeight" = 4.5
+            where name = 'Cowboy';
+
+            update role
+            set "baseWeight" = 2
+            where name = 'Cupid';
+
+            update role
+            set "baseWeight"        = 1,
+                "conditionWeight"   = 1,
+                "weightCoefficient" = 2
+            where name = 'Cursed';
+
+            update role
+            set "baseWeight" = 8.5
+            where name = 'Detective';
+
+            update role
+            set "baseWeight"      = 1,
+                "conditionWeight" = 3
+            where name = 'Drunk';
+
+            update role
+            set "baseWeight" = 5
+            where name = 'Fool';
+
+            update role
+            set "baseWeight" = 7.5
+            where name = 'GuardianAngel';
+
+            update role
+            set "baseWeight" = 4.5
+            where name = 'Harlot';
+
+            update role
+            set "baseWeight" = 0
+            where name = 'Martyr';
+
+            update role
+            set "baseWeight" = 4.5
+            where name = 'Mayor';
+
+            update role
+            set "baseWeight" = 4.5
+            where name = 'Monarch';
+
+            update role
+            set "baseWeight" = 5.5
+            where name = 'Oracle';
+
+            update role
+            set "baseWeight" = 3
+            where name = 'Pacifist';
+
+            update role
+            set "baseWeight" = 3.5
+            where name = 'Princess';
+
+            update role
+            set "baseWeight" = 8
+            where name = 'Sandman';
+
+            update role
+            set "baseWeight" = 6.5
+            where name = 'Seer';
+
+            update role
+            set "baseWeight" = -5
+            where name = 'Traitor';
+
+            update role
+            set "baseWeight" = 1
+            where name = 'Villager';
+
+            update role
+            set "baseWeight" = -1.5
+            where name = 'WildChild';
+
+            update role
+            set "baseWeight"      = 1,
+                "conditionWeight" = -1
+            where name = 'WoodMan';
+
+            update role
+            set "baseWeight" = -11
+            where name = 'AlphaWolf';
+
+            update role
+            set "baseWeight"      = -8,
+                "conditionWeight" = -10
+            where name = 'Lycan';
+
+            update role
+            set "baseWeight" = -4
+            where name = 'Prowler';
+
+            update role
+            set "baseWeight" = -3
+            where name = 'Sorcerer';
+
+            update role
+            set "baseWeight" = -8
+            where name = 'Wolf';
+
+            update role
+            set "baseWeight" = -5
+            where name = 'Arsonist';
+
+            update role
+            set "baseWeight" = -1.5
+            where name = 'Doppelganger';
+
+            update role
+            set "baseWeight" = -11
+            where name = 'SerialKiller';
+
+            update role
+            set "baseWeight"        = 1,
+                "weightCoefficient" = -0.5
+            where name = 'Suicide';
+
+            update role
+            set "baseWeight" = -4
+            where name = 'Thief';
+
+            update role
+            set "baseWeight" = 0.5
+            where name = 'Undertaker';
         `);
 
 

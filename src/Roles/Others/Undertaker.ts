@@ -7,7 +7,6 @@ export class Undertaker extends RoleBase {
     startMessageText = () => 'Тебе до смерти надоела твоя работа... ' +
         'Ночью ты можешь забрать себе роль одного из мертвецов и выиграть за его команду! Помни, что ты не можешь ' +
         `выиграть как ${this.roleName}.`
-    weight = () => .5;
 
     nightActionDone = false
 

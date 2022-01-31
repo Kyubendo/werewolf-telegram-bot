@@ -1,7 +1,7 @@
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {findPlayer} from "../../Game/findPlayer";
 import {playerLink} from "../../Utils/playerLink";
-import {RoleBase, RoleWeights} from "../";
+import {RoleBase} from "../";
 import {specialConditionGunner} from "../../Utils/specialConditionTypes";
 
 export class Gunner extends RoleBase {

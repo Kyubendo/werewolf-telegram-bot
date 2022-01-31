@@ -8,7 +8,6 @@ export class Princess extends RoleBase {
     roleIntroductionText = () => `Ты скрывающаяся ${this.roleName},`
     startMessageText = () => 'сбежавшая от своей скучной, изнеженной жизни, чтобы провести день среди деревенщин. '
         + 'Если они попытаются казнить тебя, они совершат огромную ошибку, и никто не будет казнен.'
-    weight = () => 3.5;
     specialCondition: specialConditionPrincess = {ringShowed: false}
 
     async handleDeath(killer?: Player, deathType?: DeathType): Promise<boolean> {

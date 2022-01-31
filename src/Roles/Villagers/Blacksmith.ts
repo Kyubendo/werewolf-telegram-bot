@@ -1,4 +1,4 @@
-import {RoleBase} from "../";
+import {RoleBase, RoleWeights} from "../";
 import {playerLink} from "../../Utils/playerLink";
 import {specialConditionBlacksmith} from "../../Utils/specialConditionTypes";
 import {Traitor, WildChild, Wolf} from "../index";
@@ -11,11 +11,14 @@ export class Blacksmith extends RoleBase {
         'чтобы предотвратить волчью атаку ровно на одну ночь. ' +
         'Днём ты можешь растолочь и распылить его по всей деревне. ' +
         'А в остальном ты простой селянин.'
-    weight = () => Blacksmith.game.players.find(p => p.role instanceof Wolf)
-        ? 8
-        : Blacksmith.game.players.find(p => p.role instanceof Traitor || p.role instanceof WildChild)
-            ? 4.5
-            : 3.5
+    weight = (weights: RoleWeights) => {
+        this.activeWeight = Blacksmith.game.players.find(p => p.role instanceof Wolf)
+            ? 'conditionWeight'
+            : Blacksmith.game.players.find(p => p.role instanceof Traitor || p.role instanceof WildChild)
+                ? 'conditionWeight2'
+                : 'baseWeight'
+        return weights[this.activeWeight];
+    }
 
     actionAnnouncement = () => ({
         message: 'Во время дискуссии по поводу произошедших событий селяне неожиданно увидели, ' +

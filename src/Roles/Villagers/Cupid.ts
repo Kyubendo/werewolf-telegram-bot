@@ -12,8 +12,6 @@ export class Cupid extends RoleBase {
     readonly startMessageText = () => 'Сошел на землю в одних штанах, с луком и любовными стрелами... Выбери двух, '
         + 'кто будет любить друг друга до скончания века. Если один из них погибнет, другой умрет от печали.';
 
-    readonly weight = () => 2;
-
     nightActionDone = false
 
     specialCondition: specialConditionCupid = {loversBound: false}
