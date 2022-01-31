@@ -12,7 +12,7 @@ export const balanceWeights = async (gameRoles: RoleBase[], villagersWon: boolea
         if (!role) throw 'balanceWeight 7';
         const curWeight = role[r.activeWeight];
         if (curWeight === null) throw 'balance weight 9';
-        const balanceStep = Number(process.env.BALANCE_STEP)
+        const balanceStep = Number(process.env.BALANCE_STEP || 0)
         const stepValue = villagersWon ? balanceStep : -balanceStep;
         role[r.activeWeight] = +(curWeight + stepValue).toPrecision(9)
         if (r.weightCoefficientVariable) {

@@ -45,7 +45,7 @@ export const assignRoles = async (game: Game) => {
     ]
 
     const testPool = [
-        Mason, Mason, Mason, Beholder, Beholder,
+        SerialKiller, Fool, Beholder,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -71,7 +71,7 @@ export const assignRoles = async (game: Game) => {
                 && Math.random() < 1 / villagersPool.length
             ) rolePool.unshift(ApprenticeSeer)
 
-            evils.forEach(e => e && rolePool.unshift(e as any)) // remove "as any" after changing all weights
+            evils.forEach(e => e && rolePool.unshift(e))
 
             rolePool = rolePool.slice(0, players.length)
             arrayShuffle(rolePool)
@@ -93,6 +93,7 @@ export const assignRoles = async (game: Game) => {
     } else players.map((player, i) => player.role = new testPool[i](player))
 
     for (const player of players) {
+        player.role?.weight(roleWeights[player.role.constructor.name])
         player.role && await game.bot.sendMessage(
             player.id,
             player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
