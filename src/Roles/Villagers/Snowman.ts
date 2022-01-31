@@ -15,6 +15,10 @@ export class Snowman extends RoleBase {
         'Учти, что после третьего броска от тебя ничего не останется и ты умрёшь...';
     weight = () => {
         const wolfCount = Snowman.game.players.filter(player => player.role instanceof Wolf).length
+        this.activeWeight = wolfCount
+            ? (wolfCount === 1 ? "conditionWeight" : "conditionWeight2")
+            : "baseWeight";
+
         return wolfCount
             ? (wolfCount === 1 ? 9.5 : 8)
             : 6.5;

@@ -75,7 +75,7 @@ export class SetDefaultRoleWeights1643036084713 implements MigrationInterface {
             values ('Thief')
             on conflict do nothing;
             insert into role (name)
-            values ('WiseElder')
+            values ('WiseElder') --
             on conflict do nothing;
             insert into role (name)
             values ('Sorcerer')
@@ -145,7 +145,7 @@ export class SetDefaultRoleWeights1643036084713 implements MigrationInterface {
 
             update role
             set "baseWeight" = 5.5
-            where name = 'Beholder';
+            where name = 'WiseElder';
 
             update role
             set "baseWeight" = -0.5
@@ -290,6 +290,12 @@ export class SetDefaultRoleWeights1643036084713 implements MigrationInterface {
             update role
             set "baseWeight" = 0.5
             where name = 'Undertaker';
+
+            update role
+            set "baseWeight"       = 6.5,
+                "conditionWeight"  = 9.5,
+                "conditionWeight2" = 8
+            where name = 'Snowman';
         `);
 
 
