@@ -16,7 +16,7 @@ for (let i = 0; i < 10; i++) {
     RoleBase.game = game
 
     assignRoles(game)
-    console.log(game.players.map(p => p.role?.roleName))
+    //console.log(game.players.map(p => p.role?.roleName))
 }
 
 
