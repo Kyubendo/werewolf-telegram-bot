@@ -14,7 +14,7 @@ export const joinButton = {
 }
 
 const news = [
-    'Введена система 🌀SmartBalance🌀!',
+    'Введена система [🤖SmartBalance🤖](https://telegra.ph/SmartBalance-System-01-31)!',
     'Удалён режим хаоса.',
     'Снеговик ⛄️ растаял.',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
