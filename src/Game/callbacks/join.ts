@@ -21,6 +21,7 @@ export const join = async (game: Game, select: SelectType) => {
     await game.bot.editMessageText(startPlayerList(game.players), {
         message_id: game.playerCountMsgId,
         chat_id: game.chatId,
+    }).catch(() => {
     })
     game.bot.sendMessage(newPlayer.id, 'Ты успешно присоединился к игре!')
         .catch(reason => {

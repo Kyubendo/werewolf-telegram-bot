@@ -20,7 +20,6 @@ const news = [
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
-
 const messageAppend = (news.length
         ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
         : '')

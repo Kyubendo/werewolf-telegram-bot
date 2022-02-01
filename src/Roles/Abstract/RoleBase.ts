@@ -219,7 +219,8 @@ export abstract class RoleBase {
             message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
-    )
+    ).catch(() => {
+    })
 
     createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
         new (this.constructor as any)(player, previousRole);
