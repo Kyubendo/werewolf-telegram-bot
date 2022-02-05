@@ -46,6 +46,7 @@ import {Pumpkin} from "./Halloween/Pumpkin";
 import {Cupid} from "./Villagers/Cupid";
 import {Princess} from "./Villagers/Princess";
 import {Arsonist} from "./Others/Arsonist";
+import {PuppetMaster} from "./Others/PuppetMaster";
 
 import {RoleWeights} from "./Abstract/RoleBase";
 import {wolfTeam} from "../Utils/teams"; // move

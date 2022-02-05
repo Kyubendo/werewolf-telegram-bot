@@ -5,7 +5,6 @@ import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
 import {validGameMode} from "../../Utils/validGameMode";
-import {unSilentPlayer} from "../../Utils/managePermissions";
 
 export const joinButton = {
     inline_keyboard: [
@@ -36,7 +35,7 @@ const gameModeName = (gameMode: GameMode) => {
 
 export const startGame = (bot: TelegramBot, state: State,) => {
     bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), async (msg, match) => {
-        if (msg.chat.id !== +(process.env.MAIN_CHAT || 0)) return;
+        //if (msg.chat.id !== +(process.env.MAIN_CHAT || 0)) return;
         const gameMode = match?.[1]
         if (!validGameMode(gameMode)) return
 

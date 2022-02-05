@@ -9,11 +9,12 @@ import {
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
-    WoodMan, Pacifist, Arsonist, Cowboy, Snowman, RoleWeights
+    WoodMan, Pacifist, Arsonist, Cowboy, RoleWeights
     // JackOLantern
 } from "../Roles";
 import {Game} from "./Game";
 import {Role} from "../entity/Role";
+import {PuppetMaster} from "../Roles/Others/PuppetMaster";
 
 export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
@@ -29,7 +30,7 @@ export const assignRoles = async (game: Game) => {
     })
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
-        ...wolves, SerialKiller, Arsonist,
+        ...wolves, SerialKiller, Arsonist, PuppetMaster,
         //JackOLantern,
     ]
     const wolfNeededRoles = [Sorcerer, Traitor, Prowler]
@@ -45,7 +46,7 @@ export const assignRoles = async (game: Game) => {
     ]
 
     const testPool = [
-        SerialKiller, Fool, Beholder,
+        PuppetMaster, Villager,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
