@@ -35,7 +35,7 @@ const gameModeName = (gameMode: GameMode) => {
 
 export const startGame = (bot: TelegramBot, state: State,) => {
     bot.onText(new RegExp(`\/start_(.+)@${process.env.BOT_NAME}`), async (msg, match) => {
-        //if (msg.chat.id !== +(process.env.MAIN_CHAT || 0)) return;
+        if (msg.chat.id !== +(process.env.MAIN_CHAT || 0)) return;
         const gameMode = match?.[1]
         if (!validGameMode(gameMode)) return
 
