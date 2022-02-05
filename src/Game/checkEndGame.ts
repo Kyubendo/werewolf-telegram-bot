@@ -3,6 +3,7 @@ import {
     ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
     Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
     JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Sorcerer, Prowler, Arsonist, Pacifist, Cowboy, Snowman,
+    PuppetMaster
 } from "../Roles";
 import {GameStage} from "./Game";
 
@@ -17,7 +18,8 @@ const nonWolfEvilKillers = [SerialKiller, Arsonist, JackOLantern]
 const goodKillers: Function[] = [Cowboy]
 const evil: Function[] = [Wolf, ...nonWolfEvilKillers]
 
-export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack' | 'arsonist'
+export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack' |
+    'arsonist' | 'puppetMaster'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
     const wolvesTeamPlayers = players.filter(p => wolfTeam.find(wa => p.role instanceof wa))
     const villagersTeamPlayers = players.filter(p => villagers.find(v => p.role instanceof v))
@@ -58,9 +60,14 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             const gunner = alivePlayers.find(p => p.role instanceof Gunner)
             const arsonist = alivePlayers.find(p => p.role instanceof Arsonist)
             const cowboy = alivePlayers.find(p => p.role instanceof Cowboy)
-            // const puppetMaster = alivePlayers.filter(p => p.role instanceof PuppetMaster)
+            const puppetMaster = alivePlayers.filter(p => p.role instanceof PuppetMaster)
 
-            // if(puppetMaster) return puppetMaster
+
+            if (puppetMaster.length === 1) {
+                return {winners: [puppetMaster[0]], type: 'puppetMaster'};
+            } else if (puppetMaster.length === 2) {
+                return {winners: [], type: 'nobody'};
+            }
 
             if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller || arsonist) && gunner) {

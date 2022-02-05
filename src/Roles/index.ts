@@ -62,7 +62,7 @@ export {
 
     Wolf, Lycan, Sorcerer, AlphaWolf, Prowler,
 
-    Suicide, Thief, Undertaker, SerialKiller, Doppelganger, JackOLantern, Arsonist,
+    Suicide, Thief, Undertaker, SerialKiller, Doppelganger, JackOLantern, Arsonist, PuppetMaster,
 
     Pumpkin,
     RoleWeights,
