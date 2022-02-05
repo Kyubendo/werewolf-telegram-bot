@@ -60,14 +60,16 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             const gunner = alivePlayers.find(p => p.role instanceof Gunner)
             const arsonist = alivePlayers.find(p => p.role instanceof Arsonist)
             const cowboy = alivePlayers.find(p => p.role instanceof Cowboy)
-            const puppetMaster = alivePlayers.filter(p => p.role instanceof PuppetMaster)
+            const puppetMaster = alivePlayers.find(p => p.role instanceof PuppetMaster)
 
 
-            if (puppetMaster.length === 1) {
-                return {winners: [puppetMaster[0]], type: 'puppetMaster'};
-            } else if (puppetMaster.length === 2) {
-                return {winners: [], type: 'nobody'};
-            }
+            // if (puppetMaster.length === 1) {
+            //     return {winners: [puppetMaster[0]], type: 'puppetMaster'};
+            // } else if (puppetMaster.length === 2) {
+            //     return {winners: [], type: 'nobody'};
+            // }
+            if (puppetMaster)
+                return {winners: players.filter(p => p.role instanceof PuppetMaster), type: 'puppetMaster'}
 
             if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller || arsonist) && gunner) {
