@@ -11,7 +11,6 @@ export class Cowboy extends RoleBase {
     startMessageText = () => 'Ты никогда не расстаёшься со своим кольтом, и если ты умрешь, у тебя будет шанс ' +
         'забрать кого-то с собой на тот свет.'
 
-    weight = () => 4.5
     deathTimer?: Timer
     killMessage = () => ({
         text: {

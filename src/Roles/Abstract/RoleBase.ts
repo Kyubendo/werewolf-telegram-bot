@@ -2,10 +2,19 @@ import {Game, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
 import {GuardianAngel, Martyr, Suicide} from "../index";
 import {specialConditionType} from "../../Utils/specialConditionTypes";
-import {silentPlayer} from "../../Utils/managePermissions";
 
 export type DeathType = 'loverDeath' | 'lover_betrayal' | 'harlotDeath' | 'shotByGunner' | 'runOutOfSnow' |
     'thiefCameToCowboy' | 'thiefCameToSerialKiller'; // Harlot
+
+export type Weight = 'baseWeight' | 'conditionWeight' | 'conditionWeight2'
+export type WeightCoefficient = 'weightCoefficient'
+
+export type RoleWeights = {
+    baseWeight: number,
+    conditionWeight: number | null,
+    conditionWeight2: number | null,
+    weightCoefficient: number | null,
+}
 
 export abstract class RoleBase {
     constructor(readonly player: Player, previousRole?: RoleBase) {
@@ -15,9 +24,13 @@ export abstract class RoleBase {
     static game: Game
 
     abstract readonly roleName: string
-    abstract readonly weight: () => number
     readonly roleIntroductionText = () => `Ты ${this.roleName}!`;
     abstract readonly startMessageText: () => string
+
+    weight: (weights: RoleWeights) => number | null = (w) => w.baseWeight;
+    activeWeight: Weight = 'baseWeight';
+    activeWeightCoefficient?: WeightCoefficient = undefined;
+    weightCoefficientVariable?: number = undefined;
 
     readonly previousRole?: RoleBase;
 
@@ -136,7 +149,7 @@ export abstract class RoleBase {
             RoleBase.game.players.indexOf(this.player), 1)); // Delete current player and push it to the end
     }
 
-    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
+    async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> { // refactor
         if (type === 'loverDeath') {
             killer?.role && await RoleBase.game.bot.sendMessage(
                 RoleBase.game.chatId,
@@ -165,6 +178,8 @@ export abstract class RoleBase {
                 `${playerLink(this.player)} должен(на) покинуть тебя. ` +
                 'Ты расстаешься с ним(ней), больше не заботясь о его(ее) благополучии.'
             )
+        } else if (type === 'thiefCameToCowboy' || type === 'thiefCameToSerialKiller') {
+
         } else if (killer?.role) {
             if (type === 'shotByGunner')
                 killer.role.actionAnnouncement && await RoleBase.game.bot.sendAnimation(
@@ -204,7 +219,8 @@ export abstract class RoleBase {
             message_id: this.actionMsgId,
             chat_id: this.player.id,
         }
-    )
+    ).catch(() => {
+    })
 
     createThisRole = (player: Player, previousRole?: RoleBase): RoleBase =>
         new (this.constructor as any)(player, previousRole);

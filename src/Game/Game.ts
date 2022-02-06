@@ -7,16 +7,18 @@ import {roleResolves} from "./roleResolves";
 import {endGameMessage} from "../Utils/endGameMessage";
 import {endPlayerList, playerGameList} from "../Utils/playerLists";
 import {checkEndGame, setWinners, Win} from "./checkEndGame";
-import {Doppelganger, Martyr, Wolf} from "../Roles";
+import {Doppelganger, Martyr, RoleBase, Wolf} from "../Roles";
 import {timer, Timer} from "../Utils/Timer";
 import {gameStart} from "./gameStart";
 import {User} from "../entity/User";
 import {saveGame} from "./saveGame";
 import {applyRating} from "./applyRating";
 import {UserChat} from "../entity/UserChat";
+import {balanceWeights} from "./balanceWeights";
+import {getInitialRole} from "../Utils/getInitialRole";
 
 export type GameStage = 'day' | 'night' | 'lynch' | undefined
-export const GameModeList = ['classic', 'chaos'] as const
+export const GameModeList = ['classic', /*'chaos'*/] as const
 export type GameMode = typeof GameModeList[number]
 
 export class Game {
@@ -136,6 +138,10 @@ export class Game {
         )
         if (this.mode === 'classic') {
             await saveGame(this, endGame.type)
+            await balanceWeights(
+                this.players.map(p => p.role && getInitialRole(p.role)).filter((r): r is RoleBase => !!r),
+                endGame.type === 'villagers'
+            )
             await applyRating(this)
         }
         await this.bot.sendMessage(this.chatId, endPlayerList(this.players))

@@ -20,19 +20,21 @@ export const leaveButton = {
 }
 
 const news = [
-    'Добавлена подробная информация о каждой роли (/role\\_list)',
+    'Введена система [🤖SmartBalance🤖](https://telegra.ph/SmartBalance-System-01-31)!',
+    'Удалён режим хаоса.',
+    'Снеговик ⛄️ растаял.',
     `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
 const messageAppend = (news.length
-        ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
-        : '')
+    ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
+    : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
 const gameModeName = (gameMode: GameMode) => {
     switch (gameMode) {
-        case "chaos":
-            return 'хаосная'
+        // case "chaos":
+        //     return 'хаосная'
         case "classic":
             return 'классическая'
     }

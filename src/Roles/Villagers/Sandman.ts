@@ -8,7 +8,6 @@ export class Sandman extends RoleBase {
     roleIntroductionText = () => `Ты ${this.roleName}.`
     startMessageText = () => `Один раз за игру ты можешь использовать свою магию, чтобы заставить всех спать ` +
         `так крепко, что никто не сможет выполнить свои ночные действия.`
-    weight = () => 8;
 
     specialCondition: specialConditionSandman = {
         sleep: undefined

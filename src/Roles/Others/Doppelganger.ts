@@ -10,7 +10,6 @@ export class Doppelganger extends RoleBase {
     startMessageText = () => 'Легенда гласит, что твои предки были Метаморфами и могли выбирать любую форму бытия, ' +
         'какую только пожелали... Ты унаследовал часть их способностей! Выбери игрока, когда он умрет, ' +
         'ты получишь его роль.'
-    weight = () => -1.5;
 
     nightActionDone = false
 
@@ -51,7 +50,8 @@ export class Doppelganger extends RoleBase {
 
         const currentTargetHandleDeath = this.targetPlayer.role.handleDeath.bind(this.targetPlayer.role)
         this.targetPlayer.role.handleDeath = async (killer?, type?) => {
-            const handleDeathResult = await currentTargetHandleDeath(killer, type);
+            const died = await currentTargetHandleDeath(killer, type);
+            if (!died) return false;
 
             if (this.targetPlayer?.role) {
                 this.player.role = this.targetPlayer.role.createThisRole(this.player, this.player.role);
@@ -70,7 +70,7 @@ export class Doppelganger extends RoleBase {
                         this.player.role.stealMessage()
                     )
             }
-            return handleDeathResult;
+            return true;
         }
     }
 
