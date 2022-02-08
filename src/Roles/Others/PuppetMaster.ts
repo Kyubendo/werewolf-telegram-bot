@@ -2,7 +2,7 @@ import {RoleBase} from "../Abstract/RoleBase";
 import {generateInlineKeyboard} from "../../Game/playersButtons";
 import {playerLink} from "../../Utils/playerLink";
 import {findPlayer} from "../../Game/findPlayer";
-import {Cupid, Undertaker, Wolf} from "..";
+import {Arsonist, Cupid, Undertaker, Wolf} from "..";
 import {Player} from "../../Game";
 import {firstNightChoiceRoles, nightChoiceRoles} from "../../Utils/teams";
 
@@ -37,14 +37,16 @@ export class PuppetMaster extends RoleBase {
     puppetTargetPlayerChoice = async () => {
         if (!this.targetPlayer?.role) return;
 
+        const deadPlayers = PuppetMaster.game.players.filter(player => !player.isAlive);
         if ((nightChoiceRoles.find(nightChoiceRole => this.targetPlayer?.role instanceof nightChoiceRole)
-                || (PuppetMaster.game.dayCount === 1 && firstNightChoiceRoles
-                    .find(firstNightChoiceRole => this.targetPlayer?.role instanceof firstNightChoiceRole)))
+                || (PuppetMaster.game.dayCount === 0 && firstNightChoiceRoles
+                    .find(firstNightChoiceRole => this.targetPlayer?.role instanceof firstNightChoiceRole))
+                || this.targetPlayer.role instanceof Undertaker && !deadPlayers.length)
             && !this.targetPlayer.daysLeftToUnfreeze) {
             let playersArray;
+
             if (this.targetPlayer.role instanceof Undertaker)
-                playersArray = PuppetMaster.game.players
-                    .filter(player => !player.isAlive);
+                playersArray = deadPlayers;
             else if (this.targetPlayer.role instanceof Cupid)
                 playersArray = PuppetMaster.game.players
                     .filter(player => player.isAlive);
@@ -57,12 +59,15 @@ export class PuppetMaster extends RoleBase {
                 'Кого ты хочешь выбрать?',
                 {reply_markup: generateInlineKeyboard(playersArray, false)}
             ).then(msg => this.actionMsgId = msg.message_id)
-        } else
+        } else {
             await PuppetMaster.game.bot.sendMessage(
                 this.player.id,
-                `Ты понимаешь, что не можешь управлять действиями ${playerLink(this.targetPlayer)} этой ночью...` +
+                'Ты понимаешь, ' +
+                `что не можешь управлять действиями ${playerLink(this.targetPlayer)} этой ночью... ` +
                 `Возможно он(а) спит. Какая досада.`
             )
+            this.doneNightAction()
+        }
     }
 
     cupidSecondTargetPlayerChoice = async () => {
@@ -81,19 +86,33 @@ export class PuppetMaster extends RoleBase {
     }
 
     actionResolve = async () => {
-        if (!this.targetPlayer?.role || !this.targetPlayer.role.targetPlayer) return;
+        if (!this.targetPlayer?.role || !this.puppetTargetPlayer) return;
 
-        if (this.puppetTargetPlayer?.role instanceof Wolf) {
-            this.puppetTargetPlayer.role.findAllies().forEach(wolf => {
+        if (this.targetPlayer.role instanceof Wolf) {
+            this.targetPlayer.role.findAllies().forEach(wolf => {
                 if (wolf.role?.targetPlayer)
                     wolf.role.targetPlayer = undefined;
-            });
+                this.puppetTargetPlayer && PuppetMaster.game.bot.sendMessage(wolf.id,
+                    'Сильная сущность захватила разум всей вашей стаи ночью. ' +
+                    `И какой бы выбор вы не сделали до этого, ` +
+                    `${this.roleName} выбрал ${playerLink(this.puppetTargetPlayer)} за вас!`)
+            })
         }
 
-        if (this.puppetTargetPlayer)
-            this.targetPlayer.role.targetPlayer = this.puppetTargetPlayer;
-        if (this.targetPlayer.role instanceof Cupid && this.puppetTargetPlayer2)
+        this.targetPlayer.role.targetPlayer = this.puppetTargetPlayer;
+
+        if (this.targetPlayer.role instanceof Cupid && this.puppetTargetPlayer2) {
             this.targetPlayer.role.targetPlayer2 = this.puppetTargetPlayer2;
+            await PuppetMaster.game.bot.sendMessage(this.targetPlayer.id,
+                'Сильная сущность захватила твой разум ночью. ' +
+                `И какой бы выбор ты не сделал(а) до этого, ` +
+                `${this.roleName} выбрал ${playerLink(this.puppetTargetPlayer)} ` +
+                `и ${playerLink(this.puppetTargetPlayer2)} за тебя!`)
+        } else if (!(this.targetPlayer.role instanceof Arsonist && this.targetPlayer.role.burn))
+            await PuppetMaster.game.bot.sendMessage(this.targetPlayer.id,
+                'Сильная сущность захватила твой разум ночью. ' +
+                `И какой бы выбор ты не сделал(а) до этого, ` +
+                `${this.roleName} выбрал ${playerLink(this.puppetTargetPlayer)} за тебя!`)
     }
 
     handleChoice = (choice?: string) => {

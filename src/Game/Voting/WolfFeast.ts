@@ -33,7 +33,7 @@ export class WolfFeast extends VotingBase {
             if (this.getVoters().length > 1) {
                 this.getVoters().forEach(voter => this.game.bot.sendMessage(
                     voter.id,
-                    'Ваша стая слишком долго выла на луну и вы не заметили как прошла ночь. Вы никого не съели!'
+                    'Ваша стая слишком долго выла на луну и вы не заметили как прошла ночь.'
                 ))
             }
             return;

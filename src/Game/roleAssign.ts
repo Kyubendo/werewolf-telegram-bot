@@ -5,7 +5,7 @@ import {
     ClumsyGuy, Cupid,
     Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, Lycan, Martyr,
     Mason, Monarch, Mayor, Undertaker, Oracle, Princess, RoleBase, Sandman, Seer, Prowler,
-    SerialKiller,
+    SerialKiller, PuppetMaster,
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
@@ -14,7 +14,6 @@ import {
 } from "../Roles";
 import {Game} from "./Game";
 import {Role} from "../entity/Role";
-import {PuppetMaster} from "../Roles/Others/PuppetMaster";
 
 export const assignRoles = async (game: Game) => {
     RoleBase.game = game;
@@ -46,7 +45,7 @@ export const assignRoles = async (game: Game) => {
     ]
 
     const testPool = [
-        PuppetMaster, Villager,
+        PuppetMaster, Cupid,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
