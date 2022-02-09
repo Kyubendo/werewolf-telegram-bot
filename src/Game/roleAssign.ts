@@ -57,7 +57,7 @@ export const assignRoles = async (game: Game) => {
             arrayShuffle(availableKillers)
 
             let rolePool = [...villagersPool, ...killerNeededRoles]
-            let killerCount = Math.round((players.length - 1) / 4)
+            let killerCount = Math.floor((players.length - 1) / 4)
             if (players.length > 6 && Math.random() >= .5) ++killerCount
 
             const evils = [...Array(killerCount)].map(() => availableKillers.pop())
@@ -69,8 +69,7 @@ export const assignRoles = async (game: Game) => {
                 for (let i = 0; i < players.length / 3 - 1; i++) Math.random() >= .5 && rolePool.unshift(Mason)
             }
             if ([...rolePool].slice(0, players.length - killerCount - 1).find(e => e === Seer)
-                && Math.random() < 1 / villagersPool.length
-            ) rolePool.unshift(ApprenticeSeer)
+                && Math.random() < (1 / villagersPool.length) * 8) rolePool.unshift(ApprenticeSeer)
 
             evils.forEach(e => e && rolePool.unshift(e))
 
