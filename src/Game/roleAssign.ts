@@ -46,7 +46,7 @@ export const assignRoles = async (game: Game) => {
     ]
 
     const testPool = [
-        PuppetMaster, Cupid,
+        PuppetMaster, Wolf,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -94,11 +94,11 @@ export const assignRoles = async (game: Game) => {
 
     for (const player of players) {
         player.role?.weight(roleWeights[player.role.constructor.name])
-        // player.role && await game.bot.sendMessage(
-        //     player.id,
-        //     player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
-        // );
+        player.role && await game.bot.sendMessage(
+            player.id,
+            player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
+        );
 
-        //await player.role?.sendAlliesMessage?.();
+        await player.role?.sendAlliesMessage?.();
     }
 }
