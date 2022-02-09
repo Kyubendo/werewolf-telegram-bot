@@ -102,8 +102,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
                     Gunner.game.bot.sendMessage(
                         Gunner.game.chatId,
                         `Вдруг раздаётся выстрел! Но никто уже не оборачивается посмотреть на ` +
-                        `стоящего(стоящую) ${playerLink(gunner)} над ${playerLink(aliveEvilPlayer)}. ` +
-                        `${gunner.role?.roleName} убивает злодея(злодейку) и побеждает, но какой ценой... ` +
+                        `стоящего(-ую) ${playerLink(gunner)} над ${playerLink(aliveEvilPlayer)}. ` +
+                        `${gunner.role?.roleName} убивает злодея(-ку) и побеждает, но какой ценой... ` +
                         `Все его(её) товарищи уже мертвы.`)
                     return {winners: villagersTeamPlayers, type: 'villagers'};
                 }
@@ -124,7 +124,7 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
                 else if (serialKiller)
                     customText = 'Настаёт утро и на главной площади деревни встречаются двое оставшихся жителей. ' +
                         `Расстояние не позволяет ` +
-                        `${playerLink(serialKiller, true)} подобраться к жертве и он решает ` +
+                        `${playerLink(serialKiller, true)} подобраться к жертве и он(а) решает ` +
                         `достать свой любимый нож и метнуть его в последний раз. ` +
                         `${playerLink(cowboy, true)} в последний миг вынимает пистолет из кобуры и ` +
                         `выстреливает точно в голову ${playerLink(serialKiller)}, ` +
