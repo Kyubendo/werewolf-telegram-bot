@@ -102,8 +102,8 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
                     Gunner.game.bot.sendMessage(
                         Gunner.game.chatId,
                         `Вдруг раздаётся выстрел! Но никто уже не оборачивается посмотреть на ` +
-                        `стоящего(-ую) ${playerLink(gunner)} над ${playerLink(aliveEvilPlayer)}. ` +
-                        `${gunner.role?.roleName} убивает злодея(-ку) и побеждает, но какой ценой... ` +
+                        `стоящего(ую) ${playerLink(gunner)} над ${playerLink(aliveEvilPlayer)}. ` +
+                        `${gunner.role?.roleName} убивает злодея(ку) и побеждает, но какой ценой... ` +
                         `Все его(её) товарищи уже мертвы.`)
                     return {winners: villagersTeamPlayers, type: 'villagers'};
                 }
