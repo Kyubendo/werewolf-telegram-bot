@@ -6,6 +6,7 @@ export const aboutRoles = (bot: TelegramBot,) => {
         if (!msg.from?.id) return;
         const roleKey = match?.[1]
         if (!roleKey || !roles.hasOwnProperty(roleKey)) return
+
         const role = roles[roleKey]()
         const roleInfo = `*${role.roleName}\n*`
             // + `🏋 *Вес️:* ${role.weight}\n`

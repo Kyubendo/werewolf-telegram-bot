@@ -74,7 +74,8 @@ export abstract class VotingBase {
             {
                 message_id: voter.role.voteMsgId,
                 chat_id: voter.id,
-            })
+            }).catch(() => {
+        })
         await this.handleVotingChoiceResult(voter, target)
     }
 
