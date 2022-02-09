@@ -29,11 +29,12 @@ export const assignRoles = async (game: Game) => {
     })
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
-        ...wolves, SerialKiller, Arsonist, PuppetMaster,
+        ...wolves, SerialKiller
         //JackOLantern,
     ]
+    const killerNeededRoles = [PuppetMaster, Arsonist]
     const wolfNeededRoles = [Sorcerer, Traitor, Prowler]
-    const evilPool = [...killersPool, Sorcerer, Prowler]
+    const evilPool = [...killersPool, ...killerNeededRoles, Sorcerer, Prowler]
     const villagersPool = [
         Villager,
         ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, Cowboy,// Passive Villagers
@@ -55,19 +56,19 @@ export const assignRoles = async (game: Game) => {
             const availableKillers = [...killersPool]
             arrayShuffle(availableKillers)
 
-            let rolePool = [...villagersPool]
-            let evilCount = Math.floor((players.length - 1) / 4)
-            if (players.length > 6 && Math.random() >= .5) ++evilCount
+            let rolePool = [...villagersPool, ...killerNeededRoles]
+            let killerCount = Math.round((players.length - 1) / 4)
+            if (players.length > 6 && Math.random() >= .5) ++killerCount
 
-            const evils = [...Array(evilCount)].map(() => availableKillers.pop())
+            const evils = [...Array(killerCount)].map(() => availableKillers.pop())
             evils.find(e => wolves.find(w => w === e)) && rolePool.push(...wolfNeededRoles)
 
             arrayShuffle(rolePool)
 
-            if ([...rolePool].slice(0, players.length - evilCount - 1).find(e => e === Mason)) {
+            if ([...rolePool].slice(0, players.length - killerCount - 1).find(e => e === Mason)) {
                 for (let i = 0; i < players.length / 3 - 1; i++) Math.random() >= .5 && rolePool.unshift(Mason)
             }
-            if ([...rolePool].slice(0, players.length - evilCount - 1).find(e => e === Seer)
+            if ([...rolePool].slice(0, players.length - killerCount - 1).find(e => e === Seer)
                 && Math.random() < 1 / villagersPool.length
             ) rolePool.unshift(ApprenticeSeer)
 
@@ -94,11 +95,11 @@ export const assignRoles = async (game: Game) => {
 
     for (const player of players) {
         player.role?.weight(roleWeights[player.role.constructor.name])
-        player.role && await game.bot.sendMessage(
-            player.id,
-            player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
-        );
+        // player.role && await game.bot.sendMessage(
+        //     player.id,
+        //     player.role.roleIntroductionText() + ' ' + player.role.startMessageText()
+        // );
 
-        await player.role?.sendAlliesMessage?.();
+        //await player.role?.sendAlliesMessage?.();
     }
 }
