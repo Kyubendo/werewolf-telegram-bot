@@ -15,6 +15,7 @@ import {
     Wolf, Pacifist, Arsonist, Snowman
 } from "../Roles";
 import {GameStage} from "./Game";
+import {PuppetMaster} from "../Roles/Others/PuppetMaster";
 
 export const roleResolves = (stage: GameStage) => {
     switch (stage) {
@@ -41,6 +42,7 @@ const dayRoleResolves = [
 ]
 
 const nightRoleResolves = [
+    PuppetMaster,
     WildChild, Martyr, Doppelganger, // constant choices
     Cupid,
     JackOLantern,

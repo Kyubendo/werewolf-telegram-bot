@@ -46,6 +46,7 @@ import {Pumpkin} from "./Halloween/Pumpkin";
 import {Cupid} from "./Villagers/Cupid";
 import {Princess} from "./Villagers/Princess";
 import {Arsonist} from "./Others/Arsonist";
+import {PuppetMaster} from "./Others/PuppetMaster";
 
 import {RoleWeights} from "./Abstract/RoleBase";
 import {wolfTeam} from "../Utils/teams"; // move
@@ -61,7 +62,7 @@ export {
 
     Wolf, Lycan, Sorcerer, AlphaWolf, Prowler,
 
-    Suicide, Thief, Undertaker, SerialKiller, Doppelganger, JackOLantern, Arsonist,
+    Suicide, Thief, Undertaker, SerialKiller, Doppelganger, JackOLantern, Arsonist, PuppetMaster,
 
     Pumpkin,
     RoleWeights,

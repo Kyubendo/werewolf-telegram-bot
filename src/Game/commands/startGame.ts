@@ -5,7 +5,6 @@ import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
 import {validGameMode} from "../../Utils/validGameMode";
-import {unSilentPlayer} from "../../Utils/managePermissions";
 
 export const joinButton = {
     inline_keyboard: [

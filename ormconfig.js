@@ -22,5 +22,4 @@ module.exports = {
     username: "postgres",
     password: "",
     database: "werewolf",
-
 }

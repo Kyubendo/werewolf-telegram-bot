@@ -1,40 +1,9 @@
 import {Player} from "../Game";
 import {
-    ApprenticeSeer,
-    Beholder,
-    Blacksmith,
-    ClumsyGuy,
-    Cursed,
-    Drunk,
-    GuardianAngel,
-    Gunner,
-    Harlot,
-    Martyr,
-    Mason,
-    Monarch,
-    Oracle,
-    Sandman,
-    Seer,
-    SerialKiller,
-    Traitor,
-    Villager,
-    WiseElder,
-    Wolf,
-    WoodMan,
-    WildChild,
-    Beauty,
-    JackOLantern,
-    Pumpkin,
-    Detective,
-    Cupid,
-    Princess,
-    Mayor,
-    Sorcerer,
-    Prowler,
-    Arsonist,
-    Pacifist,
-    Cowboy,
-    Snowman,
+    ApprenticeSeer, Beholder, Blacksmith, ClumsyGuy, Cursed, Drunk, GuardianAngel, Gunner, Harlot, Martyr, Mason,
+    Monarch, Oracle, Sandman, Seer, SerialKiller, Traitor, Villager, WiseElder, Wolf, WoodMan, WildChild, Beauty,
+    JackOLantern, Pumpkin, Detective, Cupid, Princess, Mayor, Sorcerer, Prowler, Arsonist, Pacifist, Cowboy, Snowman,
+    PuppetMaster
 } from "../Roles";
 import {GameStage} from "./Game";
 import {playerLink} from "../Utils/playerLink";
@@ -46,11 +15,12 @@ const villagers: Function[] = [
 ]
 
 const wolfTeam: Function[] = [Wolf, Sorcerer, Prowler]
-const nonWolfEvilKillers = [SerialKiller, Arsonist, JackOLantern]
+const nonWolfEvil = [SerialKiller, Arsonist, JackOLantern, PuppetMaster]
 const goodKillers: Function[] = [Cowboy]
-const evil: Function[] = [Wolf, ...nonWolfEvilKillers]
+const evil: Function[] = [Wolf, ...nonWolfEvil]
 
-export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack' | 'arsonist'
+export type Win = 'villagers' | 'serialKiller' | 'wolves' | 'lovers' | 'suicide' | 'nobody' | 'jack' |
+    'arsonist' | 'puppetMaster'
 export const checkEndGame = (players: Player[], stage: GameStage): undefined | { winners: Player[], type: Win } => {
     const wolvesTeamPlayers = players.filter(p => wolfTeam.find(wa => p.role instanceof wa))
     const villagersTeamPlayers = players.filter(p => villagers.find(v => p.role instanceof v))
@@ -77,12 +47,12 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     alivePlayers.find(p => p.role instanceof Gunner && p.role.specialCondition.ammo) && goodKillers.push(Gunner)
-    const aliveUniqueKillers = [...new Set(alivePlayers
-        .filter(p => nonWolfEvilKillers.find(k => p.role instanceof k) || goodKillers.find(k => p.role instanceof k))
+    const aliveUniqueEvilPlayers = [...new Set(alivePlayers
+        .filter(p => nonWolfEvil.find(k => p.role instanceof k) || goodKillers.find(k => p.role instanceof k))
         .map(p => p.role!.constructor))]
-    aliveWolves.length && aliveUniqueKillers.push(Wolf)
+    aliveWolves.length && aliveUniqueEvilPlayers.push(Wolf)
 
-    if (aliveUniqueKillers.length > 1) {
+    if (aliveUniqueEvilPlayers.length > 1) {
         if (alivePlayers.length <= 2) {
             if (aliveJackPlayers.length) return undefined;
 
@@ -91,10 +61,9 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
             const gunner = alivePlayers.find(p => p.role instanceof Gunner)
             const arsonist = alivePlayers.find(p => p.role instanceof Arsonist)
             const cowboy = alivePlayers.find(p => p.role instanceof Cowboy)
-            // const puppetMaster = alivePlayers.filter(p => p.role instanceof PuppetMaster)
+            const puppetMaster = alivePlayers.find(p => p.role instanceof PuppetMaster)
 
-            // if(puppetMaster) return puppetMaster
-
+            if (puppetMaster) return {winners: [puppetMaster], type: 'puppetMaster'}
             if (wolf && serialKiller) return {winners: [serialKiller], type: 'serialKiller'}
             if ((wolf || serialKiller || arsonist) && gunner) {
                 if (stage === 'day' || (arsonist && !gunner.readyToArson)) {
@@ -152,6 +121,9 @@ export const checkEndGame = (players: Player[], stage: GameStage): undefined | {
     }
 
     if (alivePlayers.length < 3) {
+        if (aliveEvilPlayer.role instanceof PuppetMaster)
+            return {winners: players.filter(p => p.role instanceof PuppetMaster), type: 'puppetMaster'}
+
         const serialKillers = alivePlayers.filter(p => p.role instanceof SerialKiller)
         if (serialKillers.length) {
             if (serialKillers.length === 2) {
