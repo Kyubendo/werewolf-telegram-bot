@@ -68,7 +68,7 @@ export class Sandman extends RoleBase {
     }
 
     choiceMsgEditText = () => Sandman.game.bot.editMessageText(
-        `Выбор принят: ${this.specialCondition.sleep ? 'Использовать' : 'Пропустить'}.`,
+        `Выбор принят — ${this.specialCondition.sleep ? 'Использовать' : 'Пропустить'}.`,
         {
             message_id: this.actionMsgId,
             chat_id: this.player.id,
