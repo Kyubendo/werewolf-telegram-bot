@@ -13,11 +13,11 @@ export class Suicide extends RoleBase {
         this.activeWeightCoefficient = 'weightCoefficient';
         const coefficient = w[this.activeWeightCoefficient];
 
-        this.weightCoefficientVariable = playersAmount;
+        this.weightCoefficientVariable = (playersAmount / 2);
 
         if (coefficient === null) throw 'ERROR Others/Suicide 16'
 
-        return playersAmount / coefficient;
+        return (playersAmount / 2) * coefficient;
     }
 
     async handleDeath(killer?: Player, type?: DeathType): Promise<boolean> {
