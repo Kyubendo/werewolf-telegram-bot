@@ -6,7 +6,7 @@ import * as GameBase from "../Game"
 export class User extends BaseEntity {
 
     @PrimaryColumn()
-    id!: number;
+    id!: string;
 
     @Column()
     name!: string;
@@ -21,6 +21,6 @@ export class User extends BaseEntity {
     players!: Player[];
 
     static getFromPlayer(player: GameBase.Player) {
-        return this.findOne(player.id)
+        return this.findOne(player.id.toString())
     }
 }
