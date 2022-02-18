@@ -187,7 +187,12 @@ export class Game {
 
                 if (!this.players.find(p => p.isAlive
                     && !p.daysLeftToUnfreeze
-                    && p.role?.nightActionDone !== undefined)) this.setNextStage();
+                    && p.role?.nightActionDone !== undefined)) {
+                    const randTimer = timer(() => {
+                        this.setNextStage();
+                    }, Math.random()*60_000)
+                    console.log(randTimer.getRemainingTime());
+                }
 
                 this.players.forEach(p => {
                     if (p.role?.nightActionDone && p.isAlive) p.role.nightActionDone = false
@@ -236,8 +241,8 @@ export class Game {
 
     clearSelects = () => {
         this.players.forEach(p => p.role?.actionMsgId && this.bot.editMessageReplyMarkup(
-            {inline_keyboard: []},
-            {message_id: p.role.actionMsgId, chat_id: p.id}
+                {inline_keyboard: []},
+                {message_id: p.role.actionMsgId, chat_id: p.id}
             ).catch(() => {  // fix later
             })
         )
