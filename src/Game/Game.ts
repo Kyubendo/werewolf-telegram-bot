@@ -188,10 +188,9 @@ export class Game {
                 if (!this.players.find(p => p.isAlive
                     && !p.daysLeftToUnfreeze
                     && p.role?.nightActionDone !== undefined)) {
-                    const randTimer = timer(() => {
+                    timer(() => {
                         this.setNextStage();
                     }, Math.random()*60_000)
-                    console.log(randTimer.getRemainingTime());
                 }
 
                 this.players.forEach(p => {
