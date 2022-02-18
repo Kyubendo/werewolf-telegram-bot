@@ -18,7 +18,7 @@ module.exports = {
     },
 
     host: "localhost" ,
-    port: 5432,
+    port: 5434,
     username: "postgres",
     password: "",
     database: "werewolf",
