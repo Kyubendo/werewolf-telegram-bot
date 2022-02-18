@@ -60,7 +60,7 @@ export class Blacksmith extends RoleBase {
 
     actionResolve = async () => {
         if (this.specialCondition.silverDust)
-            Blacksmith.game.wolvesDeactivated = true;
+            Blacksmith.game.blacksmithAbility = true;
     }
 
     handleChoice = (choice?: string) => {

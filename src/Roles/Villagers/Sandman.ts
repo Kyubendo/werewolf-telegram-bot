@@ -49,7 +49,7 @@ export class Sandman extends RoleBase {
     actionResolve = async () => {
         if (!this.specialCondition.sleep) return
 
-        Sandman.game.players.filter(player => player.isAlive).forEach(player => player.daysLeftToUnfreeze = 1);
+        Sandman.game.sandmanAbility = true;
     }
 
     handleChoice = (choice?: string) => {

@@ -42,7 +42,8 @@ export class Game {
     lynch?: Lynch
     wolfFeast?: WolfFeast
 
-    wolvesDeactivated: boolean = false
+    blacksmithAbility: boolean = false
+    sandmanAbility: boolean = false
 
     lynchDuration = 60_000
     dayDuration = 120_000
@@ -178,11 +179,13 @@ export class Game {
             if (this.stage === 'night') {
                 this.players.forEach(player => player.isAlive && player.infected && player.transformInfected())
 
-                if (this.wolvesDeactivated) {
+                if (this.sandmanAbility) {
+                    this.setNextStage();
+                } else if (this.blacksmithAbility) {
                     this.players
                         .filter(player => player.role instanceof Wolf && player.isAlive)
                         .forEach(wolfPlayer => wolfPlayer.daysLeftToUnfreeze = 1);
-                    this.wolvesDeactivated = false;
+                    this.blacksmithAbility = false;
                 }
 
                 if (!this.players.find(p => p.isAlive
@@ -190,7 +193,7 @@ export class Game {
                     && p.role?.nightActionDone !== undefined)) {
                     timer(() => {
                         this.setNextStage();
-                    }, Math.random()*60_000)
+                    }, 5_000 + Math.random() * 55_000)
                 }
 
                 this.players.forEach(p => {
@@ -255,6 +258,10 @@ export class Game {
     checkNightDeaths = async (nextStage: GameStage) => {
         if (nextStage === "night") this.deadPlayersCount = this.players.filter(p => !p.isAlive).length
         else if (nextStage === "day" && this.players.filter(p => !p.isAlive).length === this.deadPlayersCount) {
+            if (this.sandmanAbility) {
+                this.sandmanAbility = false;
+                return;
+            }
             await this.bot.sendMessage(this.chatId, 'Подозрительно, но это правда — сегодня ночью никто не умер!')
         }
     }
