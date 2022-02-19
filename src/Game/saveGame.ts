@@ -20,7 +20,8 @@ export const saveGame = async (endedGame: GameClass.Game, winner: Win) => {
         const finalRole = p.role && await Role.getFromObject(p.role)
         if (!initialRole || !finalRole) throw 'saveGame 23'
 
-        const player = Player.create({game, user, initialRole, finalRole, won: p.won,})
+        const player = Player
+            .create({game, user, initialRole, finalRole, won: p.won, survived: p.isAlive})
         player.loverUser = (p.lover && await User.findOne(p.lover.id)) ?? null
         await player.save()
     }

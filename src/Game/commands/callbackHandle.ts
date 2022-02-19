@@ -1,7 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
-import {join} from "../callbacks/join";
 import {State} from "../../Bot";
 import {roleChoice} from "../callbacks/roleChoice";
+import {join} from "../callbacks/join";
+import {leave} from "../callbacks/leave";
 
 export type SelectType = {
     type: string,
@@ -17,6 +18,9 @@ export const callbackHandle = (bot: TelegramBot, state: State) => {
         switch (select.type) {
             case 'join':
                 join(game, select)
+                break
+            case 'leave':
+                leave(game, select)
                 break
             case 'role':
                 roleChoice(select, game.players)

@@ -227,6 +227,13 @@ export class Game {
         await this.savePlayer(player)
     }
 
+    removePlayer = async (player: Player) => {
+        if (this.stage) return;
+        const index = this.players.indexOf(player, 0);
+        if (index > -1)
+            this.players.splice(index, 1);
+    }
+
     savePlayer = async (player: Player) => {
         let user = await User.findOne(player.id)
         if (!user) {
