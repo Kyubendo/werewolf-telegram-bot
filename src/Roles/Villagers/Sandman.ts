@@ -49,7 +49,7 @@ export class Sandman extends RoleBase {
     actionResolve = async () => {
         if (!this.specialCondition.sleep) return
 
-        Sandman.game.players.filter(player => player.isAlive).forEach(player => player.daysLeftToUnfreeze = 1);
+        Sandman.game.sandmanAbility = true;
     }
 
     handleChoice = (choice?: string) => {
@@ -68,7 +68,7 @@ export class Sandman extends RoleBase {
     }
 
     choiceMsgEditText = () => Sandman.game.bot.editMessageText(
-        `Выбор принят: ${this.specialCondition.sleep ? 'Использовать' : 'Пропустить'}.`,
+        `Выбор принят — ${this.specialCondition.sleep ? 'Использовать' : 'Пропустить'}.`,
         {
             message_id: this.actionMsgId,
             chat_id: this.player.id,

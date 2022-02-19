@@ -41,7 +41,7 @@ export class Arsonist extends RoleBase {
         this.burn = false
         const inline_keyboard = []
 
-        Arsonist.game.players.find(p => p.readyToArson) &&
+        Arsonist.game.players.find(p => p.readyToArson && p.isAlive) &&
         inline_keyboard.push([{
             text: 'Сжечь всё!',
             callback_data: JSON.stringify({type: 'role', choice: 'burn'})

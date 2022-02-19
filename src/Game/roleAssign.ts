@@ -5,7 +5,7 @@ import {
     ClumsyGuy, Cupid,
     Cursed, Detective, Doppelganger, Drunk, Fool, GuardianAngel, Gunner, Harlot, Lycan, Martyr,
     Mason, Monarch, Mayor, Undertaker, Oracle, Princess, RoleBase, Sandman, Seer, Prowler,
-    SerialKiller,
+    SerialKiller, PuppetMaster,
     Sorcerer, Suicide, Thief,
     Traitor,
     Villager, WildChild, WiseElder, Wolf,
@@ -29,11 +29,12 @@ export const assignRoles = async (game: Game) => {
     })
     const wolves = [Wolf, Lycan, AlphaWolf,]
     const killersPool = [
-        ...wolves, SerialKiller, Arsonist,
+        ...wolves, SerialKiller
         //JackOLantern,
     ]
+    const killerNeededRoles = [PuppetMaster, Arsonist]
     const wolfNeededRoles = [Sorcerer, Traitor, Prowler]
-    const evilPool = [...killersPool, Sorcerer, Prowler]
+    const evilPool = [...killersPool, ...killerNeededRoles, Sorcerer, Prowler]
     const villagersPool = [
         Villager,
         ClumsyGuy, Cursed, WoodMan, Mason, Beauty, Drunk, Beholder, Princess, Cowboy,// Passive Villagers
@@ -45,7 +46,7 @@ export const assignRoles = async (game: Game) => {
     ]
 
     const testPool = [
-        AlphaWolf, Cursed,
+        Sandman,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
@@ -55,21 +56,20 @@ export const assignRoles = async (game: Game) => {
             const availableKillers = [...killersPool]
             arrayShuffle(availableKillers)
 
-            let rolePool = [...villagersPool]
-            let evilCount = Math.floor((players.length - 1) / 4)
-            if (players.length > 6 && Math.random() >= .5) ++evilCount
+            let rolePool = [...villagersPool, ...killerNeededRoles]
+            let killerCount = Math.floor((players.length - 1) / 4)
+            if (players.length > 6 && Math.random() >= .5) ++killerCount
 
-            const evils = [...Array(evilCount)].map(() => availableKillers.pop())
+            const evils = [...Array(killerCount)].map(() => availableKillers.pop())
             evils.find(e => wolves.find(w => w === e)) && rolePool.push(...wolfNeededRoles)
 
             arrayShuffle(rolePool)
 
-            if ([...rolePool].slice(0, players.length - evilCount - 1).find(e => e === Mason)) {
+            if ([...rolePool].slice(0, players.length - killerCount - 1).find(e => e === Mason)) {
                 for (let i = 0; i < players.length / 3 - 1; i++) Math.random() >= .5 && rolePool.unshift(Mason)
             }
-            if ([...rolePool].slice(0, players.length - evilCount - 1).find(e => e === Seer)
-                && Math.random() < 1 / villagersPool.length
-            ) rolePool.unshift(ApprenticeSeer)
+            if ([...rolePool].slice(0, players.length - killerCount - 1).find(e => e === Seer)
+                && Math.random() < (1 / villagersPool.length) * 8) rolePool.unshift(ApprenticeSeer)
 
             evils.forEach(e => e && rolePool.unshift(e))
 

@@ -26,7 +26,8 @@ export class AlphaWolf extends Wolf {
         this.targetPlayer.role.handleDeath = async (killer?: Player, deathType?: DeathType) => {
             if (!this.targetPlayer
                 || Math.random() >= .25
-                || this.targetPlayer.role instanceof Cursed) return currentTargetHandleDeath(killer, deathType);
+                || this.targetPlayer.role instanceof Cursed
+                || this.targetPlayer.role instanceof Wolf) return currentTargetHandleDeath(killer, deathType);
 
             await AlphaWolf.game.bot.sendMessage(
                 this.targetPlayer.id,
