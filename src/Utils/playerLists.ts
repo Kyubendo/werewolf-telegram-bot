@@ -12,11 +12,9 @@ export const playerGameList = (players: Player[]) => {
     bubbleAliveSort(players)
     return `Живые игроки (${players
             .filter(e => e.isAlive).length}/${players.length}):\n`
-        + players.map(p => `${p.isAlive ? playerLink(p) : `*${p.name}*`}: ${p.hasLeft
-            ? `🐭 Сбежал(а) — *${p.role?.roleName}*${p.lover ? '❤' : ''}`
-            : p.isAlive
-                ? '🙂 Жив(а)'
-                : `💀 Мертв(а) — *${p.role?.roleName}*${p.lover ? '❤' : ''}`}`
+        + players.map(p => `${p.isAlive ? playerLink(p) : `*${p.name}*`}: ${p.isAlive
+            ? '🙂 Жив(а)'
+            : `💀 Мертв(а) — *${p.role?.roleName}*${p.lover ? '❤' : ''}`}`
         ).join('\n')
 }
 
@@ -35,11 +33,7 @@ export const endPlayerList = (players: Player[]) => {
             }
             return `${playerLink(p)}:`
                 + `\t${p.won ? '🏆 Выиграл(а)' : '💩 Проиграл(а)'}\t—`
-                + `\t${p.hasLeft
-                    ? '🐭 Сбежал(а)'
-                    : p.isAlive
-                        ? '🙂 Жив(а)'
-                        : '💀 Мертв(а)'}\t—`
+                + `\t${p.isAlive ? '🙂 Жив(а)' : '💀 Мертв(а)'}\t—`
                 + `\t*${p.role?.roleName}* `
                 + (previousRoles.length
                     ? `(${previousRoles.map(r => r.roleName?.match(/[\p{Emoji}\u200d]+/gu)).join(', ')})`

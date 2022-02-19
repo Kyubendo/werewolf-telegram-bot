@@ -8,7 +8,6 @@ export class Player {
         this.username = user.username
 
         this.isAlive = true
-        this.hasLeft = false
         this.daysLeftToUnfreeze = 0
     }
 
@@ -16,7 +15,6 @@ export class Player {
     readonly name: string;
     readonly username?: string;
     isAlive: boolean = true;
-    hasLeft: boolean = false; // Player left after the game started
     daysLeftToUnfreeze: number = 0;
     won: boolean = false;
     role?: RoleBase;
