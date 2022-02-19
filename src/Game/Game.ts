@@ -231,7 +231,7 @@ export class Game {
         let user = await User.findOne(player.id)
         if (!user) {
             user = await User.create({
-                id: player.id,
+                id: player.id.toString(),
                 username: player.username ?? null,
                 name: player.name,
                 rating: 1200,
