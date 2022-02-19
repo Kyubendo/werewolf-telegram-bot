@@ -5,28 +5,33 @@ import {Lynch} from "../Voting/Lynch";
 import {WolfFeast} from "../Voting/WolfFeast";
 import {startPlayerList} from "../../Utils/playerLists";
 import {validGameMode} from "../../Utils/validGameMode";
+import {sendLeaveMessage} from "../callbacks/join";
 
 export const joinButton = {
     inline_keyboard: [
-        [{text: 'Присоединиться', callback_data: JSON.stringify({type: 'join'}),}]
+        [{text: 'Присоединиться', callback_data: JSON.stringify({type: 'join'})}]
+    ]
+}
+
+export const leaveButton = {
+    inline_keyboard: [
+        [{text: 'Выйти', callback_data: JSON.stringify({type: 'leave'})}]
     ]
 }
 
 const news = [
-    'Добавлён Кукловод 🕴!',
-    'Введена система [🤖SmartBalance🤖](https://telegra.ph/SmartBalance-System-01-31)!',
-    `Пофикшено ${~~((new Date).getTime() / 100_000)} багов.`,
+    'Добавлен Кукловод 🕴!',
+    'Добавлен кнопка выхода!',
+    `Добавлено ${~~((new Date).getTime() / 100_000)} багов.`,
 ]
 
 const messageAppend = (news.length
-    ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
-    : '')
+        ? '\n\n*Новости:*\n' + news.map(n => `— _${n}_`).join('\n')
+        : '')
     + '\n\n[Баги и предложения сюда](https://trello.com/invite/b/cnBejMgi/38d6f76319eff47662ca0836f496c0d4/werewolf-bot-public)'
 
 const gameModeName = (gameMode: GameMode) => {
     switch (gameMode) {
-        // case "chaos":
-        //     return 'хаосная'
         case "classic":
             return 'классическая'
     }
@@ -69,7 +74,7 @@ export const startGame = (bot: TelegramBot, state: State,) => {
         state.game.lynch = new Lynch(state.game)
         state.game.wolfFeast = new WolfFeast(state.game)
 
-        bot.sendAnimation(
+        await bot.sendAnimation(
             msg.chat.id,
             'https://media.giphy.com/media/SirUFDS5F83Go/giphy.gif',
             {
@@ -83,5 +88,6 @@ export const startGame = (bot: TelegramBot, state: State,) => {
                 msg.chat.id,
                 startPlayerList(state.game.players),
             ).then(msg => state.game!.playerCountMsgId = msg.message_id))
+        await sendLeaveMessage(initPlayer, state.game);
     })
 }

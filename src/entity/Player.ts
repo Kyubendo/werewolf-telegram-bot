@@ -23,4 +23,7 @@ export class Player extends BaseEntity {
 
     @Column()
     won!: boolean;
+
+    @Column()
+    survived!: boolean;
 }
