@@ -12,10 +12,9 @@ import {
     SerialKiller, Sorcerer,
     Thief, WildChild,
     WiseElder,
-    Wolf, Pacifist, Arsonist, Snowman
+    Wolf, Pacifist, Arsonist, Snowman, PuppetMaster
 } from "../Roles";
 import {GameStage} from "./Game";
-import {PuppetMaster} from "../Roles/Others/PuppetMaster";
 
 export const roleResolves = (stage: GameStage) => {
     switch (stage) {
