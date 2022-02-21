@@ -1,6 +1,6 @@
 import {DeathType, Player} from "../../Game";
 import {playerLink} from "../../Utils/playerLink";
-import {Beauty, Cursed, GuardianAngel, RoleBase, Thief, Traitor} from "../index";
+import {Beauty, Cursed, GuardianAngel, RoleBase, Thief, Traitor, WildChild} from "../index";
 
 export class Wolf extends RoleBase {
     findAllies = () => Wolf.game.players.filter(otherPlayer =>
@@ -35,6 +35,8 @@ export class Wolf extends RoleBase {
                 notificationText = `Странно, ${playerLink(this.player)} решил стать веганом, ` +
                     `а ${playerLink(this.player.role.targetPlayer)} протяжно выл в ночи и щёлкал зубами! ` +
                     `${playerLink(this.player)} теперь полноценный член стаи.`
+                else if (this.player.role?.previousRole instanceof WildChild)
+                    notificationText = `Пример игрока ${playerLink(this.player)} умер! Теперь, он стал волком!`
             else
                 notificationText = `В стае пополнение! ${playerLink(this.player)} больше не выступает в цирке, ` +
                     'теперь он заодно с вами!'

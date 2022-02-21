@@ -46,7 +46,7 @@ export const assignRoles = async (game: Game) => {
     ]
 
     const testPool = [
-        Sandman,
+        Wolf, WildChild, Villager,
         Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager,
     ]
 
