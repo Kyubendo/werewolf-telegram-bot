@@ -19,7 +19,7 @@ export const endGameMessage: { [type in Win]: { text: string, gif: string } } = 
         gif: 'https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif',
     },
     suicide: {
-        text: 'О нет! Вы казнили Самоубийцу/ Он выиграл игру...',
+        text: 'О нет! Вы казнили Самоубийцу. Он выиграл игру...',
         gif: 'https://media.giphy.com/media/3ornka9rAaKRA2Rkac/giphy.gif',
     },
     lovers: {

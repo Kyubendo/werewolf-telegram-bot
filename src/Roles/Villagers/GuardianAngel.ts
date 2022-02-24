@@ -45,8 +45,8 @@ export class GuardianAngel extends RoleBase {
         if (!this.numberOfAttacks) {
             await GuardianAngel.game.bot.sendMessage(
                 this.player.id,
-                `${playerLink(this.targetPlayer)} не был(а) атакован(а),` +
-                'поэтому ничего не произошло особо...'
+                `${playerLink(this.targetPlayer)} не был(а) атакован(а), ` +
+                'поэтому ничего не произошло.'
             )
         }
     }
