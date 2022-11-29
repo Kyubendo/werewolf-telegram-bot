@@ -31,6 +31,7 @@ const getOptions = () => {
             url: process.env.DATABASE_URL,
             extra: {
                 ssl: {
+                    require: true,
                     rejectUnauthorized: false
                 },
             },
